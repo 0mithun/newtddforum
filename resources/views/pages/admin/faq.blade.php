@@ -96,9 +96,12 @@
 @section('footer_script')
     <script>
         tinymce.init({
-            selector: '#body',
-            plugins: 'a11ychecker advcode casechange formatpainter linkchecker lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
-            toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+            selector: '#tinyeditor',
+            plugins: 'code',
+            toolbar: 'formatselect fontsizeselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | code',
+            menubar: 'tools',
+
+
             toolbar_drawer: 'floating',
             tinycomments_mode: 'embedded',
             tinycomments_author: 'Author name',

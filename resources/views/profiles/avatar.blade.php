@@ -20,7 +20,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <div class="row" style="margin-top: 50px;">
+                            <div class="row" >
                                 <div class="col-md-3">
                                     <a class="list-group-item "  href="{{ route('profile', $user->username)  }}">Profile</a>
 
