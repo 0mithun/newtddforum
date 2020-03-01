@@ -36,7 +36,7 @@ class ModelFactorySeeder extends Seeder
                 'slug'  =>  $channel
             ]);
         }
-        factory(App\Tags::class, 10)->create();
+        //factory(App\Tags::class, 10)->create();
         factory(App\Thread::class, 10)->create();
         factory(App\Reply::class,10)->create();
         factory(\Illuminate\Notifications\DatabaseNotification::class, 10)->create();
