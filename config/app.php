@@ -68,7 +68,7 @@ return [
     */
 
 //    'timezone' => 'UTC',
-    'timezone' => 'Asia/Dhaka',
+    'timezone' => env('TIME_ZONE','America/New_York'),
 
     /*
     |--------------------------------------------------------------------------

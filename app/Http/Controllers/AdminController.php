@@ -124,6 +124,9 @@ class AdminController extends Controller
         $admin = Admin::first();
 
         $this->setEnv('APP_NAME',request('app_name'), $admin->app_name);
+
+        $this->setEnv('TIME_ZONE',request('timezone'), $admin->timezone);
+        
         $this->setEnv('MAIL_DRIVER',request('mail_driver'), $admin->mail_driver);
         $this->setEnv('MAIL_HOST',request('mail_host'), $admin->mail_host);
         $this->setEnv('MAIL_PORT',request('mail_port'), $admin->mail_port);
