@@ -76,7 +76,9 @@
             <input type="file" name="image_path" class="form-control" id="image_path" @change="onFileSelected">
 
             <div class="checkbox">
-                <label><input type="checkbox" value="1" name="allow_image" id="allow_image"> Allow us to choose a Wikimedia Commons image</label>
+                <label><input type="checkbox" value="1" name="allow_image" id="allow_image"
+                    @if($thread->allow_image == 1) checked @endif
+                    > Allow us to choose a Wikimedia Commons image</label>
             </div>
         </div>
 
@@ -134,7 +136,23 @@
 
     </div>
 
-    <div class="panel-body" v-html="body"></div>
+    <div class="panel-body" >
+        <img class="" style="display:inline; float:left;margin-right:20px;margin-bottom:0px" width="250"  src="{{ $thread->threadImagePath() }}" alt="...">
+        <div  v-html="body" style="display:inline">
+            
+        </div>
+        {{-- <div class="media">
+            <div class="media-left">
+              <a href="#">
+              <img class="media-object " width="150"  src="{{ $thread->threadImagePath() }}" alt="...">
+              </a>
+              
+            </div>
+            <div class="media-body" v-html="body">
+                
+            </div>
+          </div> --}}
+    </div>
 
 
 

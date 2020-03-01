@@ -84,7 +84,9 @@ class ThreadsController extends Controller
             'g-recaptcha-response.required' =>  'Please solve the captcha'
         ]);
 
-
+            //image_pending
+        
+        
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
@@ -95,6 +97,7 @@ class ThreadsController extends Controller
             'source'  =>  request('source'),
             'main_subject'  =>  request('main_subject'),
             'is_famous'  =>  request('is_famous',0),
+            'allow_image'  =>  request('allow_image',0),
 
         ]);
 
@@ -183,6 +186,8 @@ class ThreadsController extends Controller
             'source'  =>  request('source'),
             'main_subject'  =>  request('main_subject'),
             'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
+            //'is_famous'  =>  request('is_famous',0),
+            'allow_image'  =>  request('allow_image',0),
         ];
 
         if(\request('channel_id') != 'undefined'){

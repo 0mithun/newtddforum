@@ -34,7 +34,7 @@ class Thread extends Model
      *
      * @var array
      */
-    protected $appends = ['isSubscribedTo','isReported','isFavorited','isLiked','likesCount', 'isDesliked','dislikesCount','excerpt'];
+    protected $appends = ['isSubscribedTo','isReported','isFavorited','isLiked','likesCount', 'isDesliked','dislikesCount','excerpt','threadImagePath'];
 
     /**
      * The attributes that should be cast to native types.
@@ -276,6 +276,15 @@ class Thread extends Model
 //        $body = trim($this->body);
         return substr(strip_tags($body),0,250);
 
+    }
+
+
+    public function threadImagePath(){
+        return $this->image_path == '' ? 'https://source.unsplash.com/random' : $this->image_path;
+    }
+
+    public function getThreadImagePathAttribute(){
+        return $this->threadImagePath();
     }
 
 }

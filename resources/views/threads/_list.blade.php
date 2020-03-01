@@ -63,11 +63,23 @@
 {{--        </div>--}}
 
         <div class="panel-body">
-            <div class="body">{!! $thread->excerpt !!}</div>
+            
+            <div class="media">
+                <div class="media-left">
+                  <a href="#">
+                  <img class="media-object " width="80" height="60" src="{{ $thread->threadImagePath }}" alt="...">
+                  </a>
+                </div>
+                <div class="media-body">
+                    {!! $thread->excerpt !!}
+                </div>
+              </div>
+
+            {{-- <div class="body"></div> --}}
         </div>
 
         <div class="panel-footer">
-            {{  str_plural('visit', $thread->visits) }} Visits
+            {{ $thread->visits }} {{  str_plural('visit', $thread->visits) }}
         </div>
     </div>
 @empty
