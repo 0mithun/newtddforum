@@ -23,7 +23,7 @@
                 axios.post('/channel/search', {
                     channel_name: this.channel_name
                 }).then((res)=>{
-                    console.log(res)
+                    //console.log(res)
                     res.data.forEach((channel)=>{
                         this.results.push(channel)
                     })

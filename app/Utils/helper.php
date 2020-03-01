@@ -15,19 +15,19 @@ function settings($key)
         'timezone' =>  '',
     ];
 
-    $admin = App\Admin::first();
+    //$admin = App\Admin::first();
 
-    if($admin){
-        $values['app_name']         =   $admin->app_name;
-        $values['mail_driver']      =   $admin->mail_driver;
-        $values['mail_host']        =   $admin->mail_host;
-        $values['mail_port']        =   $admin->mail_port;
-        $values['username']         =   $admin->username;
-        $values['password']         =   $admin->password;
-        $values['mail_encryption']  =   $admin->mail_encryption;
-        $values['timezone']         =   $admin->timezone;
-    }
-    return $values[$key];
+    // if($admin){
+    //     $values['app_name']         =   $admin->app_name;
+    //     $values['mail_driver']      =   $admin->mail_driver;
+    //     $values['mail_host']        =   $admin->mail_host;
+    //     $values['mail_port']        =   $admin->mail_port;
+    //     $values['username']         =   $admin->username;
+    //     $values['password']         =   $admin->password;
+    //     $values['mail_encryption']  =   $admin->mail_encryption;
+    //     $values['timezone']         =   $admin->timezone;
+    // }
+    // return $values[$key];
 
 
 }

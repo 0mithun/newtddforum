@@ -280,7 +280,7 @@ class Thread extends Model
 
 
     public function threadImagePath(){
-        return $this->image_path == '' ? 'https://source.unsplash.com/random' : $this->image_path;
+        return $this->image_path == '' ? 'https://source.unsplash.com/random' : asset($this->image_path);
     }
 
     public function getThreadImagePathAttribute(){

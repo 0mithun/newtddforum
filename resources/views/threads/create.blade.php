@@ -150,7 +150,6 @@
             $(document).ready(function () {
                 $("#image_path").change(function (){
                     var fileName = $(this).val();
-                    console.log('file Selected');
                     $('#allow_image').attr('disabled', true);
                 });
 
@@ -167,7 +166,6 @@
             });
             $('#channel').typeahead({
                 afterSelect(item){
-                    console.log(item.id)
                     $('#channel_id').val(item.id);
                 },
                 source: function(query, result)

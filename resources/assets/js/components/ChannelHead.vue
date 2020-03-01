@@ -32,7 +32,7 @@
                 let url  = '/channel/search';
                 axios.post('/channel/search')
                     .then((res=>{
-                        console.log(res)
+                        //console.log(res)
                         this.channels = res.data
                 }));
             }

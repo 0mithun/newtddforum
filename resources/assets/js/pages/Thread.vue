@@ -52,7 +52,7 @@
                 return  (window.App.user)? true : false;
             },
             checkValidation(){
-                if(this.form.title == '' || this.form.body == '' || (this.tags.length == 0) || this.defaultChannel ==''){
+                if(this.form.title == '' || this.form.body == '' || this.defaultChannel ==''){
                     return true;
                 }
                 return false;
@@ -132,7 +132,14 @@
 
                 let index = 0;
                 this.tags.map(function (value) {
-                   tagId.push(value.id);
+                    let idKey = 'id' in value;
+
+                    if(idKey){
+                        tagId.push(value.id);
+                    }else{
+                        tagId.push(value.name)
+                    }
+                   
                    // index++;
                 });
 

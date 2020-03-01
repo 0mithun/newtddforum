@@ -63,7 +63,7 @@ class ThreadsController extends Controller
      */
     public function store(Recaptcha $recaptcha)
     {
-        //dd(request('tags'));
+        //return request('tags');
 
         
 
@@ -101,7 +101,7 @@ class ThreadsController extends Controller
             'source'  =>  request('source'),
             'main_subject'  =>  request('main_subject'),
             'is_famous'  =>  request('is_famous',0),
-            // 'allow_image'  =>  request('allow_image',0),
+            'allow_image'  =>  request('allow_image',0),
 
         ]);
 
@@ -112,38 +112,39 @@ class ThreadsController extends Controller
             $extension = request()->file('image_path')->getClientOriginalExtension();
             $file_name = $thread->id.".".$extension;
             $file_path = request()->image_path->storeAs('threads', $file_name);
+            $thread->image_path= 'uploads/'. $file_path;
 
-        }else{
-            $file_path = 'baler image ';
         }
 
-        $thread->image_path= 'uploads/'. $file_path;
+        
         $thread->save();
 
         $thread = $thread->fresh();
 
-        $tags = \request('tags');
+        if(request()->has('tags')){
+        //$tags = \request('tags');
 
-        $tags = \request('tags');
+            $tags = \request('tags');
 
-        $new_tags = [];
+            $new_tags = [];
 
-        foreach($tags as $tag){
+            foreach($tags as $tag){
 
-            $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
-            
-            if($bool){
-                $new_tags[] = $tag;
+                $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
+                
+                if($bool){
+                    $new_tags[] = $tag;
+                }
+                else{
+                    $tag = Tags::create(['name'=>$tag]);
+                    $new_tags[]= $tag->id;
+                }
             }
-            else{
-                $tag = Tags::create(['name'=>$tag]);
-                $new_tags[]= $tag->id;
-            }
+            $thread->tags()->sync($new_tags);
         }
 
 
-
-        $thread->tags()->sync($new_tags);
+        
 
         if (request()->wantsJson()) {
             return response($thread, 201);
@@ -185,6 +186,8 @@ class ThreadsController extends Controller
      */
     public function update($channel, Thread $thread)
     {
+        //return request('tags');
+
        $this->authorize('update', $thread);
 
        if(request()->hasFile('image_path')){
@@ -209,7 +212,7 @@ class ThreadsController extends Controller
             'source'  =>  request('source'),
             'main_subject'  =>  request('main_subject'),
             'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
-            //'is_famous'  =>  request('is_famous',0),
+            'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
         ];
 
@@ -230,7 +233,28 @@ class ThreadsController extends Controller
 
         if(\request()->has('tags')){
             $tags = json_decode(\request('tags'));
-            $thread->tags()->sync($tags);
+
+
+            //$tags = \request('tags');
+
+            $new_tags = [];
+
+            foreach($tags as $tag){
+
+                $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
+                
+                if($bool){
+                    $new_tags[] = $tag;
+                }
+                else{
+                    $tag = Tags::create(['name'=>$tag]);
+                    $new_tags[]= $tag->id;
+                }
+            }
+
+
+
+            $thread->tags()->sync($new_tags);
         }
 
         return $thread;

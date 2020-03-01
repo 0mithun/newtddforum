@@ -40,7 +40,6 @@
                     remoteFilter: function(query, callback) {
                         $.getJSON("/api/users", {name: query}, function(usernames) {
                             callback(usernames)
-                            console.log('Hello')
                         });
                     }
                 }

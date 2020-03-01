@@ -24,10 +24,10 @@ require('./bootstrap');
  import ThreadView from './pages/Thread.vue';
 import Typhaed from './components/Typehead.vue';
 
-import TinyMCE from 'tinymce-vue-2';
+// import TinyMCE from 'tinymce-vue-2';
 
 
-Vue.component('tiny-mce', TinyMCE);
+// Vue.component('tiny-mce', TinyMCE);
 
 
 

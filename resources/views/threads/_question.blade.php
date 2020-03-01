@@ -25,7 +25,7 @@
             <label for="tags" class="control-label">
                Tags
             </label>
-            <v-select  v-model="tags" :options="allTags" label="name" multiple></v-select>
+            <v-select taggable push-tags  v-model="tags" :options="allTags" label="name" multiple></v-select>
         </div>
         <div class="form-group">
             <label for="body" class="control-label">Body:</label>
