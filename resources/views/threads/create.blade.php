@@ -94,7 +94,7 @@
                             <div class="form-group ">
                                 <label for="main_subject" class="control-label"> Upload an image </label>
 
-                                <input type="file" name="image_path" class="form-control" id="image_path">
+                                <input type="file" accept="image/*" name="image_path" class="form-control" id="image_path">
 
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="1" name="allow_image" id="allow_image"> Allow us to choose a Wikimedia Commons image</label>

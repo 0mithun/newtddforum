@@ -160,7 +160,7 @@ class ProfilesController extends Controller
 
     public function avatarChange($user){
         request()->validate([
-            'avatar' => ['required', 'image']
+            'avatar' => 'required|image'
         ]);
 
 

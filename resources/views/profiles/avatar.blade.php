@@ -52,7 +52,7 @@
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label class="control-label" for="avatar">Select Your Profile Photo</label>
-                                                    <input class="form-control" type="file" id="avatar" name="avatar" onchange="loadFile(event,'avatarImg')"/>
+                                                    <input class="form-control" type="file" id="avatar" accept="image/*" name="avatar" onchange="loadFile(event,'avatarImg')"/>
                                                 </div>
                                                 <br><br>
                                                 <div class="form-group">

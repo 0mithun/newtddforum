@@ -73,7 +73,7 @@
         <div class="form-group ">
             <label for="main_subject" class="control-label"> Upload an image </label>
 
-            <input type="file" name="image_path" class="form-control" id="image_path" @change="onFileSelected">
+            <input type="file" name="image_path" accept="image/*" class="form-control" id="image_path" @change="onFileSelected">
 
             <div class="checkbox">
                 <label><input type="checkbox" value="1" name="allow_image" id="allow_image"

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-    use App\Channel;
+use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Notifications\ThreadWasReported;
 use App\Rules\Recaptcha;
@@ -248,7 +248,7 @@ class ThreadsController extends Controller
             $threads->where('channel_id', $channel->id);
         }
 
-        return $threads->paginate(25);
+        return $threads->paginate(10);
     }
 
     public function report(){
