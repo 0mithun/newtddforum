@@ -2,7 +2,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 footer-content" >
-                    <p> {!! config('copyright') !!} </p>
+                    <p> {!! $admin->copyright !!} </p>
                 </div>
                 <div class="col-md-8">
                     <div class="pull-right">
