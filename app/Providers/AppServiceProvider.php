@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
             $channels = \Cache::rememberForever('channels', function () {
                 return Channel::all();
             });
+            $admin = Admin::first();
+            
+            $view->with('admin',$admin);
 
             $view->with('channels', $channels);
         });
