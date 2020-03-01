@@ -31,7 +31,7 @@ class CreateThreadsTable extends Migration
             $table->boolean('is_famous')->default(0);
             $table->string('image_path')->nullable();
             $table->boolean('image_pending')->default(0);
-            $table->boolean('is_famous')->default(0);
+            $table->boolean('allow_image')->default(0);
             $table->unsignedInteger('best_reply_id')->nullable();
             $table->boolean('locked')->default(false);
             $table->timestamps();

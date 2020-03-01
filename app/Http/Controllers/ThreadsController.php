@@ -63,6 +63,7 @@ class ThreadsController extends Controller
      */
     public function store(Recaptcha $recaptcha)
     {
+
         if(request()->hasFile('image_path')){
             $rule = 'image|max:1024';
         }else{
@@ -71,11 +72,11 @@ class ThreadsController extends Controller
 
 
         request()->validate([
-            'tags'  =>  'required|array|min:1',
+            // 'tags'  =>  'required|array|min:1',
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id',
-            'g-recaptcha-response' => ['required', $recaptcha],
+             //'g-recaptcha-response' => ['required', $recaptcha],
             'image_path'    => $rule
 
         ],[

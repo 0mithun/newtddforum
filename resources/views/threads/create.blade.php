@@ -193,7 +193,8 @@
             $(document).ready(function() {
                 $('#tags').select2({
                     placeholder: 'Select tags',
-                    cache:true
+                    cache:true,
+                    tags:true
                 });
             });
         });
