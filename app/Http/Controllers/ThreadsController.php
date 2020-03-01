@@ -63,6 +63,9 @@ class ThreadsController extends Controller
      */
     public function store(Recaptcha $recaptcha)
     {
+        //dd(request('tags'));
+
+        
 
         if(request()->hasFile('image_path')){
             $rule = 'image|max:1024';
@@ -98,7 +101,7 @@ class ThreadsController extends Controller
             'source'  =>  request('source'),
             'main_subject'  =>  request('main_subject'),
             'is_famous'  =>  request('is_famous',0),
-            'allow_image'  =>  request('allow_image',0),
+            // 'allow_image'  =>  request('allow_image',0),
 
         ]);
 
@@ -121,7 +124,26 @@ class ThreadsController extends Controller
 
         $tags = \request('tags');
 
-        $thread->tags()->sync($tags);
+        $tags = \request('tags');
+
+        $new_tags = [];
+
+        foreach($tags as $tag){
+
+            $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
+            
+            if($bool){
+                $new_tags[] = $tag;
+            }
+            else{
+                $tag = Tags::create(['name'=>$tag]);
+                $new_tags[]= $tag->id;
+            }
+        }
+
+
+
+        $thread->tags()->sync($new_tags);
 
         if (request()->wantsJson()) {
             return response($thread, 201);
