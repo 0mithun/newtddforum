@@ -1,5 +1,6 @@
 <?php
 
+
 return [
 
     /*
@@ -12,7 +13,9 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME',  'Laravel'),
+    // 'name' => env('APP_NAME',  settings('app_name')),
+    // 'name' => settings('app_name'),
 
     /*
     |--------------------------------------------------------------------------

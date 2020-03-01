@@ -67,7 +67,7 @@
         </div>
 
         <div class="panel-footer">
-            {{ $thread->visits }} Visits
+            {{  str_plural('visit', $thread->visits) }} Visits
         </div>
     </div>
 @empty

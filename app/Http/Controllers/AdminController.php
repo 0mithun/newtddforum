@@ -8,6 +8,8 @@ use App\Thread;
 use Illuminate\Http\Request;
 use DB;
 
+use Artisan;
+
 class AdminController extends Controller
 {
     public function tags(){
@@ -121,10 +123,39 @@ class AdminController extends Controller
 
         $admin = Admin::first();
 
+        $this->setEnv('APP_NAME',request('app_name'), $admin->app_name);
+        $this->setEnv('MAIL_DRIVER',request('mail_driver'), $admin->mail_driver);
+        $this->setEnv('MAIL_HOST',request('mail_host'), $admin->mail_host);
+        $this->setEnv('MAIL_PORT',request('mail_port'), $admin->mail_port);
+        $this->setEnv('MAIL_USERNAME',request('username'), $admin->username);
+        $this->setEnv('MAIL_PASSWORD',request('password'), $admin->password);
+        $this->setEnv('MAIL_ENCRYPTION',request('mail_encryption'), $admin->mail_encryption);
+        
+
         $admin->update(request()->all());
+
+        Artisan::call('config:clear');
+        // Artisan::call('cache:clear');
+        // Artisan::call('config:cache');
+
+
 
         session()->flash('successmessage','Admin Settings Update Successfully');
 
         return redirect()->route('admin.setesettings');
     }
+
+
+    public function setEnv($key, $value, $oldValue)
+    {
+        $old = env($key);
+        $new = $key.'='.$value;
+
+        file_put_contents(app()->environmentFilePath(), str_replace(
+            $key . '=' .$oldValue,
+            $key . '=' . $value,
+            file_get_contents(app()->environmentFilePath())
+        ));
+    }
+
 }

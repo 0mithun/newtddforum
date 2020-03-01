@@ -24,24 +24,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');
-
-        /*
-        $admin = Admin::first();
-
-        if($admin){
-
-            config()->set('app_name', $admin->app_name);
-            config()->set('mail_driver', $admin->mail_driver);
-            config()->set('mail_host', $admin->mail_host);
-            config()->set('mail_port', $admin->mail_port);
-            config()->set('username', $admin->username);
-            config()->set('password', $admin->password);
-            config()->set('mail_encryption', $admin->mail_encryption);
-            config()->set('copyright', $admin->copyright);
-            config()->set('timezone', $admin->timezone);
-        }
-
-        */
+        
     }
 
     /**
@@ -51,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        
         if ($this->app->isLocal()) {
             $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
         }
