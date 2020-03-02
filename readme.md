@@ -8,6 +8,7 @@
 - Run `cp .env.example .env`
 - Run `php artisan key:generate`
 - Set your app configration to .env
+- Run Change storage folder permission 
 - Run `php artisan route:clear` 
 - Run `php artisan config:clear` 
 - Run `php artisan migrate`
