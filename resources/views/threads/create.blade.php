@@ -99,10 +99,22 @@
                                 <input type="text" name="location" id="location" class="form-control" value="{{ old('location') }}">
                             </div>
 
-                            <div class="form-group">
+
+
+                            <div class="form-group {{ $errors->has('source') ? ' has-error' : '' }}">
                                 <label for="source" class="control-label">Source:</label>
                                 <input type="text" name="source" id="source" class="form-control" value="{{ old('source') }}">
+                                
+                                @if ($errors->has('source'))
+                                    <span class="help-block ">
+                                        <strong class="">{{ $errors->first('source') }}</strong>
+                                    </span>
+                                @endif
                             </div>
+                                            
+                           
+
+
 
                             <div class="form-group">
                                 <label for="main_subject" class="control-label">Main Subject:</label>

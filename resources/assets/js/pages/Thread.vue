@@ -41,6 +41,7 @@
                 typeChannelId: '',
                 target:null,
                 channels:null,
+                showSource:false
 
             };
         },

@@ -108,7 +108,7 @@
 <div class="panel panel-default" v-else>
     <div class="panel-heading">
         <div class="panel-heading" style="display: block;overflow: hidden;"> <div class="pull-left"><h4  v-text="title"></h4> </div> <div class="pull-right">
-                <favorite-thread :thread="{{ $thread }}" v-if="!authorize('owns', thread) && signedIn "></favorite-thread>
+                <favorite-thread :thread="{{ $thread }}" v-if="signedIn "></favorite-thread>
             </div> </div>
         <div class="media">
             <div class="media-left">
@@ -141,6 +141,18 @@
         <div  v-html="body" style="display:inline">
             
         </div>
+        @if($thread->source)
+            <div>
+                <button class="btn btn-primary btn-xs" @click="showSource = true" v-if="!showSource">View Source</button>
+                <div v-if="showSource">
+                    <a href="{{ $thread->source }}" target="_blank">{{ $thread->source }}</a>
+                    <br>
+                    <button class="btn btn-danger btn-xs" @click="showSource = false">Close</button>
+                </div>
+            </div>
+        @endif
+        
+
         {{-- <div class="media">
             <div class="media-left">
               <a href="#">
@@ -175,7 +187,7 @@
             <div class=" col-md-12"  v-if="authorize('owns', thread)">
                 <button class="btn btn-xs" @click="startEdit">Edit</button>
             </div>
-            <div class="col-md-12" v-else>
+            <div class="col-md-12">
                 <div v-if=signedIn >
                     <div class="col-md-8">
                     </div>

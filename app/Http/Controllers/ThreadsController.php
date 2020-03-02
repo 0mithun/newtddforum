@@ -63,19 +63,23 @@ class ThreadsController extends Controller
      */
     public function store(Recaptcha $recaptcha)
     {
-        //return request('tags');
-
         
-
         if(request()->hasFile('image_path')){
             $rule = 'image|max:1024';
         }else{
             $rule = '';
         }
 
+        if(request('source') ==null){
+            $source = '';
+        }else{            
+            $source = 'url';
+            //|active_url
+        }
 
         request()->validate([
             // 'tags'  =>  'required|array|min:1',
+            'source'    =>  $source,
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id',
@@ -196,7 +200,16 @@ class ThreadsController extends Controller
             $rule = '';
         }
 
+
+        if(request('source') ==null){
+            $source = '';
+        }else{            
+            $source = 'url';
+            //|active_url
+        }
+
         request()->validate([
+            'source'    =>  $source,
             'title' => 'required',
             'channel_id' => 'required',
             'body' => 'required',
