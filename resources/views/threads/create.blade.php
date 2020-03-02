@@ -22,7 +22,18 @@
                             <div class="form-group {{ $errors->has('channel_id') ? ' has-error' : '' }}" >
 {{--                                <Typhaed></Typhaed>--}}
                                 <label for="search_channel">Channel: </label>
-                                <input type="text" name="channel" id="channel" id="search_channel" class="form-control " autocomplete="off" placeholder="Type Channel Name" />
+                                
+                                @php
+                                    if(old('channel_id'){
+                                        $channel = App\Channel::find(old('channel_id'));
+
+                                    }
+                                @endphp
+
+
+
+
+                                <input type="text" name="channel" id="channel" id="search_channel" class="form-control " autocomplete="off" placeholder="Type Channel Name" value="{{ $channel->name }}"  />
                                 <input type="hidden" name="channel_id" value="" id="channel_id" class="form-control">
                                 @if ($errors->has('channel_id'))
                                     <span class="help-block ">
