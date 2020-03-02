@@ -8,12 +8,12 @@
                     <div class="pull-right">
                         <ul class="footer-menu">
 
-                            <li><a href="{{ route('privacypolicy') }}">Privacy Policy</a></li>
+                            <li><a href="{{ route('privacypolicy') }}">Privacy</a></li>
                             <li>
-                                <a href="{{ route('faq')  }}">FAQ</a>
+                                <a href="{{ route('faq')  }}">faq</a>
                             </li>
                             <li>
-                                <a href="{{ route('tos')  }}">Terms of Service</a>
+                                <a href="{{ route('tos')  }}">Terms</a>
                             </li>
                             <li><a href="{{ route('contact') }}">Contact</a></li>
                         </ul>

@@ -46,8 +46,23 @@
                             <div class="form-group {{ $errors->has('tags') ? ' has-error' : '' }}">
                                 <label for="tags" class="control-label">Tags: </label>
                                 <select class="form-control  " id="tags" name="tags[]" multiple="multiple">
+                                    
                                     @foreach($tags as $tag)
-                                    <option value="{{ $tag->id  }}">{{ $tag->name }}</option>
+                                    
+                                        <option value="{{ $tag->id }}"  {{in_array($tag->id, old("tags") ?: []) ? "selected": ""}} >{{ $tag->name }}</option>
+                                                                    
+
+                                        <!-- <option value="{{ $tag->id  }}">{{ $tag->name }}</option> -->
+                                   
+
+                                    <!-- @if (old('tags[]') == $tag->id)
+                                        <option value="{{ $tag->id }}" selected>{{ $tag->name }}</option>
+                                    @else                                 
+
+                                        <option value="{{ $tag->id  }}">{{ $tag->name }}</option>
+                                    @endif -->
+
+
                                     @endforeach
                                 </select>
                                 @if ($errors->has('tags'))
@@ -60,7 +75,7 @@
                             <div class="form-group  {{ $errors->has('body') ? ' has-error' : '' }}">
                                 <label for="body ">Body:</label>
 {{--                                <wysiwyg name="body"></wysiwyg>--}}
-                                <textarea name="body" id="tinyeditor" cols="30" rows="10"></textarea>
+                                <textarea name="body" id="tinyeditor" cols="30" rows="10">{{ old('body') }}</textarea>
                                 @if ($errors->has('body'))
                                     <span class="help-block ">
                                         <strong class="">{{ $errors->first('body') }}</strong>
@@ -69,17 +84,17 @@
                             </div>
                             <div class="form-group">
                                 <label for="location" class="control-label">Location:</label>
-                                <input type="text" name="location" id="location" class="form-control">
+                                <input type="text" name="location" id="location" class="form-control" value="{{ old('location') }}">
                             </div>
 
                             <div class="form-group">
                                 <label for="source" class="control-label">Source:</label>
-                                <input type="text" name="source" id="source" class="form-control">
+                                <input type="text" name="source" id="source" class="form-control" value="{{ old('source') }}">
                             </div>
 
                             <div class="form-group">
                                 <label for="main_subject" class="control-label">Main Subject:</label>
-                                <input type="text" name="main_subject" id="main_subject" class="form-control">
+                                <input type="text" name="main_subject" id="main_subject" class="form-control" value="{{ old('main_subject') }}">
                                 <span class="help-block">Who is this story about</span>
                             </div>
 

@@ -32,9 +32,9 @@
                                             {{--                                    For Admin--}}
                                             <a class="list-group-item active"  href="{{ route('admin.setesettings') }}">Site Settings</a>
                                             <a class="list-group-item"  href="{{ route('admin.tag') }}">Tags</a>
-                                            <a class="list-group-item"  href="{{ route('admin.privacypolicy') }}">Privacy Policy</a>
-                                            <a class="list-group-item"  href="{{ route('admin.tos') }}">Terms Of Service</a>
-                                            <a class="list-group-item"  href="{{ route('admin.faq') }}">Faq</a>
+                                            <a class="list-group-item"  href="{{ route('admin.privacypolicy') }}">Privacy</a>
+                                            <a class="list-group-item"  href="{{ route('admin.tos') }}">Terms</a>
+                                            <a class="list-group-item"  href="{{ route('admin.faq') }}">faq</a>
                                             {{--                                    --}}
                                         @endif
 

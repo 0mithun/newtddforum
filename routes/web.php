@@ -45,8 +45,8 @@ Route::get('/register/confirm', 'Auth\RegisterConfirmationController@index')->na
 
 
 Route::get('/contact','FrontendController@contact')->name('contact');
-Route::get('/privacy-policy','FrontendController@privacyPolicy')->name('privacypolicy');
-Route::get('/tos','FrontendController@tos')->name('tos');
+Route::get('/privacy','FrontendController@privacyPolicy')->name('privacypolicy');
+Route::get('/terms','FrontendController@tos')->name('tos');
 Route::get('/faq','FrontendController@faq')->name('faq');
 Route::post('contact','FrontendController@contactAdmin')->name('contactadmin');
 

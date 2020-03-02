@@ -225,7 +225,7 @@ class ThreadsController extends Controller
             $extension = request()->file('image_path')->getClientOriginalExtension();
             $file_name = $thread->id.".".$extension;
             $file_path = request()->image_path->storeAs('threads', $file_name);
-            $data['image_path']  = $file_path;
+            $data['image_path']  = 'uploads/'. $file_path;
         }
 
         $thread->update($data);
