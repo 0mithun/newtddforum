@@ -79,7 +79,7 @@ class ThreadsController extends Controller
 
         request()->validate([
             // 'tags'  =>  'required|array|min:1',
-            'source'    =>  $source,
+            //'source'    =>  $source,
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id',
@@ -209,7 +209,7 @@ class ThreadsController extends Controller
         }
 
         request()->validate([
-            'source'    =>  $source,
+            //'source'    =>  $source,
             'title' => 'required',
             'channel_id' => 'required',
             'body' => 'required',

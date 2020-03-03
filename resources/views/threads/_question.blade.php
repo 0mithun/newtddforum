@@ -145,7 +145,7 @@
             <div>
                 <button class="btn btn-primary btn-xs" @click="showSource = true" v-if="!showSource">View Source</button>
                 <div v-if="showSource">
-                    <a href="{{ $thread->source }}" target="_blank">{{ $thread->source }}</a>
+                    <a href="{{ $thread->source }}" target="_blank">{!! $thread->source !!}</a>
                     <br>
                     <button class="btn btn-danger btn-xs" @click="showSource = false">Close</button>
                 </div>
