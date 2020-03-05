@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Post a New Anecdote</div>
+                    <div class="panel-heading">Post an Anecdote</div>
 
                     <div class="panel-body">
                         <form method="POST" action="/threads" enctype="multipart/form-data">

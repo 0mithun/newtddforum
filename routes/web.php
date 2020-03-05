@@ -20,13 +20,22 @@ Route::get('/home', 'ThreadsController@index');
 Route::get('threads', 'ThreadsController@index')->name('threads');
 Route::get('threads/create', 'ThreadsController@create');
 Route::get('threads/search', 'SearchController@show');
-Route::get('threads/{channel}/{thread}', 'ThreadsController@show');
+
+
+//Replace threads with anecdotes
+Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show');
+
+
 
 
 Route::post('threads', 'ThreadsController@store')->middleware('must-be-confirmed');
 Route::get('threads/{channel}', 'ThreadsController@index');
 
 Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index');
+
+
+
+
 
 
 Route::get('/tags','FrontendController@getTags');

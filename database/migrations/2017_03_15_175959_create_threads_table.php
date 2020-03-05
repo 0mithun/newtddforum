@@ -24,6 +24,7 @@ class CreateThreadsTable extends Migration
             $table->unsignedInteger('visits')->default(0);
             $table->string('title');
             $table->text('body');
+            $table->unsignedInteger('word_count');
             $table->text('summary')->nullable();
             $table->string('source')->nullable();
             $table->string('location')->nullable();

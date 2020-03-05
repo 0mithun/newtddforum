@@ -13,8 +13,9 @@ use DB;
 
 class Thread extends Model
 {
-    use RecordsActivity, Searchable, Notifiable, Favoritable, Likeable;
+    use RecordsActivity,  Notifiable, Favoritable, Likeable;
 
+    // use Searchable;
     /**
      * Don't auto-apply mass assignment protection.
      *
@@ -59,6 +60,10 @@ class Thread extends Model
         static::created(function ($thread) {
             $thread->update(['slug' => $thread->title]);
         });
+
+        // static::updated(function($thread){
+        //     $thread->update(['word_count' => str_word_count($thread->body)]);
+        // });
     }
 
     /**
@@ -68,7 +73,7 @@ class Thread extends Model
      */
     public function path()
     {
-        return "/threads/{$this->channel->slug}/{$this->slug}";
+        return "/anecdotes/{$this->channel->slug}/{$this->slug}";
     }
 
     /**
@@ -224,6 +229,18 @@ class Thread extends Model
 
         $this->attributes['slug'] = $slug;
     }
+
+
+    /**
+     * 
+     * Set the word_count attribute
+     * @param string $value
+     */
+
+     public function setWordCountAttribute($value){
+         $this->attributes['word_count'] = str_word_count($value);
+     }
+
 
     /**
      * Mark the given reply as the best answer.

@@ -13,6 +13,7 @@
                             {{ $thread->title }}
                         @endif
                     </a>
+                   <span style="font-size:16px"> {{ $thread->word_count }} Words</span>
 
             </div>
             <div class="media" style="margin-top: 0px;">

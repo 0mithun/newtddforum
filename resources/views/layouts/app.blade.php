@@ -65,6 +65,20 @@
         .navbar {
             margin-bottom: 5px;
         }
+
+        
+        .source-button{
+            padding: 0px;
+            padding-left: 15px
+            /* display: block; */
+            /* overflow: hidden */
+        }
+
+        .tag-list{
+            padding: 0px
+        }
+
+
     </style>
 
     @yield('head')

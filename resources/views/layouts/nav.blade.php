@@ -25,7 +25,13 @@
                        aria-expanded="false">Browse <span class="caret"></span></a>
 
                     <ul class="dropdown-menu">
+
+                    <!-- Need to change -->
+                        <li><a href="/threads?rated=1">Top Rated</a></li>
+                        
                         <li><a href="/threads">All Threads</a></li>
+                        <!-- Need to change  -->
+
                         @if (auth()->check())
                             <li><a href="/threads?by={{ auth()->user()->username }}">My Threads</a></li>
                             <li><a href="/threads?favorites=1">My Favorites</a></li>
@@ -34,9 +40,9 @@
                         <li><a href="/threads?viewed=1">Most Viewed</a></li>
                         <li><a href="/threads?recents=1">Most Recent</a></li>
                         <li><a href="/threads?liked=1">Most Liked</a></li>
-                        <li><a href="/threads?rated=1">Top Rated</a></li>
+                        
                         <li><a href="/threads?bestofweek=1">Best Of The Week</a></li>
-                        <li><a href="/threads?unanswered=1">Unanswered Threads</a></li>
+                        <!-- <li><a href="/threads?unanswered=1">Unanswered Threads</a></li> -->
                     </ul>
                 </li>
 
