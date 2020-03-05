@@ -1,11 +1,8 @@
 <template>
-
-   <button class="btn btn-xs btn-default">
-            <!-- <span class="glyphicon glyphicon-thumbs-down like-icon" :class="dislikeClass">&nbsp;{{ dislikesCount }}</span>
-             -->
-              <span :class="classes"  class="glyphicon glyphicon-heart "  @click="toggle"></span>
+    <button class="btn btn-xs btn-default" style="padding:0px">
+    <!-- <span :class="classes"  class="glyphicon glyphicon-heart "  @click="toggle"></span> -->
+        <i class="fa fa-twitter-square" aria-hidden="true"></i>
     </button>
-
 </template>
 
 <script>

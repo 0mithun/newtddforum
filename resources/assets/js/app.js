@@ -62,6 +62,14 @@ import ChannelHead from './components/ChannelHead.vue'
 Vue.component('channel-head', ChannelHead)
 
 
+import FbShare from './components/FbShare.vue'
+import TwitterShare from './components/TwitterShare.vue'
+
+Vue.component('fb-share', FbShare)
+Vue.component('twitter-share', TwitterShare)
+
+
+
 window.eventBus = new  Vue();
 const app = new Vue({
     el: '#app',

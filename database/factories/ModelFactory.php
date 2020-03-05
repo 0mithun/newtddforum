@@ -68,7 +68,7 @@ $factory->define(App\Thread::class, function ($faker) {
         'visits' => 0,
         'slug' => str_slug($title),
         'locked' => false,
-        'image_path'    =>  'https://source.unsplash.com/random'
+        'image_path'    =>  ''
     ];
 });
 

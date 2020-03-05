@@ -73,7 +73,8 @@ class Thread extends Model
      */
     public function path()
     {
-        return "/anecdotes/{$this->channel->slug}/{$this->slug}";
+        $lower = strtolower($this->channel->slug);
+        return "/anecdotes/{$lower}/{$this->slug}";
     }
 
     /**
@@ -297,7 +298,7 @@ class Thread extends Model
 
 
     public function threadImagePath(){
-        return $this->image_path == '' ? 'https://source.unsplash.com/random' : asset($this->image_path);
+        return $this->image_path == '' ? 'https://de.wikipedia.org/wiki/Datei:Picture_font_awesome.svg' : asset($this->image_path);
     }
 
     public function getThreadImagePathAttribute(){

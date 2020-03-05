@@ -6,15 +6,24 @@
         <button class="btn btn-xs btn-default ml-a  " @click="toggleDislike"  >
             <span class="glyphicon glyphicon-thumbs-down like-icon" :class="dislikeClass">&nbsp;{{ dislikesCount }}</span>
         </button>
+       <favorite-thread :thread="thread" v-if="signedIn "></favorite-thread>
+        <FbShare :thread="thread"></FbShare>
+        <TwitterShare :thread="thread"></TwitterShare>
     </div>
 </template>
 
 <script>
+import FbShare from './FbShare.vue'
+import TwitterShare from './TwitterShare.vue'
     export default {
         props: {
             thread:{
                 type:Object
             }
+        },
+        components:{
+            FbShare,
+            TwitterShare
         },
 
         data() {

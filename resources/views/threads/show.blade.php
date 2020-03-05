@@ -53,7 +53,7 @@
             tinycomments_author: 'Author name',
         });
         $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
+            //$('[data-toggle="tooltip"]').tooltip();
 
             $('#bodyedit').atwho({
                 at: "@",

@@ -31,7 +31,7 @@ Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show');
 Route::post('threads', 'ThreadsController@store')->middleware('must-be-confirmed');
 Route::get('threads/{channel}', 'ThreadsController@index');
 
-Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index');
+Route::get('/anecdotes/{channel}/{thread}/replies', 'RepliesController@index');
 
 
 
@@ -73,7 +73,7 @@ Route::middleware(['auth'])->group(function (){
 
 
 
-    Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store');
+    Route::post('/anecdotes/{channel}/{thread}/replies', 'RepliesController@store');
     Route::patch('/replies/{reply}', 'RepliesController@update');
     Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.destroy');
     Route::post('/replies/{reply}/best', 'BestRepliesController@store')->name('best-replies.store');
