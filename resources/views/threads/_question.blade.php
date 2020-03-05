@@ -23,7 +23,7 @@
             </div>
             <div class="media-body">
                 <h4 class="media-heading thread-info">
-                    Posted by: <a href="/threads?by={{ $thread->creator->username  }}">{{ $thread->creator->name }}</a>
+                    Posted by: <a href="{{ route('threadsbyuser', $thread->creator->username) }}">{{ $thread->creator->name }}</a>
                     {{ $thread->created_at->diffForHumans()  }}
                 </h4>
             </div>            
@@ -79,11 +79,8 @@
         <div  v-html="body" style="display:inline">            
         </div>   
         
-        <div v-if="showSource">
-            <!-- <a href="{{ $thread->source }}" target="_blank">{!! $thread->source !!}</a> -->
-            {!! $thread->source !!}
-            <br>
-            <button class="btn btn-danger btn-xs" @click="showSource = false">Close</button>
+        <div >
+            <a href="{{ $thread->source }}" target="_blank">{!! $thread->source !!}</a>
         </div>
   
 
@@ -99,16 +96,19 @@
     <div class="panel-footer">
 
         <div class="row">
-            <div class="col-md-2 source-button">
+            <!-- <div class="col-md-2 source-button">
                 @if($thread->source)
                     <button class="btn btn-primary btn-xs" @click="showSource = true" v-if="!showSource">View Source</button> 
                 @endif
-            </div>
-            <div class="col-md-7 tag-list">           
-                Tagged: 
-                @foreach($thread->tags as $tag)
-                    <span> <a href="{{ route('tags.threads.list', $tag->name)  }}">{{ $tag->name  }}</a> </span>
-                @endforeach
+            </div> -->
+            <div class="col-md-9 tag-list" style="padding-left: 15px">  
+                @if($thread->tags->count())
+                    Tagged: 
+                    @foreach($thread->tags as $tag)
+                        <span> <a href="{{ route('tags.threads.list', $tag->name)  }}">{{ $tag->name  }}</a> </span>
+                    @endforeach
+                @endif
+                
             </div>
             <div class="col-md-3" style="padding: 0px;padding-right:5px">                
                 <div class="btn-group btn-group-xs pull-right" role="group" >

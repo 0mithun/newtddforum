@@ -27,10 +27,22 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading thread-info">
-                        <a href="{{ url('/threads?by='.$thread->creator->username)  }}">{{ $thread->creator->name }}</a>
-                         <small> Posted: {{ $thread->created_at->diffForHumans()  }}</small>
-                    </h4>
+                    <div class="col-md-9" style="padding:0px;">
+                        <h4 class="media-heading thread-info">
+                            <!-- <a href="{{ url('/threads?by='.$thread->creator->username)  }}">{{ $thread->creator->name }}</a> -->
+
+
+
+                            <a href="{{ route('threadsbyuser', $thread->creator->username)  }}">{{ $thread->creator->name }}</a>
+                            <small> Posted: {{ $thread->created_at->diffForHumans()  }}</small>
+                        </h4>
+                    </div>
+                    <div class="col-md-3 " style="padding:0">
+                        @if (request()->has('by'))  
+                        <button class="btn btn-default btn-sm">Profile</button>
+                        <button class="btn btn-primary btn-sm pull-right">Add Friend</button>
+                        @endif
+                    </div>                   
 
                 </div>
             </div>

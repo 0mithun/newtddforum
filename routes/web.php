@@ -42,11 +42,13 @@ Route::get('/tags','FrontendController@getTags');
 
 Route::get("/tags/{tag}/threads",'ThreadsController@loadByTag')->name('tags.threads.list');
 
-Route::get("threads/most-likes",'ThreadsController@loadByLikes')->name('likes.threads.list');
-Route::get("/threads/most-views",'ThreadsController@loadByViews')->name('views.threads.list');
-Route::get("/threads/most-recents",'ThreadsController@loadByRecents')->name('recents.threads.list');
-Route::get("/threads/top-rated",'ThreadsController@loadByTopRated')->name('toprated.threads.list');
-Route::get("/threads/best-of-week",'ThreadsController@loadByBestOfWeek')->name('bestofweek.threads.list');
+// Route::get("threads/most-likes",'ThreadsController@loadByLikes')->name('likes.threads.list');
+// Route::get("/threads/most-views",'ThreadsController@loadByViews')->name('views.threads.list');
+// Route::get("/threads/most-recents",'ThreadsController@loadByRecents')->name('recents.threads.list');
+// Route::get("/threads/top-rated",'ThreadsController@loadByTopRated')->name('toprated.threads.list');
+// Route::get("/threads/best-of-week",'ThreadsController@loadByBestOfWeek')->name('bestofweek.threads.list');
+
+Route::get('/threads?by={username}','ThreadsController@index')->name('threadsbyuser');
 
 
 Route::get('/user/confirm-new-email','ProfilesController@confirmNewEmail')->name('conform.new.email');
