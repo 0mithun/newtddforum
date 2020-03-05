@@ -93,6 +93,10 @@
             padding: 0px 3px;
         }
 
+        .userprivacy hr{
+            margin-top:10px;
+            margin-bottom: 10px;
+        }
 
     </style>
 

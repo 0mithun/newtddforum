@@ -127,8 +127,6 @@ Route::middleware(['auth'])->group(function (){
 
     Route::post('/friend/sent-request', 'FriendController@sentRequest')->name('friendrequest.sent');
 
-    //Friend
-    
     Route::get('profiles/{user}/friend-list','FriendController@friendList')->name('profile.friendlist');
     Route::get('profiles/{user}/friend-request','FriendController@getFriendRequest')->name('profile.friendrequest');
 
@@ -143,15 +141,15 @@ Route::middleware(['auth'])->group(function (){
 
 
 
-    //User Settings
-
+    //User Settings Notifications
     Route::get('/profiles/{user}/settings','UserSettingsController@index')->name('user.settnigs');
     Route::post('/profiles/{user}/settings','UserSettingsController@update')->name('user.settnigs.update');
-
-
     
 
-  
+    
+    //User Settings Privacy
+    Route::get('/profiles/{user}/settings/privacy','UserSettingsController@getPrivacy')->name('user.settnigs.privacy');
+    Route::post('/profiles/{user}/settings/privacy','UserSettingsController@updatePrivacy')->name('user.settnigs.privacy.update');
 
 
 

@@ -298,7 +298,7 @@ class Thread extends Model
 
 
     public function threadImagePath(){
-        return $this->image_path == '' ? 'https://de.wikipedia.org/wiki/Datei:Picture_font_awesome.svg' : asset($this->image_path);
+        return $this->image_path == '' ? '//upload.wikimedia.org/wikipedia/commons/thumb/8/84/Picture_font_awesome.svg/512px-Picture_font_awesome.svg.png' : asset($this->image_path);
     }
 
     public function getThreadImagePathAttribute(){

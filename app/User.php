@@ -82,6 +82,21 @@ class User extends Authenticatable
                 'receive_daily_random_thread_notify_email'      =>  0,
                 'receive_daily_random_thread_notify_email'      =>  0,
             ]);
+
+            $user->userprivacy()->create([
+                'see_my_threads'                      =>  3,
+                'see_my_favorites'                    =>  3,
+                'see_my_friends'                      =>  3,
+
+                'send_me_message'                     =>  2,
+
+                'thread_create_share_facebook'        =>  0,
+                'thread_create_share_twitter'         =>  0,
+
+
+                'anyone_share_my_thread_facebook'     =>  1,
+                'anyone_share_my_thread_twitter'      =>  1,
+            ]);
         });
     }
 
@@ -212,4 +227,7 @@ class User extends Authenticatable
         return $this->hasOne(Usersetting::class);
    }
 
+   public function userprivacy(){
+    return $this->hasOne(Userprivacy::class);
+}
 }

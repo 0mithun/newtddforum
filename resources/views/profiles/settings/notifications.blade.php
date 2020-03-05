@@ -24,7 +24,8 @@
                             <div class="row" style="margin-top: 50px;">
                                 <div class="col-md-3">
                                     <a class="list-group-item active" href="{{ route('user.settnigs', auth()->user()->username)  }}">Notifications</a>
-{{--                                    <a class="list-group-item" href="{{ route('user.settnigs.subscriptions', auth()->user()->username)  }}">Subscriptions</a>--}}
+                                    <a class="list-group-item " href="{{ route('user.settnigs.privacy', auth()->user()->username)  }}">Privacy</a>
+                                    
                                 </div>
                                 <div class="col-md-9">
                                     <form action="{{ route('user.settnigs.update', auth()->user()->username )  }}" method="post">
@@ -48,6 +49,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <h4>Notify me on:</h4>
+
                                                             <div class="form-group">
                                                                 <div class="checkbox">
                                                                     <label>
@@ -83,6 +85,8 @@
 
 
                                                             </div>
+
+                                                            
                                                         </div>
                                                 </div>
                                             </div>
