@@ -10,6 +10,7 @@
         "barryvdh/laravel-debugbar": "^3.2.8",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
+        "hootlex/laravel-friendships": "^1.0",
         "kitetail/zttp": "^0.6.0",
         "laravel/framework": "^6.0",
         "laravel/helpers": "^1.1",

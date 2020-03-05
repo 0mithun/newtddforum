@@ -2,15 +2,16 @@
 
 namespace App;
 
+use DB;
 use Carbon\Carbon;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-use DB;
+use Hootlex\Friendships\Traits\Friendable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Friendable;
 
     /**
      * The attributes that are mass assignable.

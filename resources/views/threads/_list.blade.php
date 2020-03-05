@@ -40,7 +40,17 @@
                     <div class="col-md-3 " style="padding:0">
                         @if (request()->has('by'))  
                         <button class="btn btn-default btn-sm">Profile</button>
-                        <button class="btn btn-primary btn-sm pull-right">Add Friend</button>
+
+                            @if (auth()->check())                            
+                                <form action="{{ route('friendrequest.sent') }}" method="post">
+                                    @csrf 
+                                    
+                                    <input type="hidden" name="recipient" value="{{ $thread->creator->id }}">
+
+                                    <input type="submit" value="Add Friend" class="btn btn-primary btn-sm pull-right">
+                                </form>
+                            @endif
+                            <!-- <button class="btn btn-primary btn-sm pull-right">Add Friend</button> -->
                         @endif
                     </div>                   
 

@@ -23,6 +23,9 @@
                             <div class="col-md-3">
                                 <div class="list-group">
                                     <a class="list-group-item active"  href="{{ route('profile', $user->username)  }}">Profile</a>
+                                    <a class="list-group-item "  href="{{ route('profile.friendlist', $user->username)  }}">Friends</a>
+                                    <a class="list-group-item "  href="{{ route('profile.friendrequest', $user->username)  }}">Friend Request</a>
+                                    <a class="list-group-item  "  href="{{ route('profile.blockfriends', $user->username)  }}">Bloking</a>
 
                                 @if($user->isAdmin)
 {{--                                    For Admin--}}

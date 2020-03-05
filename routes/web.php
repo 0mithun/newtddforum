@@ -47,7 +47,6 @@ Route::get("/tags/{tag}/threads",'ThreadsController@loadByTag')->name('tags.thre
 // Route::get("/threads/most-recents",'ThreadsController@loadByRecents')->name('recents.threads.list');
 // Route::get("/threads/top-rated",'ThreadsController@loadByTopRated')->name('toprated.threads.list');
 // Route::get("/threads/best-of-week",'ThreadsController@loadByBestOfWeek')->name('bestofweek.threads.list');
-
 Route::get('/threads?by={username}','ThreadsController@index')->name('threadsbyuser');
 
 
@@ -68,6 +67,12 @@ Route::get('/replies/{reply}/load-reply','RepliesController@lodReply');
 
 
 Route::middleware(['auth'])->group(function (){
+
+   
+
+
+
+
 
     //Route::patch('threads/{channel}/{thread}', 'ThreadsController@update');
     Route::post('threads/{channel}/{thread}', 'ThreadsController@update');
@@ -118,8 +123,41 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/profiles/{user}/my-likes','ProfilesController@myLikesShow')->name('profile.likes');
 
 
+    //Friend System
+
+    Route::post('/friend/sent-request', 'FriendController@sentRequest')->name('friendrequest.sent');
+
+    //Friend
+    
+    Route::get('profiles/{user}/friend-list','FriendController@friendList')->name('profile.friendlist');
+    Route::get('profiles/{user}/friend-request','FriendController@getFriendRequest')->name('profile.friendrequest');
+
+    Route::post('profiles/{user}/accept-friend-request','FriendController@acceptFriendRequest')->name('profile.acceptfriendrequest');
+    Route::post('profiles/{user}/unfriend','FriendController@unfriend')->name('profile.unfriend');
+    Route::post('profiles/{user}/block-friend','FriendController@blockFriend')->name('profile.friend.block');
+
+
+    Route::get('profiles/{user}/block-friends', 'FriendController@getBlockFriends')->name('profile.blockfriends');
+    Route::post('profiles/{user}/unblock-friends', 'FriendController@unBlockFriends')->name('profile.unblockfriends');
+
+
+
+
+    //User Settings
+
     Route::get('/profiles/{user}/settings','UserSettingsController@index')->name('user.settnigs');
     Route::post('/profiles/{user}/settings','UserSettingsController@update')->name('user.settnigs.update');
+
+
+    
+
+  
+
+
+
+
+
+
 
 
     Route::post('/tags/load','FrontendController@tagLoad')->name('tags.load');
