@@ -97,6 +97,22 @@ class User extends Authenticatable
                 'anyone_share_my_thread_facebook'     =>  1,
                 'anyone_share_my_thread_twitter'      =>  1,
             ]);
+
+            //$arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+
+            // $userLocations = [
+            //     'ip'            =>  $arr_ip['ip'],
+            //     'country'       =>  $arr_ip['country'],
+            //     'city'          =>  $arr_ip['city'],
+            //     'state'         =>  $arr_ip['state'],
+            //     'zip'           =>  $arr_ip['postal_code'],
+            //     'lat'           =>  $arr_ip['lat'],
+            //     'lng'           =>  $arr_ip['lon'],
+            // ];
+
+           // $user->userlocation()->create($userLocations);
+
+
         });
     }
 
@@ -223,11 +239,15 @@ class User extends Authenticatable
         return $this->first_name. ' '. $this->last_name;
     }
 
-   public function usersetting(){
+    public function usersetting(){
         return $this->hasOne(Usersetting::class);
-   }
+    }
 
-   public function userprivacy(){
-    return $this->hasOne(Userprivacy::class);
-}
+    public function userprivacy(){
+        return $this->hasOne(Userprivacy::class);
+    }
+
+    public function userlocation(){
+        return $this->hasOne(Userlocation::class);
+    }
 }

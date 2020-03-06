@@ -11,6 +11,13 @@
 |
 */
 
+Route::get('/test', function(){
+    $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+
+    dd($arr_ip);
+});
+
+
 Route::get('/','ThreadsController@index');
 
 Auth::routes();

@@ -21,8 +21,16 @@ class ModelFactorySeeder extends Seeder
             'password' =>  bcrypt('secret'),
             'remember_token' => str_random(10),
             'confirmed' => true
-        ]);
-        factory(App\User::class, 10)->create();
+        ])->each(function($user){
+            $user->userlocation()->save(factory(App\Userlocation::class)->make());
+        });
+
+
+        factory(App\User::class, 10)->create()->each(function($user){
+            $user->userlocation()->save(factory(App\Userlocation::class)->make());
+        });
+
+
 
 //        factory(App\Channel::class, 10)->create();
         $channels = [

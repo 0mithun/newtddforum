@@ -33,11 +33,27 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 
+$factory->define(App\Userlocation::class, function (Faker\Generator $faker) {
+    return [
+        'ip'            =>  $faker->ipv4,
+        'country'       =>  $faker->country,
+        'city'          =>  $faker->city,
+        'state'         =>  $faker->state,
+        'zip'           =>  $faker->postcode,
+        'lat'           =>  $faker->latitude(19.5,64.5),
+        'lng'           =>  $faker->longitude(-161.75583, -68.01197),
+    ];
+});
+
+
+
 $factory->state(App\User::class, 'unconfirmed', function () {
     return [
         'confirmed' => false
     ];
 });
+
+
 
 $factory->state(App\User::class, 'administrator', function () {
     $first_name = 'john';
