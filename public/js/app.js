@@ -11177,6 +11177,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     thread: {
@@ -11194,9 +11199,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     endpoint: function endpoint() {
       return '/thread/' + this.thread.id + '/favorites';
+    },
+    threadUrl: function threadUrl() {
+      return 'https://www.facebook.com/sharer/sharer.php?u=' + this.thread.path;
     }
   },
   methods: {
+    share: function share() {
+      window.open(this.threadUrl, 'Share on Twitter', 'width=600, height=400');
+    },
     toggle: function toggle() {
       this.active ? this.destroy() : this.create();
     },
@@ -12475,6 +12486,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     thread: {
@@ -12492,9 +12506,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     endpoint: function endpoint() {
       return '/thread/' + this.thread.id + '/favorites';
+    },
+    threadUrl: function threadUrl() {
+      return "https://twitter.com/intent/tweet?url=" + this.thread.title + "&text=" + this.thread.path + "&via=0mithun_mithun";
     }
   },
   methods: {
+    share: function share() {
+      window.open(this.threadUrl, 'Share on Twitter', 'width=600, height=400');
+    },
     toggle: function toggle() {
       this.active ? this.destroy() : this.create();
     },
@@ -84966,28 +84986,23 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "a",
+    {
+      staticClass: "btn btn-xs btn-default",
+      staticStyle: { padding: "0px" },
+      attrs: { href: _vm.threadUrl, target: "_blank" },
+      on: { click: _vm.share }
+    },
+    [
+      _c("i", {
+        staticClass: "fa fa-facebook-square",
+        attrs: { "aria-hidden": "true" }
+      })
+    ]
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-xs btn-default",
-        staticStyle: { padding: "0px" }
-      },
-      [
-        _c("i", {
-          staticClass: "fa fa-facebook-square",
-          attrs: { "aria-hidden": "true" }
-        })
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -86326,28 +86341,23 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "a",
+    {
+      staticClass: "btn btn-xs btn-default",
+      staticStyle: { padding: "0px" },
+      attrs: { href: _vm.threadUrl, target: "_blank" }
+    },
+    [
+      _c("i", {
+        staticClass: "fa fa-twitter-square",
+        attrs: { "aria-hidden": "true" },
+        on: { click: _vm.share }
+      })
+    ]
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-xs btn-default",
-        staticStyle: { padding: "0px" }
-      },
-      [
-        _c("i", {
-          staticClass: "fa fa-twitter-square",
-          attrs: { "aria-hidden": "true" }
-        })
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

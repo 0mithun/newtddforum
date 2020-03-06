@@ -35,7 +35,7 @@ class Thread extends Model
      *
      * @var array
      */
-    protected $appends = ['isSubscribedTo','isReported','isFavorited','isLiked','likesCount', 'isDesliked','dislikesCount','excerpt','threadImagePath'];
+    protected $appends = ['isSubscribedTo','isReported','isFavorited','isLiked','likesCount', 'isDesliked','dislikesCount','excerpt','threadImagePath','path'];
 
     /**
      * The attributes that should be cast to native types.
@@ -75,6 +75,10 @@ class Thread extends Model
     {
         $lower = strtolower($this->channel->slug);
         return "/anecdotes/{$lower}/{$this->slug}";
+    }
+
+    public function getPathAttribute(){
+        return url($this->path());
     }
 
     /**
