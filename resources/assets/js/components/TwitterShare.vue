@@ -35,7 +35,9 @@
                 return '/thread/' + this.thread.id + '/favorites';
             },
             threadUrl(){
-               return "https://twitter.com/intent/tweet?url="+this.thread.title+"&text="+this.thread.path+"&via=0mithun_mithun"
+               //return "https://twitter.com/intent/tweet?url="+this.thread.title+"&text="+this.thread.path+"&via=0mithun_mithun"
+               //title
+               return "https://twitter.com/intent/tweet?url="+this.thread.path+"&text="+this.thread.title+"&via=0mithun_mithun"
             }
         },
 
