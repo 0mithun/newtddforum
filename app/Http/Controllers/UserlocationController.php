@@ -12,23 +12,20 @@ class UserlocationController extends Controller
     public function show(){
         $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
 
+
          $userLocations = [
                 'lat'           =>  $arr_ip['lat'],
                 'lng'           =>  $arr_ip['lon'],
             ];
-        //dd($userLocations);
-        //$userLocations = json_encode($userLocations);
         return view('map.show', compact('userLocations'));
     }
 
     public function getNearestThread(Request $request){
-           
-    //    dd(request()->all());
+
         $center=request('center');
         $lat=$center['lat'];
         $lng=$center['lng'];
-    //    $lat=35.985510;
-    //    $lng=-121.561489;
+
         $distance=request('radius')??200;
         // Search the rows in the markers table
         $results = DB::select(DB::raw('SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat .') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance') );

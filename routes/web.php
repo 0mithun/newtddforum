@@ -76,7 +76,7 @@ Route::get('/replies/{reply}/load-reply','RepliesController@lodReply');
 
 Route::middleware(['auth'])->group(function (){
 
-   
+   Route::get('/closet/threads','UserlocationController@show')->name('closet.thread');
 
 
 

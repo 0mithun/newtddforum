@@ -4,11 +4,13 @@
     import Editor from '@tinymce/tinymce-vue'
     import {Typeahead} from 'uiv'
 
+  
+
 
     export default {
         props: ['thread'],
 
-        components: {Replies, SubscribeButton, Editor,Typeahead },
+        components: {Replies, SubscribeButton, Editor,Typeahead, },
 
         data () {
             return {

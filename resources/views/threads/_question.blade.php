@@ -166,5 +166,5 @@
     </div>
 </div>
 
-<thread-map></thread-map>
+<simple-map :thread="{{ $thread }}"></simple-map>
 

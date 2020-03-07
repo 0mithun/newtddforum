@@ -32,6 +32,8 @@
                         <li><a href="/threads">All Threads</a></li>
                         <!-- Need to change  -->
 
+                        <li><a href="{{ route('closet.thread') }}">Closest</a></li>
+
                         @if (auth()->check())
                             <li><a href="/threads?by={{ auth()->user()->username }}">My Threads</a></li>
                             <li><a href="/threads?favorites=1">My Favorites</a></li>
