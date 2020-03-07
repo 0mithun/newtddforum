@@ -44,7 +44,7 @@ class UserlocationController extends Controller
         $formattedResults = collect($results)->map(function ($item, $key) {
             return [
                 'text'=>$item->title,
-                'user_id' => $item->user_id
+                'thread_id' => $item->id
             ];
         });
 

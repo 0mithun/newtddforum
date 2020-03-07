@@ -1,16 +1,14 @@
-<template>
-   
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">{{ this.infoContent.title }}</h4>
+<template>   
+    <div class="">
+        <div class="">
+            {{ this.infoContent.title }}
         </div>
-        <div class="panel-body">
-            <div class="col-md-3">
-
-            </div>
-            <div class="col-md-9">
-                {{ this.infoContent.creator.name }}
-            </div>
+        <div class="" style="margin-top:10px">
+            <img :src="infoContent.creator.profileAvatarPath" alt="" width="25"> Posted By: {{ this.infoContent.creator.name }}   
+            
+            <span>
+                <a :href="infoContent.path" class="btn btn-default btn-xs pull-right" target="_blank">View</a>
+            </span>         
         </div>
     </div>  
 </template>

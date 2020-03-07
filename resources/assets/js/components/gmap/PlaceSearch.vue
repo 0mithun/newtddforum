@@ -1,6 +1,5 @@
 <template>
-    <div class="col-md-12">
-        <form action="">
+    <div class="row" >
             <div class="col-md-9">
                 <gmap-autocomplete
                     class="form-control"
@@ -18,7 +17,6 @@
                     <option value="500">500</option>   
                 </select>    
             </div>
-        </form>
     </div>
   
 </template>
@@ -28,7 +26,7 @@ export default {
     props:['userlat', 'userlng'],
     data(){
         return{
-           radius:200,
+           radius:300,
         //    center:{lat:42.363211, lng:-105.071875},
             center:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
            radiusOptions:[100, 200, 300,]

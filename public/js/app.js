@@ -12741,8 +12741,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['infoContent'],
   data: function data() {
@@ -12794,16 +12792,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       drawer: null,
-      results: []
+      results: [],
+      activeIndex: null
     };
   },
   methods: {
+    isActive: function isActive(index) {//return this.activeIndex == index ? 'active' : '';
+      //return 'active';
+    },
     focusMarker: function focusMarker(index) {
+      this.activeIndex = index;
       eventBus.$emit('markers_result_clicked', index);
+    },
+    viewThread: function viewThread(thread_id) {
+      this.getThreadDetails(thread_id);
+    },
+    getThreadDetails: function getThreadDetails(thread_id) {
+      axios.post('/map/thread-details', {
+        thread_id: thread_id
+      }).then(function (res) {
+        window.open(res.data.path, "_blank");
+      });
     }
   },
   created: function created() {
@@ -12849,13 +12866,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['userlat', 'userlng'],
   data: function data() {
     return {
-      radius: 200,
+      radius: 300,
       //    center:{lat:42.363211, lng:-105.071875},
       center: {
         lat: parseInt(this.userlat),
@@ -12933,7 +12948,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
- // Vue.component('info-content', InfoContent);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   //@click="center=m.position"
@@ -12971,7 +12985,7 @@ __webpack_require__.r(__webpack_exports__);
         center: this.center
       }).then(function (res) {
         var data = res.data;
-        eventBus.$emit('markers_fetched', data); //console.log(res)
+        eventBus.$emit('markers_fetched', data);
       });
     },
     toggleInfoWindow: function toggleInfoWindow(marker, idx) {
@@ -13012,8 +13026,7 @@ __webpack_require__.r(__webpack_exports__);
       var targetMarkers = _this2.markers[index];
       _this2.center = targetMarkers.position;
 
-      _this2.toggleInfoWindow(targetMarkers, index); //console.log('evetn data', data);
-
+      _this2.toggleInfoWindow(targetMarkers, index);
     });
   }
 });
@@ -88912,21 +88925,32 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "panel panel-default" }, [
-    _c("div", { staticClass: "panel-heading" }, [
-      _c("h4", { staticClass: "panel-title" }, [
-        _vm._v(_vm._s(this.infoContent.title))
-      ])
+  return _c("div", {}, [
+    _c("div", {}, [
+      _vm._v("\n        " + _vm._s(this.infoContent.title) + "\n    ")
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "panel-body" }, [
-      _c("div", { staticClass: "col-md-3" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-9" }, [
-        _vm._v(
-          "\n            " +
-            _vm._s(this.infoContent.creator.name) +
-            "\n        "
+    _c("div", { staticStyle: { "margin-top": "10px" } }, [
+      _c("img", {
+        attrs: {
+          src: _vm.infoContent.creator.profileAvatarPath,
+          alt: "",
+          width: "25"
+        }
+      }),
+      _vm._v(
+        " Posted By: " +
+          _vm._s(this.infoContent.creator.name) +
+          "   \n        \n        "
+      ),
+      _c("span", [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-default btn-xs pull-right",
+            attrs: { href: _vm.infoContent.path, target: "_blank" }
+          },
+          [_vm._v("View")]
         )
       ])
     ])
@@ -88954,7 +88978,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-12" }, [
+  return _c("div", {}, [
     _c(
       "div",
       { staticClass: "list-group" },
@@ -88963,8 +88987,9 @@ var render = function() {
           "a",
           {
             key: i,
-            staticClass:
-              "list-group-item list-group-item-action flex-column align-items-start",
+            staticClass: "list-group-item ",
+            class: _vm.isActive(i),
+            staticStyle: { padding: "10px 5px" },
             attrs: { href: "#" },
             on: {
               click: function($event) {
@@ -88973,9 +88998,26 @@ var render = function() {
             }
           },
           [
-            _c("div", { staticClass: "d-flex w-100 justify-content-between" }, [
-              _c("h5", { staticClass: "mb-1" }, [_vm._v(_vm._s(item.text))])
-            ])
+            _c("div", { staticClass: "col-md-10" }, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(item.text) +
+                  "\n                "
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn-default btn btn-sm",
+                on: {
+                  click: function($event) {
+                    return _vm.viewThread(item.thread_id)
+                  }
+                }
+              },
+              [_vm._v("View")]
+            )
           ]
         )
       }),
@@ -89005,69 +89047,67 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-12" }, [
-    _c("form", { attrs: { action: "" } }, [
+  return _c("div", { staticClass: "row" }, [
+    _c(
+      "div",
+      { staticClass: "col-md-9" },
+      [
+        _c("gmap-autocomplete", {
+          staticClass: "form-control",
+          attrs: { placeholder: "Type location for search thread" },
+          on: { place_changed: _vm.setRelatedThread }
+        })
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-md-3" }, [
       _c(
-        "div",
-        { staticClass: "col-md-9" },
-        [
-          _c("gmap-autocomplete", {
-            staticClass: "form-control",
-            attrs: { placeholder: "Type location for search thread" },
-            on: { place_changed: _vm.setRelatedThread }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-3" }, [
-        _c(
-          "select",
-          {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.radius,
-                expression: "radius"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { name: "", id: "" },
-            on: {
-              change: [
-                function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.radius = $event.target.multiple
-                    ? $$selectedVal
-                    : $$selectedVal[0]
-                },
-                _vm.fetchNearestLocations
-              ]
+        "select",
+        {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.radius,
+              expression: "radius"
             }
-          },
-          [
-            _c("option", { attrs: { value: "" } }, [_vm._v("Select Radius")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "100" } }, [_vm._v("100")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "200" } }, [_vm._v("200")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "300" } }, [_vm._v("300")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "400" } }, [_vm._v("400")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "500" } }, [_vm._v("500")])
-          ]
-        )
-      ])
+          ],
+          staticClass: "form-control",
+          attrs: { name: "", id: "" },
+          on: {
+            change: [
+              function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.radius = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              },
+              _vm.fetchNearestLocations
+            ]
+          }
+        },
+        [
+          _c("option", { attrs: { value: "" } }, [_vm._v("Select Radius")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "100" } }, [_vm._v("100")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "200" } }, [_vm._v("200")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "300" } }, [_vm._v("300")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "400" } }, [_vm._v("400")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "500" } }, [_vm._v("500")])
+        ]
+      )
     ])
   ])
 }
@@ -89096,7 +89136,7 @@ var render = function() {
   return _c(
     "GmapMap",
     {
-      staticStyle: { width: "100%", height: "800px" },
+      staticStyle: { width: "100%", height: "100vh" },
       attrs: { center: _vm.center, zoom: _vm.zoom, "map-type-id": "terrain" }
     },
     [

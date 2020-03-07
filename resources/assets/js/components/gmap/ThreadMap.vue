@@ -3,7 +3,7 @@
     :center="center"
     :zoom="zoom"
     map-type-id="terrain"
-    style="width: 100%; height: 800px"
+    style="width: 100%; height: 100vh"
     >
         <gmap-cluster :zoomOnClick="true" :maxZoom="5">
         
@@ -34,7 +34,6 @@
 
 <script>
 import InfoContent from './InfoContent.vue';
-// Vue.component('info-content', InfoContent);
 
 export default {
     
@@ -72,7 +71,6 @@ export default {
             }).then(res=>{
                 let data = res.data;
                 eventBus.$emit('markers_fetched', data);
-                //console.log(res)
             })
         },
         toggleInfoWindow(marker, idx){
@@ -114,8 +112,8 @@ export default {
            let targetMarkers = this.markers[index]
            this.center = targetMarkers.position;
            this.toggleInfoWindow(targetMarkers, index);
-            //console.log('evetn data', data);
         });
+
         
     }
 }
