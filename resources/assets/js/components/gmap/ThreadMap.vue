@@ -1,9 +1,9 @@
 <template>
   <GmapMap
-    :center="{lat:10, lng:10}"
-    :zoom="7"
+    :center="center"
+    :zoom="zoom"
     map-type-id="terrain"
-    style="width: 500px; height: 300px"
+    style="width: 100%; height: 800px"
     >
         <GmapMarker
             :key="index"
@@ -20,16 +20,33 @@
 export default {
     data(){
         return{
-            center:{lat: 10.0, lng:10.0},
-            markers:[
-                {
-                    position:{lat:10.0, lng:10.0},
-                },
-                {
-                    position:{lat:10.0, lng:10.0},
-                }
-            ]
+            center:{lat: 42.363211, lng:-105.071875},
+            markers:[],
+            zoom:5
         }
+    },
+    methods:{
+        fetchLocations(){
+            axios.post('/map/nearest-threads',{
+                center:this.center, 
+            }).then(res=>{
+                let data = res.data;
+                eventBus.$emit('markers_fetched', data);
+                //console.log(res)
+            })
+        }
+    },
+    created(){
+        this.fetchLocations();
+        eventBus.$on('markers_fetched', data=>{
+            this.markers = data.markers;
+
+            if(this.markers.length>0){
+                this.center=data.markers[0].position;
+            }
+
+            console.log('evetn data', data);
+        });
     }
 }
 </script>

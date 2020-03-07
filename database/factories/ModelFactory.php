@@ -25,7 +25,9 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'first_name' => $first_name,
         'last_name' => $last_name,
         'email' => $faker->unique()->safeEmail,
-        'username'  =>  $faker->unique()->word,
+        'username'  =>  $faker->unique()->name,
+        'lat'       =>   $faker->latitude(19.5,64.5),
+        'lng'       =>  $faker->longitude(-161.75583, -68.01197),
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
         'confirmed' => true
@@ -84,7 +86,9 @@ $factory->define(App\Thread::class, function ($faker) {
         'visits' => 0,
         'slug' => str_slug($title),
         'locked' => false,
-        'image_path'    =>  ''
+        'image_path'    =>  '',
+        'lat'       =>   $faker->latitude(19.5,64.5),
+        'lng'       =>  $faker->longitude(-161.75583, -68.01197),
     ];
 });
 

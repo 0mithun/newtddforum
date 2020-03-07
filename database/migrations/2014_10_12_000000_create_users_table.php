@@ -22,6 +22,9 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('avatar_path')->nullable();
+            
+            $table->float('lat',10,6)->nullable();
+            $table->float('lng',10,6)->nullable();
 
             $table->string('city')->nullable();
             $table->string('country')->nullable();

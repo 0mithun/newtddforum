@@ -35,6 +35,10 @@ class CreateThreadsTable extends Migration
             $table->boolean('allow_image')->default(0);
             $table->unsignedInteger('best_reply_id')->nullable();
             $table->boolean('locked')->default(false);
+
+            $table->float('lat',10,6)->nullable();
+            $table->float('lng',10,6)->nullable();
+
             $table->timestamps();
 
             $table->foreign('best_reply_id')

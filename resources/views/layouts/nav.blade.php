@@ -60,6 +60,9 @@
                         @endforeach
                     </ul>
                 </li>
+                <li>
+                    <a href="{{ route('map.show') }}">Map</a>
+                </li>
             </ul>
 
             <!-- Right Side Of Navbar -->

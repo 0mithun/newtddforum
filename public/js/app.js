@@ -12717,6 +12717,77 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      radius: 200,
+      center: {
+        lat: 42.363211,
+        lng: -105.071875
+      },
+      radiusOptions: [100, 200, 300]
+    };
+  },
+  methods: {
+    fetchNearestLocations: function fetchNearestLocations() {
+      axios.post('/map/nearest-threads', {
+        center: this.center,
+        radius: this.radius
+      }).then(function (res) {
+        var data = res.data;
+        eventBus.$emit('markers_fetched', data);
+        console.log(res);
+      });
+    },
+    setRelatedThread: function setRelatedThread(place) {
+      var center = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      };
+      this.center = center;
+      this.fetchNearestLocations();
+    },
+    onRadiusChange: function onRadiusChange() {//console.log(this.radius);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/ThreadMap.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/gmap/ThreadMap.vue?vue&type=script&lang=js& ***!
@@ -12748,21 +12819,36 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       center: {
-        lat: 10.0,
-        lng: 10.0
+        lat: 42.363211,
+        lng: -105.071875
       },
-      markers: [{
-        position: {
-          lat: 10.0,
-          lng: 10.0
-        }
-      }, {
-        position: {
-          lat: 10.0,
-          lng: 10.0
-        }
-      }]
+      markers: [],
+      zoom: 5
     };
+  },
+  methods: {
+    fetchLocations: function fetchLocations() {
+      axios.post('/map/nearest-threads', {
+        center: this.center
+      }).then(function (res) {
+        var data = res.data;
+        eventBus.$emit('markers_fetched', data); //console.log(res)
+      });
+    }
+  },
+  created: function created() {
+    var _this = this;
+
+    this.fetchLocations();
+    eventBus.$on('markers_fetched', function (data) {
+      _this.markers = data.markers;
+
+      if (_this.markers.length > 0) {
+        _this.center = data.markers[0].position;
+      }
+
+      console.log('evetn data', data);
+    });
   }
 });
 
@@ -87000,6 +87086,94 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=template&id=3251018c&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=template&id=3251018c& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "col-md-12" }, [
+    _c("form", { attrs: { action: "" } }, [
+      _c(
+        "div",
+        { staticClass: "col-md-9" },
+        [
+          _c("gmap-autocomplete", {
+            staticClass: "form-control",
+            attrs: { placeholder: "Type location for search thread" },
+            on: { place_changed: _vm.setRelatedThread }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-3" }, [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.radius,
+                expression: "radius"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { name: "", id: "" },
+            on: {
+              change: [
+                function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.radius = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                },
+                _vm.fetchNearestLocations
+              ]
+            }
+          },
+          [
+            _c("option", { attrs: { value: "" } }, [_vm._v("Select Radius")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "100" } }, [_vm._v("100")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "200" } }, [_vm._v("200")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "300" } }, [_vm._v("300")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "400" } }, [_vm._v("400")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "500" } }, [_vm._v("500")])
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/ThreadMap.vue?vue&type=template&id=3cca6eaf&":
 /*!************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/gmap/ThreadMap.vue?vue&type=template&id=3cca6eaf& ***!
@@ -87018,8 +87192,8 @@ var render = function() {
   return _c(
     "GmapMap",
     {
-      staticStyle: { width: "500px", height: "300px" },
-      attrs: { center: { lat: 10, lng: 10 }, zoom: 7, "map-type-id": "terrain" }
+      staticStyle: { width: "100%", height: "800px" },
+      attrs: { center: _vm.center, zoom: _vm.zoom, "map-type-id": "terrain" }
     },
     _vm._l(_vm.markers, function(m, index) {
       return _c("GmapMarker", {
@@ -101804,8 +101978,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_FbShare_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/FbShare.vue */ "./resources/assets/js/components/FbShare.vue");
 /* harmony import */ var _components_TwitterShare_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/TwitterShare.vue */ "./resources/assets/js/components/TwitterShare.vue");
 /* harmony import */ var _components_gmap_ThreadMap_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/gmap/ThreadMap.vue */ "./resources/assets/js/components/gmap/ThreadMap.vue");
-/* harmony import */ var vue2_google_maps__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! vue2-google-maps */ "./node_modules/vue2-google-maps/dist/main.js");
-/* harmony import */ var vue2_google_maps__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(vue2_google_maps__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var _components_gmap_PlaceSearch_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/gmap/PlaceSearch.vue */ "./resources/assets/js/components/gmap/PlaceSearch.vue");
+/* harmony import */ var vue2_google_maps__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! vue2-google-maps */ "./node_modules/vue2-google-maps/dist/main.js");
+/* harmony import */ var vue2_google_maps__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(vue2_google_maps__WEBPACK_IMPORTED_MODULE_19__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -101852,9 +102027,11 @@ Vue.component('twitter-share', _components_TwitterShare_vue__WEBPACK_IMPORTED_MO
 
 Vue.component('thread-map', _components_gmap_ThreadMap_vue__WEBPACK_IMPORTED_MODULE_17__["default"]);
 
-Vue.use(vue2_google_maps__WEBPACK_IMPORTED_MODULE_18__, {
+Vue.component('place-search', _components_gmap_PlaceSearch_vue__WEBPACK_IMPORTED_MODULE_18__["default"]);
+
+Vue.use(vue2_google_maps__WEBPACK_IMPORTED_MODULE_19__, {
   load: {
-    key: 'AIzaSyCKgzVZptkOGDWZ_BJ0b6BZdIxVd_xz4rg',
+    key: 'AIzaSyCi8raV_JKtL4xUfmHIvHkxA07DBEr9WbA',
     libraries: 'places' // This is required if you use the Autocomplete plugin
     // OR: libraries: 'places,drawing'
     // OR: libraries: 'places,drawing,visualization'
@@ -103517,6 +103694,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Wysiwyg_vue_vue_type_template_id_e08f58b4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Wysiwyg_vue_vue_type_template_id_e08f58b4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/gmap/PlaceSearch.vue":
+/*!*************************************************************!*\
+  !*** ./resources/assets/js/components/gmap/PlaceSearch.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PlaceSearch_vue_vue_type_template_id_3251018c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PlaceSearch.vue?vue&type=template&id=3251018c& */ "./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=template&id=3251018c&");
+/* harmony import */ var _PlaceSearch_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlaceSearch.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PlaceSearch_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PlaceSearch_vue_vue_type_template_id_3251018c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PlaceSearch_vue_vue_type_template_id_3251018c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/gmap/PlaceSearch.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PlaceSearch_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./PlaceSearch.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PlaceSearch_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=template&id=3251018c&":
+/*!********************************************************************************************!*\
+  !*** ./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=template&id=3251018c& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlaceSearch_vue_vue_type_template_id_3251018c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./PlaceSearch.vue?vue&type=template&id=3251018c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/PlaceSearch.vue?vue&type=template&id=3251018c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlaceSearch_vue_vue_type_template_id_3251018c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlaceSearch_vue_vue_type_template_id_3251018c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
