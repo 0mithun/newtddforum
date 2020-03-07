@@ -11,7 +11,7 @@ class ModelFactorySeeder extends Seeder
      */
     public function run()
     {
-        // factory(App\Admin::class)->create();
+        factory(App\Admin::class)->create();
         // factory(App\User::class)->create([
         //     'name' => 'Jason Payne',
         //     'first_name' => 'Jason',
@@ -40,12 +40,12 @@ class ModelFactorySeeder extends Seeder
             'Music','Politics','Pranks','Religion','Science','Sex','Sports','Travel','Television','War',
         ];
 
-        // foreach ($channels as $channel){
-        //     factory(App\Channel::class)->create([
-        //         'name'  =>  $channel,
-        //         'slug'  =>  $channel
-        //     ]);
-        // }
+        foreach ($channels as $channel){
+            factory(App\Channel::class)->create([
+                'name'  =>  $channel,
+                'slug'  =>  $channel
+            ]);
+        }
         // //factory(App\Tags::class, 10)->create();
         factory(App\Thread::class, 1000)->create();
         // factory(App\Reply::class,10)->create();

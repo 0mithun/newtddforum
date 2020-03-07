@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Thread;
 use Illuminate\Http\Request;
 
 use DB;
@@ -9,7 +10,15 @@ use DB;
 class UserlocationController extends Controller
 {
     public function show(){
-        return view('map.show');
+        $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+
+         $userLocations = [
+                'lat'           =>  $arr_ip['lat'],
+                'lng'           =>  $arr_ip['lon'],
+            ];
+        //dd($userLocations);
+        //$userLocations = json_encode($userLocations);
+        return view('map.show', compact('userLocations'));
     }
 
     public function getNearestThread(Request $request){
@@ -27,13 +36,15 @@ class UserlocationController extends Controller
         $markers = collect($results)->map(function ($item, $key) {
             return [
                 'position' => ['lat' => $item->lat, 'lng' => $item->lng],
-                'name'=>$item->title
+                'name'=>$item->title,
+                'thread_id'=>$item->id
             ];
         });
 
         $formattedResults = collect($results)->map(function ($item, $key) {
             return [
-                'text'=>$item->title
+                'text'=>$item->title,
+                'user_id' => $item->user_id
             ];
         });
 
@@ -44,5 +55,12 @@ class UserlocationController extends Controller
             'results'=>$formattedResults
         ];
         return response($data,200);
-        }
+    }
+
+    public function threadDetails (){
+        $thread_id = request('thread_id');
+        $thread = Thread::where('id', $thread_id )->first();
+        return response()->json($thread);
+        
+    }
 }

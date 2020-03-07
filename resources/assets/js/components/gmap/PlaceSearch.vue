@@ -25,10 +25,12 @@
 
 <script>
 export default {
+    props:['userlat', 'userlng'],
     data(){
         return{
            radius:200,
-           center:{lat:42.363211, lng:-105.071875},
+        //    center:{lat:42.363211, lng:-105.071875},
+            center:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
            radiusOptions:[100, 200, 300,]
         }
     },
@@ -39,7 +41,6 @@ export default {
             }).then(res=>{
                 let data = res.data;
                 eventBus.$emit('markers_fetched', data);
-                console.log(res)
             })
         },
         setRelatedThread(place){

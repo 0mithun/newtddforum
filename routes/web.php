@@ -11,17 +11,13 @@
 |
 */
 
-Route::get('/test', function(){
-    //$arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
-
-    //dd($arr_ip);
-    return view('welcome');
-});
+Route::get('/test', 'UserlocationController@threadDetails');
 
 
 Route::get('/map/show','UserlocationController@show')->name('map.show');
 Route::post('/map/nearest-threads','UserlocationController@getNearestThread')->name('map.nearest');
 
+Route::post('/map/thread-details','UserlocationController@threadDetails')->name('thread.details');
 
 Route::get('/','ThreadsController@index');
 

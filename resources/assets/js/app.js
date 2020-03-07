@@ -76,8 +76,17 @@ Vue.component('thread-map', ThreadMap);
 import PlaceSearch from './components/gmap/PlaceSearch.vue';
 Vue.component('place-search',PlaceSearch);
 
+import MapResults from './components/gmap/MapResults.vue';
+Vue.component('map-results',MapResults);
+
+
+
 import * as VueGoogleMaps from 'vue2-google-maps'
+
+import GmapCluster from 'vue2-google-maps/dist/components/cluster' // replace src with dist if you have Babel issues
  
+Vue.component('GmapCluster', GmapCluster)
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyCi8raV_JKtL4xUfmHIvHkxA07DBEr9WbA',
