@@ -2,7 +2,7 @@
 ## Installation Instructions
 
 ### Install Composer if dont' have already installed
-    - Run `apt install composer`
+- Run `apt install composer`
 
 - Run `composer install`
 - Run `cp .env.example .env`
