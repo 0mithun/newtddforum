@@ -8,6 +8,7 @@
         "php": "^7.2",
         "algolia/algoliasearch-client-php": "^2.2",
         "barryvdh/laravel-debugbar": "^3.2.8",
+        "beyondcode/laravel-websockets": "^1.4",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "hootlex/laravel-friendships": "^1.0",
@@ -18,6 +19,7 @@
         "laravel/tinker": "^2.0",
         "predis/predis": "^1.1",
         "stevebauman/purify": "^3.0.1",
+        "tamayo/laravel-scout-elastic": "^5.0",
         "torann/geoip": "^1.1"
     },
     "require-dev": {
