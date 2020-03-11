@@ -19,7 +19,7 @@ class SearchController extends Controller
         // }
 
        
-        $threads = Thread::search(request('query'))->paginate(3);
+        $threads = Thread::search(request('query'))->paginate(10);
         $query = request('query');
         return view('threads.search', [
             'trending' => $trending->get(),
@@ -31,7 +31,7 @@ class SearchController extends Controller
     public function search(){
         //return request('q');
          if (request()->expectsJson()) {
-            return Thread::search(request('query'))->paginate(3);
+            return Thread::search(request('query'))->paginate(10);
             // return Thread::search(request('q'))->get();
         }
     }

@@ -12521,6 +12521,38 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SearchPagination__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SearchPagination */ "./resources/assets/js/components/SearchPagination.vue");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -12552,6 +12584,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['threads', 'query'],
   components: {
@@ -12567,7 +12600,11 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.allThreads = this.threads.data;
   },
+  computed: {},
   methods: {
+    ago: function ago(created_at) {
+      return moment__WEBPACK_IMPORTED_MODULE_1___default()(created_at, 'YYYY-MM-DD HH:mm:ss').fromNow() + '...';
+    },
     searchThreads: function searchThreads() {
       var _this = this;
 
@@ -89018,39 +89055,10 @@ var render = function() {
   return _c("div", [
     _c(
       "div",
-      { staticClass: "col-md-8" },
+      { staticClass: "col-md-12" },
       [
-        _vm._l(_vm.allThreads, function(thread, index) {
-          return _c("li", { key: index }, [
-            _c(
-              "a",
-              { attrs: { href: thread.path } },
-              [
-                _c("text-highlight", { attrs: { queries: _vm.q } }, [
-                  _vm._v(_vm._s(thread.title))
-                ])
-              ],
-              1
-            )
-          ])
-        }),
-        _vm._v(" "),
-        _c("SearchPagination", {
-          attrs: { dataSet: _vm.threads, query: _vm.q },
-          on: { changedSearch: _vm.fetch }
-        })
-      ],
-      2
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-md-4" }, [
-      _c("div", { staticClass: "panel" }, [
-        _c("div", { staticClass: "panel-heading" }, [
-          _vm._v("\n                Search\n            ")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "panel-body" }, [
-          _c("form", { attrs: { action: "" } }, [
+        _c("div", { staticClass: "panel" }, [
+          _c("div", { staticClass: "panel-body" }, [
             _c("div", { staticClass: "form-group" }, [
               _c("input", {
                 directives: [
@@ -89081,9 +89089,119 @@ var render = function() {
               })
             ])
           ])
-        ])
-      ])
-    ])
+        ]),
+        _vm._v(" "),
+        !_vm.allThreads.length
+          ? _c("div", { staticClass: "panel" }, [
+              _c("h3", { staticClass: "text-center" }, [
+                _vm._v("No Results Found")
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm._l(_vm.allThreads, function(thread, index) {
+          return _c(
+            "div",
+            {
+              key: index,
+              staticClass: "panel",
+              staticStyle: { "margin-bottom": "10px" }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "panel-heading",
+                  staticStyle: { "padding-top": "5px" }
+                },
+                [
+                  _c("h4", { staticStyle: { "margin-top": "5px" } }, [
+                    _c(
+                      "a",
+                      { attrs: { href: thread.path } },
+                      [
+                        _c("text-highlight", { attrs: { queries: _vm.q } }, [
+                          _vm._v(_vm._s(thread.title))
+                        ])
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "media",
+                      staticStyle: { "margin-top": "0px" }
+                    },
+                    [
+                      _c("div", { staticClass: "media-left" }, [
+                        _c("a", { attrs: { href: "#" } }, [
+                          _c("img", {
+                            staticClass: "mr-1 avatar-photo",
+                            attrs: {
+                              src: thread.threadImagePath,
+                              alt: "thread.title",
+                              width: "25",
+                              height: "25"
+                            }
+                          })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "media-body" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "col-md-9",
+                            staticStyle: { padding: "0px" }
+                          },
+                          [
+                            _c(
+                              "h5",
+                              { staticClass: "media-heading thread-info" },
+                              [
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: {
+                                      href:
+                                        "/threads?by=" + thread.creator.username
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(thread.creator.name))]
+                                ),
+                                _vm._v(" "),
+                                _c("small", [
+                                  _vm._v(" Posted:  "),
+                                  _c("span", {
+                                    domProps: {
+                                      textContent: _vm._s(
+                                        _vm.ago(thread.created_at)
+                                      )
+                                    }
+                                  })
+                                ])
+                              ]
+                            )
+                          ]
+                        )
+                      ])
+                    ]
+                  )
+                ]
+              )
+            ]
+          )
+        }),
+        _vm._v(" "),
+        _c("SearchPagination", {
+          attrs: { dataSet: _vm.threads, query: _vm.q },
+          on: { changedSearch: _vm.fetch }
+        })
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = []
