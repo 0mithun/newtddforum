@@ -7,7 +7,7 @@
                   <text-highlight :queries="q">{{ thread.title }}</text-highlight>
                 </a>
             </li>
-            <paginator :dataSet="threads"></paginator>
+            <SearchPagination :dataSet="threads" @changedSearch="fetch" :query="q"></SearchPagination>
             
         </div>
 
@@ -30,12 +30,12 @@
 
 <script>
 
-    import Paginator from './Paginator'
+    import SearchPagination from './SearchPagination'
 
 export default {
     props:['threads','query'],
     components:{
-        Paginator
+        SearchPagination
     },
 
     data(){
@@ -51,14 +51,27 @@ export default {
     
     methods:{
         searchThreads(){
-            axios.get('/search-vue?query='+this.q,{
-                query:this.query
-            }).then(res=>{
-                //this.allThreads = null,
-                this.allThreads = res.data.data
-                console.log(res.data.data)
+            axios.get('/search-vue?query='+this.q).then(res=>{
+                this.allThreads = res.data.data;
+                let pageUrl = {
+                    prev_page_url: res.data.prev_page_url,
+                    next_page_url: res.data.next_page_url,
+                }
+                eventBus.$emit('pageChange',pageUrl );
             })
-        }
+        },
+        fetch(page) {
+
+            axios.get('/search-vue?query='+this.q+'&page='+page)
+            .then(res=>{
+                this.allThreads = res.data.data
+                let pageUrl = {
+                    prev_page_url: res.data.prev_page_url,
+                    next_page_url: res.data.next_page_url,
+                }
+                eventBus.$emit('pageChange',pageUrl );
+            })
+        },
     }
 
 

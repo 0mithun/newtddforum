@@ -4,8 +4,7 @@
     <div class="container">
         <div class="row">
         <search-threads :threads="{{ json_encode($threads )}}" query="{{ $query }}"></search-threads>
-         
-        {{ $threads->links() }}
+
             {{-- <div class="col-md-8">
                 @foreach ($threads as $thread)
                     <li>

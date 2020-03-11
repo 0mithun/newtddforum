@@ -89,12 +89,17 @@ import GmapCluster from 'vue2-google-maps/dist/components/cluster' // replace sr
  
 Vue.component('GmapCluster', GmapCluster)
 
+
+
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyCi8raV_JKtL4xUfmHIvHkxA07DBEr9WbA',
     libraries: 'places', // This is required if you use the Autocomplete plugin
   },
 })
+
+
 
 
 import SearchThreads from './components/SearchThreads';
