@@ -18,7 +18,7 @@
                     <div class="panel-body">
                         <form method="GET" action="/threads/search">
                             <div class="form-group">
-                                <input type="text" placeholder="Search for something..." name="q" class="form-control">
+                                <input type="text" placeholder="Search for something..." name="query" class="form-control">
                             </div>
 
                             <div class="form-group">

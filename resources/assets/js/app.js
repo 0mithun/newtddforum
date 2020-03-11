@@ -97,9 +97,9 @@ Vue.use(VueGoogleMaps, {
 })
 
 
+import SearchThreads from './components/SearchThreads';
 
-
-
+Vue.component('search-threads', SearchThreads);
 
 
 window.eventBus = new  Vue();

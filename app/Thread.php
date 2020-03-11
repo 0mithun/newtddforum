@@ -257,18 +257,18 @@ class Thread extends Model
         $this->update(['best_reply_id' => $reply->id]);
     }
 
-    /**
-     * Get the indexable data array for the model.
-     *
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        $searchable = [
-            'title' => $this->title,+
-        ];
-        return $this->toArray() + ['path' => $this->path()];
-    }
+    // /**
+    //  * Get the indexable data array for the model.
+    //  *
+    //  * @return array
+    //  */
+    // public function toSearchableArray()
+    // {
+    //     $searchable = [
+    //         'title' => $this->title,
+    //     ];
+    //     return $this->toArray($searchable) + ['path' => $this->path()];
+    // }
 
 
     public function getIsReportedAttribute()

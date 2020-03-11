@@ -27,6 +27,13 @@ import * as uiv from 'uiv'
 Vue.use(uiv)
 
 
+import TextHighlight from 'vue-text-highlight';
+ 
+Vue.component('text-highlight', TextHighlight);
+
+
+
+
 let authorizations = require('./authorizations');
 
 Vue.prototype.authorize = function (...params) {
