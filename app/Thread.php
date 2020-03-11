@@ -13,7 +13,7 @@ use DB;
 
 class Thread extends Model
 {
-    use RecordsActivity,  Notifiable, Favoritable, Likeable;
+    use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
 
     // use Searchable;
     /**
@@ -264,6 +264,9 @@ class Thread extends Model
      */
     public function toSearchableArray()
     {
+        $searchable = [
+            'title' => $this->title,+
+        ];
         return $this->toArray() + ['path' => $this->path()];
     }
 
