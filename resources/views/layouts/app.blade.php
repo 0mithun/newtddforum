@@ -100,6 +100,12 @@
         .list-group-item.acive{
             background: blue;
         }
+        .chat-sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 350px;
+        }
 
     </style>
 
@@ -111,9 +117,21 @@
     @include ('layouts.nav')
 
     @yield('content')
+    <div class="chat-sidebar">
+        <div class="panel">
+            <div class="panel-body">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam, voluptates? Odio dolores molestiae totam eos numquam saepe non, possimus nulla ipsum quos exercitationem, aut, quam obcaecati fuga aspernatur adipisci distinctio cumque dolor! Officia a libero alias ipsa, molestias eligendi consequatur aperiam quam! Sequi fugiat, ratione vitae voluptatum iste officia distinctio doloremque nobis suscipit enim accusantium dolorem quis minima eum aliquam itaque exercitationem ipsa similique aliquid quo ex ad perferendis ipsam. Ducimus expedita non incidunt sunt, vel illo minima, illum odit qui rem accusamus, tenetur provident inventore? Ea a incidunt ut obcaecati optio debitis numquam, nemo dolor. Iure at odio reprehenderit.
+            </div>
+        </div>
+    
+    </div>
+    
+
     @include('layouts.footer')
     <flash message="{{ session('flash') }}"></flash>
 </div>
+
+
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
