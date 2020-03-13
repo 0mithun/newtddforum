@@ -82,8 +82,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/chat','ChatController@index')->name('chat.index');
     
     Route::post('/chat-friends','ChatController@getAllFriends');
-    Route::get('/chat-message/{friend}','ChatController@getFriendMessage');
-    
+    Route::get('/chat-message/{friend}','ChatController@getFriendMessage');    
     Route::post('/chat-send-message','ChatController@sendMessage');
 
 

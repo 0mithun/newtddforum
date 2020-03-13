@@ -32,13 +32,22 @@ class ChatController extends Controller
         if(\Request::ajax()){
             $friend = User::findOrFail($id);
 
+            // $messages = Chat::where(function($q) use($id){
+            //     $q->where('from', auth()->user()->id);
+            //     $q->where('to', $id);
+            // })->orWhere(function($q) use($id){
+            //     $q->where('to', auth()->user()->id);
+            //     $q->where('from', $id);
+            // })->with('user')->get();
+
             $messages = Chat::where(function($q) use($id){
-                $q->where('from', auth()->user()->id);
-                $q->where('to', $id);
-            })->orWhere(function($q) use($id){
-                $q->where('to', auth()->user()->id);
-                $q->where('from', $id);
-            })->with('user')->get();
+                    $q->where('from', auth()->user()->id);
+                    $q->where('to', $id);
+                })->orWhere(function($q) use($id){
+                    $q->where('to', auth()->user()->id);
+                    $q->where('from', $id);
+                })->get();
+
             return response()->json([
                 'friend'  =>  $friend,
                 'messages'=>$messages
@@ -47,6 +56,7 @@ class ChatController extends Controller
         return \abort(404);
         
     }
+
 
     public function sendMessage(Request $request){
         if($request->ajax()){

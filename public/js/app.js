@@ -13016,6 +13016,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['authuser'],
@@ -13041,9 +13045,15 @@ __webpack_require__.r(__webpack_exports__);
     selectUser: function selectUser(friend) {
       this.selectFriend = friend;
       this.message = '';
+      this.scrollToBottom();
       this.$store.dispatch('userMessage', {
         friend: friend
       });
+    },
+    scrollToBottom: function scrollToBottom() {
+      var container = this.$el.querySelector("#chat-history");
+      var height = container.scrollHeight;
+      container.scrollTop = height;
     },
     formateMessageTime: function formateMessageTime(timestamp) {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(timestamp).format('MMM Do YYYY, h:mm:ss A'); //    return moment(timestamp).fromNow();
@@ -13059,10 +13069,13 @@ __webpack_require__.r(__webpack_exports__);
           message: this.message,
           friend: this.selectFriend
         }).then(function (res) {
-          // console.log(res);
-          _this.selectUser(_this.selectFriend); // this.message = '';
-
+          _this.selectUser(_this.selectFriend);
         });
+      }
+    },
+    selected: function selected(index) {
+      if (this.selectFriend == index) {
+        return 'active-friend';
       }
     }
   }
@@ -18171,7 +18184,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .people-list {\n        width: 260px;\n        float: left;\n    } */\n.people-list .search[data-v-61f93f4f] {\n        padding: 20px;\n}\n.people-list input[data-v-61f93f4f] {\n        border-radius: 3px;\n        border: none;\n        padding: 14px;\n        color: white;\n        background: #6a6c75;\n        width: 90%;\n        font-size: 14px;\n}\n.people-list .fa-search[data-v-61f93f4f] {\n        position: relative;\n        left: -25px;\n}\n.people-list ul[data-v-61f93f4f] {\n        padding: 20px;\n        height: 770px;\n        background: #6a6c75\n}\n.people-list ul li[data-v-61f93f4f] {\n        padding-bottom: 20px;\n        cursor: pointer;\n}\n.people-list img[data-v-61f93f4f] {\n        float: left;\n}\n.people-list .about[data-v-61f93f4f] {\n        float: left;\n        margin-top: 8px;\n}\n.people-list .about[data-v-61f93f4f] {\n        padding-left: 8px;\n}\n.people-list .status[data-v-61f93f4f] {\n        color: #92959e;\n}\n.chat[data-v-61f93f4f] {\n        float: left;\n        background: #f2f5f8;\n        border-top-right-radius: 5px;\n        border-bottom-right-radius: 5px;\n        color: #434651;\n}\n.chat .chat-header[data-v-61f93f4f] {\n        padding: 20px;\n        border-bottom: 2px solid white;\n}\n.chat .chat-header img[data-v-61f93f4f] {\n        float: left;\n}\n.chat .chat-header .chat-about[data-v-61f93f4f] {\n        float: left;\n        padding-left: 10px;\n        margin-top: 6px;\n}\n.chat .chat-header .chat-with[data-v-61f93f4f] {\n        font-weight: bold;\n        font-size: 16px;\n}\n.chat .chat-header .chat-num-messages[data-v-61f93f4f] {\n        color: #92959e;\n}\n.chat .chat-header .fa-star[data-v-61f93f4f] {\n        float: right;\n        color: #d8dadf;\n        font-size: 20px;\n        margin-top: 12px;\n}\n.chat .chat-history[data-v-61f93f4f] {\n        padding: 30px 30px 20px;\n        border-bottom: 2px solid white;\n        overflow-y: scroll;\n        height: 575px;\n}\n.chat .chat-history .message-data[data-v-61f93f4f] {\n        margin-bottom: 15px;\n}\n.chat .chat-history .message-data-time[data-v-61f93f4f] {\n        color: #a8aab1;\n        padding-left: 6px;\n}\n.chat .chat-history .message[data-v-61f93f4f] {\n        color: white;\n        padding: 18px 20px;\n        line-height: 26px;\n        font-size: 16px;\n        border-radius: 7px;\n        margin-bottom: 30px;\n        width: 80%;\n        position: relative;\n}\n.chat .chat-history .message[data-v-61f93f4f]:after {\n        bottom: 100%;\n        left: 7%;\n        border: solid transparent;\n        content: \" \";\n        height: 0;\n        width: 0;\n        position: absolute;\n        pointer-events: none;\n        border-bottom-color: #86bb71;\n        border-width: 10px;\n        margin-left: -10px;\n}\n.chat .chat-history .my-message[data-v-61f93f4f] {\n        background: #86bb71;\n}\n.chat .chat-history .other-message[data-v-61f93f4f] {\n        background: #94c2ed;\n}\n.chat .chat-history .other-message[data-v-61f93f4f]:after {\n        border-bottom-color: #94c2ed;\n        left: 93%;\n}\n.chat .chat-message[data-v-61f93f4f] {\n        padding: 30px;\n}\n.chat .chat-message textarea[data-v-61f93f4f] {\n        /* width: 100%; */\n        /* border: none;\n        padding: 10px 20px;\n        font: 14px/22px \"Lato\", Arial, sans-serif;\n        margin-bottom: 10px;\n        border-radius: 5px; */\n        resize: none;\n}\n.chat .chat-message .fa-file-o[data-v-61f93f4f], .chat .chat-message .fa-file-image-o[data-v-61f93f4f] {\n        font-size: 16px;\n        color: gray;\n        cursor: pointer;\n}\n.chat .chat-message button[data-v-61f93f4f] {\n        float: right;\n        color: #94c2ed;\n        font-size: 16px;\n        text-transform: uppercase;\n        border: none;\n        cursor: pointer;\n        font-weight: bold;\n        background: #f2f5f8;\n}\n.chat .chat-message button[data-v-61f93f4f]:hover {\n        color: #75b1e8;\n}\n.online[data-v-61f93f4f], .offline[data-v-61f93f4f], .me[data-v-61f93f4f] {\n        margin-right: 3px;\n        font-size: 10px;\n}\n.online[data-v-61f93f4f] {\n        color: #86bb71;\n}\n.offline[data-v-61f93f4f] {\n        color: #e38968;\n}\n.me[data-v-61f93f4f] {\n        color: #94c2ed;\n}\n.align-left[data-v-61f93f4f] {\n        text-align: left;\n}\n.align-right[data-v-61f93f4f] {\n        text-align: right;\n}\n.float-right[data-v-61f93f4f] {\n        float: right;\n}\n.clearfix[data-v-61f93f4f]:after {\n        visibility: hidden;\n        display: block;\n        font-size: 0;\n        content: \" \";\n        clear: both;\n        height: 0;\n}\n.people-list ul li[data-v-61f93f4f] {\n        padding-bottom: 20px;\n        list-style: none;\n}\n.chat-history li[data-v-61f93f4f]{\n        list-style: none;\n}\n.chat[data-v-61f93f4f] {\n        width: 100%;\n}\n\n    /**\n        Change Chat Color\n     */\n.chat .chat-history .other-message[data-v-61f93f4f][data-v-61f93f4f] {\n        background: #34a4ef;\n}\n.chat .chat-history .other-message[data-v-61f93f4f] {\n        background: #34a4ef;\n}\n.chat .chat-history .other-message[data-v-61f93f4f]:after {\n        border-bottom-color:  #34a4ef;;\n        left: 93%;\n}\n.chat .chat-message button[data-v-61f93f4f]:hover {\n        color:#34a4ef;\n}\n.me[data-v-61f93f4f] {\n        color:#34a4ef;\n}\n#people-list ul[data-v-61f93f4f]{\n        overflow-x: scroll\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .people-list {\n        width: 260px;\n        float: left;\n    } */\n.people-list .search[data-v-61f93f4f] {\n        padding: 20px;\n}\n.people-list input[data-v-61f93f4f] {\n        border-radius: 3px;\n        border: none;\n        padding: 14px;\n        color: white;\n        background: #6a6c75;\n        width: 90%;\n        font-size: 14px;\n}\n.people-list .fa-search[data-v-61f93f4f] {\n        position: relative;\n        left: -25px;\n}\n.people-list ul[data-v-61f93f4f] {\n        padding: 20px;\n        height: 770px;\n        background: #6a6c75\n}\n.people-list ul li[data-v-61f93f4f] {\n        padding-bottom: 20px;\n        cursor: pointer;\n}\n.people-list img[data-v-61f93f4f] {\n        float: left;\n}\n.people-list .about[data-v-61f93f4f] {\n        float: left;\n        margin-top: 8px;\n}\n.people-list .about[data-v-61f93f4f] {\n        padding-left: 8px;\n}\n.people-list .status[data-v-61f93f4f] {\n        color: #92959e;\n}\n.chat[data-v-61f93f4f] {\n        float: left;\n        background: #f2f5f8;\n        border-top-right-radius: 5px;\n        border-bottom-right-radius: 5px;\n        color: #434651;\n}\n.chat .chat-header[data-v-61f93f4f] {\n        padding: 20px;\n        border-bottom: 2px solid white;\n}\n.chat .chat-header img[data-v-61f93f4f] {\n        float: left;\n}\n.chat .chat-header .chat-about[data-v-61f93f4f] {\n        float: left;\n        padding-left: 10px;\n        margin-top: 6px;\n}\n.chat .chat-header .chat-with[data-v-61f93f4f] {\n        font-weight: bold;\n        font-size: 16px;\n}\n.chat .chat-header .chat-num-messages[data-v-61f93f4f] {\n        color: #92959e;\n}\n.chat .chat-header .fa-star[data-v-61f93f4f] {\n        float: right;\n        color: #d8dadf;\n        font-size: 20px;\n        margin-top: 12px;\n}\n.chat .chat-history[data-v-61f93f4f] {\n        padding: 30px 30px 20px;\n        border-bottom: 2px solid white;\n        overflow-y: scroll;\n        height: 575px;\n}\n.chat .chat-history .message-data[data-v-61f93f4f] {\n        margin-bottom: 15px;\n}\n.chat .chat-history .message-data-time[data-v-61f93f4f] {\n        color: #a8aab1;\n        padding-left: 6px;\n}\n.chat .chat-history .message[data-v-61f93f4f] {\n        color: white;\n        padding: 18px 20px;\n        line-height: 26px;\n        font-size: 16px;\n        border-radius: 7px;\n        margin-bottom: 30px;\n        width: 80%;\n        position: relative;\n}\n.chat .chat-history .message[data-v-61f93f4f]:after {\n        bottom: 100%;\n        left: 7%;\n        border: solid transparent;\n        content: \" \";\n        height: 0;\n        width: 0;\n        position: absolute;\n        pointer-events: none;\n        border-bottom-color: #86bb71;\n        border-width: 10px;\n        margin-left: -10px;\n}\n.chat .chat-history .my-message[data-v-61f93f4f] {\n        background: #86bb71;\n}\n.chat .chat-history .other-message[data-v-61f93f4f] {\n        background: #94c2ed;\n}\n.chat .chat-history .other-message[data-v-61f93f4f]:after {\n        border-bottom-color: #94c2ed;\n        left: 93%;\n}\n.chat .chat-message[data-v-61f93f4f] {\n        padding: 30px;\n}\n.chat .chat-message textarea[data-v-61f93f4f] {\n        /* width: 100%; */\n        /* border: none;\n        padding: 10px 20px;\n        font: 14px/22px \"Lato\", Arial, sans-serif;\n        margin-bottom: 10px;\n        border-radius: 5px; */\n        resize: none;\n}\n.chat .chat-message .fa-file-o[data-v-61f93f4f], .chat .chat-message .fa-file-image-o[data-v-61f93f4f] {\n        font-size: 16px;\n        color: gray;\n        cursor: pointer;\n}\n.chat .chat-message button[data-v-61f93f4f] {\n        float: right;\n        color: #94c2ed;\n        font-size: 16px;\n        text-transform: uppercase;\n        border: none;\n        cursor: pointer;\n        font-weight: bold;\n        background: #f2f5f8;\n}\n.chat .chat-message button[data-v-61f93f4f]:hover {\n        color: #75b1e8;\n}\n.online[data-v-61f93f4f], .offline[data-v-61f93f4f], .me[data-v-61f93f4f] {\n        margin-right: 3px;\n        font-size: 10px;\n}\n.online[data-v-61f93f4f] {\n        color: #86bb71;\n}\n.offline[data-v-61f93f4f] {\n        color: #e38968;\n}\n.me[data-v-61f93f4f] {\n        color: #94c2ed;\n}\n.align-left[data-v-61f93f4f] {\n        text-align: left;\n}\n.align-right[data-v-61f93f4f] {\n        text-align: right;\n}\n.float-right[data-v-61f93f4f] {\n        float: right;\n}\n.clearfix[data-v-61f93f4f]:after {\n        visibility: hidden;\n        display: block;\n        font-size: 0;\n        content: \" \";\n        clear: both;\n        height: 0;\n}\n.people-list ul li[data-v-61f93f4f] {\n        padding-bottom: 20px;\n        list-style: none;\n}\n.chat-history li[data-v-61f93f4f]{\n        list-style: none;\n}\n.chat[data-v-61f93f4f] {\n        width: 100%;\n}\n\n    /**\n        Change Chat Color\n     */\n.chat .chat-history .other-message[data-v-61f93f4f][data-v-61f93f4f] {\n        background: #34a4ef;\n}\n.chat .chat-history .other-message[data-v-61f93f4f] {\n        background: #34a4ef;\n}\n.chat .chat-history .other-message[data-v-61f93f4f]:after {\n        border-bottom-color:  #34a4ef;;\n        left: 93%;\n}\n.chat .chat-message button[data-v-61f93f4f]:hover {\n        color:#34a4ef;\n}\n.me[data-v-61f93f4f] {\n        color:#34a4ef;\n}\n#people-list ul[data-v-61f93f4f]{\n        overflow-x: scroll\n}\n.active-friend[data-v-61f93f4f]{\n        background: white;\n}\n.people-list ul[data-v-61f93f4f][data-v-61f93f4f] {\n        padding: 0;\n}\n.people-list ul li[data-v-61f93f4f][data-v-61f93f4f] {\n        cursor: pointer;\n        padding: 10px 20px;\n}\n.chat .chat-history[data-v-61f93f4f][data-v-61f93f4f] {\n        padding: 10px 15px;\n}\n", ""]);
 
 // exports
 
@@ -99745,6 +99758,7 @@ var render = function() {
                   {
                     key: index,
                     staticClass: "clearfix",
+                    class: friend.id == _vm.selectFriend ? "active-friend" : "",
                     on: {
                       click: function($event) {
                         $event.preventDefault()
@@ -99819,112 +99833,151 @@ var render = function() {
             "div",
             {
               directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
-              staticClass: "chat-history"
+              staticClass: "chat-history",
+              attrs: { id: "chat-history" }
             },
             [
               _c(
                 "ul",
-                _vm._l(_vm.friendMessages.messages, function(
-                  friendMessage,
-                  index
-                ) {
-                  return _c("li", { key: index, staticClass: "clearfix" }, [
-                    _vm.friendMessages.friend.id ==
-                    (friendMessage.to || _vm.friendMessages.from)
-                      ? _c("div", [
-                          _c(
-                            "div",
-                            { staticClass: "message-data align-right" },
-                            [
-                              _c("span", { staticClass: "message-data-time" }, [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.formateMessageTime(
-                                      friendMessage.created_at
+                { staticStyle: { margin: "0px", padding: "0px" } },
+                [
+                  _vm._l(_vm.friendMessages.messages, function(
+                    friendMessage,
+                    index
+                  ) {
+                    return _c("li", { key: index, staticClass: "clearfix" }, [
+                      _vm.friendMessages.friend.id ==
+                      (friendMessage.to || _vm.friendMessages.from)
+                        ? _c("div", [
+                            _c(
+                              "div",
+                              { staticClass: "message-data align-right" },
+                              [
+                                _c(
+                                  "span",
+                                  { staticClass: "message-data-time" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.formateMessageTime(
+                                          friendMessage.created_at
+                                        )
+                                      )
                                     )
-                                  )
+                                  ]
+                                ),
+                                _vm._v(
+                                  "    \n                                        "
+                                ),
+                                _c(
+                                  "span",
+                                  { staticClass: "message-data-name" },
+                                  [_vm._v(_vm._s(_vm.authuser.name))]
+                                ),
+                                _vm._v(" "),
+                                _c("i", { staticClass: "fa fa-circle me" }),
+                                _vm._v(" "),
+                                _c("img", {
+                                  staticStyle: {
+                                    width: "40px",
+                                    "border-radius": "50%",
+                                    height: "40px"
+                                  },
+                                  attrs: {
+                                    src: _vm.authuser.profileAvatarPath,
+                                    alt: ""
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "message other-message float-right"
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                            " +
+                                    _vm._s(friendMessage.message) +
+                                    "\n                                        "
+                                )
+                              ]
+                            )
+                          ])
+                        : _c("div", [
+                            _c("li", [
+                              _c("div", { staticClass: "message-data" }, [
+                                _c("img", {
+                                  staticStyle: {
+                                    width: "40px",
+                                    "border-radius": "50%",
+                                    height: "40px"
+                                  },
+                                  attrs: {
+                                    src:
+                                      _vm.friendMessages.friend
+                                        .profileAvatarPath,
+                                    alt: ""
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "span",
+                                  { staticClass: "message-data-name" },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fa fa-circle online"
+                                    }),
+                                    _vm._v(
+                                      _vm._s(_vm.friendMessages.friend.name)
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "span",
+                                  { staticClass: "message-data-time" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.formateMessageTime(
+                                          friendMessage.created_at
+                                        )
+                                      )
+                                    )
+                                  ]
                                 )
                               ]),
-                              _vm._v(
-                                "    \n                                        "
-                              ),
-                              _c("span", { staticClass: "message-data-name" }, [
-                                _vm._v(_vm._s(friendMessage.user.name))
-                              ]),
                               _vm._v(" "),
-                              _c("i", { staticClass: "fa fa-circle me" }),
-                              _vm._v(" "),
-                              _c("img", {
-                                staticStyle: {
-                                  width: "40px",
-                                  "border-radius": "50%",
-                                  height: "40px"
-                                },
-                                attrs: {
-                                  src: _vm.authuser.profileAvatarPath,
-                                  alt: ""
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              staticClass: "message other-message float-right"
-                            },
-                            [
-                              _vm._v(
-                                "\n                                            " +
-                                  _vm._s(friendMessage.message) +
-                                  "\n                                        "
-                              )
-                            ]
-                          )
-                        ])
-                      : _c("div", [
-                          _c("li", [
-                            _c("div", { staticClass: "message-data" }, [
-                              _c("img", {
-                                staticStyle: {
-                                  width: "40px",
-                                  "border-radius": "50%",
-                                  height: "40px"
-                                },
-                                attrs: {
-                                  src: friendMessage.user.profileAvatarPath,
-                                  alt: ""
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "message-data-name" }, [
-                                _c("i", { staticClass: "fa fa-circle online" }),
-                                _vm._v(_vm._s(friendMessage.user.name))
-                              ]),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "message-data-time" }, [
+                              _c("div", { staticClass: "message my-message" }, [
                                 _vm._v(
-                                  _vm._s(
-                                    _vm.formateMessageTime(
-                                      friendMessage.created_at
-                                    )
-                                  )
+                                  "\n                                                " +
+                                    _vm._s(friendMessage.message) +
+                                    "\n                                            "
                                 )
                               ])
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "message my-message" }, [
-                              _vm._v(
-                                "\n                                                " +
-                                  _vm._s(friendMessage.message) +
-                                  "\n                                            "
-                              )
                             ])
                           ])
-                        ])
-                  ])
-                }),
-                0
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _vm.friendMessages.messages
+                    ? _c("div", [
+                        _vm.friendMessages.messages.length == 0
+                          ? _c(
+                              "div",
+                              {
+                                staticClass: "alert alert-danger",
+                                attrs: { role: "alert" }
+                              },
+                              [_vm._v("No Message...")]
+                            )
+                          : _vm._e()
+                      ])
+                    : _vm._e()
+                ],
+                2
               )
             ]
           ),
@@ -119885,14 +119938,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************************!*\
   !*** ./resources/assets/js/components/chat/ChatMessage.vue ***!
   \*************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ChatMessage_vue_vue_type_template_id_61f93f4f_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChatMessage.vue?vue&type=template&id=61f93f4f&scoped=true& */ "./resources/assets/js/components/chat/ChatMessage.vue?vue&type=template&id=61f93f4f&scoped=true&");
 /* harmony import */ var _ChatMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChatMessage.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/chat/ChatMessage.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _ChatMessage_vue_vue_type_style_index_0_id_61f93f4f_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ChatMessage.vue?vue&type=style&index=0&id=61f93f4f&scoped=true&lang=css& */ "./resources/assets/js/components/chat/ChatMessage.vue?vue&type=style&index=0&id=61f93f4f&scoped=true&lang=css&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ChatMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ChatMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _ChatMessage_vue_vue_type_style_index_0_id_61f93f4f_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ChatMessage.vue?vue&type=style&index=0&id=61f93f4f&scoped=true&lang=css& */ "./resources/assets/js/components/chat/ChatMessage.vue?vue&type=style&index=0&id=61f93f4f&scoped=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -119924,7 +119978,7 @@ component.options.__file = "resources/assets/js/components/chat/ChatMessage.vue"
 /*!**************************************************************************************!*\
   !*** ./resources/assets/js/components/chat/ChatMessage.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

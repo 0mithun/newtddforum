@@ -8,7 +8,7 @@
                                 <i class="fa fa-search"></i>
                             </div>
                             <ul class="list">
-                                <li class="clearfix" v-for="(friend, index) in friendLists" :key="index" @click.prevent="selectUser(friend.id)" >
+                                <li class="clearfix" v-for="(friend, index) in friendLists" :key="index" @click.prevent="selectUser(friend.id)" :class="friend.id == selectFriend ? 'active-friend': '' " >
                                     <img :src="friend.profileAvatarPath" alt="avatar" style="width:50px; border-radius:50%;height:50px" />
                                     <div class="about">
                                         <div class="name" style="color:black">{{ friend.name }}</div>
@@ -35,17 +35,18 @@
                                 <i class="fa fa-star"></i>
                             </div> <!-- end chat-header -->
                             
-                            <div class="chat-history" v-chat-scroll>
-                                <ul>
+                            <div id="chat-history" class="chat-history" v-chat-scroll >
+                                
+                                <ul style="margin:0px; padding:0px">
 
 
-                                    <li class="clearfix" v-for="(friendMessage, index) in friendMessages.messages" :key="index">
+                                    <li class="clearfix" v-for="(friendMessage, index) in friendMessages.messages" :key="index" >
                                         <div v-if="friendMessages.friend.id == (friendMessage.to || friendMessages.from) ">
 
                                             <div class="message-data align-right">
                                                 
                                             <span class="message-data-time" >{{ formateMessageTime(friendMessage.created_at)}}</span> &nbsp; &nbsp;
-                                            <span class="message-data-name" >{{ friendMessage.user.name}}</span> <i class="fa fa-circle me"></i>
+                                            <span class="message-data-name" >{{ authuser.name}}</span> <i class="fa fa-circle me"></i>
                                             <img :src="authuser.profileAvatarPath" alt="" style="width:40px; border-radius:50%;height:40px">
                                             </div>
                                             <div class="message other-message float-right">
@@ -57,21 +58,24 @@
                                             <li>
                                                 <div class="message-data">
                                                     
-                                                    <img :src="friendMessage.user.profileAvatarPath" alt="" style="width:40px; border-radius:50%;height:40px">
-                                                <span class="message-data-name"><i class="fa fa-circle online"></i>{{ friendMessage.user.name}}</span>
+                                                <img :src="friendMessages.friend.profileAvatarPath" alt="" style="width:40px; border-radius:50%;height:40px">
+                                                <span class="message-data-name"><i class="fa fa-circle online"></i>{{ friendMessages.friend.name}}</span>
                                                 <span class="message-data-time">{{ formateMessageTime(friendMessage.created_at)}}</span>
                                                 </div>
                                                 <div class="message my-message">
                                                     {{ friendMessage.message }}
                                                 </div>
                                             </li>
-                                        </div>
-                                    </li>
-                               
+                                        </div> 
+                                    </li> 
+                                    <div  v-if="friendMessages.messages">
+                                        <div class="alert alert-danger" role="alert" v-if="friendMessages.messages.length==0">No Message...</div>
+                                    </div>                                  
                                 
                                 </ul>
                                 
                             </div> <!-- end chat-history -->
+                            
                             
                             <div class="chat-message clearfix" v-if="selectFriend">
                                 <textarea @keydown.enter="sendMessage" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message"></textarea>
@@ -100,7 +104,7 @@
         data(){
             return{
                 message: '',
-                selectFriend:null
+                selectFriend:null,
             }
         },
         computed:{
@@ -119,9 +123,17 @@
         },
         methods:{
             selectUser(friend){
+                
                 this.selectFriend = friend;
-                this.message = '';
+                this.message = '';                
+                this.scrollToBottom();
                 this.$store.dispatch('userMessage', {friend});
+            },
+            scrollToBottom(){
+                let container = this.$el.querySelector("#chat-history");
+                let height = container.scrollHeight;
+                container.scrollTop = height
+               
             },
             formateMessageTime(timestamp){
                return moment(timestamp).format('MMM Do YYYY, h:mm:ss A');
@@ -136,14 +148,17 @@
                         message:this.message,
                         friend:this.selectFriend
                     }).then(res=>{
-                        // console.log(res);
                         this.selectUser(this.selectFriend)
-                        // this.message = '';
                     })
                 }
                 
                 
-            }
+            },
+            selected(index){
+                if(this.selectFriend == index){
+                    return 'active-friend';
+                }
+            },
         }
     }
 </script>
@@ -368,5 +383,18 @@
 
         #people-list ul{
             overflow-x: scroll
+        }
+        .active-friend{
+            background: white;
+        }
+        .people-list ul[data-v-61f93f4f] {
+            padding: 0;
+        }
+        .people-list ul li[data-v-61f93f4f] {
+            cursor: pointer;
+            padding: 10px 20px;
+        }
+        .chat .chat-history[data-v-61f93f4f] {
+            padding: 10px 15px;
         }
 </style>
