@@ -111,20 +111,62 @@
 
     @yield('head')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
+    <style>
+        .chat-list{
+            list-style: none;
+            margin:0;
+            padding:0;
+        }
+        .chat-list li{
+            list-style-type: none;
+        }
+        li.receiver {
+            width: 100%;
+            
+            overflow: hidden;
+            
+        }
+
+        li.receiver span.message{
+            float: left;
+            background: #e4e4e4;
+        }
+
+        .sender{
+            width: 100%;
+            overflow: hidden;
+
+        }
+
+        li.sender span.message{
+            float: right;
+            
+            background: #01a0ec;
+            color: white
+        }
+        span.message{
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+        .messageBox{
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
     @include ('layouts.nav')
 
     @yield('content')
-    <div class="chat-sidebar">
+    {{-- <div class="chat-sidebar">
         <div class="panel">
             <div class="panel-body">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam, voluptates? Odio dolores molestiae totam eos numquam saepe non, possimus nulla ipsum quos exercitationem, aut, quam obcaecati fuga aspernatur adipisci distinctio cumque dolor! Officia a libero alias ipsa, molestias eligendi consequatur aperiam quam! Sequi fugiat, ratione vitae voluptatum iste officia distinctio doloremque nobis suscipit enim accusantium dolorem quis minima eum aliquam itaque exercitationem ipsa similique aliquid quo ex ad perferendis ipsam. Ducimus expedita non incidunt sunt, vel illo minima, illum odit qui rem accusamus, tenetur provident inventore? Ea a incidunt ut obcaecati optio debitis numquam, nemo dolor. Iure at odio reprehenderit.
             </div>
         </div>
     
-    </div>
+    </div> --}}
     
 
     @include('layouts.footer')

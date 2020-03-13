@@ -79,6 +79,15 @@ Route::get('/replies/{reply}/load-reply','RepliesController@lodReply');
 
 Route::middleware(['auth'])->group(function (){
 
+    Route::get('/chat','ChatController@index')->name('chat.index');
+    
+    Route::post('/chat-friends','ChatController@getAllFriends');
+    Route::get('/chat-message/{friend}','ChatController@getFriendMessage');
+    
+    Route::post('/chat-send-message','ChatController@sendMessage');
+
+
+
    Route::get('/closet/threads','UserlocationController@show')->name('closet.thread');
 
 

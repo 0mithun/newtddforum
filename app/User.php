@@ -202,8 +202,11 @@ class User extends Authenticatable
      }
 
     public function getProfileAvatarPathAttribute($avatar){
-        return asset($avatar ?: 'images/avatars/default.png');
-    
+         $test =   $this->avatar_path == '' ? 'default': $this->avatar_path;
+        //$avatar  = $avatar == '' ?  'images/avatars/default.png' : $avatar;
+
+        return asset($test);
+       
     }
     
 
@@ -249,5 +252,10 @@ class User extends Authenticatable
 
     public function userlocation(){
         return $this->hasOne(Userlocation::class);
+    }
+
+
+    public function chat(){
+        return $this->hasMany(Chat::class,'from');
     }
 }

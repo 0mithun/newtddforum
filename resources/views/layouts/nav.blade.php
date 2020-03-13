@@ -65,6 +65,14 @@
                 <li>
                     <a href="{{ route('map.show') }}">Map</a>
                 </li>
+
+                @if(Auth::check())
+                <li>
+                    <a href="{{ route('chat.index') }}">Message</a>
+                </li>
+
+                @endif
+
             </ul>
 
             <!-- Right Side Of Navbar -->

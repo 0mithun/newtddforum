@@ -107,6 +107,23 @@ import SearchThreads from './components/SearchThreads';
 Vue.component('search-threads', SearchThreads);
 
 
+import ChatMessage from './components/chat/ChatMessage.vue';
+
+Vue.component('chat-message', ChatMessage);
+
+
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+import storeVuex from './store/index'
+
+const store = new Vuex.Store(storeVuex)
+
+import VueChatScroll from 'vue-chat-scroll'
+Vue.use(VueChatScroll)
+
+
 window.eventBus = new  Vue();
 const app = new Vue({
     el: '#app',
@@ -120,5 +137,6 @@ const app = new Vue({
         Typhaed,
         UnscribeButton,
         Alert
-    }
+    },
+    store
 });
