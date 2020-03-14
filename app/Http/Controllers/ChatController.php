@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Chat;
+use App\Events\MessegeSentEvent;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -65,7 +66,10 @@ class ChatController extends Controller
                 'to'        =>  $request->friend,
                 'message'   =>  $request->message
             ]);
-    
+            
+            broadcast(new MessegeSentEvent($message));
+            // broadcast(new NewMessage($message));
+
             return response()->json($message);
         }
 

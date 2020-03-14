@@ -72,6 +72,6 @@
 <style>
 
         
-        </style>
+</style>
     
 @endsection

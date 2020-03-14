@@ -16,6 +16,9 @@
                                             <i class="fa fa-circle online"></i> online
                                         </div>
                                     </div>
+                                    <div>
+                                        <span class="glyphicon glyphicon-comment messageStatus" style="color:red;display:none;" :id="'messageStatus'+friend.id "></span>
+                                    </div>
                                 </li>
                                 
                             </ul>
@@ -28,9 +31,9 @@
                             <div class="chat-header clearfix">
                                 <img :src="friendMessages.friend.profileAvatarPath" alt="avatar" v-if="friendMessages.friend" style="width:50px; border-radius:50%;height:50px"/>
                                 
-                                <div class="chat-about">
-                                <div class="chat-with" v-if="friendMessages.friend">{{ friendMessages.friend.name }}</div>
-                                <div class="chat-num-messages">already 1 902 messages</div>
+                                <div class="chat-about" v-if="friendMessages.friend">
+                                    <div class="chat-with" >{{ friendMessages.friend.name }}</div>
+                                    <div class="chat-num-messages" v-if="friendMessages.messages.length==0">No Message</div>
                                 </div>
                                 <i class="fa fa-star"></i>
                             </div> <!-- end chat-header -->
@@ -39,6 +42,9 @@
                                 
                                 <ul style="margin:0px; padding:0px">
 
+                                    <!-- <li  v-if="friendMessages.messages">
+                                        <div class="alert alert-danger" role="alert" >No Message...</div>
+                                    </li> -->
 
                                     <li class="clearfix" v-for="(friendMessage, index) in friendMessages.messages" :key="index" >
                                         <div v-if="friendMessages.friend.id == (friendMessage.to || friendMessages.from) ">
@@ -67,23 +73,21 @@
                                                 </div>
                                             </li>
                                         </div> 
-                                    </li> 
-                                    <div  v-if="friendMessages.messages">
-                                        <div class="alert alert-danger" role="alert" v-if="friendMessages.messages.length==0">No Message...</div>
-                                    </div>                                  
+                                    </li>                                   
                                 
                                 </ul>
                                 
                             </div> <!-- end chat-history -->
                             
                             
-                            <div class="chat-message clearfix" v-if="selectFriend">
+                            <!-- <div class="chat-message clearfix" v-if="selectFriend"> -->
+                            <div class="chat-message clearfix">
                                 <textarea @keydown.enter="sendMessage" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message"></textarea>
-                                        
+<!--                                         
                                 <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
                                 <i class="fa fa-file-image-o"></i>
                                 
-                                <button>Send</button>
+                                <button>Send</button> -->
                         
                             </div> <!-- end chat-message -->
                         
@@ -117,17 +121,45 @@
         },
         mounted(){
             this.$store.dispatch('friendList', this.authuser.id);
+
+            Echo.private(`chat.${this.authuser.id}`)
+                .listen('MessegeSentEvent', (e) => {
+                    //this.selectUser(e.message.from)
+                    if(this.selectFriend == e.message.from){
+                        this.selectUser(e.message.from, true)
+                    }else{
+                        this.selectUser(e.message.from, false)
+                    }
+                });
         },
         created(){
         
         },
         methods:{
-            selectUser(friend){
+            selectUser(friend, change=true){
                 
-                this.selectFriend = friend;
+                if(change){
+                    this.selectFriend = friend;
+                    this.$store.dispatch('userMessage', {friend});
+                    this.messageStatus(friend, false);
+                }else{
+                    this.messageStatus(friend, true)
+                }
+                
                 this.message = '';                
-                this.scrollToBottom();
-                this.$store.dispatch('userMessage', {friend});
+                // this.scrollToBottom();
+                
+            },
+            messageStatus(friend, show = false){
+
+                let element = "messageStatus"+friend;
+                let container = this.$el.querySelector("#"+element);
+                
+                if(show){
+                    container.style.display = "block";
+                }else{
+                    container.style.display = "none";
+                }
             },
             scrollToBottom(){
                 let container = this.$el.querySelector("#chat-history");
@@ -396,5 +428,21 @@
         }
         .chat .chat-history[data-v-61f93f4f] {
             padding: 10px 15px;
+        }
+
+        .people-list ul[data-v-61f93f4f] {
+            height: 670px;
+        }
+        .chat .chat-message[data-v-61f93f4f] {
+            padding: 15px;
+        }
+        .badge-danger{
+            background: red
+        }
+        .messageStatus{
+            color: #d84660;
+            float: right;
+            margin-top: 10px;
+            font-size: 20px;
         }
 </style>
