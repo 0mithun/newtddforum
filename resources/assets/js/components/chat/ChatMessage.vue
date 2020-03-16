@@ -82,7 +82,7 @@
                             
                             <!-- <div class="chat-message clearfix" v-if="selectFriend"> -->
                             <div class="chat-message clearfix">
-                                <textarea @keydown.enter="sendMessage" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message"></textarea>
+                                <textarea @keydown.enter="sendMessage" @keydown="typingEvent" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message"></textarea>
 <!--                                         
                                 <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
                                 <i class="fa fa-file-image-o"></i>
@@ -109,6 +109,7 @@
             return{
                 message: '',
                 selectFriend:null,
+                typing:''
             }
         },
         computed:{
@@ -120,22 +121,42 @@
             }
         },
         mounted(){
+            Echo.private('typingevent')
+            .listenForWhisper('typing', (e) => {
+                this.typing = e;
+                // console.log(e);
+                // alert('hello');
+            });
             this.$store.dispatch('friendList', this.authuser.id);
 
             Echo.private(`chat.${this.authuser.id}`)
-                .listen('MessegeSentEvent', (e) => {
-                    //this.selectUser(e.message.from)
-                    if(this.selectFriend == e.message.from){
-                        this.selectUser(e.message.from, true)
-                    }else{
-                        this.selectUser(e.message.from, false)
-                    }
-                });
+            .listen('MessegeSentEvent', (e) => {
+                //this.selectUser(e.message.from)
+                if(this.selectFriend == e.message.from){
+                    this.selectUser(e.message.from, true)
+                }else{
+                    this.selectUser(e.message.from, false)
+                }
+            });
+
+
+            
+
+
         },
         created(){
         
         },
         methods:{
+            typingEvent(){
+                Echo.private('typingevent')
+                .whisper('typing', {
+                    // name: this.user.name
+                    'user':this.authuser,
+                    // 'typing':this.message
+                    
+                });
+            },
             selectUser(friend, change=true){
                 
                 if(change){

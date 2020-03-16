@@ -19,3 +19,10 @@
 Broadcast::channel('chat.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+
+
+Broadcast::channel('typingevent', function ($user) {
+    // return (int) $user->id === (int) $id;
+    return Auth::check();
+});
