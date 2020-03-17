@@ -18,6 +18,7 @@ class CreateChatsTable extends Migration
             $table->unsignedInteger('from');
             $table->unsignedInteger('to');
             $table->string('message');
+            $table->dateTime('seen_at')->nullable();
             $table->timestamps();
         });
     }

@@ -26,6 +26,7 @@
     "jquery.caret": "0.3.1",
     "laravel-echo": "^1.6.1",
     "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28",
     "pusher-js": "^5.1.1",
     "select2": "^4.0.13",
     "textarea-caret": "^3.1.0",

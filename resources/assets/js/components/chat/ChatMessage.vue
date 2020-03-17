@@ -44,6 +44,16 @@
                                 <div class="chat-about" v-if="friendMessages.friend">
                                     <div class="chat-with" >{{ friendMessages.friend.name }}</div>
                                     <div class="chat-num-messages" v-if="friendMessages.messages.length==0">No Message</div>
+
+                                    <div class="chat-num-messages" v-if="last_seen">
+                                        Last seen  <span>{{ last_seen }}</span>
+                                    </div>
+                                    <div class="chat-num-messages" v-else>
+                                        <div class="" v-if="lastSeen">
+                                            Last seen <span>{{ lastSeen }}</span>
+                                        </div>
+                                       
+                                    </div>
                                 </div>
                                 <i class="fa fa-star"></i>
                             </div> <!-- end chat-header -->
@@ -81,10 +91,10 @@
                                                     <user-online :user="friendMessages.friend" type="message"></user-online>
 
 
-                                                    {{ friendMessages.friend.name}}</span>
+                                                    {{ friendMessages.friend.name}}</span> 
                                                 <span class="message-data-time">{{ formateMessageTime(friendMessage.created_at)}}</span>
                                                 </div>
-                                                <div class="message my-message">
+                                                <div class="message my-message" @click="seenMessage(friendMessage)">
                                                     {{ friendMessage.message }}
                                                     
                                                 </div>
@@ -120,7 +130,9 @@
 
 <script>
 
-    import moment from 'moment';
+    import moment from 'moment-timezone';
+    moment.tz.setDefault("America/New_York");
+
     export default {
         props:['authuser'],
         data(){
@@ -128,6 +140,7 @@
                 message: '',
                 selectFriend:null,
                 typing:'',
+                last_seen:''
             }
         },
         computed:{
@@ -136,6 +149,19 @@
             },
             friendMessages(){
                 return this.$store.getters.friendMessage;
+            },
+            lastSeen(){
+                
+                if(this.$store.getters.friendMessage.last_seen != null){
+                    
+                    if(this.$store.getters.friendMessage.last_seen.seen_at !=null){
+                        let last_seen = this.$store.getters.friendMessage.last_seen.seen_at;
+                        return  moment(last_seen, 'YYYY-MM-DD HH:mm:ss').fromNow()
+                    }
+
+                     
+                    
+                }
             }
         },
         mounted(){
@@ -158,6 +184,7 @@
 
         },
         created(){
+            
             Echo.private('typingevent')
             .listenForWhisper('typing', (e) => {
                 this.typing = e;
@@ -189,6 +216,19 @@
 
         },
         methods:{
+            seenMessage(message){
+                this.last_seen = '';
+                if(message.seen_at == null){
+                    
+                    axios.post('/chat-seen-message',{
+                        message:message.id
+                    }).then(res=>{
+                        
+                        // this.selectUser(res.data.from, true);
+                        this.last_seen = moment(res.data.seen_at, 'YYYY-MM-DD HH:mm:ss').fromNow()
+                    })
+                }
+            },
             typingMessage(){
                 Echo.private('typingevent')
                 .whisper('typing', {

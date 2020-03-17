@@ -6,6 +6,7 @@ use App\Chat;
 use App\Events\MessegeSentEvent;
 use App\User;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ChatController extends Controller
 {
@@ -49,9 +50,29 @@ class ChatController extends Controller
                     $q->where('from', $id);
                 })->get();
 
+
+
+                $last_seen = Chat::where(function($q) use($id){
+                    $q->where('from', auth()->user()->id);
+                    $q->where('to', $id);
+                })->orWhere(function($q) use($id){
+                    $q->where('to', auth()->user()->id);
+                    $q->where('from', $id);
+                })
+                // ->whereNotNull('seen_at')
+                ->where('seen_at', '!=', null)
+                
+                ->orderBy('seen_at','DESC')->first();
+
+
+
+                // ->first()
+                ;
+            // $last_seen = 'gotokal';
             return response()->json([
                 'friend'  =>  $friend,
-                'messages'=>$messages
+                'messages'=>$messages,
+                'last_seen'=> $last_seen
             ]);
         }
         return \abort(404);
@@ -75,5 +96,17 @@ class ChatController extends Controller
 
         return \abort(404);
         
+    }
+
+    public function seenMessage(Request $request){
+       $chat = Chat::find($request->message);
+    
+       $current_timestamp =now();
+
+       $chat->seen_at =  $current_timestamp;
+       $chat->save();
+
+       $chat = $chat->fresh();
+       return $chat;
     }
 }

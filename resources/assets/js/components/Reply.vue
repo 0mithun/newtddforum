@@ -197,7 +197,6 @@
             });
             eventBus.$on('cancelAddReply',()=>{
                 this.addNested = false;
-                console.log('cancel')
             });
 
             eventBus.$on('addNestedReply',data=>{

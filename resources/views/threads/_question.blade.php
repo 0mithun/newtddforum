@@ -23,7 +23,9 @@
             </div>
             <div class="media-body">
                 <h4 class="media-heading thread-info">
-                    Posted by: <a href="{{ route('threadsbyuser', $thread->creator->username) }}">{{ $thread->creator->name }}</a>
+                    Posted by: <a href="{{ route('threadsbyuser', $thread->creator->username) }}">{{ $thread->creator->name }} 
+                    <user-online :user="{{ json_encode($thread->creator) }}" type="message"></user-online>
+                    </a>
                     {{ $thread->created_at->diffForHumans()  }}
                 </h4>
             </div>            

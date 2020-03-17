@@ -4,7 +4,7 @@
             <i class="fa fa-circle online" ></i> <span v-if="type == 'status'">online</span>
         </div>
         <div v-else>
-            <i class="fa fa-circle "></i> <span  v-if="type == 'status'"> ofline</span>
+            <i class="fa fa-circle offline"></i> <span  v-if="type == 'status'"> ofline</span>
         </div>
     </div>
 </template>
@@ -48,5 +48,9 @@ export default {
 
         .status {
             display: inline-block;
+        }
+        .offline{
+            color:#92959e;
+            font-size: 10px
         }
 </style>
