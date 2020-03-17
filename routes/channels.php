@@ -26,3 +26,9 @@ Broadcast::channel('typingevent', function ($user) {
     // return (int) $user->id === (int) $id;
     return Auth::check();
 });
+
+
+Broadcast::channel('liveUser', function ($user) {
+    // return (int) $user->id === (int) $id;
+    return $user;
+});

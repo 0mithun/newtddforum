@@ -13,7 +13,14 @@
                                     <div class="about">
                                         <div class="name" style="color:black">{{ friend.name }}</div>
                                         <div class="status">
-                                            <i class="fa fa-circle online"></i> online
+                                            <div v-if="onlineUser(friend.id)">
+                                                <i class="fa fa-circle online" ></i> online
+                                            </div>
+                                            <div v-else>
+                                                <i class="fa fa-circle "></i> ofline
+                                            </div>
+
+                                            
                                         </div>
                                     </div>
                                     <div>
@@ -82,7 +89,8 @@
                             
                             <!-- <div class="chat-message clearfix" v-if="selectFriend"> -->
                             <div class="chat-message clearfix">
-                                <textarea @keydown.enter="sendMessage" @keydown="typingEvent" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message"></textarea>
+                                <div v-if="typing">{{ typing }}typing ....</div>
+                                <textarea @keydown.enter="sendMessage" @keyup="typingMessage" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message"></textarea>
 <!--                                         
                                 <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
                                 <i class="fa fa-file-image-o"></i>
@@ -109,7 +117,8 @@
             return{
                 message: '',
                 selectFriend:null,
-                typing:''
+                typing:'',
+                onlineUsers:[]
             }
         },
         computed:{
@@ -121,12 +130,7 @@
             }
         },
         mounted(){
-            Echo.private('typingevent')
-            .listenForWhisper('typing', (e) => {
-                this.typing = e;
-                // console.log(e);
-                // alert('hello');
-            });
+            
             this.$store.dispatch('friendList', this.authuser.id);
 
             Echo.private(`chat.${this.authuser.id}`)
@@ -145,15 +149,41 @@
 
         },
         created(){
-        
+            Echo.private('typingevent')
+            .listenForWhisper('typing', (e) => {
+                this.typing = e;
+
+               
+                //console.log(e);
+                // alert('hello');
+            });
+
+            //User Online
+
+            Echo.join(`liveUser`)
+                .here((users) => {
+                    this.onlineUsers = users
+                })
+                .joining((user) => {
+                    this.onlineUsers.push(user)
+                })
+                .leaving((user) => {
+                    let onlineUsers = _.remove(this.onlineUsers, (n)=>{
+                        return n.id != user.id
+                    })
+                    this.onlineUsers = onlineUsers;
+                });
+
+
+
+
         },
         methods:{
-            typingEvent(){
+            typingMessage(){
                 Echo.private('typingevent')
                 .whisper('typing', {
-                    // name: this.user.name
                     'user':this.authuser,
-                    // 'typing':this.message
+                    'typing':this.message
                     
                 });
             },
@@ -212,6 +242,9 @@
                     return 'active-friend';
                 }
             },
+            onlineUser(userId){
+                return _.find(this.onlineUsers,{'id':userId})
+            }
         }
     }
 </script>

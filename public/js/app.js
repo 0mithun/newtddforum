@@ -13024,6 +13024,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['authuser'],
@@ -13031,7 +13039,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       message: '',
       selectFriend: null,
-      typing: ''
+      typing: '',
+      onlineUsers: []
     };
   },
   computed: {
@@ -13045,10 +13054,6 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    Echo["private"]('typingevent').listenForWhisper('typing', function (e) {
-      _this.typing = e; // console.log(e);
-      // alert('hello');
-    });
     this.$store.dispatch('friendList', this.authuser.id);
     Echo["private"]("chat.".concat(this.authuser.id)).listen('MessegeSentEvent', function (e) {
       //this.selectUser(e.message.from)
@@ -13059,13 +13064,31 @@ __webpack_require__.r(__webpack_exports__);
       }
     });
   },
-  created: function created() {},
-  methods: {
-    typingEvent: function typingEvent() {
-      Echo["private"]('typingevent').whisper('typing', {
-        // name: this.user.name
-        'user': this.authuser // 'typing':this.message
+  created: function created() {
+    var _this2 = this;
 
+    Echo["private"]('typingevent').listenForWhisper('typing', function (e) {
+      _this2.typing = e; //console.log(e);
+      // alert('hello');
+    }); //User Online
+
+    Echo.join("liveUser").here(function (users) {
+      _this2.onlineUsers = users;
+    }).joining(function (user) {
+      _this2.onlineUsers.push(user);
+    }).leaving(function (user) {
+      var onlineUsers = _.remove(_this2.onlineUsers, function (n) {
+        return n.id != user.id;
+      });
+
+      _this2.onlineUsers = onlineUsers;
+    });
+  },
+  methods: {
+    typingMessage: function typingMessage() {
+      Echo["private"]('typingevent').whisper('typing', {
+        'user': this.authuser,
+        'typing': this.message
       });
     },
     selectUser: function selectUser(friend) {
@@ -13104,7 +13127,7 @@ __webpack_require__.r(__webpack_exports__);
       //return moment(timestamp).calendar();
     },
     sendMessage: function sendMessage(e) {
-      var _this2 = this;
+      var _this3 = this;
 
       e.preventDefault();
 
@@ -13113,7 +13136,7 @@ __webpack_require__.r(__webpack_exports__);
           message: this.message,
           friend: this.selectFriend
         }).then(function (res) {
-          _this2.selectUser(_this2.selectFriend);
+          _this3.selectUser(_this3.selectFriend);
         });
       }
     },
@@ -13121,6 +13144,11 @@ __webpack_require__.r(__webpack_exports__);
       if (this.selectFriend == index) {
         return 'active-friend';
       }
+    },
+    onlineUser: function onlineUser(userId) {
+      return _.find(this.onlineUsers, {
+        'id': userId
+      });
     }
   }
 });
@@ -18228,7 +18256,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .people-list {\n        width: 260px;\n        float: left;\n    } */\n.people-list .search[data-v-61f93f4f] {\n        padding: 20px;\n}\n.people-list input[data-v-61f93f4f] {\n        border-radius: 3px;\n        border: none;\n        padding: 14px;\n        color: white;\n        background: #6a6c75;\n        width: 90%;\n        font-size: 14px;\n}\n.people-list .fa-search[data-v-61f93f4f] {\n        position: relative;\n        left: -25px;\n}\n.people-list ul[data-v-61f93f4f] {\n        padding: 20px;\n        height: 770px;\n        background: #6a6c75\n}\n.people-list ul li[data-v-61f93f4f] {\n        padding-bottom: 20px;\n        cursor: pointer;\n}\n.people-list img[data-v-61f93f4f] {\n        float: left;\n}\n.people-list .about[data-v-61f93f4f] {\n        float: left;\n        margin-top: 8px;\n}\n.people-list .about[data-v-61f93f4f] {\n        padding-left: 8px;\n}\n.people-list .status[data-v-61f93f4f] {\n        color: #92959e;\n}\n.chat[data-v-61f93f4f] {\n        float: left;\n        background: #f2f5f8;\n        border-top-right-radius: 5px;\n        border-bottom-right-radius: 5px;\n        color: #434651;\n}\n.chat .chat-header[data-v-61f93f4f] {\n        padding: 20px;\n        border-bottom: 2px solid white;\n}\n.chat .chat-header img[data-v-61f93f4f] {\n        float: left;\n}\n.chat .chat-header .chat-about[data-v-61f93f4f] {\n        float: left;\n        padding-left: 10px;\n        margin-top: 6px;\n}\n.chat .chat-header .chat-with[data-v-61f93f4f] {\n        font-weight: bold;\n        font-size: 16px;\n}\n.chat .chat-header .chat-num-messages[data-v-61f93f4f] {\n        color: #92959e;\n}\n.chat .chat-header .fa-star[data-v-61f93f4f] {\n        float: right;\n        color: #d8dadf;\n        font-size: 20px;\n        margin-top: 12px;\n}\n.chat .chat-history[data-v-61f93f4f] {\n        padding: 30px 30px 20px;\n        border-bottom: 2px solid white;\n        overflow-y: scroll;\n        height: 575px;\n}\n.chat .chat-history .message-data[data-v-61f93f4f] {\n        margin-bottom: 15px;\n}\n.chat .chat-history .message-data-time[data-v-61f93f4f] {\n        color: #a8aab1;\n        padding-left: 6px;\n}\n.chat .chat-history .message[data-v-61f93f4f] {\n        color: white;\n        padding: 18px 20px;\n        line-height: 26px;\n        font-size: 16px;\n        border-radius: 7px;\n        margin-bottom: 30px;\n        width: 80%;\n        position: relative;\n}\n.chat .chat-history .message[data-v-61f93f4f]:after {\n        bottom: 100%;\n        left: 7%;\n        border: solid transparent;\n        content: \" \";\n        height: 0;\n        width: 0;\n        position: absolute;\n        pointer-events: none;\n        border-bottom-color: #86bb71;\n        border-width: 10px;\n        margin-left: -10px;\n}\n.chat .chat-history .my-message[data-v-61f93f4f] {\n        background: #86bb71;\n}\n.chat .chat-history .other-message[data-v-61f93f4f] {\n        background: #94c2ed;\n}\n.chat .chat-history .other-message[data-v-61f93f4f]:after {\n        border-bottom-color: #94c2ed;\n        left: 93%;\n}\n.chat .chat-message[data-v-61f93f4f] {\n        padding: 30px;\n}\n.chat .chat-message textarea[data-v-61f93f4f] {\n        /* width: 100%; */\n        /* border: none;\n        padding: 10px 20px;\n        font: 14px/22px \"Lato\", Arial, sans-serif;\n        margin-bottom: 10px;\n        border-radius: 5px; */\n        resize: none;\n}\n.chat .chat-message .fa-file-o[data-v-61f93f4f], .chat .chat-message .fa-file-image-o[data-v-61f93f4f] {\n        font-size: 16px;\n        color: gray;\n        cursor: pointer;\n}\n.chat .chat-message button[data-v-61f93f4f] {\n        float: right;\n        color: #94c2ed;\n        font-size: 16px;\n        text-transform: uppercase;\n        border: none;\n        cursor: pointer;\n        font-weight: bold;\n        background: #f2f5f8;\n}\n.chat .chat-message button[data-v-61f93f4f]:hover {\n        color: #75b1e8;\n}\n.online[data-v-61f93f4f], .offline[data-v-61f93f4f], .me[data-v-61f93f4f] {\n        margin-right: 3px;\n        font-size: 10px;\n}\n.online[data-v-61f93f4f] {\n        color: #86bb71;\n}\n.offline[data-v-61f93f4f] {\n        color: #e38968;\n}\n.me[data-v-61f93f4f] {\n        color: #94c2ed;\n}\n.align-left[data-v-61f93f4f] {\n        text-align: left;\n}\n.align-right[data-v-61f93f4f] {\n        text-align: right;\n}\n.float-right[data-v-61f93f4f] {\n        float: right;\n}\n.clearfix[data-v-61f93f4f]:after {\n        visibility: hidden;\n        display: block;\n        font-size: 0;\n        content: \" \";\n        clear: both;\n        height: 0;\n}\n.people-list ul li[data-v-61f93f4f] {\n        padding-bottom: 20px;\n        list-style: none;\n}\n.chat-history li[data-v-61f93f4f]{\n        list-style: none;\n}\n.chat[data-v-61f93f4f] {\n        width: 100%;\n}\n\n    /**\n        Change Chat Color\n     */\n.chat .chat-history .other-message[data-v-61f93f4f][data-v-61f93f4f] {\n        background: #34a4ef;\n}\n.chat .chat-history .other-message[data-v-61f93f4f] {\n        background: #34a4ef;\n}\n.chat .chat-history .other-message[data-v-61f93f4f]:after {\n        border-bottom-color:  #34a4ef;;\n        left: 93%;\n}\n.chat .chat-message button[data-v-61f93f4f]:hover {\n        color:#34a4ef;\n}\n.me[data-v-61f93f4f] {\n        color:#34a4ef;\n}\n#people-list ul[data-v-61f93f4f]{\n        overflow-x: scroll\n}\n.active-friend[data-v-61f93f4f]{\n        background: white;\n}\n.people-list ul[data-v-61f93f4f][data-v-61f93f4f] {\n        padding: 0;\n}\n.people-list ul li[data-v-61f93f4f][data-v-61f93f4f] {\n        cursor: pointer;\n        padding: 10px 20px;\n}\n.chat .chat-history[data-v-61f93f4f][data-v-61f93f4f] {\n        padding: 10px 15px;\n}\n.people-list ul[data-v-61f93f4f][data-v-61f93f4f] {\n        height: 670px;\n}\n.chat .chat-message[data-v-61f93f4f][data-v-61f93f4f] {\n        padding: 15px;\n}\n.badge-danger[data-v-61f93f4f]{\n        background: red\n}\n.messageStatus[data-v-61f93f4f]{\n        color: #d84660;\n        float: right;\n        margin-top: 10px;\n        font-size: 20px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* .people-list {\n        width: 260px;\n        float: left;\n    } */\n.people-list .search[data-v-61f93f4f] {\n        padding: 20px;\n}\n.people-list input[data-v-61f93f4f] {\n        border-radius: 3px;\n        border: none;\n        padding: 14px;\n        color: white;\n        background: #6a6c75;\n        width: 90%;\n        font-size: 14px;\n}\n.people-list .fa-search[data-v-61f93f4f] {\n        position: relative;\n        left: -25px;\n}\n.people-list ul[data-v-61f93f4f] {\n        padding: 20px;\n        height: 770px;\n        background: #6a6c75\n}\n.people-list ul li[data-v-61f93f4f] {\n        padding-bottom: 20px;\n        cursor: pointer;\n}\n.people-list img[data-v-61f93f4f] {\n        float: left;\n}\n.people-list .about[data-v-61f93f4f] {\n        float: left;\n        margin-top: 8px;\n}\n.people-list .about[data-v-61f93f4f] {\n        padding-left: 8px;\n}\n.people-list .status[data-v-61f93f4f] {\n        color: #92959e;\n}\n.chat[data-v-61f93f4f] {\n        float: left;\n        background: #f2f5f8;\n        border-top-right-radius: 5px;\n        border-bottom-right-radius: 5px;\n        color: #434651;\n}\n.chat .chat-header[data-v-61f93f4f] {\n        padding: 20px;\n        border-bottom: 2px solid white;\n}\n.chat .chat-header img[data-v-61f93f4f] {\n        float: left;\n}\n.chat .chat-header .chat-about[data-v-61f93f4f] {\n        float: left;\n        padding-left: 10px;\n        margin-top: 6px;\n}\n.chat .chat-header .chat-with[data-v-61f93f4f] {\n        font-weight: bold;\n        font-size: 16px;\n}\n.chat .chat-header .chat-num-messages[data-v-61f93f4f] {\n        color: #92959e;\n}\n.chat .chat-header .fa-star[data-v-61f93f4f] {\n        float: right;\n        color: #d8dadf;\n        font-size: 20px;\n        margin-top: 12px;\n}\n.chat .chat-history[data-v-61f93f4f] {\n        padding: 30px 30px 20px;\n        border-bottom: 2px solid white;\n        overflow-y: scroll;\n        height: 575px;\n}\n.chat .chat-history .message-data[data-v-61f93f4f] {\n        margin-bottom: 15px;\n}\n.chat .chat-history .message-data-time[data-v-61f93f4f] {\n        color: #a8aab1;\n        padding-left: 6px;\n}\n.chat .chat-history .message[data-v-61f93f4f] {\n        color: white;\n        padding: 18px 20px;\n        line-height: 26px;\n        font-size: 16px;\n        border-radius: 7px;\n        margin-bottom: 30px;\n        width: 80%;\n        position: relative;\n}\n.chat .chat-history .message[data-v-61f93f4f]:after {\n        bottom: 100%;\n        left: 7%;\n        border: solid transparent;\n        content: \" \";\n        height: 0;\n        width: 0;\n        position: absolute;\n        pointer-events: none;\n        border-bottom-color: #86bb71;\n        border-width: 10px;\n        margin-left: -10px;\n}\n.chat .chat-history .my-message[data-v-61f93f4f] {\n        background: #86bb71;\n}\n.chat .chat-history .other-message[data-v-61f93f4f] {\n        background: #94c2ed;\n}\n.chat .chat-history .other-message[data-v-61f93f4f]:after {\n        border-bottom-color: #94c2ed;\n        left: 93%;\n}\n.chat .chat-message[data-v-61f93f4f] {\n        padding: 30px;\n}\n.chat .chat-message textarea[data-v-61f93f4f] {\n        /* width: 100%; */\n        /* border: none;\n        padding: 10px 20px;\n        font: 14px/22px \"Lato\", Arial, sans-serif;\n        margin-bottom: 10px;\n        border-radius: 5px; */\n        resize: none;\n}\n.chat .chat-message .fa-file-o[data-v-61f93f4f], .chat .chat-message .fa-file-image-o[data-v-61f93f4f] {\n        font-size: 16px;\n        color: gray;\n        cursor: pointer;\n}\n.chat .chat-message button[data-v-61f93f4f] {\n        float: right;\n        color: #94c2ed;\n        font-size: 16px;\n        text-transform: uppercase;\n        border: none;\n        cursor: pointer;\n        font-weight: bold;\n        background: #f2f5f8;\n}\n.chat .chat-message button[data-v-61f93f4f]:hover {\n        color: #75b1e8;\n}\n.online[data-v-61f93f4f], .offline[data-v-61f93f4f], .me[data-v-61f93f4f] {\n        margin-right: 3px;\n        font-size: 10px;\n}\n.online[data-v-61f93f4f] {\n        color: #86bb71;\n}\n.offline[data-v-61f93f4f] {\n        color: #e38968;\n}\n.me[data-v-61f93f4f] {\n        color: #94c2ed;\n}\n.align-left[data-v-61f93f4f] {\n        text-align: left;\n}\n.align-right[data-v-61f93f4f] {\n        text-align: right;\n}\n.float-right[data-v-61f93f4f] {\n        float: right;\n}\n.clearfix[data-v-61f93f4f]:after {\n        visibility: hidden;\n        display: block;\n        font-size: 0;\n        content: \" \";\n        clear: both;\n        height: 0;\n}\n.people-list ul li[data-v-61f93f4f] {\n        padding-bottom: 20px;\n        list-style: none;\n}\n.chat-history li[data-v-61f93f4f]{\n        list-style: none;\n}\n.chat[data-v-61f93f4f] {\n        width: 100%;\n}\n\n    /**\n        Change Chat Color\n     */\n.chat .chat-history .other-message[data-v-61f93f4f][data-v-61f93f4f] {\n        background: #34a4ef;\n}\n.chat .chat-history .other-message[data-v-61f93f4f] {\n        background: #34a4ef;\n}\n.chat .chat-history .other-message[data-v-61f93f4f]:after {\n        border-bottom-color:  #34a4ef;;\n        left: 93%;\n}\n.chat .chat-message button[data-v-61f93f4f]:hover {\n        color:#34a4ef;\n}\n.me[data-v-61f93f4f] {\n        color:#34a4ef;\n}\n#people-list ul[data-v-61f93f4f]{\n        overflow-x: scroll\n}\n.active-friend[data-v-61f93f4f]{\n        background: white;\n}\n.people-list ul[data-v-61f93f4f][data-v-61f93f4f] {\n        padding: 0;\n}\n.people-list ul li[data-v-61f93f4f][data-v-61f93f4f] {\n        cursor: pointer;\n        padding: 10px 20px;\n}\n.chat .chat-history[data-v-61f93f4f][data-v-61f93f4f] {\n        padding: 10px 15px;\n}\n.people-list ul[data-v-61f93f4f][data-v-61f93f4f] {\n        height: 670px;\n}\n.chat .chat-message[data-v-61f93f4f][data-v-61f93f4f] {\n        padding: 15px;\n}\n.badge-danger[data-v-61f93f4f]{\n        background: red\n}\n.messageStatus[data-v-61f93f4f]{\n        color: #d84660;\n        float: right;\n        margin-top: 10px;\n        font-size: 20px;\n}\n", ""]);
 
 // exports
 
@@ -99830,7 +99858,21 @@ var render = function() {
                         [_vm._v(_vm._s(friend.name))]
                       ),
                       _vm._v(" "),
-                      _vm._m(1, true)
+                      _c("div", { staticClass: "status" }, [
+                        _vm.onlineUser(friend.id)
+                          ? _c("div", [
+                              _c("i", { staticClass: "fa fa-circle online" }),
+                              _vm._v(
+                                " online\n                                            "
+                              )
+                            ])
+                          : _c("div", [
+                              _c("i", { staticClass: "fa fa-circle " }),
+                              _vm._v(
+                                " ofline\n                                            "
+                              )
+                            ])
+                      ])
                     ]),
                     _vm._v(" "),
                     _c("div", [
@@ -100002,6 +100044,10 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "chat-message clearfix" }, [
+            _vm.typing
+              ? _c("div", [_vm._v(_vm._s(_vm.typing) + "typing ....")])
+              : _vm._e(),
+            _vm._v(" "),
             _c("textarea", {
               directives: [
                 {
@@ -100020,18 +100066,16 @@ var render = function() {
               },
               domProps: { value: _vm.message },
               on: {
-                keydown: [
-                  function($event) {
-                    if (
-                      !$event.type.indexOf("key") &&
-                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                    ) {
-                      return null
-                    }
-                    return _vm.sendMessage($event)
-                  },
-                  _vm.typingEvent
-                ],
+                keydown: function($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.sendMessage($event)
+                },
+                keyup: _vm.typingMessage,
                 input: function($event) {
                   if ($event.target.composing) {
                     return
@@ -100055,15 +100099,6 @@ var staticRenderFns = [
       _c("input", { attrs: { type: "text", placeholder: "search" } }),
       _vm._v(" "),
       _c("i", { staticClass: "fa fa-search" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "status" }, [
-      _c("i", { staticClass: "fa fa-circle online" }),
-      _vm._v(" online\n                                        ")
     ])
   }
 ]
