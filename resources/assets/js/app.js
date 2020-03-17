@@ -90,6 +90,9 @@ import GmapCluster from 'vue2-google-maps/dist/components/cluster' // replace sr
 Vue.component('GmapCluster', GmapCluster)
 
 
+import UserOnline from './components/chat/UserOnline.vue'
+
+Vue.component('user-online',UserOnline);
 
 
 Vue.use(VueGoogleMaps, {
@@ -138,5 +141,17 @@ const app = new Vue({
         UnscribeButton,
         Alert
     },
-    store
+    store,
+    created(){
+      Echo.join(`liveUser`)
+            .here((users) => {
+                this.$store.dispatch('onlineUsers', users)
+            })
+            .joining((user) => {
+                this.$store.dispatch('addUserOnline', user)
+            })
+            .leaving((user) => {
+                this.$store.dispatch('removeUserOnline', user)
+            });
+    }
 });

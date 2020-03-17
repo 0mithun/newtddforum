@@ -3,7 +3,8 @@ import Axios from "axios";
 export default {
     state: {  
         friendList:[],
-        friendMessage:[]
+        friendMessage:[],
+        onlineUsers:[]
     },
     mutations: { 
         friendList(state, payload){
@@ -11,6 +12,28 @@ export default {
         },
         friendMessage(state, payload){
             return state.friendMessage = payload;
+        },
+        onlineUsers(state, payload){
+            return state.onlineUsers = payload
+        },
+        addUserOnline(state, payload){
+            let status = _.find(state.onlineUsers,{'id':payload.id});
+            if(!status){
+                return state.onlineUsers.push(payload)
+            }
+            
+            // let onlineUsers = state.onlineUsers.push(payload)
+        },
+
+        removeUserOnline(state, payload){
+
+
+            let onlineUsers = _.remove(state.onlineUsers, (n)=>{
+                return n.id != payload.id
+            })
+            state.onlineUsers = onlineUsers;
+
+
         }
     },
     actions: {
@@ -24,6 +47,15 @@ export default {
             Axios.get('/chat-message/'+friend).then(res=>{
                 context.commit('friendMessage',res.data)
             });
+        },
+        onlineUsers(context, payload){
+            context.commit('onlineUsers', payload)
+        },
+        addUserOnline(context, payload){
+            context.commit('addUserOnline', payload);
+        },
+        removeUserOnline(context, payload){
+            context.commit('removeUserOnline', payload);
         }
     },
     getters: { 
@@ -32,6 +64,9 @@ export default {
         },
         friendMessage(state){
             return state.friendMessage;
+        },
+        onlineUsers(state){
+            return state.onlineUsers
         }
     }
 }

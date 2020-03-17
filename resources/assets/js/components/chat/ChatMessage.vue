@@ -12,7 +12,10 @@
                                     <img :src="friend.profileAvatarPath" alt="avatar" style="width:50px; border-radius:50%;height:50px" />
                                     <div class="about">
                                         <div class="name" style="color:black">{{ friend.name }}</div>
-                                        <div class="status">
+                                        
+                                        <user-online :user="friend" type="status"></user-online>
+                                        
+                                        <!-- <div class="status">
                                             <div v-if="onlineUser(friend.id)">
                                                 <i class="fa fa-circle online" ></i> online
                                             </div>
@@ -21,7 +24,7 @@
                                             </div>
 
                                             
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div>
                                         <span class="glyphicon glyphicon-comment messageStatus" style="color:red;display:none;" :id="'messageStatus'+friend.id "></span>
@@ -72,11 +75,18 @@
                                                 <div class="message-data">
                                                     
                                                 <img :src="friendMessages.friend.profileAvatarPath" alt="" style="width:40px; border-radius:50%;height:40px">
-                                                <span class="message-data-name"><i class="fa fa-circle online"></i>{{ friendMessages.friend.name}}</span>
+                                                <span class="message-data-name">
+
+                                                    <!-- <i class="fa fa-circle online"></i> -->
+                                                    <user-online :user="friendMessages.friend" type="message"></user-online>
+
+
+                                                    {{ friendMessages.friend.name}}</span>
                                                 <span class="message-data-time">{{ formateMessageTime(friendMessage.created_at)}}</span>
                                                 </div>
                                                 <div class="message my-message">
                                                     {{ friendMessage.message }}
+                                                    
                                                 </div>
                                             </li>
                                         </div> 
@@ -118,7 +128,6 @@
                 message: '',
                 selectFriend:null,
                 typing:'',
-                onlineUsers:[]
             }
         },
         computed:{
@@ -160,19 +169,20 @@
 
             //User Online
 
-            Echo.join(`liveUser`)
-                .here((users) => {
-                    this.onlineUsers = users
-                })
-                .joining((user) => {
-                    this.onlineUsers.push(user)
-                })
-                .leaving((user) => {
-                    let onlineUsers = _.remove(this.onlineUsers, (n)=>{
-                        return n.id != user.id
-                    })
-                    this.onlineUsers = onlineUsers;
-                });
+            // Echo.join(`liveUser`)
+            // .here((users) => {
+            //     //this.onlineUsers = users;
+            //     this.$store.dispatch('onlineUsers', users)
+            // })
+            // .joining((user) => {
+            //     this.onlineUsers.push(user)
+            // })
+            // .leaving((user) => {
+            //     let onlineUsers = _.remove(this.onlineUsers, (n)=>{
+            //         return n.id != user.id
+            //     })
+            //     this.onlineUsers = onlineUsers;
+            // });
 
 
 
