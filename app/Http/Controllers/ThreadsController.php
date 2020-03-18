@@ -65,7 +65,7 @@ class ThreadsController extends Controller
     {
         
         if(request()->hasFile('image_path')){
-            $rule = 'image|max:1024';
+            $rule = 'image|max:2048';
         }else{
             $rule = '';
         }
@@ -196,7 +196,7 @@ class ThreadsController extends Controller
        $this->authorize('update', $thread);
 
        if(request()->hasFile('image_path')){
-            $rule = 'image|max:1024';
+            $rule = 'image|max:2048';
         }else{
             $rule = '';
         }

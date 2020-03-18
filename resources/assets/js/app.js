@@ -127,6 +127,10 @@ import VueChatScroll from 'vue-chat-scroll'
 Vue.use(VueChatScroll)
 
 
+import AddFriend from './components/AddFriend.vue'
+
+Vue.component('add-friend',AddFriend);
+
 window.eventBus = new  Vue();
 const app = new Vue({
     el: '#app',

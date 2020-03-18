@@ -125,10 +125,20 @@ Route::middleware(['auth'])->group(function (){
     Route::post('api/users/report','ReportController@user');
 //Route::post('/users/report', '')
 
+
+    // Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
+
     Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
+
+
+
+
     Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index');
     Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationsController@destroy');
 
+
+
+/*Authentication check added*/
     Route::get('/profiles/{user}/avatar','ProfilesController@avatar')->name('profile.avatar.page');
     Route::post('/profiles/{user}/avatar/change','ProfilesController@avatarChange')->name('profile.avatar.change');
 
@@ -143,9 +153,16 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/profiles/{user}/my-likes','ProfilesController@myLikesShow')->name('profile.likes');
 
 
+    /*Authentication check added*/
+
+
     //Friend System
 
     Route::post('/friend/sent-request', 'FriendController@sentRequest')->name('friendrequest.sent');
+
+    Route::post('/friend/check-friend', 'FriendController@checkFriend');
+    Route::post('/friend/check-request-sent', 'FriendController@checkFriendRequestSent');
+
 
     Route::get('profiles/{user}/friend-list','FriendController@friendList')->name('profile.friendlist');
     Route::get('profiles/{user}/friend-request','FriendController@getFriendRequest')->name('profile.friendrequest');

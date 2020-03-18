@@ -9,12 +9,13 @@ class FriendController extends Controller
 {
 
     public function sentRequest(Request $request){
-
+        
         $user = auth()->user();
         $receipentuser = User::find($request->recipient);
         
-        $user->befriend($receipentuser);
-        return 'Friend Request Sent Successfully';
+        $friend = $user->befriend($receipentuser);
+
+       
     }
 
 
@@ -35,10 +36,19 @@ class FriendController extends Controller
     }
 
     public function friendList(){
-        $user = auth()->user();
-        $friendLists = $user->getFriends();
 
-        //dd($friendLists);
+        $user = request('user');
+
+        $userInfo = User::where('username', $user)->first();
+
+        //return $userInfo;
+
+        //$authUser = auth()->user();
+
+        
+        $friendLists = $userInfo->getFriends();
+
+
 
         return view('profiles.friendlist', compact('friendLists'));
         
@@ -104,5 +114,37 @@ class FriendController extends Controller
 
 
         return 'Friend Un block successfully';
+    }
+
+
+    public function checkFriend(Request $request){
+        $user = auth()->user();
+
+        $friend = User::find($request->recipient);
+
+
+        $isFriend = $user->isFriendWith($friend);
+
+        
+        return response()->json($isFriend);
+       
+        //return $isFriend;
+
+
+
+    }
+
+    public function checkFriendRequestSent(Request $request){
+
+        $user = auth()->user();
+
+
+        $recipient = User::find($request->recipient);
+
+
+        $isSentRequest = $user->hasSentFriendRequestTo($recipient);
+
+        return response()->json($isSentRequest);
+
     }
 }

@@ -3,6 +3,7 @@
 @section('content')
     @php
         $user = auth()->user();
+        // $profileUser 
     @endphp
     <div class="container">
         <div class="row">
@@ -12,21 +13,36 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-10">
-                                <h3>{{ strtoupper($user->name) }}</h3>
+                                <h3>{{ strtoupper($profileUser->name) }}</h3>
                             </div>
                             <div class="col-md-2">
-                                <img src="{{ asset($user->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;">
+                                <img src="{{ asset($profileUser->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;">
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="list-group">
-                                    <a class="list-group-item active"  href="{{ route('profile', $user->username)  }}">Profile</a>
-                                    <a class="list-group-item "  href="{{ route('profile.friendlist', $user->username)  }}">Friends</a>
-                                    <a class="list-group-item "  href="{{ route('profile.friendrequest', $user->username)  }}">Friend Request</a>
-                                    <a class="list-group-item  "  href="{{ route('profile.blockfriends', $user->username)  }}">Bloking</a>
 
+                                    @if($profileUser->username != $user->username)
+                                        <a class="list-group-item active"  href="{{ route('profile', $profileUser->username)  }}">Profile</a>
+                                        <a class="list-group-item "  href="{{ route('profile.friendlist', $profileUser->username)  }}">Friends</a>
+                                        <a class="list-group-item" href="{{ route('profile.threads', $profileUser->username)  }}">Threads</a>
+                                    @else 
+
+                                    
+                                        <a class="list-group-item active"  href="{{ route('profile', $user->username)  }}">Profile</a>
+                                        <a class="list-group-item "  href="{{ route('profile.friendlist', $user->username)  }}">Friends</a>
+                                        <a class="list-group-item "  href="{{ route('profile.friendrequest', $user->username)  }}">Friend Request</a>
+                                        <a class="list-group-item  "  href="{{ route('profile.blockfriends', $user->username)  }}">Bloking</a>
+
+                                        <a class="list-group-item " href="{{ route('profile.avatar.page', $user->username)  }}">Avatar</a>
+                                        <a class="list-group-item" href="{{ route('profile.subscriptions', $user->username)  }}">My Subscriptions </a>
+                                        <a class="list-group-item" href="{{ route('profile.favorites', $user->username)  }}">My Favorites</a>
+                                        <a class="list-group-item" href="{{ route('profile.threads', $user->username)  }}">My Threads</a>
+                                        <a class="list-group-item" href="{{ route('profile.likes', $user->username)  }}">My Likes</a>
+                                        <a class="list-group-item" href="{{ route('user.edit.password')  }}">Change Password</a>
+                                    @endif
                                 @if($user->isAdmin)
 {{--                                    For Admin--}}
                                         <a class="list-group-item"  href="{{ route('admin.setesettings') }}">Site Settings</a>
@@ -37,13 +53,6 @@
 {{--                                    --}}
                                 @endif
 
-
-                                    <a class="list-group-item " href="{{ route('profile.avatar.page', $user->username)  }}">Avatar</a>
-                                    <a class="list-group-item" href="{{ route('profile.subscriptions', $user->username)  }}">My Subscriptions </a>
-                                    <a class="list-group-item" href="{{ route('profile.favorites', $user->username)  }}">My Favorites</a>
-                                    <a class="list-group-item" href="{{ route('profile.threads', $user->username)  }}">My Threads</a>
-                                    <a class="list-group-item" href="{{ route('profile.likes', $user->username)  }}">My Likes</a>
-                                    <a class="list-group-item" href="{{ route('user.edit.password')  }}">Change Password</a>
                                 </div>
                             </div>
                             <div class="col-md-9">
@@ -59,21 +68,22 @@
                                             </div>
                                         @endif
                                         <div class="row">
-                                            <div class="col-md-9">
-                                                <h4>Joined {{ $user->created_at->diffForHumans()  }}
-                                                    {{ ($user->city !='' || $user->country !='')? 'From:' : '' }}
-                                                     {{ $user->city !=''? $user->city.", ": ''  }} {{ $user->country  }}
+                                            <div class="col-md-8">
+                                                <h4>Joined {{ $profileUser->created_at->diffForHumans()  }}
+                                                    {{ ($profileUser->city !='' || $profileUser->country !='')? 'From:' : '' }}
+                                                     {{ $profileUser->city !=''? $profileUser->city.", ": ''  }} {{ $user->country  }}
                                                 </h4>
                                             </div>
-                                            <div class="col-md-3">
-                                                <a class="btn btn-primary" href="{{ route('profile.user.edit', $user->username) }}" >Edit My Information</a>
+                                            <div class="col-md-4">
+                                                {{-- <a class="btn btn-primary" href="{{ route('profile.user.edit', $user->username) }}" >Edit My Information</a> --}}
+                                                <add-friend :recipient="{{ $profileUser }}"></add-friend>
                                             </div>
                                         </div>
 
                                     </div>
                                     <div class="panel-body">
                                         <h4>About Me</h4>
-                                        {{ $user->about }}
+                                        {{ $profileUser->about }}
 
                                     </div>
                                 </div>

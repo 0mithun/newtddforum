@@ -25,7 +25,11 @@ class ProfilesController extends Controller
      */
     public function show($user)
     {
+       
+
         $usredata = User::where('username', $user)->first();
+
+       
            return view('profiles.show', [
             'profileUser' => $usredata,
             'activities' => Activity::feed($usredata)
@@ -146,11 +150,21 @@ class ProfilesController extends Controller
 
 
     public function avatar(){
+        $user =  request('user');
+        $auth_user = auth()->user();
+        if($user != $auth_user->username){
+            return redirect('/');
+        }
+
         return view('profiles.avatar');
     }
 
     public  function settings(){
-
+        $user =  request('user');
+        $auth_user = auth()->user();
+        if($user != $auth_user->username){
+            return redirect('/');
+        }
         return view('profiles.settings');
     }
 
@@ -159,6 +173,13 @@ class ProfilesController extends Controller
 
 
     public function avatarChange($user){
+
+        // $user =  request('user');
+        // $auth_user = auth()->user();
+        // if($user != $auth_user->username){
+        //     return redirect('/');
+        // }
+
         request()->validate([
             'avatar' => 'required|image'
         ]);
@@ -190,10 +211,20 @@ class ProfilesController extends Controller
 
     }
 
+
+
+
     public function mySubscriptionsShow(){
 
+        $user =  request('user');
+        $auth_user = auth()->user();
+        if($user != $auth_user->username){
+            return redirect('/');
+        }
+
+
         $subscriptions = DB::table('thread_subscriptions')
-                ->where('user_id', auth()->user()->id)
+                ->where('user_id', $auth_user->id)
                 ->get()
 
             ;
@@ -202,10 +233,15 @@ class ProfilesController extends Controller
     }
 
     public  function myFavoritesShow(){
-        $user = auth()->user();
+        
+        $user =  request('user');
+        $auth_user = auth()->user();
+        if($user != $auth_user->username){
+            return redirect('/');
+        }
 
         $favorites = DB::table('favorites')
-                ->where('user_id', $user->id)
+                ->where('user_id', $auth_user->id)
                 ->where('favorited_type','App\Thread')
                 ->get()
 
@@ -216,16 +252,28 @@ class ProfilesController extends Controller
     }
 
     public function myThreadsShow(){
-        $threads =Thread::where('user_id', auth()->user()->id)->get();
+
+        $user =  request('user');
+        
+                
+        $getUserInfo = User::where('username', $user)->first();       
+
+        $threads =Thread::where('user_id', $getUserInfo->id)->get();
 
         return view('profiles.threads', compact('threads'));
     }
 
     public function myLikesShow(){
-        $user = auth()->user();
+
+        $user =  request('user');
+        $auth_user = auth()->user();
+        if($user != $auth_user->username){
+            return redirect('/');
+        }
+
 
         $likes = DB::table('likes')
-            ->where('user_id', $user->id)
+            ->where('user_id', $auth_user ->id)
             ->where('likeable_type','App\Thread')
             ->get()
 
