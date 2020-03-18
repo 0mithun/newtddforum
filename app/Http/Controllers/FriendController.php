@@ -39,6 +39,8 @@ class FriendController extends Controller
 
         $user = request('user');
 
+        $authUser = auth()->user();
+
         $userInfo = User::where('username', $user)->first();
 
         //return $userInfo;
@@ -50,28 +52,38 @@ class FriendController extends Controller
 
 
 
-        return view('profiles.friendlist', compact('friendLists'));
+        return view('profiles.friendlist', compact('friendLists','userInfo'));
         
     }
 
 
     public function acceptFriendRequest(Request $request){
 
-        $user = auth()->user();
+        $authUser = auth()->user();
         $sender = User::findOrFail($request->sender);
 
         //dd($sender);
-        $user->acceptFriendRequest($sender);
+        $authUser->acceptFriendRequest($sender);
+
+        session()->flash('succes','Friend Request Accept successfully');
+        return redirect()->route('profile.friendrequest', $authUser->username);
 
         return 'Friend Request accept';
     }
 
     public function unfriend(Request $request){
-        $user = auth()->user();
+        $authUser = auth()->user();
 
         $friend = User::findOrFail($request->friend);
 
-        $user->unfriend($friend);
+        $authUser->unfriend($friend);
+
+        if(\Request::ajax()){
+            return response()->json(['success'=>'Friend unfriend successfully']);
+        }
+        
+        session()->flash('succes','Friend unfriend successfully');
+        return redirect()->route('profile.friendlist', $authUser->username);
 
         return 'Friend unfriend successfully';
     }

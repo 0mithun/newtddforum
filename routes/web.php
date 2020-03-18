@@ -168,7 +168,13 @@ Route::middleware(['auth'])->group(function (){
     Route::get('profiles/{user}/friend-request','FriendController@getFriendRequest')->name('profile.friendrequest');
 
     Route::post('profiles/{user}/accept-friend-request','FriendController@acceptFriendRequest')->name('profile.acceptfriendrequest');
-    Route::post('profiles/{user}/unfriend','FriendController@unfriend')->name('profile.unfriend');
+
+
+    // Route::post('profiles/{user}/unfriend','FriendController@unfriend')->name('profile.unfriend');
+
+    Route::post('/friend/unfriend','FriendController@unfriend')->name('friend.unfriend');
+
+
     Route::post('profiles/{user}/block-friend','FriendController@blockFriend')->name('profile.friend.block');
 
 

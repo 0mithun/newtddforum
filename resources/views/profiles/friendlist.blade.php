@@ -4,6 +4,7 @@
 @section('content')
     @php
         $user = auth()->user();
+        
     @endphp
     <div class="container">
         <div class="row">
@@ -79,6 +80,7 @@
                                                 <tbody>
                                                 @forelse($friendLists as $friendList)
                                                     
+                                                    @if($friendList->username != $user->username )
                                                     <tr>
                                                         <td>
                                                         <img src="{{ asset($friendList->avatar_path) }}" alt="" width="30px">
@@ -87,12 +89,12 @@
 
                                                         <td>
                                                             <button class="btn btn-default btn-sm">
-                                                                <a href="">Show Profile</a>
+                                                            <a href="{{ route('profile', $friendList->username)  }}">Show Profile</a>
                                                             </button>
                                                         </td>
-                                                        <td>
-                                                            
 
+                                                        @if( $user->username == $userInfo->username)
+                                                        <td>
                                                             <form action="{{ route('profile.friend.block', $user->username) }}" method="post">
                                                                 @csrf
 
@@ -102,14 +104,23 @@
                                                         </td>
 
                                                         <td>
-                                                            <form action="{{ route('profile.unfriend', $user->username) }}" method="post">
+                                                            <form action="{{ route('friend.unfriend') }}" method="post">
                                                                 @csrf
 
                                                                 <input type="hidden" name="friend" value="{{ $friendList->id   }}">
                                                                 <input type="submit" value="Unfriend" class="btn btn-danger btn-sm">
                                                             </form>
                                                         </td>
+                                                        @endif
+
+
                                                     </tr>
+                                                    @else
+                                                        <tr>
+                                                            <td colspan="3" class="text-center">No Friend</td>
+                                                        </tr>
+                                                    @endif
+
                                                 </tbody>
                                                 @empty
                                                     <tr>

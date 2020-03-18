@@ -8,10 +8,10 @@
                 
                 <div v-if="isFriend">
                     <!-- <button class="btn btn-success btn-sm pull-right" @click.prevent="addFriend" v-if="sentRequst">Request Sent</button> -->
-                    <button class="btn btn-danger btn-sm pull-right" @click.prevent="addFriend">Urfiend</button>
+                    <button class="btn btn-danger btn-sm pull-right" @click.prevent="unFriend">Urfiend</button>
                 </div>
                 <div v-cloak v-else>
-                    <button class="btn btn-success btn-sm pull-right" @click.prevent="addFriend" v-if="sentRequst">Request Sent</button>
+                    <button class="btn btn-success btn-sm pull-right" v-if="sentRequst">Request Sent</button>
                     <button class="btn btn-primary btn-sm pull-right" @click.prevent="addFriend" v-else>Add Friend</button>
                 </div>
 
@@ -66,10 +66,23 @@
                     recipient:this.recipient.id
                 }).then(res=>{
                     // this.sentRequst = true;
-                    console.log(res)
+                    
                     if(res.data  ==true){
                         this.sentRequst = true
                     }
+                })
+            },
+            unFriend(){
+                console.log('Unfriend')
+                //profiles/{user}/unfriend
+
+                 axios.post('/friend/unfriend',{
+                    friend:this.recipient.id
+                }).then(res=>{
+                    //  this.sentRequst = true;
+                    this.isFriend = false;
+                    this.sentRequst = false;
+                    
                 })
             }
 
