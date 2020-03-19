@@ -19,7 +19,7 @@ class ThreadsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth')->except(['index', 'show','loadByTag']);
     }
 
     /**
@@ -94,7 +94,7 @@ class ThreadsController extends Controller
 
             //image_pending
         
-        
+        $user = auth()->user();
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
@@ -107,6 +107,8 @@ class ThreadsController extends Controller
             'main_subject'  =>  request('main_subject'),
             'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
+            'lat'   => $user->lat,
+            'lng'   => $user->lng
 
         ]);
 
@@ -179,8 +181,37 @@ class ThreadsController extends Controller
 
 
         $allTags = Tags::all();
+        
+        $threadTags = $thread->tags;
 
-        return view('threads.show', compact('thread','allTags'));
+        $relatedThreads = [];
+
+        foreach($threadTags as $tag){
+            $threads = $tag->threads;
+
+            if($threads->count()){              
+
+                foreach($threads as $relatedThread){
+                    if($thread->id != $relatedThread->id){
+                        $relatedThreads[] = $relatedThread;
+                    }
+                    
+                }
+            }
+
+            
+        }
+        $collection = collect($relatedThreads);
+        if($collection->count() > 4){
+            $random =$collection->random(5);
+        }else{
+            $random =  $collection->random($collection->count());
+        }
+        
+        $relatedThreads= $random;
+
+
+        return view('threads.show', compact('thread','allTags','relatedThreads'));
     }
 
     /**
@@ -218,16 +249,21 @@ class ThreadsController extends Controller
 
         ]);
 
+        $user = auth()->user();
+
         $data = [
             'title' => request('title'),
             //'channel_id'    => request('channel_id'),
             'body' => request('body'),
+            'word_count'   => str_word_count(request('body')),
             'location'  =>  request('location'),
             'source'  =>  request('source'),
             'main_subject'  =>  request('main_subject'),
             'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
             'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
+            'lat'   => $user->lat,
+            'lng'   => $user->lng
         ];
 
         if(\request('channel_id') != 'undefined'){
@@ -324,9 +360,15 @@ class ThreadsController extends Controller
     public function loadByTag($tag, Trending $trending){
         $tag = Tags::where('name', \request('tag'))->first();
 
-        $threads = $tag->threads;
-        $trending = $trending->get();
-        return view('threads.threeadsbytag',compact('threads', 'trending'));
+        if($tag){
+            $threads = $tag->threads;
+            $trending = $trending->get();
+            return view('threads.threeadsbytag',compact('threads', 'trending'));
+        }else{
+            abort(404);
+        }
+
+        
 
     }
 

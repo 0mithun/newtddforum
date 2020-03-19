@@ -19,6 +19,9 @@ Route::post('/map/nearest-threads','UserlocationController@getNearestThread')->n
 
 Route::post('/map/thread-details','UserlocationController@threadDetails')->name('thread.details');
 
+
+
+
 Route::get('/','ThreadsController@index');
 
 Auth::routes();
@@ -36,9 +39,6 @@ Route::get('search-vue', 'SearchController@search');
 //Replace threads with anecdotes
 Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show');
 
-
-
-
 Route::post('threads', 'ThreadsController@store')->middleware('must-be-confirmed');
 Route::get('threads/{channel}', 'ThreadsController@index');
 
@@ -50,8 +50,9 @@ Route::get('/anecdotes/{channel}/{thread}/replies', 'RepliesController@index');
 
 
 Route::get('/tags','FrontendController@getTags');
-
 Route::get("/tags/{tag}/threads",'ThreadsController@loadByTag')->name('tags.threads.list');
+
+Route::get('/tags-show','FrontendController@showTags')->name('show.tags');
 
 // Route::get("threads/most-likes",'ThreadsController@loadByLikes')->name('likes.threads.list');
 // Route::get("/threads/most-views",'ThreadsController@loadByViews')->name('views.threads.list');

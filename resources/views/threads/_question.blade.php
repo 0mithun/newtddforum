@@ -20,6 +20,8 @@
                          height="25"
                          class="mr-1 avatar-photo">
                 </a>
+                {{-- <a href="{{ asset($thread->creator->avatar_path) }}" data-lightbox="{{ asset($thread->creator->avatar_path) }}" data-title="My caption">Image #1</a> --}}
+                
             </div>
             <div class="media-body">
                 <h4 class="media-heading thread-info">
@@ -82,8 +84,13 @@
 
 
     <div class="panel-body" >
-        <img class="" style="display:inline; float:left;margin-right:20px;margin-bottom:0px" width="250"  src="{{ $thread->threadImagePath() }}" alt="...">
-        <div  v-html="body" style="display:inline">            
+        <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px" width="250" /></a>
+
+        {{-- <a href="{{ $thread->threadImagePath() }}" data-lightbox="{{ $thread->threadImagePath() }}" data-title="My caption">Image #1</a> --}}
+
+        {{-- <img class="" style="display:inline; float:left;margin-right:20px;margin-bottom:0px" width="250"  src="{{ $thread->threadImagePath() }}" alt="..."> --}}
+
+        <div  v-html="body" style="display:inline;">            
         </div>   
         
         <div >

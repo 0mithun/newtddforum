@@ -16,4 +16,8 @@ class Tags extends Model
 //        return $this->belongsToMany(Thread::class);
         return $this->belongsToMany(Thread::class,'thread_tag','tag_id','thread_id');
     }
+
+    public function getNameAttribute($name){
+        return ucfirst($name);
+    }
 }

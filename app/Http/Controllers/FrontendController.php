@@ -79,4 +79,11 @@ class FrontendController extends Controller
         $tags = Tags::all();
         return response()->json($tags);
     }
+
+    public function showTags(){
+        $tags = Tags::withCount('threads')->orderBy('threads_count','desc')->take(100)->get();
+        //return response()->json($tags);
+        $tags = json_encode($tags);
+        return view('threads.tags', compact('tags'));
+    }
 }

@@ -64,6 +64,8 @@ class Thread extends Model
         // static::updated(function($thread){
         //     $thread->update(['word_count' => str_word_count($thread->body)]);
         // });
+
+
     }
 
     /**
@@ -242,9 +244,10 @@ class Thread extends Model
      * @param string $value
      */
 
-     public function setWordCountAttribute($value){
-         $this->attributes['word_count'] = str_word_count($value);
-     }
+    //  public function setWordCountAttribute($value){
+    //      //$this->attributes['word_count'] = str_word_count($value);
+    //      $this->attributes['word_count'] = str_word_count($this->body);
+    //  }
 
 
     /**

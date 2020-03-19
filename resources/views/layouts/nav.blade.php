@@ -63,6 +63,9 @@
                     </ul>
                 </li>
                 <li>
+                <a href="{{ route('show.tags') }}">Tags</a>
+                </li>
+                <li>
                     <a href="{{ route('map.show') }}">Map</a>
                 </li>
 
