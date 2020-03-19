@@ -17,22 +17,57 @@ class SearchController extends Controller
         // if (request()->expectsJson()) {
         //     return Thread::search(request('q'))->paginate(10);
         // }
-
+        
+        
        
         $threads = Thread::search(request('query'))->paginate(10);
+
+        //$threads->sortByDesc('visits');
+
+        //$threads = collect($threads);
+
+        //dd($threads->sortByDesc('visits'));
+
         $query = request('query');
+
+
         return view('threads.search', [
             'trending' => $trending->get(),
             'threads' => $threads,
             'query' => $query
         ]);
+
+
     }
 
     public function search(){
         //return request('q');
+        //return request('sort_by');
+
          if (request()->expectsJson()) {
-            return Thread::search(request('query'))->paginate(10);
-            // return Thread::search(request('q'))->get();
+            $threads = Thread::search(request('query'))->paginate(10);
+
+           // $threads  = $threads->sortByDesc('visits');
+
+            return $threads;
+
+            // if(request()->has('sort_by')){
+            //     $sort_by = request('sort_by');
+            //     $threads = collect($threads);
+            //     $threads->sortBy('like_count');
+
+            //     return $threads;
+            // }
+
+           
+
+            //return Thread::search(request('q'))->get();
         }
+    }
+
+
+    //currently unused
+    public function searchByTopRated(){
+        return 'hello';
     }
 }

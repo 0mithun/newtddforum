@@ -9,13 +9,40 @@
             </li> -->
             <div class="panel">
                 <div class="panel-body">
-                    <div class="form-group">
-                        <input type="text" name="query" id="q" v-model="q" class="form-control" placeholder="Search Threads" @keyup="searchThreads">
-                    </div>
+
+                        <div class="col-md-10">
+
+                            
+
+                            <div class="input-group">
+                                <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
+                                <input type="text" name="query" id="q" v-model="q" class="form-control" placeholder="Search Threads" @keyup="searchThreads">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" @click="searchThread">Search!</button>
+                                </span>
+                            </div><!-- /input-group -->
+
+                        </div>
+
+                        <div class="col-md-2">
+                            <select name="" id="" class="form-control" v-model="sort_by" @change="sortBy">
+                                
+                                <option value="created_at">Most Recent</option>
+                                <!-- <option value="top_rated">Top Rated</option> -->
+                                <option value="like_count">Most Liked</option>
+                                <option value="favorite_count">Most Favorited</option>
+                                <option value="visits">Most Visits</option>
+
+                                <!-- <option value="most_favorited">Most Favorited</option> -->
+                                <!-- <option value="top_rated">Top Rated</option> -->
+
+                            </select>
+                        </div>
+
                 </div>
             </div>
 
-            <div class="panel" v-if="!allThreads.length">
+            <div class="panel" v-if="allThreads.length == 0">
                     <h3 class="text-center">No Results Found</h3>
             </div>
 
@@ -73,28 +100,71 @@ export default {
         return {
             allThreads:[],
             paginateThreads:this.threads,
-            q:this.query
+            q:this.query,
+            sort_by:'created_at'
         }
     },
     created(){
-        this.allThreads = this.threads.data
+        //this.allThreads = this.threads.data;
+         this.allThreads =_.orderBy(this.threads.data, [this.sort_by],'desc');
     },
     computed:{
         
     },
     
     methods:{
+        searchThread(){
+            // /threads/search
+            let url = '/threads/search?query='+this.q;
+
+            window.location.href = url;
+          
+        },
+        sortBy(){
+            if(this.sort_by == 'top_rated'){
+
+
+                //axios.get('/search-by-top-rated?query='+this.q).then(res=>{
+                  //  console.log(res.data);
+                
+                    // this.allThreads = res.data.data;
+                    // let pageUrl = {
+                    //     prev_page_url: res.data.prev_page_url,
+                    //     next_page_url: res.data.next_page_url,
+                    // }
+                    // eventBus.$emit('pageChange',pageUrl );
+
+               // })
+
+
+            }else{
+                this.allThreads =_.orderBy(this.threads.data, [this.sort_by],'desc');
+            }
+             
+        },
         ago(created_at) {
             return  moment(created_at, 'YYYY-MM-DD HH:mm:ss').fromNow() + '...';
         },
         searchThreads(){
-            axios.get('/search-vue?query='+this.q).then(res=>{
+            axios.get('/search-vue?query='+this.q+'&sort_by='+this.sort_by).then(res=>{
+                //console.log(res.data.data);
+
+               
                 this.allThreads = res.data.data;
+                //_.sortBy(this.allThreads, 'visits');
+                //let threads = _.sortBy(res.data.data, ['visits'],'desc');
+
+                //this.allThreads = threads;
+                 //console.log(this.allThreads);
+
+
                 let pageUrl = {
                     prev_page_url: res.data.prev_page_url,
                     next_page_url: res.data.next_page_url,
                 }
                 eventBus.$emit('pageChange',pageUrl );
+
+
             })
         },
         fetch(page) {

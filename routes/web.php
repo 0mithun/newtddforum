@@ -36,6 +36,11 @@ Route::get('threads/search', 'SearchController@show');
 Route::get('search-vue', 'SearchController@search');
 
 
+
+//currently unused
+// Route::get('search-by-top-rated', 'SearchController@searchByTopRated');
+
+
 //Replace threads with anecdotes
 Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show');
 
@@ -109,8 +114,10 @@ Route::middleware(['auth'])->group(function (){
 
     Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
     Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy');
+
     Route::post('/thread/{thread}/favorites', 'FavoritesController@threadStore');
     Route::delete('/thread/{thread}/favorites', 'FavoritesController@thraeadDestroy');
+
     Route::post('/thread/{thread}/likes', 'LikeController@like');
     Route::post('/thread/{thread}/dislikes', 'LikeController@dislike');
 

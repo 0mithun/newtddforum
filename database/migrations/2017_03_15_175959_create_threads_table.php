@@ -21,6 +21,7 @@ class CreateThreadsTable extends Migration
             $table->unsignedInteger('replies_count')->default(0);
             $table->unsignedInteger('like_count')->default(0);
             $table->unsignedInteger('dislike_count')->default(0);
+            $table->unsignedInteger('favorite_count')->default(0);
             $table->unsignedInteger('visits')->default(0);
             $table->string('title');
             $table->text('body');
@@ -34,6 +35,7 @@ class CreateThreadsTable extends Migration
             $table->boolean('image_pending')->default(0);
             $table->boolean('allow_image')->default(0);
             $table->unsignedInteger('best_reply_id')->nullable();
+
             $table->boolean('locked')->default(false);
 
             $table->float('lat',10,6)->nullable();

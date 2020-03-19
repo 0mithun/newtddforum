@@ -39,10 +39,15 @@ class FavoritesController extends Controller
     public  function threadStore($thread){
         $thread = Thread::findOrFail($thread);
         $thread->favorite();
+
+        $thread->increment('favorite_count');
+        
     }
      public  function thraeadDestroy( $thread){
          $thread = Thread::findOrFail($thread);
          $thread->unfavorite();
+
+         $thread->decrement('favorite_count');
     }
 
 }

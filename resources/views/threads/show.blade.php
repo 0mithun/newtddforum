@@ -41,6 +41,23 @@
                 <div class="col-md-4">
                     <div class="panel panel-default">
                         <div class="panel-heading">
+                            Search
+                        </div>
+    
+                        <div class="panel-body">
+                            <form method="GET" action="/threads/search">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Search for something..." name="query" class="form-control">
+                                </div>
+    
+                                <div class="form-group">
+                                    <button class="btn btn-default" type="submit">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
                             <p>
                                 <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button>
 
@@ -67,24 +84,14 @@
 
                             <h4>Related Threads</h4>
 
-                            {{-- {{ $relatedThreads->count() }} --}}
-
-                            <ul style="margin:0;padding:0">
+                            <ul  class="list-group">
                                 @forelse ($relatedThreads as $relatedThread)
-                                    <li style="list-style:none;padding:10px 5px;margin-bottom:10px">
+                                    <li class="list-group-item">
                                         <a href="{{ url($relatedThread->path) }}">{{ $relatedThread->title }}</a>
                                     </li>
                                 @empty
                                     <li>Currently No Related Threads </li>
                                 @endforelse
-
-
-
-                                {{-- @foreach($relatedThreads as $relatedThread)
-                                    <li>
-                                    <a href="{{ url($relatedThread->path) }}">{{ $relatedThread->title }}</a>
-                                    </li>
-                                @endforeach --}}
                             </ul>
 
 
