@@ -81,11 +81,17 @@ class ChatController extends Controller
 
 
     public function sendMessage(Request $request){
+        //return $request->all();
+
         if($request->ajax()){
+            $friend_message = $request->friend_message ? 1 : 0;
+
+
             $message = Chat::create([
                 'from'      =>  auth()->user()->id,
                 'to'        =>  $request->friend,
-                'message'   =>  $request->message
+                'message'   =>  $request->message,
+                'friend_message'    => $friend_message
             ]);
             
             broadcast(new MessegeSentEvent($message));

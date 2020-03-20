@@ -1,6 +1,27 @@
 <template>
     <div>
-         
+        <!-- Small modal -->
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Your Messagfe</button> -->
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="message-text" v-model="newMessage"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click.prevent="sendMessage" :disabled="newMessage == ''">Send message</button>
+                    </div>
+                </div>
+            </div>
+         </div>
+                
         <div style="display:inline;margin-right:20px" v-cloak>
                 <!-- <button class="btn btn-danger btn-sm pull-right" @click.prevent="addFriend">Request Sent</button> -->
 
@@ -17,7 +38,8 @@
 
         </div>
         <div style="display:inline;">
-             <button style="margin-right:20px" class="btn btn-default btn-sm pull-right" @click="sendMessage">Message</button>
+             <!-- <button type="button" class="btn btn-default btm-sm" data-toggle="modal" data-target="#exampleModal">Message</button> -->
+             <button  type="button" style="margin-right:20px" class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#exampleModal" @click="showModal=true">Message</button>
          </div>
         
     </div>
@@ -29,7 +51,9 @@
         data(){
             return {
                 sentRequst:false,
-                isFriend:false
+                isFriend:false,
+                newMessage:'',
+                showModal:false
             }
         },
         created(){
@@ -38,7 +62,21 @@
         },
         methods:{
             sendMessage(){
-                console.log('send Message')
+
+                //console.log(this.recipient)
+
+                //console.log(this.newMessage)
+                axios.post('/chat-send-message',{
+                    message:this.newMessage,
+                    friend:this.recipient.id,
+                    friend_message:this.isFriend
+                }).then(res=>{
+                    console.log(res)
+                    this.showModal = false;
+                    //this.selectUser(this.selectFriend)
+                });
+
+
             },
             addFriend(){
                 ///friend/sent-request
