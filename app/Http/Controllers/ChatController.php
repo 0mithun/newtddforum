@@ -23,6 +23,12 @@ class ChatController extends Controller
         $user =User::where('id', $request->id)->first();
 
         $friendLists = $user->getFriends();
+        
+        $otherMessageUsers = $this->getOtherMessageUsers();
+
+        $friendLists  = $friendLists->merge($otherMessageUsers);
+
+        //return $otherMessageUsers;
 
         return response()->json($friendLists);
     }

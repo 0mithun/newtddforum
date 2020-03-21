@@ -157,9 +157,7 @@
                     if(this.$store.getters.friendMessage.last_seen.seen_at !=null){
                         let last_seen = this.$store.getters.friendMessage.last_seen.seen_at;
                         return  moment(last_seen, 'YYYY-MM-DD HH:mm:ss').fromNow()
-                    }
-
-                     
+                    }                   
                     
                 }
             }
@@ -167,10 +165,15 @@
         mounted(){
             
             this.$store.dispatch('friendList', this.authuser.id);
-            this.$store.dispatch('otherMessageUserList');
+            //this.$store.dispatch('otherMessageUserList');
 
             Echo.private(`chat.${this.authuser.id}`)
             .listen('MessegeSentEvent', (e) => {
+
+                if(e.message.friend_message == 0){
+                    this.$store.dispatch('friendList', this.authuser.id);
+                    //this.$store.dispatch('otherMessageUserList', this.authuser.id);
+                }
                 //this.selectUser(e.message.from)
                 if(this.selectFriend == e.message.from){
                     this.selectUser(e.message.from, true)

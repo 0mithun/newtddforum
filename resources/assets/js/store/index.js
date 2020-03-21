@@ -35,20 +35,22 @@ export default {
 
 
         },
-        otherMessageUserList(state, payload){
-            //  let otherMessageUserList = payload;
-             const newUsers = state.friendList.concat(payload)
+        // otherMessageUserList(state, payload){
 
-             //console.log(payload);
-             return state.friendList = newUsers;
+        //      const newUsers = state.friendList.concat(payload)
+        //      return state.friendList = newUsers;
+
+        //      //let old_friend_lists = state.friendList;
+        //      //console.log(old_friend_lists)
             
 
-        }
+        // }
     },
     actions: {
         friendList(context, id){
             Axios.post('/chat-friends',{id}).then(res=>{
                context.commit('friendList', res.data)
+               console.log(res);
             })
         },
         userMessage(context, payload){
@@ -68,21 +70,16 @@ export default {
         },
 
 
-        otherMessageUserList(context){
+        // otherMessageUserList(context){
 
-            Axios.get('/chat-others').then(res=>{
-                //context.commit('friendList', res.data)
-                //console.log(res)
-                context.commit('otherMessageUserList',res.data);
-            })
-
-
-            
-
-            //context.commit('otherMessageUserList',payload);
+        //     Axios.get('/chat-others').then(res=>{
+        //         //context.commit('friendList', res.data)
+        //         //console.log(res)
+        //         context.commit('otherMessageUserList',res.data);
+        //     })
             
             
-        }
+        // }
     },
     getters: { 
         friendLists(state){

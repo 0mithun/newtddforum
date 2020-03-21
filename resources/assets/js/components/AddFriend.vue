@@ -72,7 +72,6 @@
                     friend:this.recipient.id,
                     friend_message:this.isFriend
                 }).then(res=>{
-                    console.log(res)
                     this.newMessage  = '';
                     this.showModal = false;
                     $('#exampleModal').modal('hide');
@@ -115,7 +114,6 @@
                 })
             },
             unFriend(){
-                console.log('Unfriend')
                 //profiles/{user}/unfriend
 
                  axios.post('/friend/unfriend',{
