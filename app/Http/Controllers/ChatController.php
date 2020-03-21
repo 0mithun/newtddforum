@@ -79,6 +79,35 @@ class ChatController extends Controller
         
     }
 
+    public function getOtherMessageUsers(){
+        $authUser = auth()->user();
+
+        $otherFromMessageUsers = Chat::
+            where('to', $authUser->id)
+            ->where('friend_message', 0)
+            ->distinct()          
+            ->pluck('from')
+            ;
+
+        $otherToMessageUsers = Chat::
+            where('from', $authUser->id)
+            ->where('friend_message', 0) 
+            ->distinct()           
+            ->pluck('to')
+            
+            ;
+        
+        $otherMessageUsers = $otherFromMessageUsers->merge($otherToMessageUsers);
+
+
+        $otherUsers = User::whereIn('id', $otherMessageUsers)->get();
+
+        return $otherUsers;
+    }
+    
+    public function getOtherUsersMessage(){
+
+    }
 
     public function sendMessage(Request $request){
         //return $request->all();

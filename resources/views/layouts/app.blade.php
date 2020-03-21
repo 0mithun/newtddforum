@@ -171,6 +171,7 @@
 
     @include('layouts.footer')
     <flash message="{{ session('flash') }}"></flash>
+    <flash message="{{ session('succes') }}"></flash>
 </div>
 
 

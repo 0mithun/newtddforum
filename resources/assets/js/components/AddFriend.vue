@@ -3,7 +3,7 @@
         <!-- Small modal -->
         <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Your Messagfe</button> -->
 
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" v-if="showModal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -62,7 +62,8 @@
         },
         methods:{
             sendMessage(){
-
+                
+                //this.showModal = false;
                 //console.log(this.recipient)
 
                 //console.log(this.newMessage)
@@ -72,7 +73,10 @@
                     friend_message:this.isFriend
                 }).then(res=>{
                     console.log(res)
+                    this.newMessage  = '';
                     this.showModal = false;
+                    $('#exampleModal').modal('hide');
+
                     //this.selectUser(this.selectFriend)
                 });
 
@@ -135,4 +139,13 @@
     [v-cloak]{
         display: none;
     }
+    .modal-backdrop.in {
+        display: none!important;
+    }
+
+    .modal-backdrop.in {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    display: none;
+}
 </style>

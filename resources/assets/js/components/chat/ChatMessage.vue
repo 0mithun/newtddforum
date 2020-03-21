@@ -167,6 +167,7 @@
         mounted(){
             
             this.$store.dispatch('friendList', this.authuser.id);
+            this.$store.dispatch('otherMessageUserList');
 
             Echo.private(`chat.${this.authuser.id}`)
             .listen('MessegeSentEvent', (e) => {

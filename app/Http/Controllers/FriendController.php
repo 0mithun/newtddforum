@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Chat;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -57,6 +58,64 @@ class FriendController extends Controller
     }
 
 
+    public function setFriendMessage(){
+        $authUser = auth()->user();
+        
+        $otherFromMessageUsers = Chat::
+            where('to', $authUser->id)
+            ->where('friend_message', 0)
+            ->distinct()          
+            ->pluck('id')
+            ;
+
+        $otherToMessageUsers = Chat::
+            where('from', $authUser->id)
+            ->where('friend_message', 0) 
+            ->distinct()           
+            ->pluck('id')
+            
+            ;
+        
+
+        $otherMessageUsers = $otherFromMessageUsers->merge($otherToMessageUsers);
+
+        foreach($otherMessageUsers as $otherMessage){
+            $chat = Chat::find($otherMessage);
+            $chat->friend_message = 1;
+            $chat->save();
+        }
+        
+    }
+
+    public function unsetFriendMessage(){
+        $authUser = auth()->user();
+        
+        $otherFromMessageUsers = Chat::
+            where('to', $authUser->id)
+            ->distinct()          
+            ->pluck('id')
+            ;
+
+        $otherToMessageUsers = Chat::
+            where('from', $authUser->id) 
+            ->distinct()           
+            ->pluck('id')
+            
+            ;
+        
+
+        $otherMessageUsers = $otherFromMessageUsers->merge($otherToMessageUsers);
+
+        foreach($otherMessageUsers as $otherMessage){
+            $chat = Chat::find($otherMessage);
+            $chat->friend_message = 0;
+            $chat->save();
+        }
+        
+    }
+
+
+
     public function acceptFriendRequest(Request $request){
 
         $authUser = auth()->user();
@@ -64,6 +123,8 @@ class FriendController extends Controller
 
         //dd($sender);
         $authUser->acceptFriendRequest($sender);
+
+        $this->setFriendMessage();
 
         session()->flash('succes','Friend Request Accept successfully');
         return redirect()->route('profile.friendrequest', $authUser->username);
@@ -78,6 +139,8 @@ class FriendController extends Controller
 
         $authUser->unfriend($friend);
 
+        $this->unsetFriendMessage();
+
         if(\Request::ajax()){
             return response()->json(['success'=>'Friend unfriend successfully']);
         }
@@ -90,12 +153,17 @@ class FriendController extends Controller
 
 
     public function blockFriend(Request $request){
-        $user = auth()->user();
+        $authUser = auth()->user();
 
         $friend = User::findOrFail($request->friend);
-        $user->blockFriend($friend);
+        $authUser->blockFriend($friend);
 
-        return 'Friend block successfully';
+        $this->unsetFriendMessage();
+
+        session()->flash('succes','Friend Block successfully');
+        return redirect()->route('profile.friendlist', $authUser->username);
+
+        return 'Friend unfriend successfully';
     }
 
 
@@ -107,7 +175,10 @@ class FriendController extends Controller
         $blockFriendLists = [];       
         
         foreach($blockFriends  as $blockFriend ){
-            $blockFriendLists [] = $blockFriend->recipient_id;
+            if($blockFriend->recipient_id != $user->id){
+                $blockFriendLists [] = $blockFriend->recipient_id;
+            } 
+            
         }
         
 
@@ -118,14 +189,15 @@ class FriendController extends Controller
     }
 
     public function unBlockFriends(Request $request){
-        $user = auth()->user();
+        $authUser = auth()->user();
 
         $friend = User::findOrFail($request->friend);
 
-        $user->unblockFriend($friend);
+        $authUser->unblockFriend($friend);
 
 
-        return 'Friend Un block successfully';
+        session()->flash('succes','Unblock successfully');
+        return redirect()->route('profile.friendlist', $authUser->username);
     }
 
 

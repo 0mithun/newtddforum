@@ -34,6 +34,15 @@ export default {
             state.onlineUsers = onlineUsers;
 
 
+        },
+        otherMessageUserList(state, payload){
+            //  let otherMessageUserList = payload;
+             const newUsers = state.friendList.concat(payload)
+
+             //console.log(payload);
+             return state.friendList = newUsers;
+            
+
         }
     },
     actions: {
@@ -56,6 +65,23 @@ export default {
         },
         removeUserOnline(context, payload){
             context.commit('removeUserOnline', payload);
+        },
+
+
+        otherMessageUserList(context){
+
+            Axios.get('/chat-others').then(res=>{
+                //context.commit('friendList', res.data)
+                //console.log(res)
+                context.commit('otherMessageUserList',res.data);
+            })
+
+
+            
+
+            //context.commit('otherMessageUserList',payload);
+            
+            
         }
     },
     getters: { 

@@ -92,6 +92,9 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/chat-send-message','ChatController@sendMessage');
     Route::post('/chat-seen-message','ChatController@seenMessage');
 
+    //Other users message
+    Route::get('/chat-others','ChatController@getOtherMessageUsers');
+    Route::get('/other-users-message','ChatController@getOtherUsersMessage');
 
 
    Route::get('/closet/threads','UserlocationController@show')->name('closet.thread');
