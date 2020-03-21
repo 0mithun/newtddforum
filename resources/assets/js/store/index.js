@@ -50,7 +50,6 @@ export default {
         friendList(context, id){
             Axios.post('/chat-friends',{id}).then(res=>{
                context.commit('friendList', res.data)
-               console.log(res);
             })
         },
         userMessage(context, payload){

@@ -3,10 +3,10 @@
             <div class="row">
                     <div class="col-md-4">
                         <div class="people-list" id="people-list">
-                            <div class="search">
+                            <!-- <div class="search">
                                 <input type="text" placeholder="search" />
                                 <i class="fa fa-search"></i>
-                            </div>
+                            </div> -->
                             <ul class="list">
                                 <li class="clearfix" v-for="(friend, index) in friendLists" :key="index" @click.prevent="selectUser(friend.id)" :class="friend.id == selectFriend ? 'active-friend': '' " >
                                     <img :src="friend.profileAvatarPath" alt="avatar" style="width:50px; border-radius:50%;height:50px" />
@@ -42,7 +42,10 @@
                                 <img :src="friendMessages.friend.profileAvatarPath" alt="avatar" v-if="friendMessages.friend" style="width:50px; border-radius:50%;height:50px"/>
                                 
                                 <div class="chat-about" v-if="friendMessages.friend">
-                                    <div class="chat-with" >{{ friendMessages.friend.name }}</div>
+                                    <div class="chat-with" >
+                                        <a :href="'/profiles/'+friendMessages.friend.username">{{ friendMessages.friend.name }}</a>
+                                        
+                                        </div>
                                     <div class="chat-num-messages" v-if="friendMessages.messages.length==0">No Message</div>
 
                                     <div class="chat-num-messages" v-if="last_seen">
@@ -72,7 +75,10 @@
                                             <div class="message-data align-right">
                                                 
                                             <span class="message-data-time" >{{ formateMessageTime(friendMessage.created_at)}}</span> &nbsp; &nbsp;
-                                            <span class="message-data-name" >{{ authuser.name}}</span> <i class="fa fa-circle me"></i>
+                                            <span class="message-data-name" >{{ authuser.name}}</span> 
+                                            
+                                            <!-- <i class="fa fa-circle me"></i> -->
+                                            
                                             <img :src="authuser.profileAvatarPath" alt="" style="width:40px; border-radius:50%;height:40px">
                                             </div>
                                             <div class="message other-message float-right">
@@ -171,15 +177,22 @@
             .listen('MessegeSentEvent', (e) => {
 
                 if(e.message.friend_message == 0){
+
+                    
                     this.$store.dispatch('friendList', this.authuser.id);
+
                     //this.$store.dispatch('otherMessageUserList', this.authuser.id);
                 }
-                //this.selectUser(e.message.from)
+               
                 if(this.selectFriend == e.message.from){
                     this.selectUser(e.message.from, true)
                 }else{
                     this.selectUser(e.message.from, false)
+                                        
                 }
+            
+
+               
             });
 
 
@@ -193,9 +206,6 @@
             .listenForWhisper('typing', (e) => {
                 this.typing = e;
 
-               
-                //console.log(e);
-                // alert('hello');
             });
 
             //User Online
@@ -220,6 +230,7 @@
 
         },
         methods:{
+            
             seenMessage(message){
                 this.last_seen = '';
                 if(message.seen_at == null){
@@ -256,10 +267,9 @@
                 
             },
             messageStatus(friend, show = false){
-
                 let element = "messageStatus"+friend;
                 let container = this.$el.querySelector("#"+element);
-                
+
                 if(show){
                     container.style.display = "block";
                 }else{
