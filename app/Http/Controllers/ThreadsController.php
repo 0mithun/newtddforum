@@ -63,7 +63,9 @@ class ThreadsController extends Controller
      */
     public function store(Recaptcha $recaptcha)
     {
-        
+       
+
+
         if(request()->hasFile('image_path')){
             $rule = 'image|max:2048';
         }else{
@@ -89,7 +91,8 @@ class ThreadsController extends Controller
         ],[
             'channel_id.required'    => 'The channel field is required.',
             'channel_id.exists'    => 'Invalid channel',
-            'g-recaptcha-response.required' =>  'Please solve the captcha'
+            'g-recaptcha-response.required' =>  'Please solve the captcha',
+            'image_path.max'    =>  'Thread image may not be greater than 2048 kilobytes'
         ]);
 
             //image_pending

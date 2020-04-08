@@ -43,7 +43,9 @@
                 typeChannelId: '',
                 target:null,
                 channels:null,
-                showSource:false
+                showSource:false,
+                image_path_error:false,
+                image_path_error_message:''
 
             };
         },
@@ -126,9 +128,23 @@
 
             },
             onFileSelected(event){
+                this.image_path_error = false;
+                this.image_path_error_message = '';
+                let file =  event.target.files[0];               
+
+                if (file.size > 1024 *1024) {
+                    event.preventDefault();
+                    this.image_path_error = true;
+                    this.image_path_error_message = 'Thread image may not be greater than 2048 kilobytes';
+                    return;
+                }
+
                 this.selectFile = event.target.files[0];
 
                 this.formData.append('image_path', this.selectFile);
+
+
+
             },
             appendData(){
                 let tagId = [];

@@ -130,10 +130,16 @@
                                 </div>
                             </div>
 
-                            <div class="form-group ">
+                            <div class="form-group {{ $errors->has('image_path') ? ' has-error' : '' }}">
                                 <label for="main_subject" class="control-label"> Upload an image </label>
 
                                 <input type="file" accept="image/*" name="image_path" class="form-control" id="image_path">
+
+                                @if ($errors->has('image_path'))
+                                    <span class="help-block ">
+                                        <strong class="">{{ $errors->first('image_path') }}</strong>
+                                    </span>
+                                @endif
 
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="1" name="allow_image" id="allow_image"> Allow us to choose a Wikimedia Commons image</label>

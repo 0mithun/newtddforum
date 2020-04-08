@@ -68,10 +68,14 @@
                 <span class="help-block">Check this box if the subject is Famous</span>
             </div>
         </div>
-        <div class="form-group ">
+        <div class="form-group " :class="image_path_error ? 'has-error' : ''">
             <label for="main_subject" class="control-label"> Upload an image </label>
 
             <input type="file" name="image_path" accept="image/*" class="form-control" id="image_path" @change="onFileSelected">
+
+            <span class="help-block " v-if="image_path_error">
+                <strong class="" v-text="image_path_error_message"></strong>
+            </span>
 
             <div class="checkbox">
                 <label><input type="checkbox" value="1" name="allow_image" id="allow_image"
