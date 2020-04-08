@@ -67,6 +67,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
         return User::forceCreate([
             'name' => $data['first_name'] ." ". $data['last_name'],
             'first_name' => $data['first_name'],
@@ -74,7 +75,9 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'username'  => $data['username'],
             'password' => bcrypt($data['password']),
-            'confirmation_token' => str_limit(md5($data['email'] . str_random()), 25, '')
+            'confirmation_token' => str_limit(md5($data['email'] . str_random()), 25, ''),
+            'lat'           =>  $arr_ip['lat'],
+            'lng'           =>  $arr_ip['lon'],   
         ]);
     }
 

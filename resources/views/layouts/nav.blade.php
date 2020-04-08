@@ -44,6 +44,8 @@
                         <li><a href="/threads?liked=1">Most Liked</a></li>
                         
                         <li><a href="/threads?bestofweek=1">Best Of The Week</a></li>
+
+                        <li><a href="/threads?video=1">Video</a></li>
                         <!-- <li><a href="/threads?unanswered=1">Unanswered Threads</a></li> -->
                     </ul>
                 </li>

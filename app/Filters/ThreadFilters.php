@@ -14,7 +14,7 @@ class ThreadFilters extends Filters
      *
      * @var array
      */
-    protected $filters = ['by', 'popular', 'unanswered','viewed','recents','liked','rated','bestofweek','favorites'];
+    protected $filters = ['by', 'popular', 'unanswered','viewed','recents','liked','rated','bestofweek','favorites','video'];
 
     /**
      * Filter the query by a given username.
@@ -144,5 +144,18 @@ class ThreadFilters extends Filters
 
         return $this->builder->whereIn('id', $favoriteThreadId)->orderBy('created_at','desc');
 
+    }
+
+    public function video(){
+
+
+        $threads = DB::table('threads')
+        ->where('body','LIKE','%https://www.youtube.com/watch?v=%')        
+        ->get();
+
+        return $this->builder
+        ->where('body','LIKE','%https://www.youtube.com/watch?v=%')
+        ->orderBy('created_at','desc');
+        
     }
 }
