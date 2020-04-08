@@ -25,15 +25,35 @@ class ProfilesController extends Controller
      */
     public function show($user)
     {
-       
+       $authUser = auth()->user();
+       $usredata = User::
+            with('userprivacy')->
+            where('username', $user)
+            ->first();
 
-        $usredata = User::where('username', $user)->first();
 
-       
+       if($authUser->username == $user){
+            return view('profiles.show', [
+                'profileUser' => $usredata,
+                'activities' => Activity::feed($usredata)
+            ]);
+       }else{
+           
+
+        $friend = User::where('username', $user)
+                    ->first();
+        $isFriend = $authUser->isFriendWith($friend);
+
+
+
            return view('profiles.show', [
             'profileUser' => $usredata,
-            'activities' => Activity::feed($usredata)
+            'activities' => Activity::feed($usredata),
+            'is_friend' =>  $isFriend
         ]);
+       }
+
+
     }
 
 
@@ -235,19 +255,21 @@ class ProfilesController extends Controller
     public  function myFavoritesShow(){
         
         $user =  request('user');
-        $auth_user = auth()->user();
-        if($user != $auth_user->username){
+        $getUserInfo = User::where('username', $user)->first();      
+        
+
+        if(!$this->checkFriend($getUserInfo,'see_my_favorites')){
             return redirect('/');
         }
 
+        
+
         $favorites = DB::table('favorites')
-                ->where('user_id', $auth_user->id)
+                ->where('user_id', $getUserInfo->id)
                 ->where('favorited_type','App\Thread')
                 ->get()
 
             ;
-
-//        dd($favorite);
         return view('profiles.favorites', compact('favorites'));
     }
 
@@ -256,7 +278,11 @@ class ProfilesController extends Controller
         $user =  request('user');
         
                 
-        $getUserInfo = User::where('username', $user)->first();       
+        $getUserInfo = User::where('username', $user)->first();
+        
+        if(!$this->checkFriend($getUserInfo,'see_my_threads')){
+            return redirect('/');
+        }
 
         $threads =Thread::where('user_id', $getUserInfo->id)->get();
 
@@ -281,5 +307,48 @@ class ProfilesController extends Controller
 
 //        dd($favorite);
         return view('profiles.likes', compact('likes'));
+    }
+
+    public function friendList(){
+
+        $user = request('user');
+
+        //$authUser = auth()->user();
+
+        $userInfo = User::where('username', $user)->first();
+
+        if(!$this->checkFriend($userInfo,'see_my_friends')){
+            return redirect('/');
+        }
+
+
+        //return $userInfo;
+
+        //$authUser = auth()->user();
+
+        
+        $friendLists = $userInfo->getFriends();
+
+
+
+        return view('profiles.friendlist', compact('friendLists','userInfo'));
+        
+    }
+
+
+    public function checkFriend($friend, $privacy){
+        $auth_user = auth()->user();
+       
+        
+        if($friend->username != $auth_user->username){
+            if($friend->userprivacy->{$privacy} == 1 ){
+               
+                return false;
+           }else if(
+               $friend->userprivacy->{$privacy} == 2 && !$auth_user->isFriendWith($friend)){
+                return false;
+           }
+        }
+        return true;
     }
 }

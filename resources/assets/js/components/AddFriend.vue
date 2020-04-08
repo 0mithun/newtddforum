@@ -37,7 +37,8 @@
                 </div>
 
         </div>
-        <div style="display:inline;">
+         <!-- v-if="recipient.userprivacy.send_me_message" -->
+        <div style="display:inline;" v-if="showMessageButton">
              <!-- <button type="button" class="btn btn-default btm-sm" data-toggle="modal" data-target="#exampleModal">Message</button> -->
              <button  type="button" style="margin-right:20px" class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#exampleModal" @click="showModal=true">Message</button>
          </div>
@@ -53,14 +54,26 @@
                 sentRequst:false,
                 isFriend:false,
                 newMessage:'',
-                showModal:false
+                showModal:false,
+                showMessageButton:false
             }
         },
         created(){
             this.checkFriend()
             this.checkSentRequest()
+            this.checkPrivacy()
         },
         methods:{
+            checkPrivacy(){
+                //recipient.userprivacy.send_me_message;
+                if(this.isFriend){
+                    this.showMessageButton = true;
+                }else if(this.recipient.userprivacy.send_me_message ===2){
+                   this.showMessageButton = true;
+                }else if(this.recipient.userprivacy.send_me_message ===1){
+                    this.showMessageButton = false;
+                }
+            },
             sendMessage(){
                 
                 //this.showModal = false;

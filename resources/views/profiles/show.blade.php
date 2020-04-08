@@ -3,7 +3,9 @@
 @section('content')
     @php
         $user = auth()->user();
+       
         // $profileUser 
+        $profileUserPrivacy = $profileUser->userprivacy;
     @endphp
     <div class="container">
         <div class="row">
@@ -25,9 +27,38 @@
                                 <div class="list-group">
 
                                     @if($profileUser->username != $user->username)
+                                    @php    
+                                    //dd($is_friend);
+
+                                    @endphp
                                         <a class="list-group-item active"  href="{{ route('profile', $profileUser->username)  }}">Profile</a>
-                                        <a class="list-group-item "  href="{{ route('profile.friendlist', $profileUser->username)  }}">Friends</a>
-                                        <a class="list-group-item" href="{{ route('profile.threads', $profileUser->username)  }}">Threads</a>
+
+                                        @if($profileUserPrivacy->see_my_friends ==3)
+                                            <a class="list-group-item "  href="{{ route('profile.friendlist', $profileUser->username)  }}">Friends</a>
+
+                                        @elseif($profileUserPrivacy->see_my_friends == 2 && $is_friend)
+                                            <a class="list-group-item "  href="{{ route('profile.friendlist', $profileUser->username)  }}">Friends</a>
+                                        @endif
+                                        
+
+                                        {{-- <a class="list-group-item "  href="{{ route('profile.friendlist', $profileUser->username)  }}">Friends</a> --}}
+
+                                        @if($profileUserPrivacy->see_my_threads==3)
+                                            <a class="list-group-item" href="{{ route('profile.threads', $profileUser->username)  }}">Threads</a>
+                                        @elseif($profileUserPrivacy->see_my_threads == 2 && $is_friend)
+                                            <a class="list-group-item" href="{{ route('profile.threads', $profileUser->username)  }}">Threads</a>
+                                        @endif
+                                        {{-- <a class="list-group-item" href="{{ route('profile.threads', $profileUser->username)  }}">Threads</a> --}}
+
+                                        
+
+                                        @if($profileUserPrivacy->see_my_favorites==3)
+                                            <a class="list-group-item" href="{{ route('profile.favorites', $profileUser->username)  }}">Favorites</a>
+                                        @elseif($profileUserPrivacy->see_my_favorites == 2 && $is_friend)
+                                            <a class="list-group-item" href="{{ route('profile.favorites', $profileUser->username)  }}">Favorites</a>
+                                        @endif
+                                        
+
                                     @else 
 
                                     
@@ -76,7 +107,9 @@
                                             </div>
                                             <div class="col-md-4">
                                                 {{-- <a class="btn btn-primary" href="{{ route('profile.user.edit', $user->username) }}" >Edit My Information</a> --}}
-                                                <add-friend :recipient="{{ $profileUser }}"></add-friend>
+                                                @if($profileUser->username != $user->username)
+                                                    <add-friend :recipient="{{ $profileUser }}"></add-friend>
+                                                @endif
                                             </div>
                                         </div>
 

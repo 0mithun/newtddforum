@@ -36,26 +36,30 @@ class FriendController extends Controller
 
     }
 
-    public function friendList(){
+    /**
+     * Currently Un used
+     */
 
-        $user = request('user');
+    // public function friendList(){
 
-        $authUser = auth()->user();
+    //     $user = request('user');
 
-        $userInfo = User::where('username', $user)->first();
+    //     $authUser = auth()->user();
 
-        //return $userInfo;
+    //     $userInfo = User::where('username', $user)->first();
 
-        //$authUser = auth()->user();
+    //     //return $userInfo;
+
+    //     //$authUser = auth()->user();
 
         
-        $friendLists = $userInfo->getFriends();
+    //     $friendLists = $userInfo->getFriends();
 
 
 
-        return view('profiles.friendlist', compact('friendLists','userInfo'));
+    //     return view('profiles.friendlist', compact('friendLists','userInfo'));
         
-    }
+    // }
 
 
     public function setFriendMessage(){

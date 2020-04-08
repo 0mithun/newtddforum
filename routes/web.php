@@ -159,8 +159,8 @@ Route::middleware(['auth'])->group(function (){
 
 
     Route::get('/profiles/{user}/my-subscriptions','ProfilesController@mySubscriptionsShow')->name('profile.subscriptions');
-    Route::get('/profiles/{user}/my-favorites','ProfilesController@myFavoritesShow')->name('profile.favorites');
-    Route::get('/profiles/{user}/my-threads','ProfilesController@myThreadsShow')->name('profile.threads');
+    Route::get('/profiles/{user}/favorites','ProfilesController@myFavoritesShow')->name('profile.favorites');
+    Route::get('/profiles/{user}/threads','ProfilesController@myThreadsShow')->name('profile.threads');
     Route::get('/profiles/{user}/my-likes','ProfilesController@myLikesShow')->name('profile.likes');
 
 
@@ -175,7 +175,10 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/friend/check-request-sent', 'FriendController@checkFriendRequestSent');
 
 
-    Route::get('profiles/{user}/friend-list','FriendController@friendList')->name('profile.friendlist');
+    //Route::get('profiles/{user}/friend-list','FriendController@friendList')->name('profile.friendlist');
+    Route::get('profiles/{user}/friend-list','ProfilesController@friendList')->name('profile.friendlist');
+
+
     Route::get('profiles/{user}/friend-request','FriendController@getFriendRequest')->name('profile.friendrequest');
 
     Route::post('profiles/{user}/accept-friend-request','FriendController@acceptFriendRequest')->name('profile.acceptfriendrequest');
