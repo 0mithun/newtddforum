@@ -201,9 +201,10 @@ class ThreadsController extends Controller
                     
                 }
             }
-
-            
+  
         }
+
+
         $collection = collect($relatedThreads);
         if($collection->count() > 4){
             $random =$collection->random(5);

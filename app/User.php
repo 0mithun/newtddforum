@@ -50,7 +50,7 @@ class User extends Authenticatable
         'confirmed' => 'boolean'
     ];
 
-    protected $appends = ['isReported','profileAvatarPath'];
+    protected $appends = ['profileAvatarPath'];
 
     /**
      * Get the route key name for Laravel.
@@ -222,21 +222,22 @@ class User extends Authenticatable
     }
 
 
-    public function getIsReportedAttribute()
-    {
-        $report = DB::table('reports')
-            ->where('user_id', auth()->id())
-            ->where('reported_id', $this->id)
-            ->where('reported_type','App\User')
-            ->first();
-        ;
-        if($report){
-            return true;
-        }else{
-            return false;
-        }
+    // public function getIsReportedAttribute()
+    // {
+    //     $report = DB::table('reports')
+    //         ->where('user_id', auth()->id())
+    //         ->where('reported_id', $this->id)
+    //         ->where('reported_type','App\User')
+    //         ->first();
+    //     ;
+    //     //$report = true;
+    //     if($report){
+    //         return true;
+    //     }else{
+    //         return false;
+    //     }
 
-    }
+    // }
 
     public function getFullNameAttribute(){
         return $this->first_name. ' '. $this->last_name;

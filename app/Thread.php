@@ -35,7 +35,8 @@ class Thread extends Model
      *
      * @var array
      */
-    protected $appends = ['isSubscribedTo','isReported','isFavorited','isLiked','likesCount', 'isDesliked','dislikesCount','excerpt','threadImagePath','path'];
+    // protected $appends = ['isSubscribedTo','isReported','isFavorited','excerpt','threadImagePath','path'];
+    protected $appends = ['isSubscribedTo','isFavorited','excerpt','threadImagePath','path'];
 
     /**
      * The attributes that should be cast to native types.
@@ -274,21 +275,24 @@ class Thread extends Model
     // }
 
 
-    public function getIsReportedAttribute()
-    {
-        $report = DB::table('reports')
-            ->where('user_id', auth()->id())
-            ->where('reported_id', $this->id)
-            ->where('reported_type','App\Thread')
-            ->first();
-        ;
-        if($report){
-            return true;
-        }else{
-            return false;
-        }
+    
+    // public function getIsReportedAttribute()
+    // {
+    //     $report = DB::table('reports')
+    //         ->where('user_id', auth()->id())
+    //         ->where('reported_id', $this->id)
+    //         ->where('reported_type','App\Thread')
+    //         ->first();
+    //     ;
+    //     //$report  = true;
 
-    }
+    //     if($report){
+    //         return true;
+    //     }else{
+    //         return false;
+    //     }
+
+    // }
 
 
     public function tags(){

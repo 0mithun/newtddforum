@@ -17,7 +17,7 @@
                 <div v-if="signedIn" class="col-md-2">
                     <div class="pull-left" v-if="!authorize('owns', reply)">
                         <div class="dropdown">
-                            <button class="btn btn-light btn-xs  dropdown-toggle" type="button" data-toggle="dropdown" :disabled=reply.owner.isReported><span class="caret"></span></button>
+                            <button class="btn btn-light btn-xs  dropdown-toggle" type="button" data-toggle="dropdown" :disabled="isReplyOwnerReported"><span class="caret"></span></button>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="#" @click="reportUser" >Report User  <span class="text-danger glyphicon glyphicon-flag"></span> </a></li>
                             </ul>
@@ -106,7 +106,9 @@
                 report_reason: '',
                 report_user_reason: '',
                 addNested: false,
-                nestedReplies: []
+                nestedReplies: [],
+                isReplyOwnerReported:false,
+                
             };
         },
         mounted(){
@@ -131,6 +133,7 @@
             signedIn(){
                 return  (window.App.user)? true : false;
             },
+            
         },
 
         created () {
@@ -138,11 +141,31 @@
             window.events.$on('best-reply-selected', id => {
                 this.isBest = (id === this.id);
             });
+            this.checkUserReported();
 
         },
 
 
         methods: {
+            checkUserReported(){
+                //isCreatorReported
+                if(this.signedIn){
+                    axios.post('/api/users/check-user-report',{
+                        reported_id: this.reply.owner.id,
+                        user:window.App.user.id
+
+                    })
+                    .then((res=>{
+                        console.log(res)
+                        if(res.data.reported){
+                            return this.isReplyOwnerReported = true;
+                        }
+                       return this.isReplyOwnerReported = false;
+                    }));
+                }
+                return this.isReplyOwnerReported = false;
+            },
+
             bodyEditing(){
                 $('#body').atwho({
                     at: "@",

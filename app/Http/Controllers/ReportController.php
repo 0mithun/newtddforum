@@ -41,6 +41,7 @@ class ReportController extends Controller
 
 
     public  function  user(){
+
         $reason = \request('reason');
         $user_id = \request('user_id');
         $user = User::find(1);
@@ -54,6 +55,30 @@ class ReportController extends Controller
 
 
         $user->notify(new UserWasReported($user) );
+    }
+
+    public function checkUserReport(){
+        $reported_id = request('reported_id');
+        $user_id = request('user');
+
+        //return auth()->user()->id;
+        //return $creatorId;
+
+
+        if(auth()->user()->id == $user_id){
+            $report = DB::table('reports')
+            ->where('user_id', $user_id )
+            ->where('reported_type','App\User')
+            ->where('reported_id', $reported_id )
+            ->first();
+
+            if($report){
+                return response()->json(['reported'=>true]);
+            }
+            return response()->json(['reported'=>false]);
+        }
+
+        return response()->json(['reported'=>false]);
     }
 
 
@@ -75,6 +100,38 @@ class ReportController extends Controller
 
         $user = User::find(1);
         $user->notify(new ThreadWasReported($thread, $reason));
+    }
+
+    public function checkThreadReport(){
+        $threadId = request('thread');
+        $userId = request('user');
+
+        if(auth()->user()->id == $userId){
+            $report = DB::table('reports')
+            ->where('user_id', $userId )
+            ->where('reported_type','App\Thread')
+            ->where('reported_id', $threadId )
+            ->first();
+
+            if($report){
+                return response()->json(['reported'=>true]);
+            }
+            return response()->json(['reported'=>false]);
+        }
+
+        return response()->json(['reported'=>false]);
+
+        
+
+
+        
+
+        
+        // ([
+        //     'user_id'           =>  auth()->id(),
+        //     'reported_id'       =>  $id,
+        //     'reported_type'     =>  get_class($thread)
+        // ]);
     }
 
 }

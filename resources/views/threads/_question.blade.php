@@ -8,8 +8,18 @@
 {{-- Viewing the question. --}}
 <div class="panel panel-default" v-else>
     <div class="panel-heading">
-        <div class="media">    
-        <h2 class="media-heading" v-text="title" style="margin-bottom: 10px"></h2>
+        <div class="media">
+            <div class="row">
+                <div class="col-md-11">
+                    <h2 class="media-heading" v-text="title" style="margin-bottom: 10px"></h2>
+                </div>
+                <div class="col-md-1">
+                    <button data-toggle="tooltip" title="Report Thread Creator" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportCreator"  :disabled="isCreatorReported" data-placement="right">
+                        <span class="glyphicon glyphicon-flag"></span>
+                    </button>
+                </div>
+            </div>    
+             
          
             <div class="media-left">
 
@@ -18,20 +28,35 @@
                          alt="{{ $thread->creator->name }}"
                          width="25"
                          height="25"
-                         class="mr-1 avatar-photo">
+                         class="avatar-photo">
                 </a>
                 {{-- <a href="{{ asset($thread->creator->avatar_path) }}" data-lightbox="{{ asset($thread->creator->avatar_path) }}" data-title="My caption">Image #1</a> --}}
                 
             </div>
+
+                <!-- Report Thread -->
+            <div  class="row" v-if="userReport">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="report_reason" class="control-label">Reason for report the Creator:</label>
+                        <textarea name="report_reason" id="report_reason"  v-model="report_reason" cols="30" rows="2" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-xs btn-primary mr-1" @click="makeUserReport">Make Report</button>
+                        <button class="btn btn-xs btn-danger mr-1 red-bg" @click="userReport = false">Cancel</button>
+                    </div>
+                </div>
+            </div>
             <div class="media-body">
-                <h4 class="media-heading thread-info">
+                <h4 class="media-heading thread-info" style="margin-top:0px">
                     Posted by: 
 
                     {{-- <a href="{{ route('threadsbyuser', $thread->creator->username) }}">{{ $thread->creator->name }}  --}}
                         <a href="{{ route('profile', $thread->creator->username)  }}">{{ $thread->creator->name }}</a>
 
 
-                    <user-online :user="{{ json_encode($thread->creator) }}" type="message"></user-online>
+                        <user-online :user="{{ json_encode($thread->creator) }}" type="message"></user-online>
                     </a>
                     {{ $thread->created_at->diffForHumans()  }}
                 </h4>
@@ -44,11 +69,6 @@
             <div class="col-md-10" style="padding: 0px">
 
                 <div class="media-body">
-                    @php 
-
-                    //dd($thread);
-
-                    @endphp
                         {{ $thread->visits }} {{ str_plural('view', $thread->visits) }}, 
                         
                         {{ $thread->like_count }}  {{ str_plural('like', $thread->like_count) }},
@@ -65,11 +85,12 @@
                             
                             <fb-share :thread="thread"></fb-share>
                             <twitter-share :thread="thread"></twitter-share>
-                            <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled=thread.isReported  data-placement="left">
+
+                            <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported" data-placement="left">
                                 <span class="glyphicon glyphicon-flag"></span>
                             </button>
-                        </div>
-                        
+                            
+                        </div>                       
 
 
                 </div>
@@ -127,12 +148,15 @@
             <div class="col-md-3" style="padding: 0px;padding-right:5px">                
                 <div class="btn-group btn-group-xs pull-right" role="group" >
                     <like-button :thread="{{ $thread }}"></like-button>
-                    <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled=thread.isReported  data-placement="left">
+                    <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
                         <span class="glyphicon glyphicon-flag"></span>
                     </button>
                 </div>
             </div>            
         </div>
+
+
+        
         <!-- Report Thread -->
         <div v-if="report" class="row">
             <div class="col-md-12">

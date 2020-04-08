@@ -45,7 +45,11 @@
                 channels:null,
                 showSource:false,
                 image_path_error:false,
-                image_path_error_message:''
+                image_path_error_message:'',
+                isThreadReported:false,
+                isCreatorReported:false,
+
+                userReport:false
 
             };
         },
@@ -68,11 +72,48 @@
             this.resetForm();
             this.getAllTags();
             this.fetchChannel();
+            this.checkThreadReported();
+            this.checkCreatorReported();
         },
 
 
         methods: {
+            checkCreatorReported(){
+                //isCreatorReported
+                if(this.signedIn){
+                    axios.post('/api/users/check-user-report',{
+                        reported_id: this.thread.creator.id,
+                        user:window.App.user.id
 
+                    })
+                    .then((res=>{
+                        if(res.data.reported){
+                            return this.isCreatorReported = true;
+                        }
+                       return this.isCreatorReported = false;
+                    }));
+                }
+                return this.isCreatorReported = false;
+            },
+            
+            checkThreadReported(){
+
+                if(this.signedIn){
+                    axios.post('/threads/check-thread-report',{
+                        thread: this.thread.id,
+                        user:window.App.user.id
+
+                    })
+                    .then((res=>{
+                        if(res.data.reported){
+                            return this.isThreadReported = true;
+                        }
+                       return this.isThreadReported = false;
+                    }));
+                }
+                return this.isThreadReported = false;
+                
+            },
             fetchChannel(){
                 let url  = '/channel/search';
                 axios.post('/channel/search')
@@ -102,6 +143,23 @@
                     this.thread.isReportd = true;
 
                 }));
+            },
+            reportCreator(){
+                this.userReport = true;
+            },
+            makeUserReport(){
+
+                axios.post('/api/users/report',{
+                    user_id: this.thread.creator.id,
+                    reason:this.report_reason,
+                }).then((res=>{
+                    // console.log(res)
+                    flash('Your have successfully report to this Thread','success')
+                    this.userReport =false;
+                    this.isCreatorReported = true;
+
+                }));
+
             },
             channelTypeHead(){
                 this.states = [];

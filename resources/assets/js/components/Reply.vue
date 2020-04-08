@@ -37,14 +37,16 @@
 <!--                </div>-->
 
                 <div v-if="signedIn" class="col-md-2">
+
                     <div class="pull-left" v-if="!authorize('owns', reply)">
                         <div class="dropdown">
-                            <button class="btn btn-light btn-sm  dropdown-toggle" type="button" data-toggle="dropdown" :disabled=reply.owner.isReported><span class="caret"></span></button>
+                            <button class="btn btn-light btn-sm  dropdown-toggle" type="button" data-toggle="dropdown" :disabled="isReplyOwnerReported"><span class="caret"></span></button>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="#" @click="reportUser" >Report User  <span class="text-danger glyphicon glyphicon-flag"></span> </a></li>
                             </ul>
                         </div>
                     </div>
+
                     <div class="pull-right">
                         <favorite :reply="reply" type="sm"></favorite>
                     </div>
@@ -161,6 +163,7 @@
                 addNested: false,
                 nestedReplies: [],
                 showNested: false,
+                isReplyOwnerReported:false
             };
         },
         mounted(){
@@ -214,6 +217,8 @@
                 flash('Your reply has been deleted.');
             });
 
+            this.checkUserReported();
+
         },
 
 
@@ -259,6 +264,23 @@
                 }).then((res=>{
                     flash('Your have successfully report to this user','success')
                 }));
+            },
+            checkUserReported(){
+                //isCreatorReported
+                if(this.signedIn){
+                    axios.post('/api/users/check-user-report',{
+                        reported_id: this.reply.owner.id,
+                        user:window.App.user.id
+
+                    })
+                    .then((res=>{
+                        if(res.data.reported){
+                            return this.isReplyOwnerReported = true;
+                        }
+                       return this.isReplyOwnerReported = false;
+                    }));
+                }
+                return this.isReplyOwnerReported = false;
             },
 
             update() {
