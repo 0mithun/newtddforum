@@ -19,11 +19,14 @@ class AppServiceProvider extends ServiceProvider
             $channels = \Cache::rememberForever('channels', function () {
                 return Channel::all();
             });
+           
+
+            $view->with('channels', $channels);
+        });
+        \View::composer('layouts.footer', function($view){
             $admin = Admin::first();
             
             $view->with('admin',$admin);
-
-            $view->with('channels', $channels);
         });
 
         \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');

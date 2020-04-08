@@ -35,7 +35,7 @@ class ProfilesController extends Controller
        if($authUser->username == $user){
             return view('profiles.show', [
                 'profileUser' => $usredata,
-                'activities' => Activity::feed($usredata)
+                // 'activities' => Activity::feed($usredata)
             ]);
        }else{
            
@@ -48,7 +48,7 @@ class ProfilesController extends Controller
 
            return view('profiles.show', [
             'profileUser' => $usredata,
-            'activities' => Activity::feed($usredata),
+            // 'activities' => Activity::feed($usredata),
             'is_friend' =>  $isFriend
         ]);
        }
@@ -58,9 +58,9 @@ class ProfilesController extends Controller
 
 
     public function edit($user){
-        $usre = auth()->user();
-
-        return view('profiles.edit',compact('user'));
+        $user = auth()->user();
+        $profileUser = $user;
+        return view('profiles.edit',compact('user','profileUser'));
 
 
     }
@@ -130,7 +130,9 @@ class ProfilesController extends Controller
     }
 
     public function editPassword(){
-        return view('profiles.changepassword');
+
+        $profileUser = auth()->user();
+        return view('profiles.changepassword', compact('profileUser'));
     }
 
     public function updatePassword(Request $request){
@@ -176,7 +178,9 @@ class ProfilesController extends Controller
             return redirect('/');
         }
 
-        return view('profiles.avatar');
+        $profileUser = $auth_user;
+        
+        return view('profiles.avatar', compact('profileUser'));
     }
 
     public  function settings(){
@@ -248,8 +252,8 @@ class ProfilesController extends Controller
                 ->get()
 
             ;
-
-        return view('profiles.subscriptions', compact('subscriptions'));
+        $profileUser = $auth_user;
+        return view('profiles.subscriptions', compact('subscriptions','profileUser'));
     }
 
     public  function myFavoritesShow(){
@@ -270,24 +274,47 @@ class ProfilesController extends Controller
                 ->get()
 
             ;
-        return view('profiles.favorites', compact('favorites'));
+
+        $profileUser = $getUserInfo;      
+
+
+
+        // $friend = User::where('username', $user)
+        //             ->first();
+
+
+        $is_friend = auth()->user()->isFriendWith($getUserInfo);
+
+        return view('profiles.favorites', compact('favorites','profileUser', 'is_friend'));
     }
+
+
 
     public function myThreadsShow(){
 
         $user =  request('user');
         
                 
-        $getUserInfo = User::where('username', $user)->first();
+        $getUserInfo = User::with('userprivacy')->where('username', $user)->first();
         
         if(!$this->checkFriend($getUserInfo,'see_my_threads')){
             return redirect('/');
         }
 
         $threads =Thread::where('user_id', $getUserInfo->id)->get();
+        
+        $profileUser = $getUserInfo;      
 
-        return view('profiles.threads', compact('threads'));
+        $friend = User::where('username', $user)
+                    ->first();
+
+                    
+        $is_friend = auth()->user()->isFriendWith($friend);
+
+        return view('profiles.threads', compact('threads','profileUser', 'is_friend'));
     }
+
+
 
     public function myLikesShow(){
 
@@ -305,15 +332,15 @@ class ProfilesController extends Controller
 
         ;
 
-//        dd($favorite);
-        return view('profiles.likes', compact('likes'));
+        $profileUser = $auth_user;
+        return view('profiles.likes', compact('likes','profileUser'));
     }
+
+
 
     public function friendList(){
 
         $user = request('user');
-
-        //$authUser = auth()->user();
 
         $userInfo = User::where('username', $user)->first();
 
@@ -321,17 +348,16 @@ class ProfilesController extends Controller
             return redirect('/');
         }
 
-
-        //return $userInfo;
-
-        //$authUser = auth()->user();
-
         
         $friendLists = $userInfo->getFriends();
 
+        $profileUser = $userInfo;      
 
 
-        return view('profiles.friendlist', compact('friendLists','userInfo'));
+        $is_friend = auth()->user()->isFriendWith($userInfo);
+
+
+        return view('profiles.friendlist', compact('friendLists','userInfo','profileUser','is_friend'));
         
     }
 

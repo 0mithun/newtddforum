@@ -21,35 +21,12 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <div class="list-group">
-                                        <a class="list-group-item "  href="{{ route('profile', $user->username)  }}">Profile</a>
 
-                                        {{--                                    For Admin--}}
-                                        {{--                                        <a class="list-group-item active"  href="{{ route('admin.tag') }}">Tags</a>--}}
-                                        {{--                                    --}}
+                                    @include('profiles.sidebarmenu')
 
-                                        @if($user->isAdmin)
-                                            {{--                                    For Admin--}}
-                                            <a class="list-group-item active"  href="{{ route('admin.setesettings') }}">Site Settings</a>
-                                            <a class="list-group-item"  href="{{ route('admin.tag') }}">Tags</a>
-                                            <a class="list-group-item"  href="{{ route('admin.privacypolicy') }}">Privacy</a>
-                                            <a class="list-group-item"  href="{{ route('admin.tos') }}">Terms</a>
-                                            <a class="list-group-item"  href="{{ route('admin.faq') }}">faq</a>
-                                            {{--                                    --}}
-                                        @endif
-
-
-
-                                        <a class="list-group-item " href="{{ route('profile.avatar.page', $user->username)  }}">Avatar</a>
-                                        <a class="list-group-item" href="{{ route('profile.subscriptions', $user->username)  }}">My Subscriptions </a>
-                                        <a class="list-group-item" href="{{ route('profile.favorites', $user->username)  }}">My Favorites</a>
-                                        <a class="list-group-item" href="{{ route('profile.threads', $user->username)  }}">My Threads</a>
-                                        <a class="list-group-item" href="{{ route('profile.likes', $user->username)  }}">My Likes</a>
-                                        <a class="list-group-item" href="{{ route('user.edit.password')  }}">Change Password</a>
-                                    </div>
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="panel">
+                                    <div class="panel  panel-primary">
                                         <div class="panel-heading" style="padding: 0px 10px">
 
                                             @if(session()->has('successmessage'))

@@ -4,6 +4,7 @@
 @section('content')
     @php
         $user = auth()->user();
+        $profileUserPrivacy = $profileUser->userprivacy;
     @endphp
     <div class="container">
         <div class="row">
@@ -13,35 +14,16 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-10">
-                                    <h3>{{ strtoupper($user->name) }}</h3>
+                                    <h3>{{ strtoupper($profileUser->name) }}</h3>
                                 </div>
                                 <div class="col-md-2">
-                                    <img src="{{ asset($user->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;">
+                                    <img src="{{ asset($profileUser->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;">
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <div class="list-group">
-                                        <a class="list-group-item "  href="{{ route('profile', $user->username)  }}">Profile</a>
-
-                                        @if($user->isAdmin)
-                                            {{--                                    For Admin--}}
-                                            <a class="list-group-item"  href="{{ route('admin.setesettings') }}">Site Settings</a>
-                                            <a class="list-group-item"  href="{{ route('admin.tag') }}">Tags</a>
-                                            <a class="list-group-item"  href="{{ route('admin.privacypolicy') }}">Privacy</a>
-                                            <a class="list-group-item"  href="{{ route('admin.tos') }}">Terms</a>
-                                            <a class="list-group-item"  href="{{ route('admin.faq') }}">faq</a>
-                                            {{--                                    --}}
-                                        @endif
-
-                                        <a class="list-group-item " href="{{ route('profile.avatar.page', $user->username)  }}">Avatar</a>
-                                        <a class="list-group-item " href="{{ route('profile.subscriptions', $user->username)  }}">My Subscriptions </a>
-                                        <a class="list-group-item active" href="{{ route('profile.favorites', $user->username)  }}">My Favorites</a>
-                                        <a class="list-group-item" href="{{ route('profile.threads',$user->username)  }}">My Threads</a>
-                                        <a class="list-group-item " href="{{ route('profile.likes', $user->username)  }}">My Likes</a>
-                                        <a class="list-group-item " href="{{ route('user.edit.password')  }}">Change Password</a>
-                                    </div>
+                                   @include('profiles.sidebarmenu')
                                 </div>
                                 <div class="col-md-9">
                                     <div class="panel">

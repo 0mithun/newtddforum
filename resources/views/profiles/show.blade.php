@@ -24,67 +24,9 @@
                         <hr>
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="list-group">
 
-                                    @if($profileUser->username != $user->username)
-                                    @php    
-                                    //dd($is_friend);
+                            @include('profiles.sidebarmenu')
 
-                                    @endphp
-                                        <a class="list-group-item active"  href="{{ route('profile', $profileUser->username)  }}">Profile</a>
-
-                                        @if($profileUserPrivacy->see_my_friends ==3)
-                                            <a class="list-group-item "  href="{{ route('profile.friendlist', $profileUser->username)  }}">Friends</a>
-
-                                        @elseif($profileUserPrivacy->see_my_friends == 2 && $is_friend)
-                                            <a class="list-group-item "  href="{{ route('profile.friendlist', $profileUser->username)  }}">Friends</a>
-                                        @endif
-                                        
-
-                                        {{-- <a class="list-group-item "  href="{{ route('profile.friendlist', $profileUser->username)  }}">Friends</a> --}}
-
-                                        @if($profileUserPrivacy->see_my_threads==3)
-                                            <a class="list-group-item" href="{{ route('profile.threads', $profileUser->username)  }}">Threads</a>
-                                        @elseif($profileUserPrivacy->see_my_threads == 2 && $is_friend)
-                                            <a class="list-group-item" href="{{ route('profile.threads', $profileUser->username)  }}">Threads</a>
-                                        @endif
-                                        {{-- <a class="list-group-item" href="{{ route('profile.threads', $profileUser->username)  }}">Threads</a> --}}
-
-                                        
-
-                                        @if($profileUserPrivacy->see_my_favorites==3)
-                                            <a class="list-group-item" href="{{ route('profile.favorites', $profileUser->username)  }}">Favorites</a>
-                                        @elseif($profileUserPrivacy->see_my_favorites == 2 && $is_friend)
-                                            <a class="list-group-item" href="{{ route('profile.favorites', $profileUser->username)  }}">Favorites</a>
-                                        @endif
-                                        
-
-                                    @else 
-
-                                    
-                                        <a class="list-group-item active"  href="{{ route('profile', $user->username)  }}">Profile</a>
-                                        <a class="list-group-item "  href="{{ route('profile.friendlist', $user->username)  }}">Friends</a>
-                                        <a class="list-group-item "  href="{{ route('profile.friendrequest', $user->username)  }}">Friend Request</a>
-                                        <a class="list-group-item  "  href="{{ route('profile.blockfriends', $user->username)  }}">Bloking</a>
-
-                                        <a class="list-group-item " href="{{ route('profile.avatar.page', $user->username)  }}">Avatar</a>
-                                        <a class="list-group-item" href="{{ route('profile.subscriptions', $user->username)  }}">My Subscriptions </a>
-                                        <a class="list-group-item" href="{{ route('profile.favorites', $user->username)  }}">My Favorites</a>
-                                        <a class="list-group-item" href="{{ route('profile.threads', $user->username)  }}">My Threads</a>
-                                        <a class="list-group-item" href="{{ route('profile.likes', $user->username)  }}">My Likes</a>
-                                        <a class="list-group-item" href="{{ route('user.edit.password')  }}">Change Password</a>
-                                    @endif
-                                @if($user->isAdmin)
-{{--                                    For Admin--}}
-                                        <a class="list-group-item"  href="{{ route('admin.setesettings') }}">Site Settings</a>
-                                    <a class="list-group-item"  href="{{ route('admin.tag') }}">Tags</a>
-                                    <a class="list-group-item"  href="{{ route('admin.privacypolicy') }}">Privacy</a>
-                                    <a class="list-group-item"  href="{{ route('admin.tos') }}">Terms</a>
-                                    <a class="list-group-item"  href="{{ route('admin.faq') }}">faq</a>
-{{--                                    --}}
-                                @endif
-
-                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="panel">
@@ -106,16 +48,18 @@
                                                 </h4>
                                             </div>
                                             <div class="col-md-4">
-                                                {{-- <a class="btn btn-primary" href="{{ route('profile.user.edit', $user->username) }}" >Edit My Information</a> --}}
+                                                
                                                 @if($profileUser->username != $user->username)
                                                     <add-friend :recipient="{{ $profileUser }}"></add-friend>
+                                                @else 
+                                                    <a class="btn btn-primary btn-sm pull-right" href="{{ route('profile.user.edit', $user->username) }}" >Edit My Information</a>
                                                 @endif
                                             </div>
                                         </div>
 
                                     </div>
                                     <div class="panel-body">
-                                        <h4>About Me</h4>
+                                        <h4>About</h4>
                                         {{ $profileUser->about }}
 
                                     </div>

@@ -31,8 +31,8 @@ class FriendController extends Controller
         }
 
         $requestFriendLists = User::whereIn('id', $pendingRequestId)->get();
-
-        return view('profiles.friendrequest', compact('requestFriendLists'));
+        $profileUser =  $user; 
+        return view('profiles.friendrequest', compact('requestFriendLists','profileUser'));
 
     }
 
@@ -188,8 +188,9 @@ class FriendController extends Controller
 
         $blockFriendLists = User::whereIn('id', $blockFriendLists)->get();
 
+        $profileUser =  $user; 
    
-        return view('profiles.blockfriendlist', compact('blockFriendLists'));
+        return view('profiles.blockfriendlist', compact('blockFriendLists','profileUser'));
     }
 
     public function unBlockFriends(Request $request){

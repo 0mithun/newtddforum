@@ -13,7 +13,8 @@ use Artisan;
 class AdminController extends Controller
 {
     public function tags(){
-        return view('pages.admin.tags');
+        $profileUser = auth()->user();
+        return view('pages.admin.tags',compact('profileUser'));
     }
 
     public function tagsAdd(){
@@ -44,18 +45,21 @@ class AdminController extends Controller
     }
 
     public function privacyPolicy(){
+        $profileUser = auth()->user();
         $adminInfo = Admin::first();
-        return view('pages.admin.privacypolicy',compact('adminInfo'));
+        return view('pages.admin.privacypolicy',compact('adminInfo','profileUser'));
     }
 
     public function tos(){
+        $profileUser = auth()->user();
         $adminInfo = Admin::first();
-        return view('pages.admin.tos', compact('adminInfo'));
+        return view('pages.admin.tos', compact('adminInfo','profileUser'));
     }
 
     public function faq(){
+        $profileUser = auth()->user();
         $adminInfo = Admin::first();
-        return view('pages.admin.faq',compact('adminInfo'));
+        return view('pages.admin.faq',compact('adminInfo','profileUser'));
     }
 
 
@@ -104,8 +108,9 @@ class AdminController extends Controller
 
 
     public function siteSettings(){
+        $profileUser = auth()->user();
         $admin = Admin::first();
-        return view('pages.admin.sitesettings', compact('admin'));
+        return view('pages.admin.sitesettings', compact('admin','profileUser'));
     }
 
     public function siteSettingsUpdate(){

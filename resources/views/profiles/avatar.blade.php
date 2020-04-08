@@ -16,31 +16,14 @@
                                     <h3>{{ strtoupper($user->name) }}</h3>
                                 </div>
                                 <div class="col-md-2">
-                                    <img src="{{ asset($user->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:100px; height: auto;" id="avatarphoto">
+                                    <img src="{{ asset($user->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;" id="avatarphoto">
                                 </div>
                             </div>
                             <hr>
                             <div class="row" >
                                 <div class="col-md-3">
-                                    <a class="list-group-item "  href="{{ route('profile', $user->username)  }}">Profile</a>
+                                    @include('profiles.sidebarmenu')
 
-                                    @if($user->isAdmin)
-                                        <a class="list-group-item"  href="{{ route('admin.setesettings') }}">Site Settings</a>
-
-                                        {{--                                    For Admin--}}
-                                        <a class="list-group-item"  href="{{ route('admin.tag') }}">Tags</a>
-                                        <a class="list-group-item"  href="{{ route('admin.privacypolicy') }}">Privacy</a>
-                                        <a class="list-group-item"  href="{{ route('admin.tos') }}">Terms</a>
-                                        <a class="list-group-item"  href="{{ route('admin.faq') }}">faq</a>
-                                        {{--                                    --}}
-                                    @endif
-
-                                    <a class="list-group-item active " href="{{ route('profile.avatar.page', $user->username)  }}">Avatar</a>
-                                    <a class="list-group-item" href="{{ route('profile.subscriptions', $user->username)  }}">My Subscriptions </a>
-                                    <a class="list-group-item" href="{{ route('profile.favorites', $user->username)  }}">My Favorites</a>
-                                    <a class="list-group-item" href="{{ route('profile.threads', $user->username)  }}">My Threads</a>
-                                    <a class="list-group-item " href="{{ route('profile.likes', $user->username)  }}">My Likes</a>
-                                    <a class="list-group-item" href="{{ route('user.edit.password')  }}">Change Password</a>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="row">

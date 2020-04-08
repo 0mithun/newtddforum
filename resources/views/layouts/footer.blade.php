@@ -18,7 +18,6 @@
                             <li><a href="{{ route('contact') }}">Contact</a></li>
                         </ul>
 
-
                     </div>
                 </div>
             </div>
