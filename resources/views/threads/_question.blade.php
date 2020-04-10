@@ -77,7 +77,7 @@
                         {{ $thread->replies->count() }}  {{ str_plural('reply', $thread->replies->count()) }},
 
 
-                        {{ $thread->favorites->count() }} <span class="glyphicon glyphicon-heart red-icon " style="font-size: 12px;"></span>,
+                        {{ $thread->favorite_count }} <span class="glyphicon glyphicon-heart red-icon " style="font-size: 12px;"></span>,
 
                         {{ $thread->word_count }} words
                         

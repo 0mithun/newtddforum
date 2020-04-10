@@ -36,7 +36,7 @@ class Thread extends Model
      * @var array
      */
     // protected $appends = ['isSubscribedTo','isReported','isFavorited','excerpt','threadImagePath','path'];
-    protected $appends = ['isFavorited','excerpt','threadImagePath','path'];
+    protected $appends = ['excerpt','threadImagePath','path'];
 
     /**
      * The attributes that should be cast to native types.

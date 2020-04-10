@@ -37,11 +37,9 @@
                     axios.post('/thread/check-thread-subscribe',{
                         thread: this.thread.id,
                         user:window.App.user.id
-
                     })
                     .then((res=>{
                         if(res.data.subscribed){
-                            console.log(res.data)
                             return this.isThreadSubscribed = true;
                         }
                        return this.isThreadSubscribed = false;

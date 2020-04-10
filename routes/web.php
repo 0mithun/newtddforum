@@ -118,8 +118,12 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
     Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy');
 
+
+    /*Favorites*/
     Route::post('/thread/{thread}/favorites', 'FavoritesController@threadStore');
     Route::delete('/thread/{thread}/favorites', 'FavoritesController@thraeadDestroy');
+    Route::post('/thread/check-thread-favorite','FavoritesController@checkFavorite');
+
 
     Route::post('/thread/{thread}/likes', 'LikeController@like');
     Route::post('/thread/{thread}/dislikes', 'LikeController@dislike');
@@ -178,7 +182,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/profiles/{user}/my-likes','ProfilesController@myLikesShow')->name('profile.likes');
 
 
-    /*Authentication check added*/
+/*Authentication check added*/
 
 
     //Friend System
@@ -194,18 +198,13 @@ Route::middleware(['auth'])->group(function (){
 
 
     Route::get('profiles/{user}/friend-request','FriendController@getFriendRequest')->name('profile.friendrequest');
-
     Route::post('profiles/{user}/accept-friend-request','FriendController@acceptFriendRequest')->name('profile.acceptfriendrequest');
 
 
     // Route::post('profiles/{user}/unfriend','FriendController@unfriend')->name('profile.unfriend');
 
     Route::post('/friend/unfriend','FriendController@unfriend')->name('friend.unfriend');
-
-
     Route::post('profiles/{user}/block-friend','FriendController@blockFriend')->name('profile.friend.block');
-
-
     Route::get('profiles/{user}/block-friends', 'FriendController@getBlockFriends')->name('profile.blockfriends');
     Route::post('profiles/{user}/unblock-friends', 'FriendController@unBlockFriends')->name('profile.unblockfriends');
 
@@ -240,6 +239,9 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/user/update-password','ProfilesController@updatePassword')->name('user.update.password');
 
     Route::get("/threads/my-favorites",'ThreadsController@loadByMyFavorites')->name('myfavorites.threads.list');
+
+
+    
 });
 
 

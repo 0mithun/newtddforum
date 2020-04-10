@@ -36,6 +36,29 @@ class FavoritesController extends Controller
     }
 
 
+    /**
+     * Check Thread Favorited
+    */
+    public function checkFavorite(){
+         //return request()->all();
+
+         $threadId = request('thread');
+         $thread = Thread::where('id', $threadId)->first();
+ 
+         
+         // $subscribed = $thread->subscriptions()
+         //     ->where('user_id', auth()->id())
+         //     ->exists();
+             
+         if($thread->isFavorited){
+             return response()->json(['favorited'=>true]);
+         }
+         return response()->json(['favorited'=>false]);
+    }
+
+
+
+
     public  function threadStore($thread){
         $thread = Thread::findOrFail($thread);
         $thread->favorite();
@@ -49,5 +72,7 @@ class FavoritesController extends Controller
 
          $thread->decrement('favorite_count');
     }
+
+    
 
 }
