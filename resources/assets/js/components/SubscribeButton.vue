@@ -4,21 +4,50 @@
 
 <script>
     export default {
-        props: ['active'],
-
+        props: ['thread'],
+        data(){
+            return{
+                isThreadSubscribed:false
+            }
+        },
         computed: {
             classes() {
-                return ['btn', this.active ? 'btn-primary' : 'btn-default'];
-            }
+                return ['btn', this.isThreadSubscribed ? 'btn-primary' : 'btn-default'];
+            },
+            signedIn(){
+                return  (window.App.user)? true : false;
+            },
+        },
+        created(){
+            this.checkIsSubscribe()
         },
 
         methods: {
             subscribe() {
                 axios[
-                    (this.active ? 'delete' : 'post')
+                    (this.isThreadSubscribed ? 'delete' : 'post')
                 ](location.pathname + '/subscriptions');
 
-                this.active = ! this.active;
+                this.isThreadSubscribed = ! this.isThreadSubscribed;
+            },
+            checkIsSubscribe(){
+               
+                if(this.signedIn){
+                     //console.log('calling')
+                    axios.post('/thread/check-thread-subscribe',{
+                        thread: this.thread.id,
+                        user:window.App.user.id
+
+                    })
+                    .then((res=>{
+                        if(res.data.subscribed){
+                            console.log(res.data)
+                            return this.isThreadSubscribed = true;
+                        }
+                       return this.isThreadSubscribed = false;
+                    }));
+                }
+                return this.isThreadSubscribed = false;
             }
         }
     }

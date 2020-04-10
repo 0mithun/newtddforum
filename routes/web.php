@@ -249,8 +249,10 @@ Route::post('/channel/search', 'ChannelController@search')->name('chanel.search'
 
 
 
-Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->middleware('auth');
-Route::delete('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->middleware('auth');
+Route::post('/anecdotes/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->middleware('auth');
+Route::delete('/anecdotes/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->middleware('auth');
+
+Route::post('/thread/check-thread-subscribe', 'ThreadSubscriptionsController@checkSubscribe')->middleware('auth');
 
 
 //Route::get('/profiles/{user}/settings/notifications','UserSettingsController@notifications')->name('user.settnigs.notifications');

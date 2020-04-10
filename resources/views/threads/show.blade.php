@@ -59,12 +59,17 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <p>
-                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button>
+                               
+
+                                
+                                {{-- <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button> --}}
+                            <subscribe-button :thread="{{ $thread }}"></subscribe-button>
 
                                 <button class="btn btn-default"
                                         v-if="authorize('isAdmin')"
                                         @click="toggleLock"
                                         v-text="locked ? 'Unlock' : 'Lock'"></button>
+                               
                             </p>
                         </div>
                         <div class="panel-body">

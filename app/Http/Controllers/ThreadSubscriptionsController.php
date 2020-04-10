@@ -27,4 +27,27 @@ class ThreadSubscriptionsController extends Controller
     {
         $thread->unsubscribe();
     }
+
+    /**
+     * Check thread is subscribed
+     */
+
+    public function checkSubscribe(){
+        //return request()->all();
+
+        $threadId = request('thread');
+        $thread = Thread::where('id', $threadId)->first();
+
+        
+        // $subscribed = $thread->subscriptions()
+        //     ->where('user_id', auth()->id())
+        //     ->exists();
+            
+        if($thread->isSubscribedTo){
+            return response()->json(['subscribed'=>true]);
+        }
+        return response()->json(['subscribed'=>false]);
+     
+
+    }
 }
