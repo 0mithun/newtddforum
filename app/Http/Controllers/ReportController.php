@@ -121,17 +121,28 @@ class ReportController extends Controller
 
         return response()->json(['reported'=>false]);
 
-        
-
-
-        
-
-        
-        // ([
-        //     'user_id'           =>  auth()->id(),
-        //     'reported_id'       =>  $id,
-        //     'reported_type'     =>  get_class($thread)
-        // ]);
     }
 
+    public function checkReplyReport(){
+        //return request()->all();
+
+
+        $replyId = request('reply');
+        $userId = request('user');
+
+        if(auth()->user()->id == $userId){
+            $report = DB::table('reports')
+            ->where('user_id', $userId )
+            ->where('reported_type','App\Reply')
+            ->where('reported_id', $replyId )
+            ->first();
+
+            if($report){
+                return response()->json(['reported'=>true]);
+            }
+            return response()->json(['reported'=>false]);
+        }
+
+        return response()->json(['reported'=>false]);
+    }
 }

@@ -45,7 +45,6 @@
             },
 
             create() {
-                console.log('create favorite')
                 axios.post(this.endpoint).then((res)=>{
                 });
 
@@ -55,7 +54,6 @@
             },
 
             destroy() {
-                console.log('destroy favorite')
                 axios.delete(this.endpoint);
 
                 this.isFavoriteThread = false;
@@ -72,7 +70,6 @@
                     })
                     .then((res=>{
                         if(res.data.favorited){
-                            console.log(res.data)
                             return this.isFavoriteThread = true;
                         }
                        return this.isFavoriteThread = false;

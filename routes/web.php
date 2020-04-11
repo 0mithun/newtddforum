@@ -138,6 +138,8 @@ Route::middleware(['auth'])->group(function (){
 
 //Route::post('/replies/{reply}/report', 'RepliesController@report');
     Route::post('/replies/{reply}/report', 'ReportController@reply');
+    Route::post('/reply/check-reply-report','ReportController@checkReplyReport');
+    //Need New Route for check isReply Report
 
 //Route::post('/threads/report','ThreadsController@report');
     Route::post('/threads/report','ReportController@thread');

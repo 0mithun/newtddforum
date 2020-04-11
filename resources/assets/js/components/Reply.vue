@@ -124,11 +124,16 @@
 <!--            </div>-->
 
 <!--            <div  class="col-md-12" v-if="!authorize('owns', reply)">-->
+
+
+
             <div  class="col-md-12" v-if=signedIn>
-                <button class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply" v-if="!report" :disabled=reply.isReported >
+                <button class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply" v-if="!report" :disabled="isReplyReported" >
                     <span class="glyphicon glyphicon-flag"></span>
                 </button>
             </div>
+
+
 
 <!--            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-if="authorize('owns', reply.thread)">Best Reply?</button>-->
         </div>
@@ -163,7 +168,8 @@
                 addNested: false,
                 nestedReplies: [],
                 showNested: false,
-                isReplyOwnerReported:false
+                isReplyOwnerReported:false,
+                isReplyReported:false
             };
         },
         mounted(){
@@ -218,6 +224,7 @@
             });
 
             this.checkUserReported();
+            this.checkReplyReported();
 
         },
 
@@ -281,6 +288,24 @@
                     }));
                 }
                 return this.isReplyOwnerReported = false;
+            },
+            checkReplyReported(){
+                //isCreatorReported
+                if(this.signedIn){
+                    axios.post('/reply/check-reply-report',{
+                        reply: this.reply.id,
+                        user:window.App.user.id
+
+                    })
+                    .then((res=>{
+                        console.log(res.data)
+                        if(res.data.reported){
+                            return this.isReplyReported = true;
+                        }
+                       return this.isReplyReported = false;
+                    }));
+                }
+                return this.isReplyReported = false;
             },
 
             update() {
