@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
+use App\Thread;
 
 class BestRepliesController extends Controller
 {
@@ -18,4 +19,24 @@ class BestRepliesController extends Controller
 
         $reply->thread->markBestReply($reply);
     }
+
+
+    /**
+     * Check Is Reply Best
+     * 
+     */
+
+     public function checkIsBest(){
+         
+         $thread = Thread::where('id',request('thread_id'))
+                            ->where('best_reply_id', request('reply'))
+                            ->first();
+
+
+        if($thread){
+            return response()->json(['isBest'=>true]);
+        }
+        return response()->json(['isBest'=>false]);
+
+     }
 }

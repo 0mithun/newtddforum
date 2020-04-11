@@ -112,7 +112,11 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/anecdotes/{channel}/{thread}/replies', 'RepliesController@store');
     Route::patch('/replies/{reply}', 'RepliesController@update');
     Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.destroy');
+    
     Route::post('/replies/{reply}/best', 'BestRepliesController@store')->name('best-replies.store');
+    Route::post('/reply/check-reply-isbest','BestRepliesController@checkIsBest');
+
+
     Route::post('/replies/{reply}/new-reply','RepliesController@newReply');
 
     Route::post('/replies/{reply}/favorites', 'FavoritesController@store');

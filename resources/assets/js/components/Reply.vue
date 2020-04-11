@@ -1,5 +1,6 @@
 <template>
     <div :id="'reply-'+id"  class="panel panel-default panel-no-margin ">
+        
         <div class="panel-heading reply-heading">
             <div class="level">
                 <h5 class="flex">
@@ -14,27 +15,8 @@
                     said <span v-text="ago"></span>
                 </h5>
 
-<!--                <div class="media">-->
-<!--                    <div class="media-left">-->
 
-<!--                        <a href="#">-->
-<!--                            <img src="{{ asset($thread->creator->avatar_path) }}"-->
-<!--                                 alt="{{ $thread->creator->name }}"-->
-<!--                                 width="25"-->
-<!--                                 height="25"-->
-<!--                                 class="mr-1 avatar-photo">-->
-<!--                        </a>-->
-<!--                    </div>-->
-<!--                    <div class="media-body">-->
-<!--                        <h4 class="media-heading thread-info">-->
-<!--                            Posted by: <a href="{{ route('profile', $thread->creator->username) }}">{{ $thread->creator->name }}</a>-->
-<!--                            {{ $thread->created_at->diffForHumans()  }}-->
-<!--                        </h4>-->
-
-
-
-<!--                    </div>-->
-<!--                </div>-->
+                <!-- Reply User Reprot Start  -->
 
                 <div v-if="signedIn" class="col-md-2">
 
@@ -50,8 +32,12 @@
                     <div class="pull-right">
                         <favorite :reply="reply" type="sm"></favorite>
                     </div>
-<!--                    <report :reply="reply"></report>-->
                 </div>
+
+
+                <!-- Reply User Report End -->
+
+                
             </div>
         </div>
 
@@ -69,6 +55,7 @@
             <div v-else v-html="body"></div>
 
 
+            <!-- Nested Reply Load Start -->
             <div class="" style="margin-top: 10px" >
                 <div class="col-md-1 no-margin" v-if="nestedReplyCount >0">
                     <button class="btn btn-default btn-xs" @click="showNested = !showNested">
@@ -92,10 +79,14 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
 
+
+            <!-- Nested Reply Load End -->
+
+
+
+            <!-- Reply Reprot Start -->
             <div v-if="report" style="margin-top: 10px;overflow: hidden;display:block;width:100%">
                 <div class="form-group">
                     <label for="report_reason">Reason for report the reply:</label>
@@ -107,6 +98,9 @@
                     <button class="btn btn-xs btn-danger mr-1 red-bg" @click="report = false">Cancel</button>
                 </div>
             </div>
+
+            <!-- Reply Report End -->
+
         </div>
 
         <div class="panel-footer level reply-footer reply-footer" >
@@ -115,8 +109,9 @@
                     <button class="btn btn-xs mr-1" @click="editing = true" v-if="! editing">Edit</button>
                     <button class="btn btn-xs btn-danger red-bg mr-1" @click="destroy">Delete</button>
                 </div>
-
             </div>
+
+            
 <!--            <div class="col-md-12" v-else>-->
 <!--                <div v-if="signedIn">-->
 <!--                    <button class="btn btn-xs mr-1 btn-default" @click="addNestedReply" v-if="!addNested">Reply</button>-->
@@ -127,16 +122,29 @@
 
 
 
-            <div  class="col-md-12" v-if=signedIn>
-                <button class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply" v-if="!report" :disabled="isReplyReported" >
+           
+
+
+
+            <!-- Need Check Best Reply  -->
+
+            <div>
+                <button class="btn btn-xs btn-default ml-a pull-right" @click="markBestReply" v-if="authorize('owns', reply.thread) && !isReplyBest">Best Reply?</button>
+                <button class="btn btn-xs btn-primary ml-a pull-right" v-else>Best Reply</button>
+            </div>
+                
+
+            <div  class="col-md-1" v-if="signedIn">                
+
+                <button class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply" v-if="!report && !authorize('owns', reply)" :disabled="isReplyReported" >
                     <span class="glyphicon glyphicon-flag"></span>
                 </button>
             </div>
 
 
 
-<!--            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-if="authorize('owns', reply.thread)">Best Reply?</button>-->
         </div>
+
     </div>
 </template>
 
@@ -161,7 +169,8 @@
                 editing: false,
                 id: this.reply.id,
                 body: this.reply.body,
-                isBest: this.reply.isBest,
+                // isBest: this.reply.isBest,
+                // isBest: this.reply.isBest,
                 report: false,
                 report_reason: '',
                 report_user_reason: '',
@@ -169,7 +178,8 @@
                 nestedReplies: [],
                 showNested: false,
                 isReplyOwnerReported:false,
-                isReplyReported:false
+                isReplyReported:false,
+                isReplyBest:false
             };
         },
         mounted(){
@@ -202,7 +212,8 @@
         created () {
             this.loadNestedReply();
             window.events.$on('best-reply-selected', id => {
-                this.isBest = (id === this.id);
+                // this.isBest = (id === this.id);
+                this.isReplyBest = (id === this.id);
             });
             eventBus.$on('cancelAddReply',()=>{
                 this.addNested = false;
@@ -225,13 +236,13 @@
 
             this.checkUserReported();
             this.checkReplyReported();
+            this.checkReplyIsBest()
 
         },
 
 
         methods: {
             bodyChange(){
-                console.log('editing')
                 $('#bodyedit').atwho({
                     at: "@",
                     delay: 750,
@@ -298,7 +309,6 @@
 
                     })
                     .then((res=>{
-                        console.log(res.data)
                         if(res.data.reported){
                             return this.isReplyReported = true;
                         }
@@ -306,6 +316,22 @@
                     }));
                 }
                 return this.isReplyReported = false;
+            },
+            checkReplyIsBest(){
+                 if(this.signedIn){
+                    axios.post('/reply/check-reply-isbest',{
+                        reply: this.reply.id,
+                        thread_id:this.reply.thread_id
+
+                    })
+                    .then((res=>{
+                        if(res.data.isBest){
+                            return this.isReplyBest = true;
+                        }
+                       return this.isReplyBest = false;
+                    }));
+                }
+                return this.isReplyBest = false;
             },
 
             update() {

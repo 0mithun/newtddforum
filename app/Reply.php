@@ -24,7 +24,7 @@ class Reply extends Model
      *
      * @var array
      */
-    protected $with = ['owner', 'favorites'];
+    protected $with = ['owner', 'favorites','thread'];
 
     /**
      * The accessors to append to the model's array form.
@@ -32,7 +32,7 @@ class Reply extends Model
      * @var array
      */
     // protected $appends = ['favoritesCount', 'isFavorited', 'isBest','isReported','replyCount','ownerThreadUrl'];
-    protected $appends = ['favoritesCount', 'isFavorited', 'isBest','replyCount','ownerThreadUrl'];
+    protected $appends = ['favoritesCount', 'isFavorited', 'ownerThreadUrl'];
 
     /**
      * Boot the reply instance.
@@ -157,7 +157,9 @@ class Reply extends Model
      */
     public function isBest()
     {
-        return $this->thread->best_reply_id == $this->id;
+         return $this->thread->best_reply_id == $this->id;
+        // return $this->thread->best_reply_id != '';
+        return TRUE;
     }
 
     /**
@@ -206,6 +208,7 @@ class Reply extends Model
     public function getReplyCountAttribute(){
         return $this->replyCount();
     }
+    
     public function replyCount(){
         $reply = DB::table('replies')
             ->where('parent_id', $this->id)->get()->count()
