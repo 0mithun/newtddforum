@@ -46,4 +46,19 @@ class LikeController extends Controller
         }
     }
 
+    /**
+     * 
+     * Get Likes Count
+     */
+
+     public function getLikesCount($thread){
+        $thread = Thread::findOrFail($thread);
+        return $thread->likesCount;
+     }
+
+
+     public function getDisikesCount($thread){
+        $thread = Thread::findOrFail($thread);
+        return $thread->dislikesCount;
+     }
 }

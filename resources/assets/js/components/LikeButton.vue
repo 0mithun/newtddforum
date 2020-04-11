@@ -35,9 +35,15 @@ import TwitterShare from './TwitterShare.vue'
                 //isDesliked:false
                 isLiked:  this.thread.isLiked,
                 isDesliked:  this.thread.isDesliked,
-                likesCount:this.thread.likesCount,
-                dislikesCount:this.thread.dislikesCount
+                // likesCount:this.thread.likesCount,
+                likesCount:0,
+                // dislikesCount:this.thread.dislikesCount
+                dislikesCount:210
             }
+        },
+        created(){
+            this.getLikesCount();
+            this.getDislikeCount();
         },
 
         computed: {
@@ -54,6 +60,22 @@ import TwitterShare from './TwitterShare.vue'
         },
 
         methods: {
+            getLikesCount(){
+                // this.likesCount = 1;
+
+                axios.get('/thread/' + this.thread.id + '/likes-count').then((res)=>{
+                   
+                   this.likesCount = res.data
+                });
+            },
+            getDislikeCount(){
+                // this.dislikesCount = 1;
+                axios.get('/thread/' + this.thread.id + '/dislikes-count').then((res)=>{
+                   
+                   this.dislikesCount = res.data
+                });
+            },
+
             toggleDislike(){
                 axios.post('/thread/' + this.thread.id + '/dislikes').then((res)=>{
                     if(this.isDesliked){
