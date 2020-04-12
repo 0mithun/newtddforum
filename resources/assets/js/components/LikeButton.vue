@@ -9,10 +9,7 @@
 
         
        <favorite-thread :thread="thread"></favorite-thread>
-
-
-        <FbShare :thread="thread"></FbShare>
-        <TwitterShare :thread="thread"></TwitterShare>
+        
     </div>
 </template>
 
@@ -38,7 +35,7 @@ import TwitterShare from './TwitterShare.vue'
                 // likesCount:this.thread.likesCount,
                 likesCount:0,
                 // dislikesCount:this.thread.dislikesCount
-                dislikesCount:210
+                dislikesCount:0
             }
         },
         created(){
@@ -56,6 +53,9 @@ import TwitterShare from './TwitterShare.vue'
                 return [
                     this.isDesliked ? 'red-icon' : 'black-icon'
                 ];
+            },
+             signedIn(){
+                return  (window.App.user)? true : false;
             },
         },
 
@@ -77,6 +77,9 @@ import TwitterShare from './TwitterShare.vue'
             },
 
             toggleDislike(){
+                if(!this.signedIn){
+                    return false;
+                }
                 axios.post('/thread/' + this.thread.id + '/dislikes').then((res)=>{
                     if(this.isDesliked){
                         this.isDesliked = false;
@@ -94,6 +97,10 @@ import TwitterShare from './TwitterShare.vue'
                 });
             },
             toggleLike(){
+                if(!this.signedIn){
+                    return false;
+                }
+
                 axios.post('/thread/' + this.thread.id + '/likes').then((res)=>{
                     if(this.isLiked){
                         this.isLiked = false;

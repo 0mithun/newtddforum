@@ -14,9 +14,17 @@
                     <h2 class="media-heading" v-text="title" style="margin-bottom: 10px"></h2>
                 </div>
                 <div class="col-md-1">
-                    <button data-toggle="tooltip" title="Report Thread Creator" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportCreator"  :disabled="isCreatorReported" data-placement="right">
-                        <span class="glyphicon glyphicon-flag"></span>
-                    </button>
+                    <div v-if="signedIn">
+                        <button data-toggle="tooltip" title="Report Thread Creator" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportCreator"  :disabled="isCreatorReported" data-placement="right">
+                            <span class="glyphicon glyphicon-flag"></span>
+                        </button>
+                    </div>
+                    <div v-else>
+                        <button data-toggle="tooltip" title="Please Login To Report Creator" class="btn btn-xs btn-danger ml-a red-bg pull-right" data-placement="top">
+                            <span class="glyphicon glyphicon-flag"></span>
+                        </button>
+                    </div>
+
                 </div>
             </div>    
              
@@ -81,16 +89,29 @@
 
                         {{ $thread->word_count }} words
                         
-                        <div class="btn-group btn-group-xs ">
-                            
-                            <fb-share :thread="thread"></fb-share>
-                            <twitter-share :thread="thread"></twitter-share>
+                        <div class="btn-group btn-group-xs " v-if="signedIn">
+                            @include('threads._socialshare')                           
 
                             <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported" data-placement="left">
                                 <span class="glyphicon glyphicon-flag"></span>
                             </button>
                             
-                        </div>                       
+                        </div>
+                        <div  class="btn-group btn-group-xs "  data-toggle="tooltip" title="Please Login To Perform" v-else >
+                            
+                            <button  class="btn btn-xs btn-default" style="padding:0px" type="button"data-placement="left">
+                                <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                            </button>
+
+                            <button class="btn btn-xs btn-default" style="padding:0px" type="button"data-placement="left">
+                                <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                            </button>
+
+                            <button class="btn btn-xs btn-danger ml-a red-bg pull-right"  data-placement="left">
+                                <span class="glyphicon glyphicon-flag"></span>
+                            </button> 
+
+                        </div>                      
 
 
                 </div>
@@ -146,9 +167,22 @@
                 
             </div>
             <div class="col-md-3" style="padding: 0px;padding-right:5px">                
-                <div class="btn-group btn-group-xs pull-right" role="group" >
-                    <like-button :thread="{{ $thread }}"></like-button>
+                <div class="btn-group btn-group-xs pull-right" role="group" v-if="signedIn">
+                    <like-button :thread="{{ $thread }}"></like-button> 
+                    @include('threads._socialshare')                    
                     <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
+                        <span class="glyphicon glyphicon-flag"></span>
+                    </button>
+                </div>
+
+
+                <div class="btn-group btn-group-xs pull-right" data-toggle="tooltip" title="Please Login To Perform" v-else>
+                    <like-button :thread="{{ $thread }}"></like-button> 
+
+                    <fb-share :thread="thread"></fb-share>
+                    <twitter-share :thread="thread"></twitter-share>
+
+                    <button data-toggle="tooltip"  class="btn btn-xs btn-danger ml-a red-bg pull-right" data-placement="left">
                         <span class="glyphicon glyphicon-flag"></span>
                     </button>
                 </div>

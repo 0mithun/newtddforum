@@ -34,14 +34,21 @@
 
             endpoint() {
                 return '/thread/' + this.thread.id + '/favorites';
-            }
+            },
+            signedIn(){
+                return  (window.App.user)? true : false;
+            },
         },
         created(){
             this.checkIsFavoriteThread();
         },
         methods: {
             toggle() {
-                this.isFavoriteThread ? this.destroy() : this.create();
+                if(this.signedIn){
+                    this.isFavoriteThread ? this.destroy() : this.create();
+                }
+                return;
+                
             },
 
             create() {

@@ -79,6 +79,9 @@ Route::post('contact','FrontendController@contactAdmin')->name('contactadmin');
 
 Route::get('/replies/{reply}/load-reply','RepliesController@lodReply');
 
+Route::get('/thread/{thread}/likes-count','LikeController@getLikesCount');
+Route::get('/thread/{thread}/dislikes-count','LikeController@getDisikesCount');
+
 
 
 
@@ -131,9 +134,7 @@ Route::middleware(['auth'])->group(function (){
 
     Route::post('/thread/{thread}/likes', 'LikeController@like');
     Route::post('/thread/{thread}/dislikes', 'LikeController@dislike');
-    Route::get('/thread/{thread}/likes-count','LikeController@getLikesCount');
-    Route::get('/thread/{thread}/dislikes-count','LikeController@getDisikesCount');
-
+ 
 
 /**
  * 

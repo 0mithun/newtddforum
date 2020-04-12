@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Channel;
-use App\Filters\ThreadFilters;
-use App\Notifications\ThreadWasReported;
-use App\Rules\Recaptcha;
 use App\Tags;
+use App\User;
 use App\Thread;
+use App\Channel;
 use App\Trending;
-use function GuzzleHttp\Promise\all;
 use http\Env\Request;
+use App\Rules\Recaptcha;
+use App\Filters\ThreadFilters;
+use function GuzzleHttp\Promise\all;
+use App\Notifications\ThreadWasReported;
 
 class ThreadsController extends Controller
 {
@@ -181,6 +182,8 @@ class ThreadsController extends Controller
         $trending->push($thread);
 
         $thread->increment('visits');
+        
+
 
 
         $allTags = Tags::all();
@@ -218,7 +221,7 @@ class ThreadsController extends Controller
         $relatedThreads= $random;
 
 
-        return view('threads.show', compact('thread','allTags','relatedThreads'));
+        return view('threads.show', compact('thread','allTags','relatedThreads',));
     }
 
     /**
