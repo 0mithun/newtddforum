@@ -161,7 +161,7 @@
                 @if($thread->tags->count())
                     Tagged: 
                     @foreach($thread->tags as $tag)
-                        <span> <a href="{{ route('tags.threads.list', $tag->name)  }}">{{ $tag->name  }}</a> </span>
+                        <span> <a href="{{ strtolower(route('tags.threads.list', $tag->name))  }}">{{ $tag->name  }}</a> </span>
                     @endforeach
                 @endif
                 
