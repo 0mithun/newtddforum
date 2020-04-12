@@ -190,7 +190,10 @@ class ThreadsController extends Controller
         $relatedThreads = [];
 
         foreach($threadTags as $tag){
-            $threads = $tag->threads;
+            //$threads = $tag->threads;
+            $threads = $tag->threads()->without(['creator', 'likes','tags'])->get();
+            // dd($threads);
+            //books = App\Book::without('author')->get();
 
             if($threads->count()){              
 
