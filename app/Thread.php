@@ -266,13 +266,15 @@ class Thread extends Model
     //  *
     //  * @return array
     //  */
-    // public function toSearchableArray()
-    // {
-    //     $searchable = [
-    //         'title' => $this->title,
-    //     ];
-    //     return $this->toArray($searchable) + ['path' => $this->path()];
-    // }
+    public function toSearchableArray()
+    {
+        $searchable = [
+            'title' => $this->title,
+            'body'  => $this->body,
+            'tags'  => $this->tags
+        ];
+        return $this->toArray($searchable) + ['path' => $this->path()];
+    }
 
 
     
