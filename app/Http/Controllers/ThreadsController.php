@@ -221,7 +221,7 @@ class ThreadsController extends Controller
         $relatedThreads= $random;
 
 
-        return view('threads.show', compact('thread','allTags','relatedThreads',));
+        return view('threads.show', compact('thread','allTags','relatedThreads'));
     }
 
     /**

@@ -48,8 +48,8 @@ class ModelFactorySeeder extends Seeder
         }
         // //factory(App\Tags::class, 10)->create();
         factory(App\Thread::class, 100)->create();
-        // factory(App\Reply::class,10)->create();
-        // factory(\Illuminate\Notifications\DatabaseNotification::class, 10)->create();
+        factory(App\Reply::class,10)->create();
+        factory(\Illuminate\Notifications\DatabaseNotification::class, 10)->create();
 
     }
 }
