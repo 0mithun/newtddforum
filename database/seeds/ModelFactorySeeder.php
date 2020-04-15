@@ -12,18 +12,18 @@ class ModelFactorySeeder extends Seeder
     public function run()
     {
         factory(App\Admin::class)->create();
-        // factory(App\User::class)->create([
-        //     'name' => 'Jason Payne',
-        //     'first_name' => 'Jason',
-        //     'last_name' => 'Payne',
-        //     'email' =>'kakooljay@gmail.com',
-        //     'username'  =>  'jasonpayne',
-        //     'password' =>  bcrypt('secret'),
-        //     'remember_token' => str_random(10),
-        //     'confirmed' => true
-        // ])->each(function($user){
-        //     $user->userlocation()->save(factory(App\Userlocation::class)->make());
-        // });
+        factory(App\User::class)->create([
+            'name' => 'Jason Payne',
+            'first_name' => 'Jason',
+            'last_name' => 'Payne',
+            'email' =>'kakooljay@gmail.com',
+            'username'  =>  'jasonpayne',
+            'password' =>  bcrypt('secret'),
+            'remember_token' => str_random(10),
+            'confirmed' => true
+        ])->each(function($user){
+            $user->userlocation()->save(factory(App\Userlocation::class)->make());
+        });
 
         factory(App\User::class, 10)->create();
 
