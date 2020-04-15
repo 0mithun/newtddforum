@@ -196,7 +196,7 @@ Route::middleware(['auth'])->group(function (){
     //Friend System
 
     Route::post('/friend/sent-request', 'FriendController@sentRequest')->name('friendrequest.sent');
-
+    
     Route::post('/friend/check-friend', 'FriendController@checkFriend');
     Route::post('/friend/check-request-sent', 'FriendController@checkFriendRequestSent');
 

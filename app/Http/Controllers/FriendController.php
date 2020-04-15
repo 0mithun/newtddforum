@@ -11,6 +11,9 @@ class FriendController extends Controller
 
     public function sentRequest(Request $request){
         
+         if(\Request::ajax()){
+            return response()->json(['success'=>'Friend unfriend successfully']);
+        }
         $user = auth()->user();
         $receipentuser = User::find($request->recipient);
         

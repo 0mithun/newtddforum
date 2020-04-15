@@ -99,6 +99,7 @@
                 axios.post('/friend/sent-request',{
                     recipient:this.recipient.id
                 }).then(res=>{
+                    console.log(res)
                     this.sentRequst = true;
                 })
             },
