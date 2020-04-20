@@ -45,6 +45,7 @@ class ReportController extends Controller
         $reason = \request('reason');
         $user_id = \request('user_id');
         $user = User::find(1);
+        $reported_user = User::find($user_id);
 
 //        $user = User::find(1);
         DB::table('reports')->insert([
@@ -54,7 +55,7 @@ class ReportController extends Controller
         ]);
 
 
-        $user->notify(new UserWasReported($user) );
+        $user->notify(new UserWasReported($reported_user, $reason) );
     }
 
     public function checkUserReport(){

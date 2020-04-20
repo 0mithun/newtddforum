@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class ThreadWasUpdated extends Notification
 {
@@ -39,7 +40,7 @@ class ThreadWasUpdated extends Notification
      */
     public function via()
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -53,6 +54,13 @@ class ThreadWasUpdated extends Notification
             'message' => $this->reply->owner->name . ' replied to ' . $this->thread->title,
             'link' => $this->reply->path()
         ];
+    }
+
+    public function toBroadcast($notifiable){
+        return new BroadcastMessage([
+            'message' => $this->reply->owner->name . ' replied to ' . $this->thread->title,
+            'link' => $this->reply->path()
+        ]);
     }
 }
 
