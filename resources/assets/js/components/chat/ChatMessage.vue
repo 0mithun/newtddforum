@@ -115,15 +115,15 @@
                             
                             <!-- <div class="chat-message clearfix" v-if="selectFriend"> -->
                             <div class="chat-message clearfix">
-                                <div v-if="typing">{{ typing }}typing ....</div>
-                                <textarea @keydown.enter="sendMessage" @keyup="typingMessage" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message"></textarea>
+                                <div v-if="typing">   {{ typing.user.name }} <img src="/images/png/pen.png" alt=""> .............</div>
+                                <textarea @keydown.enter="sendMessage" @keyup="typingMessage(friendMessages.friend.id)" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message" :disabled="!selectFriend"></textarea>
 <!--                                         
                                 <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
                                 <i class="fa fa-file-image-o"></i>
                                 
                                 <button>Send</button> -->
                         
-                            </div> <!-- end chat-message -->
+                            </div> 
                         
                         </div> <!-- end chat -->
                     </div>
@@ -146,7 +146,8 @@
                 message: '',
                 selectFriend:null,
                 typing:'',
-                last_seen:''
+                last_seen:'',
+                typingClock:null,
             }
         },
         computed:{
@@ -175,7 +176,7 @@
 
             Echo.private(`chat.${this.authuser.id}`)
             .listen('MessegeSentEvent', (e) => {
-
+                
                 if(e.message.friend_message == 0){
 
                     
@@ -190,7 +191,7 @@
                     this.selectUser(e.message.from, false)
                                         
                 }
-            
+                //this.messageSound();
 
                
             });
@@ -204,7 +205,22 @@
             
             Echo.private('typingevent')
             .listenForWhisper('typing', (e) => {
-                this.typing = e;
+                
+                if(this.selectFriend){
+                    if(e.user.id == this.friendMessages.friend.id && e.userId == this.authuser.id){
+                        this.typing = e;
+                       
+                       if(this.typingClock){
+                        clearTimeout(this.typingClock)
+                       }
+
+                        this.typingClock = setTimeout(()=>{
+                            this.typing = '';
+                        }, 2000)
+                    }
+                }
+               
+                
 
             });
 
@@ -230,6 +246,11 @@
 
         },
         methods:{
+
+            messageSound(){
+                let sound = new Audio('https://notificationsounds.com/soundfiles/acc3e0404646c57502b480dc052c4fe1/file-sounds-1140-just-saying.mp3');
+                sound.play();
+            },
             
             seenMessage(message){
                 this.last_seen = '';
@@ -244,11 +265,12 @@
                     })
                 }
             },
-            typingMessage(){
+            typingMessage(userId){
                 Echo.private('typingevent')
                 .whisper('typing', {
                     'user':this.authuser,
-                    'typing':this.message
+                    'typing':this.message,
+                    'userId': userId
                     
                 });
             },
