@@ -1,6 +1,6 @@
 <template>
   <GmapMap
-    :center="center"
+    :center="mapCenter"
     :zoom="zoom"
     map-type-id="terrain"
     style="width: 100%; height: 100vh"
@@ -51,10 +51,10 @@ export default {
     data(){
         return{
             //center:{lat: 42.363211, lng:-105.071875},
-            center:{lat: parseFloat(this.userlat),lng: parseFloat(this.userlng)},
-            
+            center:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
+            mapCenter:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
             markers:[],
-            zoom:8,
+            zoom:7,
           infoContent: null,
           infoWindowPos: {
               lat: 0,
@@ -108,18 +108,17 @@ export default {
     created(){
         this.fetchLocations();
         eventBus.$on('markers_fetched', data=>{
-            //this.markers.push()
-            console.log(data.markers)
             this.markers = data.markers;
 
             if(this.markers.length>0){
-                this.center=data.markers[0].position;
+                let center = Math.floor(Math.random() * Math.floor(this.markers.length));
+                this.mapCenter=data.markers[center].position;
             }
 
         });
         eventBus.$on('markers_result_clicked', index=>{
            let targetMarkers = this.markers[index]
-           this.center = targetMarkers.position;
+           this.mapCenter = targetMarkers.position;
            this.toggleInfoWindow(targetMarkers, index);
         });
 
