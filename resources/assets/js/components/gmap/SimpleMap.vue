@@ -46,16 +46,16 @@ export default {
         return{
             //center:{lat: 42.363211, lng:-105.071875},
             center:{
-                    lat:parseInt(this.thread.lat),
-                    lng:parseInt(this.thread.lng),
+                    lat:parseFloat(this.thread.lat),
+                    lng:parseFloat(this.thread.lng),
                 },
             // center:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
             markers:[
                 {
                     position:{
                         //lat: 42.363211, lng:-105.071875
-                        lat:parseInt(this.thread.lat),
-                        lng:parseInt(this.thread.lng),
+                        lat:parseFloat(this.thread.lat),
+                        lng:parseFloat(this.thread.lng),
                     }
                 
                 },
