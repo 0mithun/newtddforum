@@ -51,8 +51,8 @@ export default {
     data(){
         return{
             //center:{lat: 42.363211, lng:-105.071875},
-            center:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
-            mapCenter:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
+            center:{lat: parseFloat(this.userlat),lng: parseFloat(this.userlng)},
+            mapCenter:{lat: parseFloat(this.userlat),lng: parseFloat(this.userlng)},
             markers:[],
             zoom:7,
           infoContent: null,
