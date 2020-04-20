@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 class YouWereMentioned extends Notification
@@ -47,5 +48,13 @@ class YouWereMentioned extends Notification
             'message' => $this->reply->owner->name . ' mentioned you in ' . $this->reply->thread->title,
             'link' => $this->reply->path()
         ];
+    }
+
+
+    public function toBroadcast($notifiable){
+        return new BroadcastMessage([
+            'message' => $this->reply->owner->name . ' mentioned you in ' . $this->reply->thread->title,
+            'link' => $this->reply->path()
+        ]);
     }
 }

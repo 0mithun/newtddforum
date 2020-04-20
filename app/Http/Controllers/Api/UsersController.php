@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use Algolia\AlgoliaSearch\Http\Psr7\Request;
 use App\Http\Controllers\Controller;
 use App\Notifications\UserWasReported;
+
+use Illuminate\Support\Str;
+
 use App\User;
 
 use DB;
@@ -26,12 +29,14 @@ class UsersController extends Controller
 //            ->take(5)
 //            ->pluck('name')->toArray();
         //full_name
-     return   DB::table("users")
+     $name =   DB::table("users")
             ->select("id", DB::raw("CONCAT(first_name, ' ', last_name) as name"))
 //            ->where("students_class_id", $id)
                 ->where('name', 'LIKE', "%$search%")
             ->pluck("name");
             ;
+        // $name = strtolower($name);
+        return Str::title($name);
     }
 
     public function user(Request $request){
