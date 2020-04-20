@@ -3,9 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class ReplywasReported extends Notification
 {
@@ -32,7 +33,7 @@ class ReplywasReported extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -62,10 +63,18 @@ class ReplywasReported extends Notification
             //'reply_id'  =>  $this->reply->id,
 //            'data' => "User " .$user->username .  " reported a reply by " . $this->reply->owner->username.' because: '.$this->reason
 
-            'message' => "User " .$user->username .  " reported a reply by " . $this->reply->owner->username.' because: '.$this->reason,
+            'message' => "User " .$user->username .  " reported a reply by " . $this->reply->owner->username.', because: '.$this->reason,
             'link' => $this->reply->path()
         ];
 
 
+    }
+
+    public function toBroadcast($notifiable){
+        $user = auth()->user();
+        return new BroadcastMessage([
+            'message' => "User " .$user->username .  " reported a reply by " . $this->reply->owner->username.', because: '.$this->reason,
+            'link' => $this->reply->path()
+        ]);
     }
 }

@@ -3,9 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 /**
  * Class ThreadWasReported
@@ -36,7 +37,7 @@ class ThreadWasReported extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -64,10 +65,18 @@ class ThreadWasReported extends Notification
         $user = auth()->user();
         return [
 //            'data' => "User " . $user->username . " ".  " reported thread with id = " . $this->thread->id . " because: " . $this->reason,
-            'message' => "User " . $user->username . " ".  " reported thread with id = " . $this->thread->id . " because: " . $this->reason,
+            'message' => "User " . $user->username . " ".  " reported thread with id = " . $this->thread->id . ", because: " . $this->reason,
             'link' => $this->thread->path()
         ];
 
 
+    }
+
+    public function toBroadcast($notifiable){
+        $user = auth()->user();
+        return new BroadcastMessage([
+            'message' => "User " . $user->username . " ".  " reported thread with id = " . $this->thread->id . ", because: " . $this->reason,
+            'link' => $this->thread->path()
+        ]);
     }
 }

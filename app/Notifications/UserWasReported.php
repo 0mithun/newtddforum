@@ -3,24 +3,27 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class UserWasReported extends Notification
 {
     use Queueable;
 
     protected  $reported_user;
+    protected $reason;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($reported_user)
+    public function __construct($reported_user, $reason)
     {
         $this->reported_user = $reported_user;
+        $this->reason  = $reason;
     }
 
     /**
@@ -31,7 +34,7 @@ class UserWasReported extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -59,9 +62,16 @@ class UserWasReported extends Notification
         $user = auth()->user();
         return [
 //           'data' => "User " . $user->username . " ". " reported user " . $this->reported_user->username
-            'message' => "User " . $user->username . " ". " reported user " . $this->reported_user->username,
+            'message' => "User " . $user->username . " ". " reported user " . $this->reported_user->username. ", because: " . $this->reason,
             'link' => url('/threads?by='.$this->reported_user->username)
         ];
 
+    }
+    public function toBroadcast($notifiable){
+        $user = auth()->user();
+        return new BroadcastMessage([
+            'message' => "User " . $user->username . " ". " reported user " . $this->reported_user->username.", because: " . $this->reason,
+            'link' => url('/threads?by='.$this->reported_user->username)
+        ]);
     }
 }
