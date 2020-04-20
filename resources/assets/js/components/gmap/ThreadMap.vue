@@ -13,8 +13,14 @@
                 :position="m.position"
                 :clickable="true"
                 :draggable="true"
-                icon='/images/png/002-marker.png'
+                icon='/images/png/pin.png'
                 @click="toggleInfoWindow(m,index)"
+            />
+            <GmapMarker
+                :position="center"
+                :clickable="true"
+                :draggable="true"
+                icon='/images/png/google-maps.png'
             />
 
             
@@ -47,7 +53,7 @@ export default {
             //center:{lat: 42.363211, lng:-105.071875},
             center:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
             markers:[],
-            zoom:5,
+            zoom:6,
           infoContent: null,
           infoWindowPos: {
               lat: 0,
@@ -101,6 +107,8 @@ export default {
     created(){
         this.fetchLocations();
         eventBus.$on('markers_fetched', data=>{
+            //this.markers.push()
+            console.log(data.markers)
             this.markers = data.markers;
 
             if(this.markers.length>0){
