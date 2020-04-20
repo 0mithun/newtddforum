@@ -11,9 +11,7 @@ class FriendController extends Controller
 
     public function sentRequest(Request $request){
         
-         if(\Request::ajax()){
-            return response()->json(['success'=>'Friend unfriend successfully']);
-        }
+       
         $user = auth()->user();
         $receipentuser = User::find($request->recipient);
         
@@ -170,7 +168,7 @@ class FriendController extends Controller
         session()->flash('succes','Friend Block successfully');
         return redirect()->route('profile.friendlist', $authUser->username);
 
-        return 'Friend unfriend successfully';
+        return 'Friend unfriend successfully ';
     }
 
 

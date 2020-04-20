@@ -39,6 +39,7 @@
                     //console.log(notification);
                     //1this.notifications.unshift(notification)
                     this.fetchNotifications();
+                    this.playNotification()
                 });
             
         },
@@ -62,6 +63,11 @@
             fetchNotifications(){
                 axios.get('/profiles/' + window.App.user.username + '/notifications')
                 .then(response => this.notifications = response.data);
+            },
+            playNotification(){
+                // let sound = new Audio('http://soundbible.com/mp3/glass_ping-Go445-1207030150.mp3');
+                let sound = new Audio('https://notificationsounds.com/soundfiles/08b255a5d42b89b0585260b6f2360bdd/file-sounds-1137-eventually.mp3');
+                sound.play();
             }
         }
     }
