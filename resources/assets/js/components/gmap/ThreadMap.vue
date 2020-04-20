@@ -51,9 +51,10 @@ export default {
     data(){
         return{
             //center:{lat: 42.363211, lng:-105.071875},
-            center:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
+            center:{lat: parseFloat(this.userlat),lng: parseFloat(this.userlng)},
+            
             markers:[],
-            zoom:6,
+            zoom:8,
           infoContent: null,
           infoWindowPos: {
               lat: 0,
