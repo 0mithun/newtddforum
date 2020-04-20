@@ -95,7 +95,7 @@
                                         <a href="{{ url($relatedThread->path) }}">{{ $relatedThread->title }}</a>
                                     </li>
                                 @empty
-                                    <li>Currently No Related Threads </li>
+                                    <li class="list-group-item">Currently No Related Threads </li>
                                 @endforelse
                             </ul>
 

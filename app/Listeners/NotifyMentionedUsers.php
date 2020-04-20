@@ -22,13 +22,15 @@ class NotifyMentionedUsers
     public function handle(ThreadReceivedNewReply $event)
     {
         //dd($event->reply->mentionedUsers());
+    
+        ///@(?<=@)[a-zA-Z]+\s[a-zA-Z]+/
 
-
-        preg_match_all('/@([\w\-]+)/', $event->reply->body, $matches);
+        preg_match_all('/@([\w\-]+\s[a-zA-Z]+)/', $event->reply->body, $matches);
         //dd($matches);
+        
 
         foreach ($matches[1] as $name){
-            if($user = User::where('first_name', $name)->first()){
+            if($user = User::where('name', $name)->first()){
                 $usersettings = $user->usersetting;
                 if($usersettings->mention_notify_anecdotage ==1){
                     $user->notify(new YouWereMentioned($event->reply));
