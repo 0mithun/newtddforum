@@ -28,8 +28,15 @@ class UserlocationController extends Controller
 
         $distance=request('radius')??200;
         // Search the rows in the markers table
-        $results = DB::select(DB::raw('SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat .') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance') );
+        //$results = DB::select(DB::raw('SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat .') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance') );
+        
+        // if(request('radius') > 0){
+        //     $results = $results = DB::select(DB::raw('SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat .') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance') );
+        // }else{
+        // $results = Thread::all();
+        // }
 
+        $results = Thread::all();
         $markers = collect($results)->map(function ($item, $key) {
             return [
                 'position' => ['lat' => $item->lat, 'lng' => $item->lng],

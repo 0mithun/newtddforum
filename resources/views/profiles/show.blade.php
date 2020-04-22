@@ -64,6 +64,7 @@
 
                                     </div>
                                 </div>
+                                <profile-map lat="{{ $profileUser->lat }}" lng={{ $profileUser->lng}}></profile-map>
                             </div>
                         </div>
                     </div>

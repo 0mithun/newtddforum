@@ -96,9 +96,10 @@ class ThreadsController extends Controller
             'image_path.max'    =>  'Thread image may not be greater than 2048 kilobytes'
         ]);
 
-            //image_pending
         
-        $user = auth()->user();
+        
+        // $user = auth()->user();
+        $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
@@ -111,8 +112,8 @@ class ThreadsController extends Controller
             'main_subject'  =>  request('main_subject'),
             'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
-            'lat'   => $user->lat,
-            'lng'   => $user->lng
+            'lat'   => $arr_ip['lat'],
+            'lng'   => $arr_ip['lon'],
 
         ]);
 
@@ -259,7 +260,6 @@ class ThreadsController extends Controller
 
         ]);
 
-        $user = auth()->user();
 
         $data = [
             'title' => request('title'),
@@ -272,8 +272,6 @@ class ThreadsController extends Controller
             'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
             'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
-            'lat'   => $user->lat,
-            'lng'   => $user->lng
         ];
 
         if(\request('channel_id') != 'undefined'){
