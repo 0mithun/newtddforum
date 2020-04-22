@@ -130,7 +130,6 @@
 
             <div>
                 <button class="btn btn-xs btn-default ml-a pull-right" @click="markBestReply" v-if="authorize('owns', reply.thread) && !isReplyBest">Best Reply?</button>
-                <button class="btn btn-xs btn-primary ml-a pull-right" v-else>Best Reply</button>
             </div>
                 
 
