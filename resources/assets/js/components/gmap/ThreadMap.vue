@@ -5,26 +5,36 @@
     map-type-id="terrain"
     style="width: 100%; height: 100vh"
     >
-        <gmap-cluster :zoomOnClick="true" :maxZoom="5">
+    <GmapMarker
+                :key="index"
+                v-for="(m, index) in markers"
+                :position="m.position"
+                :clickable="true"
+                :draggable="true"                
+                @click="toggleInfoWindow(m,index)"
+            />
+
+        <!-- <gmap-cluster :zoomOnClick="true" :maxZoom="5">
         
             <GmapMarker
                 :key="index"
                 v-for="(m, index) in markers"
                 :position="m.position"
                 :clickable="true"
-                :draggable="true"
-                icon='/images/png/pin.png'
+                :draggable="true"                
                 @click="toggleInfoWindow(m,index)"
             />
-            <GmapMarker
+            
+            
+        </gmap-cluster> -->
+
+        <!-- <GmapMarker
                 :position="center"
                 :clickable="true"
                 :draggable="true"
                 icon='/images/png/google-maps.png'
-            />
+            /> -->
 
-            
-        </gmap-cluster>
         <gmap-info-window
             :options="infoOptions"
             :position="infoWindowPos"
@@ -54,7 +64,7 @@ export default {
             center:{lat: parseFloat(this.userlat),lng: parseFloat(this.userlng)},
             mapCenter:{lat: parseFloat(this.userlat),lng: parseFloat(this.userlng)},
             markers:[],
-            zoom:7,
+            zoom:2,
           infoContent: null,
           infoWindowPos: {
               lat: 0,
@@ -108,6 +118,7 @@ export default {
     created(){
         this.fetchLocations();
         eventBus.$on('markers_fetched', data=>{
+            this.markers = null;
             this.markers = data.markers;
 
             if(this.markers.length>0){
@@ -120,6 +131,13 @@ export default {
            let targetMarkers = this.markers[index]
            this.mapCenter = targetMarkers.position;
            this.toggleInfoWindow(targetMarkers, index);
+        });
+
+        eventBus.$on('zoom_decreased', zoom=>{
+            this.zoom = zoom;
+        });
+        eventBus.$on('change_center', center=>{
+            this.mapCenter =center;
         });
 
         

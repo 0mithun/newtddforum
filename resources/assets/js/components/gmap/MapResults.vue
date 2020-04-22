@@ -1,6 +1,6 @@
 <template>
-    <div class="">
-        <div class="list-group">
+    <div class="map_thraed_list ">
+        <div class="list-group" >
             <a style="padding:10px 5px" href="#" class="list-group-item " 
                 v-for="(item, i) in results" :key="i"
                 @click="focusMarker(i)"
@@ -9,7 +9,7 @@
                     <div class="col-md-10">
                         {{ item.text }}
                     </div>
-                    <button class="btn-default btn btn-sm" @click="viewThread(item.thread_id)">View</button>
+                    <button class="btn-default btn btn-sm" @click="viewThread(item.thread_id)" > View</button>
                     
                     <!-- <small>3 days ago</small> -->
                 
@@ -58,6 +58,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .map_thraed_list {
+   height: 100vh;
+    overflow-y: scroll;
+}
 </style>

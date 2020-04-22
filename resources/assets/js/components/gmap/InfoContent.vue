@@ -7,7 +7,7 @@
             <img :src="infoContent.creator.profileAvatarPath" alt="" width="25"> Posted By: {{ this.infoContent.creator.name }}   
             
             <span>
-                <a :href="infoContent.path" class="btn btn-default btn-xs pull-right" target="_blank">View</a>
+                <a :href="infoContent.path" class="btn btn-default btn-xs pull-right" target="_blank" style="margin-left:5px">View</a>
             </span>         
         </div>
     </div>  

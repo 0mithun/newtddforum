@@ -83,6 +83,9 @@ Vue.component('map-results',MapResults);
 import SimpleMap from './components/gmap/SimpleMap.vue';
 Vue.component('simple-map',SimpleMap);
 
+import ProfileMap from './components/gmap/ProfileMap.vue';
+Vue.component('profile-map',ProfileMap);
+
 import * as VueGoogleMaps from 'vue2-google-maps'
 
 import GmapCluster from 'vue2-google-maps/dist/components/cluster' // replace src with dist if you have Babel issues

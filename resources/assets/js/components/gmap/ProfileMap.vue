@@ -3,9 +3,9 @@
     :center="center"
     :zoom="zoom"
     map-type-id="terrain"
-    style="width: 100%; height: 30vh"
+    style="width: 100%; height: 35vh"
     >
-        <GmapMarker
+       <GmapMarker
                 :key="index"
                 v-for="(m, index) in markers"
                 :position="m.position"
@@ -19,29 +19,29 @@
 
 <script>
 export default {
-    props:['thread'],
+    props:['lat','lng'],
     data(){
         return{
-            //center:{lat: 42.363211, lng:-105.071875},
             center:{
-                    lat:parseFloat(this.thread.lat),
-                    lng:parseFloat(this.thread.lng),
+                    lat:parseFloat(this.lat),
+                    lng:parseFloat(this.lng),
                 },
-            // center:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
             markers:[
                 {
                     position:{
                         //lat: 42.363211, lng:-105.071875
-                        lat:parseFloat(this.thread.lat),
-                        lng:parseFloat(this.thread.lng),
+                       lat:parseFloat(this.lat),
+                        lng:parseFloat(this.lng),
                     }
                 
                 },
             ],
-            zoom:3,
+        zoom:4,          
 
         }
     },
+   
+    
 }
 </script>
 
