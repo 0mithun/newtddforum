@@ -260,6 +260,7 @@ class ThreadsController extends Controller
 
         ]);
 
+        $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
 
         $data = [
             'title' => request('title'),
@@ -272,6 +273,8 @@ class ThreadsController extends Controller
             'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
             'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
+            'lat'   => $arr_ip['lat'],
+            'lng'   => $arr_ip['lon'],
         ];
 
         if(\request('channel_id') != 'undefined'){
