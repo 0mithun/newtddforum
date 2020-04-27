@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-            <div class="row">
+            <div class="row chat-page">
                     <div class="col-md-4">
                         <div class="people-list" id="people-list">
                             <!-- <div class="search">
@@ -115,7 +115,7 @@
                             
                             <!-- <div class="chat-message clearfix" v-if="selectFriend"> -->
                             <div class="chat-message clearfix">
-                                <div v-if="typing">   {{ typing.user.name }} <img src="/images/png/pen.png" alt=""> .............</div>
+                                <div v-if="typing">   {{ typing.user.name }} <img src="/images/png/pen.png" alt=""> .........</div>
                                 <textarea @keydown.enter="sendMessage" @keyup="typingMessage(friendMessages.friend.id)" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message" :disabled="!selectFriend"></textarea>
 <!--                                         
                                 <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
@@ -128,9 +128,9 @@
                         </div> <!-- end chat -->
                     </div>
         
-                </div> <!-- end container -->
+            </div> <!-- end container -->
     
-            </div>
+    </div>       
     
 </template>
 
@@ -584,5 +584,8 @@
             float: right;
             margin-top: 10px;
             font-size: 20px;
+        }
+        .chat-page{
+            margin-top: 50px;
         }
 </style>

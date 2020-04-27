@@ -5,10 +5,8 @@
         $user = auth()->user();
     @endphp
     
-    <div class="">
-        <div class="row">
             <div class="col-md-12">
-                <div class="row">
+                <div class="row" style="margin-top:55px">
                     <div class="col-md-3">
                         <div class="panel">
                             <div class="panel-heading">
@@ -31,7 +29,13 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    </div>
+@endsection
+
+
+@section('head')
+    <style>
+        .container .row{
+            margin-top: 0px;
+        }
+    </style>
 @endsection

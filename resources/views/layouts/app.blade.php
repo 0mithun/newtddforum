@@ -106,7 +106,9 @@
             top: 0;
             width: 350px;
         }
-
+        .container .row{
+            margin-top: 55px;
+        }
     </style>
 
     @yield('head')

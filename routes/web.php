@@ -171,6 +171,7 @@ Route::middleware(['auth'])->group(function (){
 
 
     Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index');
+    Route::get('/profiles/{user}/message-notifications', 'UserNotificationsController@messageNotifications');
     Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationsController@destroy');
 
 

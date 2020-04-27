@@ -117,6 +117,8 @@ import ChatMessage from './components/chat/ChatMessage.vue';
 
 Vue.component('chat-message', ChatMessage);
 
+import MessageNotification from "./components/chat/MessageNotification.vue";
+Vue.component('message-notification', MessageNotification);
 
 import Vuex from 'vuex'
 

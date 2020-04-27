@@ -36,17 +36,21 @@
                 this.fetchNotifications();
                 Echo.private(`App.User.${window.App.user.id}`)
                 .notification((notification) => {
-                    //console.log(notification);
+                    
                     //1this.notifications.unshift(notification)
                     this.fetchNotifications();
-                    this.playNotification()
+                    
+                    if(notification.type != "App\\Notifications\\NewMessageNotification"){
+                        this.playNotification()
+                    }
                 });
             
         },
         computed:{
             unreadNotifications(){
                 return this.notifications.filter(notification=>{
-                    return notification.read_at == null;
+                    //return notification.read_at == null;
+                    return notification.type != "App\\Notifications\\NewMessageNotification" && notification.read_at == null;
                 })
             }
         },

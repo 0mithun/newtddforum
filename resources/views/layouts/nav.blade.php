@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-default navbar-static-top navbar-fixed-top" style="margin-bottom:50px">
     <div class="container">
         <div class="navbar-header">
 
@@ -89,8 +89,9 @@
                     <li><a href="{{ route('login') }}">Login</a></li>
                     <li><a href="{{ route('register') }}">Register</a></li>
                 @else
+                <message-notification></message-notification>
                     <user-notifications></user-notifications>
-
+                   
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-expanded="false">

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+
 class UserNotificationsController extends Controller
 {
     /**
@@ -21,6 +23,13 @@ class UserNotificationsController extends Controller
     {
         return auth()->user()->unreadNotifications;
     }
+
+    public function messageNotifications(){
+        return auth()->user()->notifications;
+     
+    }
+    
+
 
     /**
      * Mark a specific notification as read.

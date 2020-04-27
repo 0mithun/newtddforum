@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Chat;
 use App\Events\MessegeSentEvent;
+use App\Notifications\NewMessageNotification;
 use App\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -118,17 +119,22 @@ class ChatController extends Controller
         if($request->ajax()){
             $friend_message = $request->friend_message ? 1 : 0;
 
+            $authUser = auth()->user();
             
             $message = Chat::create([
-                'from'      =>  auth()->user()->id,
+                'from'      =>  $authUser->id,
                 'to'        =>  $request->friend,
                 'message'   =>  $request->message,
                 'friend_message'    => $friend_message
             ]);
 
+            $friend = User::where('id', $request->friend)->first();
+
             
+            $friend->notify(new NewMessageNotification($authUser, $message));
             
             broadcast(new MessegeSentEvent($message));
+
 
             return response()->json($message);
         }
