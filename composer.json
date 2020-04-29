@@ -21,7 +21,8 @@
         "pusher/pusher-php-server": "~3.0",
         "stevebauman/purify": "^3.0.1",
         "tamayo/laravel-scout-elastic": "^5.0",
-        "torann/geoip": "^1.1"
+        "torann/geoip": "^1.1",
+        "laravel-notification-channels/facebook-poster":"^2.0"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('head')
+<meta property="og:image" content="{{ $thread->threadImagePath }}"/>
+
+   
+
     <link rel="stylesheet" href="/css/vendor/jquery.atwho.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     
@@ -23,6 +27,9 @@
             border-radius: 10px;
             width: 7240px;
             height:474px;
+        }
+        .container .row {
+            margin-top: 0px;
         }
     </style>
     

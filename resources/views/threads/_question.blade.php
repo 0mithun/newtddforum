@@ -126,7 +126,8 @@
 
 
     <div class="panel-body" >
-        <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px" width="250" /></a>
+        <img src="{{ $thread->threadImagePath() }}" alt="">
+        {{-- <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px" width="250" /></a> --}}
 
         {{-- <a href="{{ $thread->threadImagePath() }}" data-lightbox="{{ $thread->threadImagePath() }}" data-title="My caption">Image #1</a> --}}
 
@@ -151,7 +152,7 @@
 
     <div class="panel-footer">
 
-        <div class="row">
+        <div class="row" >
             <!-- <div class="col-md-2 source-button">
                 @if($thread->source)
                     <button class="btn btn-primary btn-xs" @click="showSource = true" v-if="!showSource">View Source</button> 
@@ -192,7 +193,7 @@
 
         
         <!-- Report Thread -->
-        <div v-if="report" class="row">
+        <div v-if="report" class="row" >
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="report_reason" class="control-label">Reason for report the thread:</label>
@@ -208,7 +209,7 @@
 
 
 
-        <div class="row">
+        <div class="row" >
             <div class=" col-md-12"  v-if="authorize('owns', thread)">
                 <button class="btn btn-xs" @click="startEdit">Edit</button>
             </div>
