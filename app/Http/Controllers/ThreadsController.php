@@ -10,6 +10,8 @@ use App\Trending;
 use http\Env\Request;
 use App\Rules\Recaptcha;
 use App\Filters\ThreadFilters;
+use App\Notifications\ThreadPostFacebook;
+
 use function GuzzleHttp\Promise\all;
 use App\Notifications\ThreadWasReported;
 
@@ -155,12 +157,14 @@ class ThreadsController extends Controller
             $thread->tags()->sync($new_tags);
         }
 
-
+        $thread->notify(new ThreadPostFacebook);
         
 
         if (request()->wantsJson()) {
             return response($thread, 201);
         }
+
+
 
         return redirect($thread->path())
             ->with('flash', 'Your thread has been published!');
