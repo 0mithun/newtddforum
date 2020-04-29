@@ -67,7 +67,7 @@ class ThreadsController extends Controller
     public function store(Recaptcha $recaptcha)
     {
        
-
+        $authUser = auth()->user();
 
         if(request()->hasFile('image_path')){
             $rule = 'image|max:2048';
@@ -104,7 +104,7 @@ class ThreadsController extends Controller
         $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
 
         $thread = Thread::create([
-            'user_id' => auth()->id(),
+            'user_id' => $authUser->id,
             'channel_id' => request('channel_id'),
             'title' => request('title'),
             'body' => request('body'),
@@ -156,8 +156,10 @@ class ThreadsController extends Controller
             }
             $thread->tags()->sync($new_tags);
         }
-
-        $thread->notify(new ThreadPostFacebook);
+        if($authUser->userprivacy->thread_create_share_facebook ==1){
+            $thread->notify(new ThreadPostFacebook);
+        }
+        
         
 
         if (request()->wantsJson()) {
