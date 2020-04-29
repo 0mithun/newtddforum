@@ -126,8 +126,8 @@
 
 
     <div class="panel-body" >
-        <img src="{{ $thread->threadImagePath() }}" alt="">
-        {{-- <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px" width="250" /></a> --}}
+        
+        <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px" width="250" /></a>
 
         {{-- <a href="{{ $thread->threadImagePath() }}" data-lightbox="{{ $thread->threadImagePath() }}" data-title="My caption">Image #1</a> --}}
 
