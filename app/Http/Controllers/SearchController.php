@@ -45,7 +45,12 @@ class SearchController extends Controller
         //return request('sort_by');
 
          if (request()->expectsJson()) {
-            $threads = Thread::search(request('query'))->paginate(10);
+             if(request('query')==''){
+                $threads = Thread::all();
+             }else{
+                $threads = Thread::search(request('query'))->paginate(10);
+             }
+            
 
            // $threads  = $threads->sortByDesc('visits');
 

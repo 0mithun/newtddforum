@@ -3,9 +3,28 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use ScoutElastic\Searchable;
 
 class Tags extends Model
-{
+{   
+    use Searchable;
+
+    protected $indexConfigurator = ThreadsIndexConfigurator::class;
+
+    protected $mapping = [
+        'properties' => [
+            'id' => [
+                'type' => 'integer',
+                'index' => 'not_analyzed'
+            ],
+            'name' => [
+                'type' => 'string',
+                'analyzer' => 'english'
+            ],
+            
+        ]
+    ];
+
     protected $fillable = [
             'name'
     ];
@@ -19,5 +38,11 @@ class Tags extends Model
 
     public function getNameAttribute($name){
         return ucfirst($name);
+    }
+
+    public function toSearchableArray(){
+        return [
+            'name'  =>  $this->name
+        ];
     }
 }

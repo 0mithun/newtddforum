@@ -7,13 +7,39 @@ use App\Filters\ThreadFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Scout\Searchable;
+use ScoutElastic\Searchable;
+
 
 use DB;
 
 class Thread extends Model
 {
     use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
+
+    protected $indexConfigurator = ThreadsIndexConfigurator::class;
+
+    protected $searchRules = [
+        ThreadSearchRule::class
+    ];
+
+    protected $mapping = [
+        'properties' => [
+            'id' => [
+                'type' => 'integer',
+                'index' => 'not_analyzed'
+            ],
+            'title' => [
+                'type' => 'string',
+                'analyzer' => 'english',
+              
+            ],
+            'body' => [
+                'type' => 'string',
+                'analyzer' => 'english'
+            ],
+            
+        ]
+    ];
 
     // use Searchable;
     /**
@@ -268,12 +294,23 @@ class Thread extends Model
     //  */
     public function toSearchableArray()
     {
+        $tags = $this->tags;
+        $tagsList = [];
+        $tagName = '';
+        if($tags->count()){
+            foreach($tags as $tag){
+                array_push($tagsList, $tag->name);
+            }
+
+            $tagName = join(' ', $tagsList);
+        }
         $searchable = [
             'title' => $this->title,
             'body'  => $this->body,
-            'tags'  => $this->tags
+            'tags'  => $tagName
         ];
-        return $this->toArray($searchable) + ['path' => $this->path()];
+        return $searchable;
+        //return $this->toArray($searchable) + ['path' => $this->path()];
     }
 
 
