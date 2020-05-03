@@ -224,25 +224,6 @@
 
             });
 
-            //User Online
-
-            // Echo.join(`liveUser`)
-            // .here((users) => {
-            //     //this.onlineUsers = users;
-            //     this.$store.dispatch('onlineUsers', users)
-            // })
-            // .joining((user) => {
-            //     this.onlineUsers.push(user)
-            // })
-            // .leaving((user) => {
-            //     let onlineUsers = _.remove(this.onlineUsers, (n)=>{
-            //         return n.id != user.id
-            //     })
-            //     this.onlineUsers = onlineUsers;
-            // });
-
-
-
 
         },
         methods:{
@@ -260,7 +241,6 @@
                         message:message.id
                     }).then(res=>{
                         
-                        // this.selectUser(res.data.from, true);
                         this.last_seen = moment(res.data.seen_at, 'YYYY-MM-DD HH:mm:ss').fromNow()
                     })
                 }
@@ -284,8 +264,7 @@
                     this.messageStatus(friend, true)
                 }
                 
-                this.message = '';                
-                // this.scrollToBottom();
+                this.message = '';
                 
             },
             messageStatus(friend, show = false){
