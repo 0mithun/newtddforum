@@ -44,7 +44,7 @@
 
 @section('content')
     <thread-view :thread="{{ $thread }}" inline-template>
-        <div class="container">
+        <div class="container" style="margin-top:55px">
             <div class="row">
                 <div class="col-md-8" v-cloak>
                     @include ('threads._question')

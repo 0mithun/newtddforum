@@ -35,65 +35,20 @@
                             {{-- <a href="{{ route('threadsbyuser', $thread->creator->username)  }}">{{ $thread->creator->name }}</a> --}}
 
                             <a href="{{ route('profile', $thread->creator->username)  }}">{{ $thread->creator->name }}</a>
+                            <user-online :user="{{ json_encode($thread->creator) }}"></user-online>
 
                             <small> Posted: {{ $thread->created_at->diffForHumans()  }}</small>
                             
                         </h4>
                     </div>
                     <div class="col-md-3 " style="padding:0">
-                        @if (request()->has('by'))  
-                       
-
-                        
-
-
-                        {{-- <button class="btn btn-default btn-sm"> Add Friend</button> --}}
-
-                            {{-- @if (auth()->check())                            
-                                <form action="{{ route('friendrequest.sent') }}" method="post">
-                                    @csrf 
-                                    
-                                    <input type="hidden" name="recipient" value="{{ $thread->creator->id }}">
-
-                                    <input type="submit" value="Add Friend" class="btn btn-primary btn-sm pull-right">
-                                </form>
-                            @endif --}}
-
-
-                            <!-- <button class="btn btn-primary btn-sm pull-right">Add Friend</button> -->
+                        @if (request()->has('by'))
                         @endif
                     </div>                   
 
                 </div>
             </div>
         </div>
-
-
-{{--        <div class="panel-heading">--}}
-{{--            <div class="level">--}}
-{{--                <div class="flex">--}}
-{{--                    <h4>--}}
-{{--                        <a href="{{ $thread->path() }}">--}}
-{{--                            @if (auth()->check() && $thread->hasUpdatesFor(auth()->user()))--}}
-{{--                                <strong>--}}
-{{--                                    {{ $thread->title }}--}}
-{{--                                </strong>--}}
-{{--                            @else--}}
-{{--                                {{ $thread->title }}--}}
-{{--                            @endif--}}
-{{--                        </a>--}}
-{{--                    </h4>--}}
-
-{{--                    <h5>--}}
-{{--                        Posted By: <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>--}}
-{{--                    </h5>--}}
-{{--                </div>--}}
-
-{{--                <a href="{{ $thread->path() }}">--}}
-{{--                    {{ $thread->replies_count }} {{ str_plural('reply', $thread->replies_count) }}--}}
-{{--                </a>--}}
-{{--            </div>--}}
-{{--        </div>--}}
 
         <div class="panel-body">
             
