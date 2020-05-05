@@ -8,7 +8,7 @@
 					<a class="Like__link js-hover" style="visibility:hidden">Like <kbd>hover me!!</kbd>
 					</a>
 					<div class="Emojis" v-if="visibleEmoticion">
-						<div class="Emoji Emoji--like" @click="toggleLike(1, false)">
+						<div class="Emoji Emoji--like" @click="toggleLike(1, false)"  @mouseout="showLikeTypeUser = false">
 							<div class="icon icon--like"></div>
 						</div>
 						<div class="Emoji Emoji--love" @click="toggleLike(2,false)">
@@ -183,9 +183,12 @@ import TwitterShare from './TwitterShare.vue'
               }
             },
             getThreadAllLikeType(){
-              axios.post('/thread/' + this.thread.id + '/all-like-type').then((res)=>{
+              if(this.signedIn){
+                axios.post('/thread/' + this.thread.id + '/all-like-type').then((res)=>{
                    this.allLikeTypes = res.data;
                 });
+              }
+              
             },
             getUserLikeType(){
               if(this.isLiked){

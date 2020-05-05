@@ -165,7 +165,9 @@
                         <span> <a href="{{ strtolower(route('tags.threads.list', $tag->name))  }}">{{ $tag->name  }}</a> </span>
                     @endforeach
                 @endif
-                
+                <div class=" col-md-12"  v-if="authorize('owns', thread)" style="margin-top:5px">
+                    <button class="btn btn-xs" @click="startEdit">Edit</button>
+                </div>
             </div>
             <div class="col-md-3" style="padding: 0px;padding-right:5px">                
                 <div class="btn-group btn-group-xs pull-right" role="group" v-if="signedIn">
@@ -209,7 +211,7 @@
 
 
 
-        <div class="row" >
+        {{-- <div class="row" >
             <div class=" col-md-12"  v-if="authorize('owns', thread)">
                 <button class="btn btn-xs" @click="startEdit">Edit</button>
             </div>
@@ -233,9 +235,10 @@
             </div> -->
 
             <!-- Change like/dislike posistion to top -->
+        </div> --}}
 
 
-        </div>
+
     </div>
 </div>
 
