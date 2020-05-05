@@ -31,6 +31,13 @@
         .container .row {
             margin-top: 0px;
         }
+        .thread-buttons{
+            padding: 5px 15px 5px 5px;
+            background-color: #f5f5f5;
+            border-top: 1px solid #d3e0e9;
+            border-bottom-right-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
     </style>
     
 @endsection

@@ -338,6 +338,10 @@ class Thread extends Model
         return $this->belongsToMany(Tags::class,'thread_tag','thread_id','tag_id');
     }
 
+    public function emojis(){
+        return $this->belongsToMany(User::class,'thread_emoji','thread_id','user_id');
+    }
+
 
     public function getExcerptAttribute(){
 //        return substr(strip_tags($this->body),80);

@@ -150,7 +150,7 @@
     
 
 
-    <div class="panel-footer">
+    <div class="panel-footer thread-buttons">
 
         <div class="row" >
             <!-- <div class="col-md-2 source-button">

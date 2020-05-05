@@ -13,8 +13,9 @@ trait Likeable
     }
 
 
-    public function like()
+    public function like($type)
     {
+        $user = auth()->user();
         $attributes = [
             'user_id' => auth()->id(),
             'up' => 1
@@ -22,6 +23,11 @@ trait Likeable
 
         if (!$this->likes()->where($attributes)->exists()) {
             $this->increment('like_count');
+
+            
+            $this->emojis()->detach($user->id);
+            $this->emojis()->attach($user->id, ['emoji_type'=> (int) $type]);
+
             return $this->likes()->create($attributes);
 
         }
@@ -37,6 +43,7 @@ trait Likeable
 
         if (!$this->likes()->where($attributes)->exists()) {
             $this->increment('dislike_count');
+            $this->emojis()->detach(auth()->id());
             return $this->likes()->create($attributes);
         }
 
@@ -50,7 +57,7 @@ trait Likeable
             'user_id' => auth()->id(),
             //'up' => 1
         ];
-
+        $this->emojis()->detach(auth()->id());
         $this->likes()->where($attributes)->delete();
     }
 
@@ -85,6 +92,10 @@ trait Likeable
         return $this->likes()->where('down',1)->count();
     }
 
-
+    public function changeEmoji($type){
+        $user = auth()->user();
+        $this->emojis()->detach($user->id);
+        $this->emojis()->attach($user->id, ['emoji_type'=> (int) $type]);
+    }
 
 }

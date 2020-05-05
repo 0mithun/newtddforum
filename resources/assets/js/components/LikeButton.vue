@@ -8,22 +8,22 @@
 					<a class="Like__link js-hover" style="visibility:hidden">Like <kbd>hover me!!</kbd>
 					</a>
 					<div class="Emojis" v-if="visibleEmoticion">
-						<div class="Emoji Emoji--like">
+						<div class="Emoji Emoji--like" @click="toggleLike(1, false)">
 							<div class="icon icon--like"></div>
 						</div>
-						<div class="Emoji Emoji--love">
+						<div class="Emoji Emoji--love" @click="toggleLike(2,false)">
 							<div class="icon icon--heart"></div>
 						</div>
-						<div class="Emoji Emoji--haha">
+						<div class="Emoji Emoji--haha" @click="toggleLike(3, false)">
 							<div class="icon icon--haha"></div>
 						</div>
-						<div class="Emoji Emoji--wow">
+						<div class="Emoji Emoji--wow" @click="toggleLike(4, false)">
 							<div class="icon icon--wow"></div>
 						</div>
-						<div class="Emoji Emoji--sad">
+						<div class="Emoji Emoji--sad" @click="toggleLike(5, false)">
 							<div class="icon icon--sad"></div>
 						</div>
-						<div class="Emoji Emoji--angry">
+						<div class="Emoji Emoji--angry" @click="toggleLike(6, false)">
 							<div class="icon icon--angry"></div>
 						</div>
 					</div>
@@ -32,7 +32,7 @@
 
         </div>
 
-        <button class="btn btn-xs btn-default ml-a  like-emoji-icon " @click="toggleLike" @mouseenter="showEmoticion">
+        <button class="btn btn-xs btn-default ml-a  like-emoji-icon " @click="toggleLike(1, true)" @mouseenter="showEmoticion">
             <span class="glyphicon glyphicon-thumbs-up like-icon" :class="likeClass">&nbsp;{{ likesCount }}</span>
         </button>
         <button class="btn btn-xs btn-default ml-a  " @click="toggleDislike"  >
@@ -42,29 +42,38 @@
         
        <favorite-thread :thread="thread"></favorite-thread>
 
-	   <div style="background:red"  class="small-emoticion-icons">
+	   <div style="background:red"  class="small-emoticion-icons" :class="{'small-emoticion-icons-left-margin':!isLiked}">
 			<div class="like-type-users" v-if="showLikeTypeUser">
-				Mithun Halder
-				Sumon Saker
-				Mithun Halder
-				Sumon Saker Halar Po Hala
-			</div>
-			<button class="emoji-like-counts emoji-like-small" @mouseenter="likeTypeUserHandle('like')" @mouseleave="showLikeTypeUser = false">
+        <span v-for="(user, index) in likeTypeUsers" :key="index">{{user}} <br /> </span>
 
-				<!-- <span>100</span> -->
+        <span v-if="loadingUser">loading...</span>
+			</div>
+
+			<button class="emoji-like-counts" :class="emojiClass" style="margin-top:5px;padding-bottom:3px;" >
+			</button>
+
+
+
+
+      <button class="emoji-like-counts " :class="smallEmojiClass(likeType)"  @mouseenter="likeTypeUserHandle(likeType)" @mouseout="showLikeTypeUser = false" v-for=" (likeType, index) in allLikeTypes" :key="index">
+			</button>
+
+
+
+      <!-- <button class="emoji-like-counts emoji-like-small" @mouseenter="likeTypeUserHandle('like')" @mouseleave="showLikeTypeUser = false" >
 			</button>
 
 			<button class="emoji-like-counts emoji-love-small" @mouseenter="likeTypeUserHandle('love')" @mouseleave="showLikeTypeUser = false">
 			</button>
 
-			<button class="emoji-like-counts emoji-haha-small" @mouseenter="likeTypeUserHandle('haha')" @mouseleave="showLikeTypeUser = false">
+			<button class="emoji-like-counts emoji-haha-small" @mouseenter="likeTypeUserHandle('haha')" @mouseleave="showLikeTypeUser = false" >
 			</button>
-			<button class="emoji-like-counts emoji-wow-small" @mouseenter="likeTypeUserHandle('wow')" @mouseleave="showLikeTypeUser = false">
+			<button class="emoji-like-counts emoji-wow-small" @mouseenter="likeTypeUserHandle('wow')" @mouseleave="showLikeTypeUser = false" >
 			</button>
-			<button class="emoji-like-counts emoji-sad-small" @mouseenter="likeTypeUserHandle('sad')" @mouseleave="showLikeTypeUser = false">
+			<button class="emoji-like-counts emoji-sad-small" @mouseenter="likeTypeUserHandle('sad')" @mouseleave="showLikeTypeUser = false" >
 			</button>
-			<button class="emoji-like-counts emoji-angry-small" @mouseenter="likeTypeUserHandle('angry')" @mouseleave="showLikeTypeUser = false">
-			</button>
+			<button class="emoji-like-counts emoji-angry-small" @mouseenter="likeTypeUserHandle('angry')" @mouseleave="showLikeTypeUser = false"  >
+			</button> -->
 
 		</div>
         
@@ -93,14 +102,20 @@ import TwitterShare from './TwitterShare.vue'
                 // likesCount:this.thread.likesCount,
                 likesCount:0,
                 // dislikesCount:this.thread.dislikesCount
-				dislikesCount:0,
-				visibleEmoticion:false,
-				showLikeTypeUser:false
+              dislikesCount:0,
+              visibleEmoticion:false,
+              showLikeTypeUser:false,
+              emojiType: null,
+              allLikeTypes:null,
+              likeTypeUsers:null,
+              loadingUser:false
             }
         },
         created(){
             this.getLikesCount();
             this.getDislikeCount();
+            this.getUserLikeType();
+            this.getThreadAllLikeType();
         },
 
         computed: {
@@ -117,22 +132,90 @@ import TwitterShare from './TwitterShare.vue'
              signedIn(){
                 return  (window.App.user)? true : false;
             },
+
+            
+
+            emojiClass(){
+              if(this.emojiType==1){
+                return 'emoji-like-big'
+              }
+              else if(this.emojiType==2){
+                return 'emoji-love-big'
+              }
+              else if(this.emojiType==3){
+                return 'emoji-haha-big'
+              }
+              else if(this.emojiType==4){
+                return 'emoji-wow-big'
+              }
+              else if(this.emojiType==5){
+                return 'emoji-sad-big'
+              }
+              else if(this.emojiType==6){
+                return 'emoji-angry-big'
+              }else{
+                return null;
+              }
+            }
         },
 
         methods: {
-			likeTypeUserHandle(type){
-				console.log('like type user handle', type)
-				this.showLikeTypeUser = true;
-			},
-			showEmoticion(){
-				this.visibleEmoticion = true;
-				setTimeout(()=> {
-					this.visibleEmoticion = false;
-				}, 5000);
-				
-				
-				
-			},
+            smallEmojiClass(type){
+              if(type==1){
+                return 'emoji-like-small'
+              }
+              else if(type==2){
+                return 'emoji-love-small'
+              }
+              else if(type==3){
+                return 'emoji-haha-small'
+              }
+              else if(type==4){
+                return 'emoji-wow-small'
+              }
+              else if(type==5){
+                return 'emoji-sad-small'
+              }
+              else if(type==6){
+                return 'emoji-angry-small'
+              }else{
+                return null;
+              }
+            },
+            getThreadAllLikeType(){
+              axios.post('/thread/' + this.thread.id + '/all-like-type').then((res)=>{
+                   this.allLikeTypes = res.data;
+                });
+            },
+            getUserLikeType(){
+              if(this.isLiked){
+                axios.post('/thread/' + this.thread.id + '/like-type').then((res)=>{
+                   this.emojiType = res.data.emoji_type;
+                });
+              }
+            },
+            likeTypeUserHandle(type){
+
+              this.likeTypeUsers = null;
+              this.loadingUser = true;
+              
+              axios.get('/thread/' + this.thread.id + '/like-type-users/'+type).then((res)=>{
+                this.loadingUser = false;
+                this.likeTypeUsers = res.data;
+                this.showLikeTypeUser = true;
+              });
+
+              
+            },
+            showEmoticion(){
+              this.visibleEmoticion = true;
+              setTimeout(()=> {
+                this.visibleEmoticion = false;
+              }, 5000);
+              
+              
+              
+            },
             getLikesCount(){
                 // this.likesCount = 1;
 
@@ -167,25 +250,38 @@ import TwitterShare from './TwitterShare.vue'
 
                     }
                     this.isLiked=false;
+                     this.emojiType = null
+                     this.getThreadAllLikeType();
                 });
             },
-            toggleLike(){
+            toggleLike(type, isDelete){
                 if(!this.signedIn){
                     return false;
                 }
 
-                axios.post('/thread/' + this.thread.id + '/likes').then((res)=>{
+                axios.post('/thread/' + this.thread.id + '/likes',{
+                  type:type,
+                  isDelete: isDelete
+                }).then((res)=>{
                     if(this.isLiked){
-                        this.isLiked = false;
-                        this.likesCount--;
+                        if(isDelete){
+                          this.isLiked = false;
+                          this.likesCount--;
+                           this.emojiType = null;
+                        }else{
+                          this.emojiType = type;
+                        }
+                        
                     }else{
                         this.isLiked = true;
                         if(this.isDesliked){
                             this.dislikesCount--;
                         }
                         this.likesCount++
+                        this.emojiType = type;
                     }
                     this.isDesliked=false;
+                    this.getThreadAllLikeType();
                 });
             },
 
@@ -590,9 +686,9 @@ kbd {
 	.like-type-users{
 		color: white;
 		position: absolute;
-		width: 170px;
+		width: 120px;
 		top: -40;
-		left: -10px;
+		left: 40px;
 		margin-top: -84px;
 		background-color: rgb(0, 0, 0,.9);
 		padding: 0px 0px;
@@ -601,7 +697,7 @@ kbd {
 		font-size: 12px;
 		z-index: 99999999999;
 		padding: 5px;
-		bottom: -25px;
+		bottom: 0px;
 	}
 
 	.small-emoticion-icons{
@@ -622,4 +718,96 @@ kbd {
 	 .like-emoji-icon{
 		 border-radius: 3px 0px 0px 3px!important;
 	 }
+
+
+  .like-buttons {
+    position: relative;
+    width: 106px;
+}
+
+
+   .small-emoticion-icons {
+      background: red;
+      position: relative;
+      z-index: 88888;
+      top: 0px;
+      height: 0px;
+      left: 24px;
+      display: block;
+      width: 161px;
+      display: inline-block;
+  }
+
+  button.emoji-like-counts.emoji-like-big, button.emoji-like-counts.emoji-love-big,button.emoji-like-counts.emoji-haha-big,button.emoji-like-counts.emoji-wow-big,button.emoji-like-counts.emoji-sad-big,button.emoji-like-counts.emoji-angry-big{
+      border: none;
+      background: none;
+      border: none;
+      background: none;
+      
+      background-size: 22px;
+      height: 22px;
+      width:22px;
+      margin-left: 0;
+      margin-top: 5px
+  }
+
+  button.emoji-like-counts.emoji-like-big{
+		background-image: url(/images/png/facebook_iconset.png);
+		background-repeat: no-repeat;
+		background-position: 0px -42px;
+	}
+
+  button.emoji-like-counts.emoji-like-big{
+		background-image: url(/images/png/facebook_iconset.png);
+		background-repeat: no-repeat;
+		background-position: 0px -66px;
+	}
+
+   button.emoji-like-counts.emoji-love-big{
+		background-image: url(/images/png/facebook_iconset.png);
+		background-repeat: no-repeat;
+		background-position: 0px -88px;
+	}
+
+   button.emoji-like-counts.emoji-haha-big{
+		background-image: url(/images/png/facebook_iconset.png);
+		background-repeat: no-repeat;
+		background-position: 0px -44px;
+	}
+
+
+   button.emoji-like-counts.emoji-wow-big{
+		background-image: url(/images/png/facebook_iconset.png);
+		background-repeat: no-repeat;
+		background-position: 0px -176px;
+	}
+
+  button.emoji-like-counts.emoji-sad-big{
+		background-image: url(/images/png/facebook_iconset.png);
+		background-repeat: no-repeat;
+		background-position: 0px -110px;
+	}
+
+  button.emoji-like-counts.emoji-angry-big{
+		background-image: url(/images/png/facebook_iconset.png);
+		background-repeat: no-repeat;
+		background-position: 0px 0px;
+	}
+
+  button.emoji-like-counts {
+    margin-right: 8px;
+}
+
+.small-emoticion-icons{
+  left:0px
+}
+
+.small-emoticion-icons-left-margin{
+  left:-20px;
+}
+
+.emoji-icons-div{
+    margin-top: -10px;
+}
+
 </style>

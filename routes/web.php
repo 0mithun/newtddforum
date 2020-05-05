@@ -134,6 +134,10 @@ Route::middleware(['auth'])->group(function (){
 
     Route::post('/thread/{thread}/likes', 'LikeController@like');
     Route::post('/thread/{thread}/dislikes', 'LikeController@dislike');
+
+    Route::post('/thread/{thread}/like-type', 'LikeController@getUserLikeType');
+    Route::post('/thread/{thread}/all-like-type', 'LikeController@getAllLikeType');
+    Route::get('/thread/{thread}/like-type-users/{type}', 'LikeController@getLikeTypeUsers');
  
 
 /**
