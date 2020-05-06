@@ -18,10 +18,14 @@ class SearchController extends Controller
         //     return Thread::search(request('q'))->paginate(10);
         // }
         
-        
+        $query = request('query');
        
-        $threads = Thread::search(request('query'))->paginate(10);
-
+        $threads = Thread::search($query)
+        //->get()
+        ->paginate(10);
+            ;
+        // dd($threads);
+        
         //$threads->sortByDesc('visits');
 
         //$threads = collect($threads);

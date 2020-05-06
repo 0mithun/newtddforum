@@ -105,8 +105,9 @@ export default {
         }
     },
     created(){
+        this.allThreads = this.threads.data;
         //this.allThreads = this.threads.data;
-         this.allThreads =_.orderBy(this.threads.data, [this.sort_by],'desc');
+        //  this.allThreads =_.orderBy(this.threads.data, [this.sort_by],'desc');
     },
     computed:{
         
@@ -146,6 +147,9 @@ export default {
             return  moment(created_at, 'YYYY-MM-DD HH:mm:ss').fromNow() + '...';
         },
         searchThreads(){
+            if(this.q == ''){
+                return;
+            }
             axios.get('/search-vue?query='+this.q+'&sort_by='+this.sort_by).then(res=>{
                 //console.log(res.data.data);
 
@@ -163,8 +167,6 @@ export default {
                     next_page_url: res.data.next_page_url,
                 }
                 eventBus.$emit('pageChange',pageUrl );
-
-
             })
         },
         fetch(page) {

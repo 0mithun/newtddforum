@@ -14,7 +14,7 @@ class ThreadFilters extends Filters
      *
      * @var array
      */
-    protected $filters = ['by', 'popular', 'unanswered','viewed','recents','liked','rated','bestofweek','favorites','video'];
+    protected $filters = ['by', 'popular', 'unanswered','viewed','recents','liked','rated','bestofweek','favorites','video','emoji'];
 
     /**
      * Filter the query by a given username.
@@ -157,5 +157,40 @@ class ThreadFilters extends Filters
         ->where('body','LIKE','%https://www.youtube.com/watch?v=%')
         ->orderBy('created_at','desc');
         
+    }
+
+    public function emoji($type){
+        $emoji_type = '';
+
+        switch($type){
+            case 'like':
+                $emoji_type = 1;
+                break;
+            case 'love':
+                $emoji_type = 2;
+                break;
+            case 'haha':
+                $emoji_type = 3;
+                break;
+            case 'wow':
+                $emoji_type = 4;
+                break;
+            case 'sad':
+                $emoji_type = 5;
+                break;
+            case 'angry':
+                $emoji_type = 6;
+                break;
+        }
+        $threadsId = DB::table('thread_emoji')
+            ->groupBy('thread_id')
+            ->where('emoji_type', $emoji_type)
+            ->pluck('thread_id')
+            ->all() 
+            ;
+        return $this->builder
+                ->whereIn('id', $threadsId)       
+                ->get(); 
+    
     }
 }

@@ -85,5 +85,39 @@ li.list-group-item{
     margin-bottom: 5px;
 }
 
+.navigation-emoji{
+    border: none;
+    background: none;
+    background-size: 28px;
+    background-image: url(/images/png/facebook_iconset.png);
+    background-repeat: no-repeat;
+    background-position: 0px -0px;
+    margin-left: 10px;
+    padding-left: 35px!important;
+}
 
+.navigation-emoji.navigation-emoji-like{
+    background-position: 0px -84px;
+}
+.navigation-emoji.navigation-emoji-love{
+    background-position: 0px -112px;
+}
+.navigation-emoji.navigation-emoji-haha{
+    background-position: 0px -56px;
+}
+.navigation-emoji.navigation-emoji-wow{
+    background-position: 0px -224px;
+}
+.navigation-emoji.navigation-emoji-sad{
+    background-position: 0px -140px;
+}
+.navigation-emoji.navigation-emoji-angry{
+    background-position: 0px 0px;
+}
+.navigation-emoji-icon{
+    margin-bottom: 5px;;
+}
 
+.navigation-emoji-icon:last-child{
+    margin-bottom: 0px;;
+}

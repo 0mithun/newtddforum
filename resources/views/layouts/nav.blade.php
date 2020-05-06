@@ -70,6 +70,25 @@
                 <li>
                     <a href="{{ route('map.show') }}">Map</a>
                 </li>
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Emoticions <span class="caret"></span></a>
+
+                    <ul class="dropdown-menu">
+
+                    <!-- Need to change -->
+                        <li class="navigation-emoji-icon"><a href="/threads?emoji=like" class="navigation-emoji navigation-emoji-like">Like</a></li>
+                        <li class="navigation-emoji-icon"><a href="/threads?emoji=love" class="navigation-emoji navigation-emoji-love">Love</a></li>
+                        <li class="navigation-emoji-icon"><a href="/threads?emoji=haha" class="navigation-emoji navigation-emoji-haha">Haha</a></li>
+                        <li class="navigation-emoji-icon"><a href="/threads?emoji=wow" class="navigation-emoji navigation-emoji-wow">Wow</a></li>
+                        <li class="navigation-emoji-icon"><a href="/threads?emoji=sad" class="navigation-emoji navigation-emoji-sad">Sad</a></li>
+                        <li class="navigation-emoji-icon"><a href="/threads?emoji=angry" class="navigation-emoji navigation-emoji-angry">Angry</a></li>
+                    </ul>
+                </li>
+
+
+
 
                 @if(Auth::check())
                 <li>
