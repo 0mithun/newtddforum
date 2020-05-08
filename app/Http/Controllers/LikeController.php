@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Favorite;
 use App\Likes;
 use App\Thread;
+use App\User;
 use Illuminate\Http\Request;
 
 use DB;
@@ -19,9 +20,6 @@ class LikeController extends Controller
         $type = request('type');
         $isDelete = request('isDelete');
        
-       
-
-
         if($thread->isLiked()){
             if($isDelete){
                 $thread->decrement('like_count');
@@ -77,12 +75,14 @@ class LikeController extends Controller
      }
 
      public function getUserLikeType($thread){
-        //$thread = Thread::findOrFail($thread);
+         
         $emoji = DB::table('thread_emoji')
             ->where('user_id', auth()->id())
             ->where('thread_id', $thread)
+            ->pluck('emoji_id')
             ->first()
             ;
+        
         if($emoji){
             return response()->json($emoji);
         }
@@ -90,24 +90,29 @@ class LikeController extends Controller
      }
 
      public function getAllLikeType($thread){
-          //$thread = Thread::findOrFail($thread);
         $likes = DB::table('thread_emoji')
-            ->groupBy('emoji_type')
+            ->groupBy('emoji_id')
             ->where('thread_id', $thread)
-            ->orderBy('emoji_type','ASC')
-            ->pluck('emoji_type')
+            ->orderBy('emoji_id','ASC')
+            ->pluck('emoji_id')
         ;
         return response()->json($likes);
      }
 
      public function getLikeTypeUsers($thread,$type){
         if(\Request::ajax()){
-            $thread = Thread::findOrFail($thread);
-            $users = $thread->emojis()->where('emoji_type', $type)->get()->pluck('name')
-            ;
-            //->pluck('name');
-    
-            return response()->json($users);
+
+            $usersId = DB::table('thread_emoji')
+                // ->groupBy('user_id')
+                ->where('thread_id', $thread)
+                ->where('emoji_id', $type)
+                ->get()
+                ->pluck('user_id')
+        ;
+
+        $users = User::whereIn('id', $usersId)->get()->pluck('name');
+        
+        return response()->json($users);
         }
 
         return abort(404);

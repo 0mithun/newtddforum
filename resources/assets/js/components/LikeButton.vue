@@ -193,7 +193,7 @@ import TwitterShare from './TwitterShare.vue'
             getUserLikeType(){
               if(this.isLiked){
                 axios.post('/thread/' + this.thread.id + '/like-type').then((res)=>{
-                   this.emojiType = res.data.emoji_type;
+                   this.emojiType = res.data;
                 });
               }
             },
@@ -811,6 +811,9 @@ kbd {
 
 .emoji-icons-div{
     margin-top: -10px;
+}
+.emoji-like-counts:last-child{
+  margin-right: 0px;
 }
 
 </style>

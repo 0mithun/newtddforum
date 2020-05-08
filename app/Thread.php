@@ -339,7 +339,7 @@ class Thread extends Model
     }
 
     public function emojis(){
-        return $this->belongsToMany(User::class,'thread_emoji','thread_id','user_id');
+        return $this->belongsToMany(Emoji::class,'thread_emoji','thread_id','emoji_id');
     }
 
 
