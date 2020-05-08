@@ -52,7 +52,7 @@ class SearchController extends Controller
              if(request('query')==''){
                 $threads = Thread::all();
              }else{
-                $threads = Thread::search(request('query'))->paginate(10);
+                $threads = Thread::search(request('query'))->with('emojis')->paginate(10);
              }
             
 

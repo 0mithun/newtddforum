@@ -134,8 +134,28 @@ export default {
             paginateThreads:this.threads,
             q:this.query,
             sort_by:'created_at',
-            filterOpen:true,
+            filterOpen:false,
             filter_emojis:[]
+        }
+    },
+    watch:{
+        filter_emojis(filter){
+            if(filter.length>0){
+                let newThreads = _.filter(this.threads.data, (thread)=>{
+                    return thread.emojis.length>0;
+                })
+                let filterThreads = _.filter(newThreads, (thread)=>{
+                    for(let i = 0; i<thread.emojis.length; i++){
+                        if(_.includes(filter, thread.emojis[i].name)){
+                            return true;
+                        }
+                    }
+                })
+                this.allThreads = filterThreads;
+            }else{
+                this.allThreads = this.threads.data;
+            }
+            
         }
     },
     created(){
@@ -173,7 +193,9 @@ export default {
 
 
             }else{
-                this.allThreads =_.orderBy(this.threads.data, [this.sort_by],'desc');
+                let threads = _.orderBy(this.threads.data, [this.sort_by],'desc');
+                this.allThreads = threads;
+                this.threads.data = threads; 
             }
              
         },
@@ -189,6 +211,7 @@ export default {
 
                
                 this.allThreads = res.data.data;
+                this.threads.data = res.data.data
                 //_.sortBy(this.allThreads, 'visits');
                 //let threads = _.sortBy(res.data.data, ['visits'],'desc');
 
