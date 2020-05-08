@@ -20,7 +20,7 @@ class SearchController extends Controller
         
         $query = request('query');
        
-        $threads = Thread::search($query)
+        $threads = Thread::search($query)->with('emojis')
         //->get()
         ->paginate(10);
             ;

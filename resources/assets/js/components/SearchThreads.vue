@@ -10,33 +10,65 @@
             <div class="panel">
                 <div class="panel-body">
 
-                        <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="input-group">
+                                    <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
+                                    <input type="text" name="query" id="q" v-model="q" class="form-control" placeholder="Search Threads" @keyup="searchThreads">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" @click="searchThread">Search!</button>
+                                    </span>
+                                </div><!-- /input-group -->
 
-                            
+                            </div>
 
-                            <div class="input-group">
-                                <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
-                                <input type="text" name="query" id="q" v-model="q" class="form-control" placeholder="Search Threads" @keyup="searchThreads">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" @click="searchThread">Search!</button>
-                                </span>
-                            </div><!-- /input-group -->
+                            <div class="col-md-2">
+                                <select name="" id="" class="form-control" v-model="sort_by" @change="sortBy">
+                                    
+                                    <option value="created_at">Most Recent</option>
+                                    <!-- <option value="top_rated">Top Rated</option> -->
+                                    <option value="like_count">Most Liked</option>
+                                    <option value="favorite_count">Most Favorited</option>
+                                    <option value="visits">Most Visits</option>
 
+                                    <!-- <option value="most_favorited">Most Favorited</option> -->
+                                    <!-- <option value="top_rated">Top Rated</option> -->
+
+                                </select>
+                            </div>
                         </div>
-
-                        <div class="col-md-2">
-                            <select name="" id="" class="form-control" v-model="sort_by" @change="sortBy">
-                                
-                                <option value="created_at">Most Recent</option>
-                                <!-- <option value="top_rated">Top Rated</option> -->
-                                <option value="like_count">Most Liked</option>
-                                <option value="favorite_count">Most Favorited</option>
-                                <option value="visits">Most Visits</option>
-
-                                <!-- <option value="most_favorited">Most Favorited</option> -->
-                                <!-- <option value="top_rated">Top Rated</option> -->
-
-                            </select>
+                        <div class="row filter-row">
+                            <div class="col-md-12">
+                                <button class="btn btn-default mt-10" @click.prevent="filterOpen = !filterOpen">Filter 
+                                    <!-- <span class="glyphicon  glyphicon-chevron-up "></span> -->
+                                    <span class="glyphicon " :class="filterOpen ? 'glyphicon-chevron-up': 'glyphicon-chevron-down'" ></span>
+                                </button>
+                            </div>
+                            <div class="col-md-12" v-if="filterOpen">
+                                <div class="col-md-2">
+                                    <h3 class="filter-title">Emoji</h3>
+                                </div>
+                                <div class="col-md-10">
+                                        <div class="col-md-2 filter-emoji filter-emoji-like">
+                                            <input type="checkbox" name="like" id="" value="like" class="filter-emoji-checkbox" v-model="filter_emojis"> Like
+                                        </div>
+                                        <div class="col-md-2 filter-emoji filter-emoji-love">
+                                            <input type="checkbox" name="like" id="" value="love" class="filter-emoji-checkbox" v-model="filter_emojis"> Love
+                                        </div>
+                                        <div class="col-md-2 filter-emoji filter-emoji-haha">
+                                            <input type="checkbox" name="like" id="" value="haha" class="filter-emoji-checkbox" v-model="filter_emojis"> Haha
+                                        </div>
+                                        <div class="col-md-2 filter-emoji filter-emoji-wow">
+                                            <input type="checkbox" name="like" id="" value="wow" class="filter-emoji-checkbox" v-model="filter_emojis"> Wow
+                                        </div>
+                                        <div class="col-md-2 filter-emoji filter-emoji-sad">
+                                            <input type="checkbox" name="like" id="" value="sad" class="filter-emoji-checkbox" v-model="filter_emojis"> Sad
+                                        </div>
+                                        <div class="col-md-2 filter-emoji filter-emoji-angry">
+                                            <input type="checkbox" name="like" id="" value="angry" class="filter-emoji-checkbox" v-model="filter_emojis"> Angry
+                                        </div>
+                                </div>
+                            </div>
                         </div>
 
                 </div>
@@ -101,7 +133,9 @@ export default {
             allThreads:[],
             paginateThreads:this.threads,
             q:this.query,
-            sort_by:'created_at'
+            sort_by:'created_at',
+            filterOpen:true,
+            filter_emojis:[]
         }
     },
     created(){
@@ -187,6 +221,52 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+    .panel-body .row {
+        margin-top: 0px;
+    }
 
+    .row.filter-row{
+        margin-top: 10px;
+    }
+    .filter-title{
+        margin-top:10px;
+    }
+    .filter-emoji{
+        background-size: 28px;
+        background-image: url(/images/png/facebook_iconset.png);
+        background-repeat: no-repeat;
+        margin-left: 0px;
+        /* padding-top: 10px; */
+        padding-left: 35px!important;
+        margin-top: 10px;
+        height: 28px;
+        /* display: inline-block; */
+        /* margin-right: 10px; */
+        padding-right: 0px!important;
+
+        font-weight: bold;
+    }
+    .filter-emoji-like{
+        background-position: 0px -84px;
+    }
+     .filter-emoji-love{
+        background-position: 0px -112px;
+    }
+     .filter-emoji-haha{
+        background-position: 0px -56px;
+    }
+     .filter-emoji-wow{
+        background-position: 0px -224px;
+    }
+     .filter-emoji-sad{
+        background-position: 0px -140px;
+    }
+     .filter-emoji-angry{
+        background-position: 0px 0px;
+    }
+
+    .filter-emoji-checkbox{
+        margin-top: 10px;
+    }
 </style>
