@@ -2,6 +2,7 @@
 
 namespace App\Filters;
 
+use App\Emoji;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -182,12 +183,14 @@ class ThreadFilters extends Filters
                 $emoji_type = 6;
                 break;
         }
+
         $threadsId = DB::table('thread_emoji')
             ->groupBy('thread_id')
-            ->where('emoji_type', $emoji_type)
+            ->where('emoji_id', $emoji_type)
             ->pluck('thread_id')
             ->all() 
             ;
+        
         return $this->builder
                 ->whereIn('id', $threadsId)       
                 ->get(); 
