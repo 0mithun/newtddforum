@@ -151,3 +151,9 @@ $factory->define(App\Admin::class, function ($faker) {
         'timezone'      =>  'America/New_York'
     ];
 });
+
+$factory->define(App\Emoji::class, function($faker){
+    return [
+        'name'  =>  $faker->name
+    ];
+});
