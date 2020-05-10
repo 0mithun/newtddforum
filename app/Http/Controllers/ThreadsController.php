@@ -9,11 +9,12 @@ use App\Channel;
 use App\Trending;
 use http\Env\Request;
 use App\Rules\Recaptcha;
+use Spatie\Geocoder\Geocoder;
 use App\Filters\ThreadFilters;
-use App\Notifications\ThreadPostFacebook;
 
 use function GuzzleHttp\Promise\all;
 use App\Notifications\ThreadWasReported;
+use App\Notifications\ThreadPostFacebook;
 
 class ThreadsController extends Controller
 {
@@ -97,13 +98,12 @@ class ThreadsController extends Controller
             'g-recaptcha-response.required' =>  'Please solve the captcha',
             'image_path.max'    =>  'Thread image may not be greater than 2048 kilobytes'
         ]);
-
         
         
-        // $user = auth()->user();
         $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
 
-        $thread = Thread::create([
+        
+        $data = [
             'user_id' => $authUser->id,
             'channel_id' => request('channel_id'),
             'title' => request('title'),
@@ -114,12 +114,17 @@ class ThreadsController extends Controller
             'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
             'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
-            'lat'   => $arr_ip['lat'],
-            'lng'   => $arr_ip['lon'],
+        ];
 
-        ]);
+        if(request('location') !=null){
+            $location = $this->getGeocodeing(request('location'));
+            if($location['accuracy'] != 'result_not_found'){
+                $data['lat'] = $location['lat'];
+                $data['lng'] = $location['lng'];
+            }
+        }
 
-
+        $thread = Thread::create($data);
 
         $file_path = '';
         if (request()->hasFile('image_path')) {
@@ -155,7 +160,6 @@ class ThreadsController extends Controller
         if(request()->has('tags')){
             $tags = \request('tags');          
             
-
             foreach($tags as $tag){
 
                 $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
@@ -170,6 +174,8 @@ class ThreadsController extends Controller
             }
             $thread->tags()->sync($new_tags);
         }
+
+        //Send user Notification
         if($authUser->userprivacy->thread_create_share_facebook ==1){
             $thread->notify(new ThreadPostFacebook);
         }
@@ -205,8 +211,6 @@ class ThreadsController extends Controller
         $thread->increment('visits');
         
 
-
-
         $allTags = Tags::all();
         
         $threadTags = $thread->tags;
@@ -214,10 +218,7 @@ class ThreadsController extends Controller
         $relatedThreads = [];
 
         foreach($threadTags as $tag){
-            //$threads = $tag->threads;
             $threads = $tag->threads()->without(['creator', 'likes','tags'])->get();
-            // dd($threads);
-            //books = App\Book::without('author')->get();
 
             if($threads->count()){              
 
@@ -253,8 +254,6 @@ class ThreadsController extends Controller
      */
     public function update($channel, Thread $thread)
     {
-        //return request('tags');
-
        $this->authorize('update', $thread);
 
        if(request()->hasFile('image_path')){
@@ -284,7 +283,6 @@ class ThreadsController extends Controller
 
         $data = [
             'title' => request('title'),
-            //'channel_id'    => request('channel_id'),
             'body' => request('body'),
             'word_count'   => str_word_count(request('body')),
             'location'  =>  request('location') == null ? "" : request('location'),
@@ -293,9 +291,17 @@ class ThreadsController extends Controller
             // 'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
             'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
-            'lat'   => $arr_ip['lat'],
-            'lng'   => $arr_ip['lon'],
         ];
+
+        if(request('location') !=null){
+            $location = $this->getGeocodeing(request('location'));
+            if($location['accuracy'] != 'result_not_found'){
+                $data['lat'] = $location['lat'];
+                $data['lng'] = $location['lng'];
+            }
+        }
+
+
 
         if(\request('channel_id') != 'undefined'){
             $data[ 'channel_id']    = request('channel_id');
@@ -329,12 +335,7 @@ class ThreadsController extends Controller
         if(\request()->has('tags')){
             $tags = json_decode(\request('tags'));
 
-
-            //$tags = \request('tags');
-
-            
-            
-
+           
             foreach($tags as $tag){
 
                 $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
@@ -347,8 +348,6 @@ class ThreadsController extends Controller
                     $new_tags[]= $tag->id;
                 }
             }
-
-
 
             $thread->tags()->sync($new_tags);
         }
@@ -416,6 +415,18 @@ class ThreadsController extends Controller
 
         
 
+    }
+
+    public function getGeocodeing($address){
+        $client = new \GuzzleHttp\Client();
+
+        $geocoder = new Geocoder($client);
+
+        $geocoder->setApiKey(config('geocoder.key'));
+
+        $geocoder->setCountry(config('geocoder.country', 'US'));
+
+        return $geocoder->getCoordinatesForAddress($address);
     }
 
 }

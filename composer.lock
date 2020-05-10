@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "717ae905f214212bfce957bfe5ffb60e",
+    "content-hash": "2872b62bbaf9bfcbd2ccd112210d5fb4",
     "packages": [
         {
             "name": "babenkoivan/scout-elasticsearch-driver",
@@ -3683,6 +3683,72 @@
                 "uri"
             ],
             "time": "2018-01-15T21:00:49+00:00"
+        },
+        {
+            "name": "spatie/geocoder",
+            "version": "3.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/geocoder.git",
+                "reference": "c349fd10442b5614bee4904663b251a411a17a37"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/geocoder/zipball/c349fd10442b5614bee4904663b251a411a17a37",
+                "reference": "c349fd10442b5614bee4904663b251a411a17a37",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.5",
+                "illuminate/support": "^6.0|^7.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0|^5.0",
+                "phpunit/phpunit": "^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\Geocoder\\GeocoderServiceProvider"
+                    ],
+                    "aliases": {
+                        "Geocoder": "Spatie\\Geocoder\\Facades\\Geocoder"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Geocoder\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be"
+                }
+            ],
+            "description": "Geocoding addresses to coordinates",
+            "homepage": "https://github.com/spatie/geocoder",
+            "keywords": [
+                "coordinate",
+                "geocode",
+                "laravel",
+                "location",
+                "map"
+            ],
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                }
+            ],
+            "time": "2020-03-04T07:57:40+00:00"
         },
         {
             "name": "stevebauman/purify",
