@@ -237,7 +237,8 @@
                 $('#tags').select2({
                     placeholder: 'Select tags',
                     cache:true,
-                    tags:true
+                    tags:true,
+                    tokenSeparators: [',', ' ']
                 });
             });
         });

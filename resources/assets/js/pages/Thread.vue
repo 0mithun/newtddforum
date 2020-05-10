@@ -78,6 +78,17 @@
 
 
         methods: {
+            tagChange(){
+                let len = this.tags.length;
+                let lastIndex = this.tags[len-1];
+                
+                let separateItem = lastIndex.name.split(/[\s,]+/);
+
+                this.tags.pop()
+                for(let i = 0; i <separateItem.length; i++){
+                    this.tags.push({name:separateItem[i]});
+                }
+            }, 
             checkCreatorReported(){
                 //isCreatorReported
                 if(this.signedIn){

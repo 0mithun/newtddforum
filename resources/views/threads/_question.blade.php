@@ -137,7 +137,10 @@
         </div>   
         
         <div >
-            <a href="{{ $thread->source }}" target="_blank">{!! $thread->source !!}</a>
+            @if($thread->source !=null)
+                <a href="{{ $thread->source }}" target="_blank">{!! $thread->source !!}</a>
+            @endif
+            
         </div>
   
 
