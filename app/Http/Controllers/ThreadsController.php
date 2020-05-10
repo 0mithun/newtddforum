@@ -109,9 +109,9 @@ class ThreadsController extends Controller
             'title' => request('title'),
             'body' => request('body'),
             'word_count'   => str_word_count(request('body')),
-            'location'  =>  request('location'),
-            'source'  =>  request('source'),
-            'main_subject'  =>  request('main_subject'),
+            'location'  =>  request('location') == null ? '' : request('location'),
+            'source'  =>  request('source') == null ? '' : request('source'),
+            'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
             'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
             'lat'   => $arr_ip['lat'],
@@ -135,12 +135,26 @@ class ThreadsController extends Controller
 
         $thread = $thread->fresh();
 
+        $main_subject = \request('main_subject');
+        $new_tags = [];
+
+        if(\request()->has('main_subject') && \request('main_subject') !=null){
+            $tag  = Tags::where('name', ucfirst($main_subject))->first();
+            if($tag){
+                $thread->tags()->sync([$tag->id]);
+                $new_tags[] = $tag->id;
+            }else{
+                $tag = Tags::create(['name'=>ucfirst($main_subject)]);
+                $thread->tags()->sync([$tag->id]);
+                $new_tags[] = $tag->id;
+            }
+        }
+
+
+
         if(request()->has('tags')){
-        //$tags = \request('tags');
-
-            $tags = \request('tags');
-
-            $new_tags = [];
+            $tags = \request('tags');          
+            
 
             foreach($tags as $tag){
 
@@ -150,7 +164,7 @@ class ThreadsController extends Controller
                     $new_tags[] = $tag;
                 }
                 else{
-                    $tag = Tags::create(['name'=>$tag]);
+                    $tag = Tags::create(['name'=>ucfirst($tag)]);
                     $new_tags[]= $tag->id;
                 }
             }
@@ -273,10 +287,10 @@ class ThreadsController extends Controller
             //'channel_id'    => request('channel_id'),
             'body' => request('body'),
             'word_count'   => str_word_count(request('body')),
-            'location'  =>  request('location'),
-            'source'  =>  request('source'),
-            'main_subject'  =>  request('main_subject'),
-            'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
+            'location'  =>  request('location') == null ? "" : request('location'),
+            'source'  =>  request('source') == null ? "" : request('source'),
+            'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
+            // 'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
             'is_famous'  =>  request('is_famous',0),
             'allow_image'  =>  request('allow_image',0),
             'lat'   => $arr_ip['lat'],
@@ -297,6 +311,20 @@ class ThreadsController extends Controller
 
         $thread->update($data);
 
+        $main_subject = \request('main_subject');
+        $new_tags = [];
+        if(\request()->has('main_subject') && \request('main_subject') !=null){
+            $tag  = Tags::where('name', ucfirst($main_subject))->first();
+            if($tag){
+                $thread->tags()->sync([$tag->id]);
+                $new_tags[] = $tag->id;
+            }else{
+                $tag = Tags::create(['name'=>ucfirst($main_subject)]);
+                $thread->tags()->sync([$tag->id]);
+                $new_tags[] = $tag->id;
+            }
+        }
+
 
         if(\request()->has('tags')){
             $tags = json_decode(\request('tags'));
@@ -304,7 +332,8 @@ class ThreadsController extends Controller
 
             //$tags = \request('tags');
 
-            $new_tags = [];
+            
+            
 
             foreach($tags as $tag){
 

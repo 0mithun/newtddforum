@@ -80,14 +80,22 @@
         methods: {
             tagChange(){
                 let len = this.tags.length;
-                let lastIndex = this.tags[len-1];
-                
-                let separateItem = lastIndex.name.split(/[\s,]+/);
-
-                this.tags.pop()
-                for(let i = 0; i <separateItem.length; i++){
-                    this.tags.push({name:separateItem[i]});
+                if(len>0){
+                    let lastIndex = this.tags[len-1];
+                    
+                    let separateItem = lastIndex.name.split(/[\s,]+/);
+                    if(separateItem.length>0){
+                        this.tags.pop()
+                        for(let i = 0; i <separateItem.length; i++){
+                            if(separateItem[i].length>0){
+                                this.tags.push({name:separateItem[i]});
+                            }
+                            
+                        }
+                    }
                 }
+                
+                
             }, 
             checkCreatorReported(){
                 //isCreatorReported
