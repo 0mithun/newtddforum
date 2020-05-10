@@ -26,6 +26,10 @@
         ]) !!};
     </script>
 
+    <script>
+        window.MIX_GOOGLE_MAP_KEY ="AIzaSyCi8raV_JKtL4xUfmHIvHkxA07DBEr9WbA";
+    </script>
+
     <style>
         body { padding-bottom: 100px; }
         .level { display: flex; align-items: center; }
@@ -106,7 +110,7 @@
             top: 0;
             width: 350px;
         }
-        .container .row{
+        .top-margin{
             margin-top: 55px;
         }
     </style>
@@ -191,6 +195,8 @@
 @yield('scripts')
 
 @yield('footer_script')
+
+    
 
 </body>
 </html>

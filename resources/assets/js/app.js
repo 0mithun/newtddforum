@@ -100,7 +100,8 @@ Vue.component('user-online',UserOnline);
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyCi8raV_JKtL4xUfmHIvHkxA07DBEr9WbA',
+    // key:process.env.MIX_GOOGLE_MAP_KEY,
+    key:window.MIX_GOOGLE_MAP_KEY,
     libraries: 'places', // This is required if you use the Autocomplete plugin
   },
 })

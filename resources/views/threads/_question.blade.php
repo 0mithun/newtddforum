@@ -6,7 +6,7 @@
 
 
 {{-- Viewing the question. --}}
-<div class="panel panel-default" v-else>
+<div  class="panel panel-default" v-else>
     <div class="panel-heading">
         <div class="media">
             <div class="row">
@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div class="media-body">
+            <div class="media-body" >
                 <h4 class="media-heading thread-info" style="margin-top:0px">
                     Posted by: 
 
@@ -125,7 +125,7 @@
 
 
 
-    <div class="panel-body" >
+    <div class="panel-body" style="min-height: 345px;">
         
         <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px" width="250" /></a>
 
@@ -159,7 +159,7 @@
                 @if($thread->tags->count())
                     Tagged: 
                     @foreach($thread->tags as $tag)
-                        <span> <a href="{{ strtolower(route('tags.threads.list', $tag->name))  }}">{{ $tag->name  }}</a> </span>
+                        <span> <a href="{{ strtolower(route('tags.threads.list', $tag->name))  }}">{{ strtolower($tag->name)  }}</a> </span>
                     @endforeach
                 @endif
                 <div class=" col-md-12"  v-if="authorize('owns', thread)" style="margin-top:5px">
@@ -240,7 +240,5 @@
 </div>
 
 
-@if($thread->lat != null && $thread->lng != null )
-    <simple-map :thread="{{ $thread }}"></simple-map>
-@endif
+
 

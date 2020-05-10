@@ -4,6 +4,16 @@
     :zoom="zoom"
     map-type-id="terrain"
     style="width: 100%; height: 35vh"
+    :options="{
+        zoomControl: true,
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: true,
+        disableDefaultUi: false,
+        draggable:false
+    }"
     >
        <GmapMarker
                 :key="index"

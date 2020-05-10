@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
+        <div class="row top-margin">
         <search-threads :threads="{{ json_encode($threads )}}" query="{{ $query }}"></search-threads>
 
             {{-- <div class="col-md-8">

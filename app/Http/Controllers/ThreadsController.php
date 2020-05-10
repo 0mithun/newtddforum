@@ -144,12 +144,12 @@ class ThreadsController extends Controller
         $new_tags = [];
 
         if(\request()->has('main_subject') && \request('main_subject') !=null){
-            $tag  = Tags::where('name', ucfirst($main_subject))->first();
+            $tag  = Tags::where('name', strtolower($main_subject))->first();
             if($tag){
                 $thread->tags()->sync([$tag->id]);
                 $new_tags[] = $tag->id;
             }else{
-                $tag = Tags::create(['name'=>ucfirst($main_subject)]);
+                $tag = Tags::create(['name'=>strtolower($main_subject)]);
                 $thread->tags()->sync([$tag->id]);
                 $new_tags[] = $tag->id;
             }
@@ -168,7 +168,7 @@ class ThreadsController extends Controller
                     $new_tags[] = $tag;
                 }
                 else{
-                    $tag = Tags::create(['name'=>ucfirst($tag)]);
+                    $tag = Tags::create(['name'=>strtolower($tag)]);
                     $new_tags[]= $tag->id;
                 }
             }
@@ -261,8 +261,7 @@ class ThreadsController extends Controller
         }else{
             $rule = '';
         }
-
-
+        
         if(request('source') ==null){
             $source = '';
         }else{            
@@ -301,12 +300,9 @@ class ThreadsController extends Controller
             }
         }
 
-
-
         if(\request('channel_id') != 'undefined'){
             $data[ 'channel_id']    = request('channel_id');
         }
-
 
         if (request()->hasFile('image_path')) {
             $extension = request()->file('image_path')->getClientOriginalExtension();
@@ -320,12 +316,12 @@ class ThreadsController extends Controller
         $main_subject = \request('main_subject');
         $new_tags = [];
         if(\request()->has('main_subject') && \request('main_subject') !=null){
-            $tag  = Tags::where('name', ucfirst($main_subject))->first();
+            $tag  = Tags::where('name', strtolower($main_subject))->first();
             if($tag){
                 $thread->tags()->sync([$tag->id]);
                 $new_tags[] = $tag->id;
             }else{
-                $tag = Tags::create(['name'=>ucfirst($main_subject)]);
+                $tag = Tags::create(['name'=>strtolower($main_subject)]);
                 $thread->tags()->sync([$tag->id]);
                 $new_tags[] = $tag->id;
             }
@@ -333,22 +329,18 @@ class ThreadsController extends Controller
 
 
         if(\request()->has('tags')){
-            $tags = json_decode(\request('tags'));
-
-           
+            $tags = json_decode(\request('tags'));           
             foreach($tags as $tag){
-
                 $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
                 
                 if($bool){
                     $new_tags[] = $tag;
                 }
                 else{
-                    $tag = Tags::create(['name'=>$tag]);
+                    $tag = Tags::create(['name'=>strtolower($tag)]);
                     $new_tags[]= $tag->id;
                 }
             }
-
             $thread->tags()->sync($new_tags);
         }
 

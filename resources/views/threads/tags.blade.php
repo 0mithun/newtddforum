@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
+        <div class="row top-margin">
             <div class="col-md-8">
                 <div id="chartdiv"></div>
             </div>

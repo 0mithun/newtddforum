@@ -44,12 +44,11 @@
 
 @section('content')
     <thread-view :thread="{{ $thread }}" inline-template>
-        <div class="container" style="margin-top:55px">
-            <div class="row">
+        <div class="container">
+            <div class="row top-margin">
                 <div class="col-md-8" v-cloak>
                     @include ('threads._question')
-                    <hr>
-                    <replies @added="repliesCount++" @removed="repliesCount--"></replies>
+                   
                 </div>
 
                 <div class="col-md-4">
@@ -64,7 +63,7 @@
                                     <input type="text" placeholder="Search for something..." name="query" class="form-control">
                                 </div>
     
-                                <div class="form-group">
+                                <div class="form-group" style="margin-bottom: 0px;">
                                     <button class="btn btn-default" type="submit">Search</button>
                                 </div>
                             </form>
@@ -101,7 +100,7 @@
 
                            
 
-                            <h4>Related Threads</h4>
+                            <h4 style="padding: 0px">Related Threads</h4>
 
                             <ul  class="list-group">
                                 @forelse ($relatedThreads as $relatedThread)
@@ -118,6 +117,15 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                @if($thread->lat != null && $thread->lng != null )
+                    <div class="col-md-12">
+                        <simple-map :thread="{{ $thread }}"></simple-map>
+                    </div>
+                    
+                @endif
+            </div>
+            <replies @added="repliesCount++" @removed="repliesCount--"></replies>
         </div>
     </thread-view>
 @endsection
