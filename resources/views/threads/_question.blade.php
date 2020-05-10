@@ -143,14 +143,8 @@
             
         </div>
   
-
-
-
     </div>
 
-
-
-    
 
 
     <div class="panel-footer thread-buttons">
@@ -245,5 +239,8 @@
     </div>
 </div>
 
-<simple-map :thread="{{ $thread }}"></simple-map>
+
+@if($thread->lat != null && $thread->lng != null )
+    <simple-map :thread="{{ $thread }}"></simple-map>
+@endif
 
