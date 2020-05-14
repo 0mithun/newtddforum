@@ -25,6 +25,8 @@ class Trending
     {
         Redis::zincrby($this->cacheKey(), 1, json_encode([
             'title' => $thread->title,
+            'user_id' => $thread->user_id,
+            'age_restriction' => $thread->age_restriction,
             'path' => $thread->path()
         ]));
     }

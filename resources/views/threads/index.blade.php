@@ -36,12 +36,33 @@
 
                         <div class="panel-body">
                             <ul class="list-group">
+                                @php
+                                    $auth_user = null;
+                                    if(auth()->check()){
+                                        $auth_user = auth()->user();
+                                    }
+                                @endphp
+
                                 @foreach ($trending as $thread)
-                                    <li class="list-group-item">
-                                        <a href="{{ url($thread->path) }}">
-                                            {{ $thread->title }}
-                                        </a>
-                                    </li>
+                                    @if($thread->age_restriction == 0)
+                                        <li class="list-group-item">
+                                            <a href="{{ url($thread->path) }}">
+                                                {{ $thread->title }}
+                                            </a>
+                                        </li>
+                                    @elseif($auth_user !=null && $auth_user->userprivacy->show_restricted ==1)
+                                        <li class="list-group-item">
+                                            <a href="{{ url($thread->path) }}">
+                                                {{ $thread->title }}
+                                            </a>
+                                        </li>
+                                    @elseif($auth_user !=null && $thread->user_id == $auth_user->id)
+                                        <li class="list-group-item">
+                                            <a href="{{ url($thread->path) }}">
+                                                {{ $thread->title }}
+                                            </a>
+                                        </li>
+                                    @endif
                                 @endforeach
                             </ul>
                         </div>
