@@ -35,8 +35,21 @@ class UserlocationController extends Controller
         // }else{
         // $results = Thread::all();
         // }
+        if(auth()->check()){
+            // $results = Thread::all();
+            $auth_user = auth()->user();
+            if($auth_user->userprivacy->show_restricted ==1){
+                $results = Thread::all();
+            }
+            else{
+                $results = Thread::where('age_restriction',0)->get();
+            }
+        }else{
+            $results = Thread::where('age_restriction',0)->get();
+        }
+       
 
-        $results = Thread::all();
+
         $markers = collect($results)->map(function ($item, $key) {
             return [
                 'position' => ['lat' => $item->lat, 'lng' => $item->lng],
