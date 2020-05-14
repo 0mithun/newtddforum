@@ -1,14 +1,14 @@
 <template>   
-    <div class="">
+    <div class="info-content" @click="openThread">
         <div class="">
             {{ this.infoContent.title }}
         </div>
         <div class="" style="margin-top:10px">
             <img :src="infoContent.creator.profileAvatarPath" alt="" width="25"> Posted By: {{ this.infoContent.creator.name }}   
-            
+<!--             
             <span>
                 <a :href="infoContent.path" class="btn btn-default btn-xs pull-right" target="_blank" style="margin-left:5px">View</a>
-            </span>         
+            </span>          -->
         </div>
     </div>  
 </template>
@@ -26,6 +26,12 @@ export default {
         focusMarker(index){
             eventBus.$emit('markers_result_clicked', index);
         },
+        openThread(){
+            window.open(
+            this.infoContent.path,
+            '_blank' // <- This is what makes it open in a new window.
+            );
+        }
     },
     created(){
         eventBus.$on('markers_fetched', data=>{
@@ -35,6 +41,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .info-content{
+        cursor: pointer;
+    }
 </style>
