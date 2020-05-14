@@ -42,6 +42,7 @@ class UserSettingsController extends Controller
 
         $data['anyone_share_my_thread_facebook'] = request('anyone_share_my_thread_facebook',0);
         $data['anyone_share_my_thread_twitter'] = request('anyone_share_my_thread_twitter',0);
+        $data['show_restricted'] = request('show_restricted',0);
 
         
         auth()->user()->userprivacy()->update($data);

@@ -61,6 +61,16 @@
             <span class="help-block">Who is this story about</span>
         </div>
 
+        <div class="form-group ">
+            <label for="age_restriction">Age Restriction</label>
+            <select name="age_restriction" id="age_restriction" class="form-control " v-model="form.age_restriction">
+                <option value="0">Ok for everyone</option>
+                <option value="13">PG-13</option>
+                <option value="18">R-rated (18+)</option>
+            </select>
+        </div>
+
+
         <div class="form-group">
             <label for="main_subject" class="control-label">Category:</label>
             <div class="checkbox">

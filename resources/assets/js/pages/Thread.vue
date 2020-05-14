@@ -24,6 +24,7 @@
                 is_famous:this.thread.is_famous,
                 main_subject: this.thread.main_subject,
                 image_path:null,
+                age_restriction:this.thread.age_restriction,
                 allow_image: this.thread.allow_image,
                 selectFile: null,
                 formData: new FormData,
@@ -251,6 +252,7 @@
                 this.formData.append('channel_id', this.form.channel_id);
                 this.formData.append('body', this.form.body);
                 this.formData.append('is_famous', this.form.is_famous);
+                this.formData.append('age_restriction', this.form.age_restriction);
                 this.formData.append('source', this.form.source);
                 this.formData.append('location', this.form.location);
                 this.formData.append('main_subject', this.form.main_subject);
@@ -271,6 +273,7 @@
                     this.body = this.form.body;
                     this.is_famous = this.form.source;
                     this.location = this.form.location;
+                    this.age_restriction = this.form.age_restriction;
                     this.is_famous = this.form.is_famous;
                     this.main_subject = this.form.main_subject;
                     this.source = this.form.source;
@@ -291,6 +294,7 @@
                     channel_id: this.thread.channel_id,
                     location: this.thread.location,
                     source: this.thread.source,
+                    age_restriction: this.thread.age_restriction,
                     is_famous: this.thread.is_famous,
                     main_subject: this.thread.main_subject,
                     image_path: null,

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\{Thread, Trending};
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SearchController extends Controller
 {
@@ -17,60 +20,87 @@ class SearchController extends Controller
         // if (request()->expectsJson()) {
         //     return Thread::search(request('q'))->paginate(10);
         // }
-        
         $query = request('query');
+
        
-        $threads = Thread::search($query)->with('emojis')
-        //->get()
-        ->paginate(10);
+
+        if(auth()->check()){
+            $user = auth()->user();
+            $restriction = $user->userprivacy->show_restricted;
+            if($restriction ==1){
+                $threads = Thread::search($query)
+                    ->with('emojis')
+                    ->paginate(10)
+                    ;
+            }else{
+                $threads = Thread::search($query)
+                    ->with('emojis')
+                    ;
+                $collect = collect($threads->get());     
+
+                $threads = $collect->where('age_restriction', 0);
+                $threads = $this->paginate($threads, 10);
+            } 
+        }else{
+            $threads = Thread::search($query)
+            ->with('emojis')
             ;
-        // dd($threads);
+            $collect = collect($threads->get());     
+
+            $threads = $collect->where('age_restriction', 0);
+            $threads = $this->paginate($threads, 10);
+        }
         
-        //$threads->sortByDesc('visits');
-
-        //$threads = collect($threads);
-
-        //dd($threads->sortByDesc('visits'));
-
-        $query = request('query');
-
-
+        
         return view('threads.search', [
             'trending' => $trending->get(),
             'threads' => $threads,
-            'query' => $query
+            'query' => $query,
         ]);
 
 
     }
 
     public function search(){
-        //return request('q');
-        //return request('sort_by');
 
          if (request()->expectsJson()) {
              if(request('query')==''){
                 $threads = Thread::all();
              }else{
-                $threads = Thread::search(request('query'))->with('emojis')->paginate(10);
+                 $query = request('query');
+                // $threads = Thread::search(request('query'))->with('emojis')->paginate(10);
+                if(auth()->check()){
+                    $user = auth()->user();
+                    $restriction = $user->userprivacy->show_restricted;
+                    if($restriction ==1){
+                        $threads = Thread::search($query)
+                            ->with('emojis')
+                            ->paginate(10)
+                            ;
+                    }else{
+                        $threads = Thread::search($query)
+                            ->with('emojis')
+                            ;
+                        $collect = collect($threads->get());     
+        
+                        $threads = $collect->where('age_restriction', 0);
+                        $threads = $this->paginate($threads, 10);
+                    } 
+                }else{
+                    $threads = Thread::search($query)
+                    ->with('emojis')
+                    ;
+                    $collect = collect($threads->get());     
+        
+                    $threads = $collect->where('age_restriction', 0);
+                    $threads = $this->paginate($threads, 10);
+                }
              }
             
 
            // $threads  = $threads->sortByDesc('visits');
 
             return $threads;
-
-            // if(request()->has('sort_by')){
-            //     $sort_by = request('sort_by');
-            //     $threads = collect($threads);
-            //     $threads->sortBy('like_count');
-
-            //     return $threads;
-            // }
-
-           
-
-            //return Thread::search(request('q'))->get();
         }
     }
 
@@ -78,5 +108,14 @@ class SearchController extends Controller
     //currently unused
     public function searchByTopRated(){
         return 'hello';
+    }
+
+    public function paginate($items, $perPage = 2, $page = null){
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, [
+        'path' => Paginator::resolveCurrentPath(),
+        'pageName' => 'page',
+        ]);
     }
 }

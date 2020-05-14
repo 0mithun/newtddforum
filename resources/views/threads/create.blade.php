@@ -122,6 +122,7 @@
                                 <span class="help-block">Who is this story about</span>
                             </div>
 
+
                             <div class="form-group">
                                 <label for="main_subject" class="control-label">Category:</label>
                                 <div class="checkbox">
@@ -129,6 +130,22 @@
                                     <span class="help-block">Check this box if the subject is Famous</span>
                                 </div>
                             </div>
+
+                            <div class="form-group {{ $errors->has('age_restriction') ? ' has-error' : '' }}">
+                                <label for="age_restriction">Age Restriction</label>
+                                <select name="age_restriction" id="age_restriction" class="form-control ">
+                                    <option value="0">Ok for everyone</option>
+                                    <option value="13">PG-13</option>
+                                    <option value="18">R-rated (18+)</option>
+                                </select>
+                                @if ($errors->has('age_restriction'))
+                                    <span class="help-block ">
+                                        <strong class="">{{ $errors->first('age_restriction') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+
+
 
                             <div class="form-group {{ $errors->has('image_path') ? ' has-error' : '' }}">
                                 <label for="main_subject" class="control-label"> Upload an image </label>

@@ -30,18 +30,16 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="panel">
-                                        <div class="panel-heading">
-
-                                            @if(session()->has('message'))
+                                        @if(session()->has('message'))
+                                            <div class="panel-heading">
                                                 <div class="row">
                                                     <div class="alert alert-success alert-dismissible" role="alert">
                                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                                         <strong>{{ session('message')  }}</strong>
                                                     </div>
                                                 </div>
-                                            @endif
-                                            <h4>My Threads</h4>
-                                        </div>
+                                            </div>
+                                        @endif 
                                         <div class="panel-body">
                                             <table class="table table-responsive table-hover table-bordered table-condensed">
                                                 <thead>

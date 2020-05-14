@@ -268,22 +268,34 @@ class ProfilesController extends Controller
 
         
 
-        $favorites = DB::table('favorites')
+        $favoritesId = DB::table('favorites')
                 ->where('user_id', $getUserInfo->id)
                 ->where('favorited_type','App\Thread')
                 ->get()
+                ->pluck('favorited_id')
+                ->all()
 
             ;
-
-        $profileUser = $getUserInfo;      
-
+        $auth_user = auth()->user();
 
 
-        // $friend = User::where('username', $user)
-        //             ->first();
+
+        // $favorites = Thread::whereIn('id', $favoritesId)->get();
+
+        if($auth_user->username == $user){
+            $favorites = Thread::whereIn('id', $favoritesId)->get();
+        }else{
+            if($auth_user->userprivacy->show_restricted == 1){
+                $favorites = Thread::whereIn('id', $favoritesId)->get();
+            }else{
+                $favorites = Thread::whereIn('id', $favoritesId)->where('age_restriction',0)->get();
+            }
+        }
 
 
-        $is_friend = auth()->user()->isFriendWith($getUserInfo);
+
+        $profileUser = $getUserInfo;   
+        $is_friend = $auth_user->isFriendWith($getUserInfo);
 
         return view('profiles.favorites', compact('favorites','profileUser', 'is_friend'));
     }
@@ -297,11 +309,27 @@ class ProfilesController extends Controller
                 
         $getUserInfo = User::with('userprivacy')->where('username', $user)->first();
         
+        
         if(!$this->checkFriend($getUserInfo,'see_my_threads')){
             return redirect('/');
         }
 
-        $threads =Thread::where('user_id', $getUserInfo->id)->get();
+
+        $auth_user =auth()->user();
+        if($auth_user->username == $user){
+            $threads =Thread::where('user_id', $getUserInfo->id)->get();
+        }else{
+            if($auth_user->userprivacy->show_restricted == 1){
+                $threads =Thread::where('user_id', $getUserInfo->id)->get();
+            }else{
+                $threads =Thread::where('user_id', $getUserInfo->id)->where('age_restriction',0)->get();
+            }
+        }
+
+        
+
+
+
         
         $profileUser = $getUserInfo;      
 

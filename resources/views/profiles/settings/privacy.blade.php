@@ -220,6 +220,31 @@
                                                                 </div>
 
                                                             </div>
+
+                                                            <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-3" >
+                                                                <h4>Restrictions:</h4>
+                                                            </div>
+                                                            <div class="col-md-9">
+
+                                                                
+
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" name="show_restricted" value="1"
+                                                                                @if($privacy->show_restricted ==1)
+                                                                                    checked
+                                                                                @endif
+                                                                            >
+                                                                            I confirm that I am 13/18 years old & wish to view PG-13/R-Rated content
+                                                                        </label>
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
                                                         </div>
 
                                                         

@@ -74,12 +74,16 @@
                 </div>
             </div>
 
-            <div class="panel" v-if="allThreads.length == 0">
+            <div class="panel" v-if="search ==false && allThreads.length == 0">
                     <h3 class="text-center">No Results Found</h3>
             </div>
 
+            <div class="panel" v-if="search">
+                    <h3 class="text-center">Search.....</h3>
+            </div>
 
-            <div class="panel" v-for="(thread, index) in allThreads" :key="index" style="margin-bottom:10px">
+
+            <div class="panel" v-for="(thread, index) in allThreads" :key="index" style="margin-bottom:10px" v-else>
                 <div class="panel-heading" style="padding-top:5px">
                     <h4 style="margin-top:5px">
                         <a :href="thread.path">
@@ -111,6 +115,7 @@
             </div>
 
 
+
             <SearchPagination :dataSet="threads" @changedSearch="fetch" :query="q"></SearchPagination>
             
         </div>
@@ -123,7 +128,7 @@
     import moment from 'moment';
 
 export default {
-    props:['threads','query'],
+    props:['threads','query','restriction'],
     components:{
         SearchPagination
     },
@@ -135,7 +140,8 @@ export default {
             q:this.query,
             sort_by:'created_at',
             filterOpen:false,
-            filter_emojis:[]
+            filter_emojis:[],
+            search: false
         }
     },
     watch:{
@@ -160,6 +166,17 @@ export default {
     },
     created(){
         this.allThreads = this.threads.data;
+
+        // let filtered = this.threads.data.filter((value)=>{
+        //         if(this.restriction ==1){
+        //             return ;
+        //         }else{
+        //             return value.age_restriction == 0;
+        //         }
+            
+        // })
+        // this.allThreads = filtered;
+
         //this.allThreads = this.threads.data;
         //  this.allThreads =_.orderBy(this.threads.data, [this.sort_by],'desc');
     },
@@ -206,24 +223,21 @@ export default {
             if(this.q == ''){
                 return;
             }
+            this.search = true;
             axios.get('/search-vue?query='+this.q+'&sort_by='+this.sort_by).then(res=>{
                 //console.log(res.data.data);
 
                
                 this.allThreads = res.data.data;
                 this.threads.data = res.data.data
-                //_.sortBy(this.allThreads, 'visits');
-                //let threads = _.sortBy(res.data.data, ['visits'],'desc');
-
-                //this.allThreads = threads;
-                 //console.log(this.allThreads);
-
 
                 let pageUrl = {
                     prev_page_url: res.data.prev_page_url,
                     next_page_url: res.data.next_page_url,
                 }
                 eventBus.$emit('pageChange',pageUrl );
+
+                this.search = false;
             })
         },
         fetch(page) {

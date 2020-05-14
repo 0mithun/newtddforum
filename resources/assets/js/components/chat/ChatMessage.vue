@@ -565,6 +565,6 @@
             font-size: 20px;
         }
         .chat-page{
-            margin-top: 50px;
+            margin-top: 55px;
         }
 </style>

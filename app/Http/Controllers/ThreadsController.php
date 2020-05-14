@@ -11,6 +11,8 @@ use http\Env\Request;
 use App\Rules\Recaptcha;
 use Spatie\Geocoder\Geocoder;
 use App\Filters\ThreadFilters;
+use Illuminate\Validation\Rule;
+
 
 use function GuzzleHttp\Promise\all;
 use App\Notifications\ThreadWasReported;
@@ -90,7 +92,8 @@ class ThreadsController extends Controller
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id',
              //'g-recaptcha-response' => ['required', $recaptcha],
-            'image_path'    => $rule
+            'image_path'    => $rule,
+            'age_restriction'  => 'numeric', Rule::in([0, 13, 18]),
 
         ],[
             'channel_id.required'    => 'The channel field is required.',
@@ -113,6 +116,7 @@ class ThreadsController extends Controller
             'source'  =>  request('source') == null ? '' : request('source'),
             'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
             'is_famous'  =>  request('is_famous',0),
+            'age_restriction'  =>  request('age_restriction',0),
             'allow_image'  =>  request('allow_image',0),
         ];
 
@@ -161,9 +165,7 @@ class ThreadsController extends Controller
             $tags = \request('tags');          
             
             foreach($tags as $tag){
-
                 $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
-                
                 if($bool){
                     $new_tags[] = $tag;
                 }
@@ -202,47 +204,63 @@ class ThreadsController extends Controller
      */
     public function show($channel, Thread $thread, Trending $trending)
     {
+        $auth_user = null;
+        $auth_user_privacy = null;
+
         if (auth()->check()) {
-            auth()->user()->read($thread);
+            $auth_user = auth()->user();
+            if($thread->age_restriction!=0 && $auth_user->userprivacy->show_restricted==0 && $thread->user_id != $auth_user->id){
+                abort(404);
+            }         
+            
+            $auth_user->read($thread);
+        }else{
+            if($thread->age_restriction !=0){
+                return abort(404);
+            }
         }
 
         $trending->push($thread);
 
-        $thread->increment('visits');
-        
+        $thread->increment('visits');        
 
         $allTags = Tags::all();
         
-        $threadTags = $thread->tags;
 
+        //Related Threads
+        $threadTags = $thread->tags->pluck('id')->all();       
         $relatedThreads = [];
-
-        foreach($threadTags as $tag){
-            $threads = $tag->threads()->without(['creator', 'likes','tags'])->get();
-
-            if($threads->count()){              
-
-                foreach($threads as $relatedThread){
-                    if($thread->id != $relatedThread->id){
-                        $relatedThreads[] = $relatedThread;
-                    }
-                    
+        $relatedThreads = Thread::whereHas('tags', function ($q) use ($threadTags) {
+            $q->whereIn('id',$threadTags)
+            ; // or email <> ''
+        })
+        ->whereNotIn('id',[$thread->id])
+        ->get();
+        $relatedThreads = collect($relatedThreads);
+        if(auth()->check()){
+            $relatedThreads = $relatedThreads->filter(function($value, $key) use($auth_user){
+                if($value->age_restriction == 0){
+                    return true;
+                }else if($auth_user->userprivacy->show_restricted==1){
+                    return true;
+                }else if($value->user_id == $auth_user->id){
+                    return true;
                 }
-            }
-  
-        }
-
-
-        $collection = collect($relatedThreads);
-        if($collection->count() > 4){
-            $random =$collection->random(5);
+            });
         }else{
-            $random =  $collection->random($collection->count());
+            $relatedThreads = $relatedThreads->filter(function($value, $key){
+                if($value->age_restriction == 0){
+                    return true;
+                }
+            });
+        }
+        if($relatedThreads->count()>4){
+            $relatedThreads = $relatedThreads->random(5);
         }
         
-        $relatedThreads= $random;
+        
 
-
+       
         return view('threads.show', compact('thread','allTags','relatedThreads'));
     }
 
@@ -274,7 +292,8 @@ class ThreadsController extends Controller
             'title' => 'required',
             'channel_id' => 'required',
             'body' => 'required',
-            'image_path'    => $rule
+            'image_path'    => $rule,
+            'age_restriction'  => 'numeric', Rule::in([0, 13, 18]),
 
         ]);
 
@@ -289,6 +308,7 @@ class ThreadsController extends Controller
             'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
             // 'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
             'is_famous'  =>  request('is_famous',0),
+            'age_restriction'  =>  request('age_restriction',0),
             'allow_image'  =>  request('allow_image',0),
         ];
 
@@ -329,16 +349,22 @@ class ThreadsController extends Controller
 
 
         if(\request()->has('tags')){
-            $tags = json_decode(\request('tags'));           
+            $tags = json_decode(\request('tags')); 
             foreach($tags as $tag){
                 $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
                 
                 if($bool){
                     $new_tags[] = $tag;
                 }
-                else{
-                    $tag = Tags::create(['name'=>strtolower($tag)]);
-                    $new_tags[]= $tag->id;
+                else{                    
+                    $tag  = Tags::where('name', strtolower($tag))->first();
+                    if($tag){
+                        $new_tags[] = $tag->id;
+                    }else{
+                        $tag = Tags::create(['name'=>strtolower($tag)]);
+                        $new_tags[]= $tag->id;
+
+                    }
                 }
             }
             $thread->tags()->sync($new_tags);

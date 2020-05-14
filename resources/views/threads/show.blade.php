@@ -28,9 +28,7 @@
             width: 7240px;
             height:474px;
         }
-        .container .row {
-            margin-top: 0px;
-        }
+        
         .thread-buttons{
             padding: 5px 15px 5px 5px;
             background-color: #f5f5f5;

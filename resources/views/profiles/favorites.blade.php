@@ -51,10 +51,7 @@
                                                 </thead>
                                                 <tbody>
 
-                                                @forelse($favorites as $favorite)
-                                                    @php
-                                                        $thread = \App\Thread::where('id', $favorite->favorited_id)->first();
-                                                    @endphp
+                                                @forelse($favorites as $thread)
                                                     <tr>
                                                         <td>{{ $thread->title }}</td>
                                                         <td>
