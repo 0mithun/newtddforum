@@ -12,15 +12,6 @@
 |
 */
 
-use App\Notifications\ThreadPostTwitter;
-use NotificationChannels\Twitter\TwitterChannel;
-
-Route::get('/test', function(){
-    Notification::route(TwitterChannel::class, '')
-    ->notify(new ThreadPostTwitter);
-    
-});
-
 
 Route::get('/map/show','UserlocationController@show')->name('map.show');
 Route::post('/map/nearest-threads','UserlocationController@getNearestThread')->name('map.nearest');
