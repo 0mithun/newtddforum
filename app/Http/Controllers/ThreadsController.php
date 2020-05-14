@@ -15,6 +15,7 @@ use Illuminate\Validation\Rule;
 
 
 use function GuzzleHttp\Promise\all;
+use App\Notifications\ThreadPostTwitter;
 use App\Notifications\ThreadWasReported;
 use App\Notifications\ThreadPostFacebook;
 
@@ -182,6 +183,10 @@ class ThreadsController extends Controller
             $thread->notify(new ThreadPostFacebook);
         }
         
+         //Send user Notification
+         if($authUser->userprivacy->thread_create_share_twitter ==1){
+            $thread ->notify(new ThreadPostTwitter);
+        }
         
 
         if (request()->wantsJson()) {

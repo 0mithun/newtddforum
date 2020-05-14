@@ -14,6 +14,7 @@
         "hootlex/laravel-friendships": "^1.0",
         "kitetail/zttp": "^0.6.0",
         "laravel-notification-channels/facebook-poster": "^2.0",
+        "laravel-notification-channels/twitter": "3.0.1",
         "laravel/framework": "^6.0",
         "laravel/helpers": "^1.1",
         "laravel/scout": "^7.2",
