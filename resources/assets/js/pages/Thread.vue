@@ -3,10 +3,6 @@
     import SubscribeButton from '../components/SubscribeButton.vue';
     import Editor from '@tinymce/tinymce-vue'
     import {Typeahead} from 'uiv'
-
-  
-
-
     export default {
         props: ['thread'],
 
@@ -99,12 +95,10 @@
                 
             }, 
             checkCreatorReported(){
-                //isCreatorReported
                 if(this.signedIn){
                     axios.post('/api/users/check-user-report',{
                         reported_id: this.thread.creator.id,
                         user:window.App.user.id
-
                     })
                     .then((res=>{
                         if(res.data.reported){
@@ -117,12 +111,10 @@
             },
             
             checkThreadReported(){
-
                 if(this.signedIn){
                     axios.post('/threads/check-thread-report',{
                         thread: this.thread.id,
                         user:window.App.user.id
-
                     })
                     .then((res=>{
                         if(res.data.reported){
@@ -131,8 +123,7 @@
                        return this.isThreadReported = false;
                     }));
                 }
-                return this.isThreadReported = false;
-                
+                return this.isThreadReported = false;                
             },
             fetchChannel(){
                 let url  = '/channel/search';
@@ -168,18 +159,14 @@
                 this.userReport = true;
             },
             makeUserReport(){
-
                 axios.post('/api/users/report',{
                     user_id: this.thread.creator.id,
                     reason:this.report_reason,
                 }).then((res=>{
-                    // console.log(res)
                     flash('Your have successfully report to this Thread','success')
                     this.userReport =false;
                     this.isCreatorReported = true;
-
                 }));
-
             },
             channelTypeHead(){
                 this.states = [];
@@ -193,9 +180,7 @@
             },
             toggleLock () {
                 let uri = `/locked-threads/${this.thread.slug}`;
-
                 axios[this.locked ? 'delete' : 'post'](uri);
-
                 this.locked = ! this.locked;
             },
             checked(){
@@ -203,26 +188,19 @@
             },
             updateChecked(){
                 this.form.is_famous = !this.form.is_famous;
-
             },
             onFileSelected(event){
                 this.image_path_error = false;
                 this.image_path_error_message = '';
-                let file =  event.target.files[0];               
-
+                let file =  event.target.files[0];
                 if (file.size > 1024 *1024) {
                     event.preventDefault();
                     this.image_path_error = true;
                     this.image_path_error_message = 'Thread image may not be greater than 2048 kilobytes';
                     return;
                 }
-
                 this.selectFile = event.target.files[0];
-
                 this.formData.append('image_path', this.selectFile);
-
-
-
             },
             appendData(){
                 let tagId = [];
@@ -236,12 +214,9 @@
                     }else{
                         tagId.push(value.name)
                     }
-                   
-                   // index++;
                 });
 
                 tagId = JSON.stringify(tagId);
-
                 let channel_id = this.typeChannelId.id;
 
 
@@ -262,11 +237,7 @@
             update () {
                 this.appendData();
                 let uri = `/threads/${this.thread.channel.slug}/${this.thread.slug}`;
-
-
                 axios.post(uri, this.formData).then((res) => {
-                    //console.log(res);
-
                     this.editing = false;
                     this.channel_id = this.form.channel_id;
                     this.title = this.form.title;
@@ -280,13 +251,10 @@
                     this.image_path = this.form.image_path;
                     this.allow_image = this.form.allow_image;
                     this.tags = this.form.tags;
-                    this.typeChannelId = ''
-
-
+                    this.typeChannelId = '';
                    flash('Your thread has been updated.');
                 });
             },
-
             resetForm () {
                 this.form = {
                     title: this.thread.title,
@@ -302,7 +270,6 @@
                     tags: this.thread.tags,
                     typeChannelId: ''
                 };
-
                 this.editing = false;
             }
         }

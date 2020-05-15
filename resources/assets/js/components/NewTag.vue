@@ -1,5 +1,5 @@
 <template>
-    <div class="panel-body" style="padding-top: 0px">
+    <div class="panel-body" style="padding-top: 0px;">
         <table class="table table-bordered table-hover table-responsive table-bordered">
             <thead>
             <tr>
@@ -13,7 +13,7 @@
                 <td>
                     {{ tag.name }}
                 </td>
-                <td style="text-align:center">
+                <td style="text-align:center;">
                     <button class="btn btn-default btn-sm" @click="editTag(tag.id, tag.name)">Edit</button>
                 </td>
             </tr>

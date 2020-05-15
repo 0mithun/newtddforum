@@ -72,23 +72,10 @@ class ThreadsController extends Controller
     {
        
         $authUser = auth()->user();
-
-        if(request()->hasFile('image_path')){
-            $rule = 'image|max:2048';
-        }else{
-            $rule = '';
-        }
-
-        if(request('source') ==null){
-            $source = '';
-        }else{            
-            $source = 'url';
-            //|active_url
-        }
+        $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+        $rule = request()->hasFile('image_path') ? 'image|max:2048' : '';
 
         request()->validate([
-            // 'tags'  =>  'required|array|min:1',
-            //'source'    =>  $source,
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id',
@@ -104,7 +91,7 @@ class ThreadsController extends Controller
         ]);
         
         
-        $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+        
 
         
         $data = [
@@ -226,10 +213,9 @@ class ThreadsController extends Controller
         }
 
         $trending->push($thread);
+        $thread->increment('visits');       
 
-        $thread->increment('visits');        
-
-        $allTags = Tags::all();
+       
         
 
         //Related Threads
@@ -263,10 +249,8 @@ class ThreadsController extends Controller
             $relatedThreads = $relatedThreads->random(5);
         }
         
-        
-
-       
-        return view('threads.show', compact('thread','allTags','relatedThreads'));
+        // $allTags = Tags::all();
+        return view('threads.show', compact('thread','relatedThreads'));
     }
 
     /**
@@ -278,22 +262,11 @@ class ThreadsController extends Controller
     public function update($channel, Thread $thread)
     {
        $this->authorize('update', $thread);
+       $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
 
-       if(request()->hasFile('image_path')){
-            $rule = 'image|max:2048';
-        }else{
-            $rule = '';
-        }
-        
-        if(request('source') ==null){
-            $source = '';
-        }else{            
-            $source = 'url';
-            //|active_url
-        }
+        $rule = request()->hasFile('image_path') ? 'image|max:2048' : '';
 
         request()->validate([
-            //'source'    =>  $source,
             'title' => 'required',
             'channel_id' => 'required',
             'body' => 'required',
@@ -302,7 +275,7 @@ class ThreadsController extends Controller
 
         ]);
 
-        $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+        
 
         $data = [
             'title' => request('title'),
@@ -311,7 +284,6 @@ class ThreadsController extends Controller
             'location'  =>  request('location') == null ? "" : request('location'),
             'source'  =>  request('source') == null ? "" : request('source'),
             'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
-            // 'is_famous'  =>  (request('is_famous') == 'true')  ? 1 : 0,
             'is_famous'  =>  request('is_famous',0),
             'age_restriction'  =>  request('age_restriction',0),
             'allow_image'  =>  request('allow_image',0),
@@ -354,7 +326,8 @@ class ThreadsController extends Controller
 
 
         if(\request()->has('tags')){
-            $tags = json_decode(\request('tags')); 
+            $tags = json_decode(\request('tags'));
+            
             foreach($tags as $tag){
                 $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
                 
@@ -362,12 +335,12 @@ class ThreadsController extends Controller
                     $new_tags[] = $tag;
                 }
                 else{                    
-                    $tag  = Tags::where('name', strtolower($tag))->first();
-                    if($tag){
-                        $new_tags[] = $tag->id;
-                    }else{
-                        $tag = Tags::create(['name'=>strtolower($tag)]);
-                        $new_tags[]= $tag->id;
+                    $findTag  = Tags::where('name', strtolower($tag))->first();
+                    if($findTag){
+                        $new_tags[] = $findTag->id;
+                    }else{                        
+                        $createTag = Tags::create(['name'=>strtolower($tag)]);
+                        $new_tags[]= $createTag->id;
 
                     }
                 }

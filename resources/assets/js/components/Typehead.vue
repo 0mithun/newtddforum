@@ -12,8 +12,6 @@
     </section>
 </template>
 <script>
-    //import states from '../../assets/data/states.json'
-
     export default {
         name: 'Typehead' ,
         data () {
@@ -35,13 +33,8 @@
         },
         methods: {
             testing(){
-                // console.log();
                 let channel = $('#channel_id')
             }
         }
     }
 </script>
-
-<style>
-
-</style>

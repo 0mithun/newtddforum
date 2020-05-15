@@ -41,8 +41,6 @@
                         tinycomments_author: 'Author name'
                 }"
             />
-
-{{--            <wysiwyg v-model="form.body"></wysiwyg>--}}
         </div>
 
         <div class="form-group">

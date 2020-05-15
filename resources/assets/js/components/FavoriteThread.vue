@@ -1,9 +1,7 @@
 <template>
 
    <button class="btn btn-xs btn-default">
-            <!-- <span class="glyphicon glyphicon-thumbs-down like-icon" :class="dislikeClass">&nbsp;{{ dislikesCount }}</span>
-             -->
-              <span :class="classes"  class="glyphicon glyphicon-heart "  @click="toggle"></span>
+        <span :class="classes"  class="glyphicon glyphicon-heart "  @click="toggle"></span>
     </button>
 
 </template>

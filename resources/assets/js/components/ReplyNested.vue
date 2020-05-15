@@ -62,21 +62,11 @@
                     <button class="btn btn-xs btn-danger red-bg mr-1" @click="destroy">Delete</button>
                 </div>
             </div>
-<!--            <div class="col-md-12" v-else>-->
-<!--                <div v-if="signedIn">-->
-<!--                    <button class="btn btn-xs mr-1 btn-default" @click="addNestedReply" v-if="!addNested">Reply</button>-->
-<!--                </div>-->
-
-<!--            </div>-->
-
-<!--            <div  class="col-md-12" v-if="!authorize('owns', reply)">-->
             <div  class="col-md-12" v-if=signedIn>
                 <button class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply" v-if="!report" :disabled=reply.isReported >
                     <span class="glyphicon glyphicon-flag"></span>
                 </button>
             </div>
-
-<!--            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-if="authorize('owns', reply.thread)">Best Reply?</button>-->
         </div>
     </div>
 </template>

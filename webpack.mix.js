@@ -16,3 +16,10 @@ mix.js('resources/assets/js/app.js', 'public/js').version()
     .styles([
         'resources/assets/custom.css'
     ],'public/css/custom.css').version();
+
+
+    mix.webpackConfig({
+        output:{
+            chunkFilename:'js/vuejs_code_split/[name].js',
+        }
+    });

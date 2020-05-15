@@ -83,9 +83,9 @@
             </div>
 
 
-            <div class="panel" v-for="(thread, index) in allThreads" :key="index" style="margin-bottom:10px" v-else>
-                <div class="panel-heading" style="padding-top:5px">
-                    <h4 style="margin-top:5px">
+            <div class="panel" v-for="(thread, index) in allThreads" :key="index" style="margin-bottom:10px;" v-else>
+                <div class="panel-heading" style="padding-top:5px;">
+                    <h4 style="margin-top:5px;">
                         <a :href="thread.path">
                         <text-highlight :queries="q">{{ thread.title }}</text-highlight>
                     </a> 
@@ -274,14 +274,10 @@ export default {
         background-image: url(/images/png/facebook_iconset.png);
         background-repeat: no-repeat;
         margin-left: 0px;
-        /* padding-top: 10px; */
         padding-left: 35px!important;
         margin-top: 10px;
         height: 28px;
-        /* display: inline-block; */
-        /* margin-right: 10px; */
         padding-right: 0px!important;
-
         font-weight: bold;
     }
     .filter-emoji-like{

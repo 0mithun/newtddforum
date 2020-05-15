@@ -11,7 +11,7 @@
         <div class="media">
             <div class="row">
                 <div class="col-md-11">
-                    <h2 class="media-heading" v-text="title" style="margin-bottom: 10px"></h2>
+                    <h2 class="media-heading" v-text="title" style="margin-bottom: 10px;"></h2>
                 </div>
                 <div class="col-md-1">
                     <div v-if="signedIn">
@@ -20,7 +20,7 @@
                         </button>
                     </div>
                     <div v-else>
-                        <button data-toggle="tooltip" title="Please Login To Report Creator" class="btn btn-xs btn-danger ml-a red-bg pull-right" data-placement="top">
+                        <button data-toggle="tooltip" title="Please Login To Report Creator" class="btn btn-xs btn-danger ml-a red-bg pull-right" data-placement="top" onclick="alert('Please log in or sign up')">
                             <span class="glyphicon glyphicon-flag"></span>
                         </button>
                     </div>
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="media-body" >
-                <h4 class="media-heading thread-info" style="margin-top:0px">
+                <h4 class="media-heading thread-info" style="margin-top:0px;">
                     Posted by: 
 
                     {{-- <a href="{{ route('threadsbyuser', $thread->creator->username) }}">{{ $thread->creator->name }}  --}}
@@ -70,11 +70,11 @@
                 </h4>
             </div>            
         </div>
-        <div class="media" style="margin-top: 0px">
+        <div class="media" style="margin-top: 0px;">
             <div class="col-md-1">
 
             </div>
-            <div class="col-md-10" style="padding: 0px">
+            <div class="col-md-10" style="padding: 0px;">
 
                 <div class="media-body">
                         {{ $thread->visits }} {{ str_plural('view', $thread->visits) }}, 
@@ -97,17 +97,17 @@
                             </button>
                             
                         </div>
-                        <div  class="btn-group btn-group-xs "  data-toggle="tooltip" title="Please Login To Perform" v-else >
+                        <div  class="btn-group btn-group-xs "  data-toggle="tooltip" title="Please log in or sign up" v-else >
                             
-                            <button  class="btn btn-xs btn-default" style="padding:0px" type="button"data-placement="left">
+                            <button  class="btn btn-xs btn-default" style="padding:0px;" type="button"data-placement="left" onclick="alert('Please log in or sign up')">
                                 <i class="fa fa-facebook-square" aria-hidden="true"></i>
                             </button>
 
-                            <button class="btn btn-xs btn-default" style="padding:0px" type="button"data-placement="left">
+                            <button class="btn btn-xs btn-default" style="padding:0px;" type="button"data-placement="left"  onclick="alert('Please log in or sign up')">
                                 <i class="fa fa-twitter-square" aria-hidden="true"></i>
                             </button>
 
-                            <button class="btn btn-xs btn-danger ml-a red-bg pull-right"  data-placement="left">
+                            <button class="btn btn-xs btn-danger ml-a red-bg pull-right"  data-placement="left" onclick="alert('Please log in or sign up')">
                                 <span class="glyphicon glyphicon-flag"></span>
                             </button> 
 
@@ -127,11 +127,7 @@
 
     <div class="panel-body" style="min-height: 345px;">
         
-        <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px" width="250" /></a>
-
-        {{-- <a href="{{ $thread->threadImagePath() }}" data-lightbox="{{ $thread->threadImagePath() }}" data-title="My caption">Image #1</a> --}}
-
-        {{-- <img class="" style="display:inline; float:left;margin-right:20px;margin-bottom:0px" width="250"  src="{{ $thread->threadImagePath() }}" alt="..."> --}}
+        <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px;" width="250" /></a>
 
         <div  v-html="body" style="display:inline;">            
         </div>   
@@ -140,9 +136,7 @@
             @if($thread->source !=null)
                 <a href="{{ $thread->source }}" target="_blank">{!! $thread->source !!}</a>
             @endif
-            
-        </div>
-  
+        </div>  
     </div>
 
 
@@ -150,23 +144,18 @@
     <div class="panel-footer thread-buttons">
 
         <div class="row" >
-            <!-- <div class="col-md-2 source-button">
-                @if($thread->source)
-                    <button class="btn btn-primary btn-xs" @click="showSource = true" v-if="!showSource">View Source</button> 
-                @endif
-            </div> -->
-            <div class="col-md-9 tag-list" style="padding-left: 15px">  
+            <div class="col-md-9 tag-list" style="padding-left: 15px;">  
                 @if($thread->tags->count())
                     Tagged: 
                     @foreach($thread->tags as $tag)
                         <span> <a href="{{ strtolower(route('tags.threads.list', $tag->name))  }}">{{ strtolower($tag->name)  }}</a> </span>
                     @endforeach
                 @endif
-                <div class=" col-md-12"  v-if="authorize('owns', thread)" style="margin-top:5px">
+                <div class=" col-md-12"  v-if="authorize('owns', thread)" style="margin-top:5px;">
                     <button class="btn btn-xs" @click="startEdit">Edit</button>
                 </div>
             </div>
-            <div class="col-md-3" style="padding: 0px;padding-right:5px">                
+            <div class="col-md-3" style="padding: 0px;padding-right:5px;">                
                 <div class="btn-group btn-group-xs pull-right" role="group" v-if="signedIn">
                     <like-button :thread="{{ $thread }}"></like-button> 
                     @include('threads._socialshare')                    
@@ -176,7 +165,7 @@
                 </div>
 
 
-                <div class="btn-group btn-group-xs pull-right" data-toggle="tooltip" title="Please Login To Perform" v-else>
+                <div class="btn-group btn-group-xs pull-right" data-toggle="tooltip" title="Please log in or sign up" v-else  onclick="alert('Please log in or sign up')">
                     <like-button :thread="{{ $thread }}"></like-button> 
 
                     <fb-share :thread="thread"></fb-share>

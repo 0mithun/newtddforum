@@ -33,7 +33,6 @@
             checkIsSubscribe(){
                
                 if(this.signedIn){
-                     //console.log('calling')
                     axios.post('/thread/check-thread-subscribe',{
                         thread: this.thread.id,
                         user:window.App.user.id

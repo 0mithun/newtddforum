@@ -61,7 +61,7 @@
                                     
                                     @foreach($tags as $tag)
                                     
-                                        <option value="{{ $tag->id }}"  {{in_array($tag->id, old("tags") ?: []) ? "selected": ""}} >{{ $tag->name }}</option>
+                                        <option value="{{ $tag->id }}"  {{in_array($tag->id, old("tags") ?: []) ? "selected": ""}} >{{ strtolower($tag->name) }}</option>
                                                                     
 
                                         <!-- <option value="{{ $tag->id  }}">{{ $tag->name }}</option> -->

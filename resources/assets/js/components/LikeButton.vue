@@ -1,11 +1,11 @@
 <template>
     <div class="btn-group btn-group-xs pull-left like-buttons" role="group" >
         
-       <div class="emoji-icons-div" style="background:green">
+       <div class="emoji-icons-div" style="background:green;">
 			<div class="box">
 				<div class="Like">
 					
-					<a class="Like__link js-hover" style="visibility:hidden">Like <kbd>hover me!!</kbd>
+					<a class="Like__link js-hover" style="visibility:hidden;">Like <kbd>hover me!!</kbd>
 					</a>
 					<div class="Emojis" v-if="visibleEmoticion">
 						<div class="Emoji Emoji--like" @click="toggleLike(1, false)"  @mouseout="showLikeTypeUser = false">
@@ -297,23 +297,19 @@ import TwitterShare from './TwitterShare.vue'
         position: relative;
     }
     .emoji-icons-div{
-		    /* background: #ffffff; */
 		position: absolute;
 		top: -100!important;
 		left: 100;
 		width: 150px;
 		height: 35px;
 		margin-top: 3px;
-		/* border-radius: 10px; */
-		/* border: 1px solid #ccc; */
-		/* padding: 5px 15px; */
 		right: -55px;
     }
 
     .emoji-icons{
         color:red;
         font-size: 18px;
-        font-weight: bold
+        font-weight: bold;
     }
 
 
@@ -436,14 +432,6 @@ import TwitterShare from './TwitterShare.vue'
           transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 2);
 }
 
-.Emoji--like {
-  /* color: $c-blue; */
-}
-
-.Emoji--love {
-  /* color: $c-red; */
-}
-
 .icon {
   background-image: url("https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif");
   background-repeat: no-repeat;
@@ -480,13 +468,6 @@ import TwitterShare from './TwitterShare.vue'
 }
 
 
-/* body {
-  min-height: 100%;
-  margin: 0;
-  background-color: #fff;
-  color: #222;
-  text-align: center;
-} */
 
 .intro {
   width: 100%;
@@ -627,7 +608,7 @@ kbd {
 
 
 
-		.icon[data-v-7a27c6a0] {
+	.icon[data-v-7a27c6a0] {
 		background-image: url(https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif);
 		background-repeat: no-repeat;
 	}

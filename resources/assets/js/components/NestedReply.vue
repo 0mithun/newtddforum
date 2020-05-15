@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-top:10px">
+    <div style="margin-top:10px;">
         <div v-if="signedIn">
             <h5>Add Reply</h5>
             <div class="form-group">
@@ -12,11 +12,6 @@
                     class="btn btn-xs btn-danger"
                     @click="cancelAddReply">Canel</button>
         </div>
-
-<!--        <p class="text-center" v-else>-->
-<!--            Please <a href="/login">sign in</a> to participate in this-->
-<!--            discussion.-->
-<!--        </p>-->
     </div>
 </template>
 

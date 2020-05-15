@@ -1,7 +1,7 @@
 
 window._ = require('lodash');
 
-import InstantSearch from 'vue-instantsearch';
+
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -21,15 +21,10 @@ require('bootstrap-sass');
 
 window.Vue = require('vue');
 
-Vue.use(InstantSearch);
-
-import * as uiv from 'uiv'
-Vue.use(uiv)
+// import InstantSearch from 'vue-instantsearch';
+// Vue.use(InstantSearch);
 
 
-import TextHighlight from 'vue-text-highlight';
- 
-Vue.component('text-highlight', TextHighlight);
 
 
 

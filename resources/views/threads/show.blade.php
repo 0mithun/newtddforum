@@ -2,11 +2,16 @@
 
 @section('head')
 <meta property="og:image" content="{{ $thread->threadImagePath }}"/>
+<meta property="og:site_name" content="{{ config('app.name') }}">
+<meta property="og:title" content="{{ $thread->title }}">
+<meta property="og:url" content="{{ url($thread->slug) }}">
+<meta property="og:type" content="article">
+<meta property="og:description" content="{{ $thread->excerpt }}">
 
    
 
     <link rel="stylesheet" href="/css/vendor/jquery.atwho.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" /> --}}
     
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/css/lightbox.min.css"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" type="text/css" media="screen" />
@@ -45,8 +50,7 @@
         <div class="container">
             <div class="row top-margin">
                 <div class="col-md-8" v-cloak>
-                    @include ('threads._question')
-                   
+                    @include ('threads._question')                   
                 </div>
 
                 <div class="col-md-4">
@@ -84,22 +88,7 @@
                             </p>
                         </div>
                         <div class="panel-body">
-                           
-
-
-
-                            {{-- <p>
-                                This thread was published {{ $thread->created_at->diffForHumans() }} by
-                                <a href="#">{{ $thread->creator->name }}</a>, and currently
-                                has <span
-                                        v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}
-                                .
-                            </p> --}}
-
-                           
-
-                            <h4 style="padding: 0px">Related Threads</h4>
-
+                            <h4 style="padding: 0px;">Related Threads</h4>
                             <ul  class="list-group">
                                 @forelse ($relatedThreads as $relatedThread)
                                     <li class="list-group-item">
@@ -109,8 +98,6 @@
                                     <li class="list-group-item">Currently No Related Threads </li>
                                 @endforelse
                             </ul>
-
-
                         </div>
                     </div>
                 </div>
@@ -152,45 +139,21 @@
                     }
                 }
             });
-
-            $('#tags').select2({
-                placeholder: 'Select tags',
-                cache:true
-            });
+            // $('#tags').select2({
+            //     placeholder: 'Select tags',
+            //     cache:true
+            // });
         })
     </script>
-    <script src="//cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script> --}}
-
+    {{-- <script src="//cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script> --}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
     <script>
         $(document).ready(function() {
-
-/* This is basic - uses default settings */
-
-        $("a#single_image").fancybox({
-            showCloseButton:false,
-            titlePosition:'inside'
-        });
-
-        /* Using custom settings */
-
-        // $("a#inline").fancybox({
-        //     'hideOnContentClick': true
-        // });
-
-        /* Apply fancybox to multiple items */
-
-        // $("a.group").fancybox({
-        //     'transitionIn'	:	'fade',
-        //     'transitionOut'	:	'elastic',
-        //     'speedIn'		:	600, 
-        //     'speedOut'		:	200, 
-        //     'overlayShow'	:	false,
-        //     'modal' : true
-        // });
-
+            $("a#single_image").fancybox({
+                showCloseButton:false,
+                titlePosition:'inside'
+            });
         });
         
 

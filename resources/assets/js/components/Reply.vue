@@ -56,7 +56,7 @@
 
 
             <!-- Nested Reply Load Start -->
-            <div class="" style="margin-top: 10px" >
+            <div class="" style="margin-top: 10px;" >
                 <div class="col-md-1 no-margin" v-if="nestedReplyCount >0">
                     <button class="btn btn-default btn-xs" @click="showNested = !showNested">
                         <span class="caret"></span>
@@ -87,7 +87,7 @@
 
 
             <!-- Reply Reprot Start -->
-            <div v-if="report" style="margin-top: 10px;overflow: hidden;display:block;width:100%">
+            <div v-if="report" style="margin-top: 10px;overflow: hidden;display:block;width:100%;">
                 <div class="form-group">
                     <label for="report_reason">Reason for report the reply:</label>
                     <textarea name="report_reason" id="report_reason" cols="30" rows="2" v-model="report_reason" class="form-control"></textarea>
@@ -111,20 +111,6 @@
                 </div>
             </div>
 
-            
-<!--            <div class="col-md-12" v-else>-->
-<!--                <div v-if="signedIn">-->
-<!--                    <button class="btn btn-xs mr-1 btn-default" @click="addNestedReply" v-if="!addNested">Reply</button>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div  class="col-md-12" v-if="!authorize('owns', reply)">-->
-
-
-
-           
-
-
 
             <!-- Need Check Best Reply  -->
 
@@ -140,10 +126,7 @@
                 </button>
             </div>
 
-
-
         </div>
-
     </div>
 </template>
 

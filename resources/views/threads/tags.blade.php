@@ -1,4 +1,3 @@
-{{-- {{  dd($tags) }} --}}
 @extends('layouts.app')
 
 @section('content')

@@ -27,9 +27,7 @@ li.list-group-item{
  }
 
 
-.dropdown-menu {
-    /*width: 100%;*/
-}
+
 .dropdown-menu li a:hover{
     background: #3097d1;
 }
@@ -115,9 +113,9 @@ li.list-group-item{
     background-position: 0px 0px;
 }
 .navigation-emoji-icon{
-    margin-bottom: 5px;;
+    margin-bottom: 5px;
 }
 
 .navigation-emoji-icon:last-child{
-    margin-bottom: 0px;;
+    margin-bottom: 0px;
 }

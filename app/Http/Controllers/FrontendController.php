@@ -76,7 +76,10 @@ class FrontendController extends Controller
     }
 
     public function allTags(){
-        $tags = Tags::all();
+        $tags = Tags::all()->map(function($value){
+            return ['id'=>$value->id, 'name'=>strtolower($value->name)];
+
+        });
         return response()->json($tags);
     }
 

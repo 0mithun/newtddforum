@@ -26,7 +26,7 @@ class AddShowRestrictedToUserprivacysTable extends Migration
     public function down()
     {
         Schema::table('userprivacys', function (Blueprint $table) {
-            //
+            $table->dropColumn('show_restricted');
         });
     }
 }
