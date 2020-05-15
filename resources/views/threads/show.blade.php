@@ -4,7 +4,7 @@
 <meta property="og:image" content="{{ $thread->threadImagePath }}"/>
 <meta property="og:site_name" content="{{ config('app.name') }}">
 <meta property="og:title" content="{{ $thread->title }}">
-<meta property="og:url" content="{{ url($thread->slug) }}">
+<meta property="og:url" content="{{ url($thread->path) }}">
 <meta property="og:type" content="article">
 <meta property="og:description" content="{{ $thread->excerpt }}">
 
