@@ -22,6 +22,9 @@
                 image_path:null,
                 age_restriction:this.thread.age_restriction,
                 allow_image: this.thread.allow_image,
+                share_on_facebook:false,
+                share_on_twitter:false,
+
                 selectFile: null,
                 formData: new FormData,
                 form: {},
@@ -233,6 +236,9 @@
                 this.formData.append('main_subject', this.form.main_subject);
                 this.formData.append('tags',tagId);
                 this.formData.append('channel_id', channel_id);
+                this.formData.append('share_on_facebook', this.form.share_on_facebook);
+                this.formData.append('share_on_twitter', this.form.share_on_twitter);
+
             },
             update () {
                 this.appendData();
@@ -250,9 +256,15 @@
                     this.source = this.form.source;
                     this.image_path = this.form.image_path;
                     this.allow_image = this.form.allow_image;
+                    this.share_on_facebook = false;
+                    this.share_on_twitter = false;
+                    this.allow_image = this.form.allow_image;
+
+
                     this.tags = this.form.tags;
                     this.typeChannelId = '';
                    flash('Your thread has been updated.');
+                   console.log(res.data)
                 });
             },
             resetForm () {
@@ -267,6 +279,9 @@
                     main_subject: this.thread.main_subject,
                     image_path: null,
                     allow_image: false,
+                    share_on_facebook: false,
+                    share_on_twitter: false,
+
                     tags: this.thread.tags,
                     typeChannelId: ''
                 };

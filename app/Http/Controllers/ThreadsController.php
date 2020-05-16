@@ -70,9 +70,10 @@ class ThreadsController extends Controller
      */
     public function store(Recaptcha $recaptcha)
     {
-       
+        
+
         $authUser = auth()->user();
-        $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+        // $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
         $rule = request()->hasFile('image_path') ? 'image|max:2048' : '';
 
         request()->validate([
@@ -90,10 +91,7 @@ class ThreadsController extends Controller
             'image_path.max'    =>  'Thread image may not be greater than 2048 kilobytes'
         ]);
         
-        
-        
-
-        
+                
         $data = [
             'user_id' => $authUser->id,
             'channel_id' => request('channel_id'),
@@ -129,7 +127,6 @@ class ThreadsController extends Controller
 
         
         $thread->save();
-
         $thread = $thread->fresh();
 
         $main_subject = \request('main_subject');
@@ -168,19 +165,22 @@ class ThreadsController extends Controller
         //Send user Notification
         if($authUser->userprivacy->thread_create_share_facebook ==1){
             $thread->notify(new ThreadPostFacebook);
+        }else if(request()->has('share_on_facebook') && request('share_on_facebook') ==1){
+            $thread ->notify(new ThreadPostFacebook);  
         }
         
          //Send user Notification
          if($authUser->userprivacy->thread_create_share_twitter ==1){
             $thread ->notify(new ThreadPostTwitter);
         }
+        else if(request()->has('share_on_twitter') && request('share_on_twitter') ==1){
+            $thread ->notify(new ThreadPostTwitter);  
+        }
         
 
         if (request()->wantsJson()) {
             return response($thread, 201);
         }
-
-
 
         return redirect($thread->path())
             ->with('flash', 'Your thread has been published!');
@@ -214,9 +214,6 @@ class ThreadsController extends Controller
 
         $trending->push($thread);
         $thread->increment('visits');       
-
-       
-        
 
         //Related Threads
         $threadTags = $thread->tags->pluck('id')->all();       
@@ -261,9 +258,12 @@ class ThreadsController extends Controller
      */
     public function update($channel, Thread $thread)
     {
-       $this->authorize('update', $thread);
-       $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+        // return response()->json(request()->all());
 
+       $this->authorize('update', $thread);
+       $authUser = auth()->user();
+    //    $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+        
         $rule = request()->hasFile('image_path') ? 'image|max:2048' : '';
 
         request()->validate([
@@ -274,9 +274,7 @@ class ThreadsController extends Controller
             'age_restriction'  => 'numeric', Rule::in([0, 13, 18]),
 
         ]);
-
         
-
         $data = [
             'title' => request('title'),
             'body' => request('body'),
@@ -346,6 +344,23 @@ class ThreadsController extends Controller
                 }
             }
             $thread->tags()->sync($new_tags);
+        }
+        // return response()->json(request()->all());
+         //Send user Notification
+         if($authUser->userprivacy->thread_create_share_facebook ==1){
+             return response()->json('under default facebook');
+            $thread->notify(new ThreadPostFacebook);
+        }else if(request()->has('share_on_facebook') && request('share_on_facebook') =='true'){
+            $thread ->notify(new ThreadPostFacebook);  
+        }
+        
+         //Send user Notification
+        if($authUser->userprivacy->thread_create_share_twitter ==1){
+            return response()->json('under default twitter');
+            $thread ->notify(new ThreadPostTwitter);
+        }
+        else if(request()->has('share_on_twitter') &&  request('share_on_twitter') =='true'){
+            $thread ->notify(new ThreadPostTwitter);  
         }
 
         return $thread;

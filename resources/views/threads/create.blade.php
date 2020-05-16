@@ -124,7 +124,7 @@
 
 
                             <div class="form-group">
-                                <label for="main_subject" class="control-label">Category:</label>
+                                <label for="is_famous" class="control-label">Category:</label>
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="1" name="is_famous">Famous</label>
                                     <span class="help-block">Check this box if the subject is Famous</span>
@@ -148,7 +148,7 @@
 
 
                             <div class="form-group {{ $errors->has('image_path') ? ' has-error' : '' }}">
-                                <label for="main_subject" class="control-label"> Upload an image </label>
+                                <label for="image_path" class="control-label"> Upload an image </label>
 
                                 <input type="file" accept="image/*" name="image_path" class="form-control" id="image_path">
 
@@ -162,8 +162,19 @@
                                     <label><input type="checkbox" value="1" name="allow_image" id="allow_image"> Allow us to choose a Wikimedia Commons image</label>
                                 </div>
 
-
                             </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="1" name="share_on_facebook">Share on Facebook</label>
+                                </div>
+
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="1" name="share_on_twitter">Share on Twitter</label>
+                                </div>
+                            </div>
+
+
 
                             <div class="form-group  {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }} recaptcha" style="margin-bottom: 40px">
                                 <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site')  }}">
@@ -175,6 +186,9 @@
                                     </span>
                                 @endif
                             </div>
+
+                            
+
 
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Publish</button>

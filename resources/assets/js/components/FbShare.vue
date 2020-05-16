@@ -14,7 +14,8 @@
         computed: {
             
             threadUrl(){
-                return 'https://www.facebook.com/sharer/sharer.php?u='+ this.thread.path + '&quote='+this.thread.title+'&title='+this.thread.title;
+                // return 'https://www.facebook.com/sharer/sharer.php?u='+ this.thread.path + '&quote='+this.thread.title+'&title='+this.thread.title;
+                return 'https://www.facebook.com/sharer/sharer.php?u='+ this.thread.path +'&title='+this.thread.title;
             },
             signedIn(){
                 return  (window.App.user)? true : false;

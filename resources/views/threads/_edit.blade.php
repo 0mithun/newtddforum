@@ -70,14 +70,14 @@
 
 
         <div class="form-group">
-            <label for="main_subject" class="control-label">Category:</label>
+            <label for="is_famous" class="control-label">Category:</label>
             <div class="checkbox">
                 <label><input type="checkbox" value="1" name="is_famous" :checked="checked()" @change="updateChecked()">Famous</label>
                 <span class="help-block">Check this box if the subject is Famous</span>
             </div>
         </div>
         <div class="form-group " :class="image_path_error ? 'has-error' : ''">
-            <label for="main_subject" class="control-label"> Upload an image </label>
+            <label for="image_path" class="control-label"> Upload an image </label>
 
             <input type="file" name="image_path" accept="image/*" class="form-control" id="image_path" @change="onFileSelected">
 
@@ -90,6 +90,18 @@
                     @if($thread->allow_image == 1) checked @endif
                     > Allow us to choose a Wikimedia Commons image</label>
             </div>
+
+            <hr>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label><input type="checkbox" value="1" name="share_on_facebook" v-model="form.share_on_facebook">Share on Facebook</label>
+                </div>
+
+                <div class="checkbox">
+                    <label><input type="checkbox" value="1" name="share_on_twitter" v-model="form.share_on_twitter">Share on Twitter</label>
+                </div>
+            </div>
+
         </div>
     </div>
 

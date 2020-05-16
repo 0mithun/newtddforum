@@ -27,7 +27,9 @@ class User extends Authenticatable
         'avatar_path',
         'city',
         'country',
-        'about'
+        'about',
+        'lat',
+        'lng'
     ];
 
     /**

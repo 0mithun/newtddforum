@@ -8,7 +8,7 @@ use App\Thread;
 use App\User;
 use App\Usersetting;
 use Illuminate\Http\Request;
-
+use Spatie\Geocoder\Geocoder;
 use Carbon\Carbon;
 
 use DB;
@@ -71,7 +71,29 @@ class ProfilesController extends Controller
             'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users,email,'.auth()->user()->id,
         ]);
-        auth()->user()->update($request->only(['first_name','last_name','date_of_birth','city','country','about']));
+        $data = [
+            'first_name'    => $request->first_name,
+            'last_name'     => $request->last_name,
+            'date_of_birth' => $request->date_of_birth,
+            'city'          => $request->city,
+            'country'       => $request->country,
+            'about'         => $request->about,
+        ];
+
+        if(request('city') !=null && auth()->user()->city != $request->city){
+            $location = $this->getGeocodeing(request('city'));
+            if($location['accuracy'] != 'result_not_found'){
+                $data['lat'] = $location['lat'];
+                $data['lng'] = $location['lng'];
+            }
+        }
+
+        // dd($data);
+
+        auth()->user()->update($data);
+        // auth()->user()->update($request->only(['first_name','last_name','date_of_birth','city','country','about']));
+
+
 
         if(auth()->user()->email != $request->email){
             $token = md5(uniqid().str_random());
@@ -404,5 +426,17 @@ class ProfilesController extends Controller
            }
         }
         return true;
+    }
+
+    public function getGeocodeing($address){
+        $client = new \GuzzleHttp\Client();
+
+        $geocoder = new Geocoder($client);
+
+        $geocoder->setApiKey(config('geocoder.key'));
+
+        $geocoder->setCountry(config('geocoder.country', 'US'));
+
+        return $geocoder->getCoordinatesForAddress($address);
     }
 }
