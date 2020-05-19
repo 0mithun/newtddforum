@@ -201,7 +201,10 @@ class ThreadsController extends Controller
 
         if (auth()->check()) {
             $auth_user = auth()->user();
-            if($thread->age_restriction!=0 && $auth_user->userprivacy->show_restricted==0 && $thread->user_id != $auth_user->id){
+            if($auth_user->id == 1){
+                $auth_user->read($thread);  
+            }
+            else if($thread->age_restriction!=0 && $auth_user->userprivacy->show_restricted==0 && $thread->user_id != $auth_user->id){
                 abort(404);
             }         
             
@@ -423,8 +426,6 @@ class ThreadsController extends Controller
         }else{
             abort(404);
         }
-
-        
 
     }
 

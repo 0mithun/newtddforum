@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="media-body" >
-                <h4 class="media-heading thread-info" style="margin-top:0px;">
+                <h4 class="media-heading thread-info">
                     Posted by: 
 
                     {{-- <a href="{{ route('threadsbyuser', $thread->creator->username) }}">{{ $thread->creator->name }}  --}}
@@ -70,13 +70,13 @@
                 </h4>
             </div>            
         </div>
-        <div class="media" style="margin-top: 0px;">
+        <div class="row" style="margin-top: 0px;">
             <div class="col-md-1">
 
             </div>
             <div class="col-md-10" style="padding: 0px;">
 
-                <div class="media-body">
+                <div class="">
                         {{ $thread->visits }} {{ str_plural('view', $thread->visits) }}, 
                         
                         {{ $thread->like_count }}  {{ str_plural('like', $thread->like_count) }},
@@ -92,9 +92,27 @@
                         <div class="btn-group btn-group-xs " v-if="signedIn">
                             @include('threads._socialshare')                           
 
-                            <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported" data-placement="left">
+                            {{-- <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported" data-placement="left">
                                 <span class="glyphicon glyphicon-flag"></span>
-                            </button>
+                            </button> --}}
+
+                            <div class="btn-group ">
+
+                                <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg " @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
+                                    <span class="glyphicon glyphicon-flag"></span>
+                                </button>
+        
+                                <button type="button" class="btn btn-default dropdown-toggle btn-xs" title="Report Thread Age Restriction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="isThreadReported">
+                                  <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @if(auth()->id() == 1)
+                                        <li><a href="#" @click.prevent="makeRestrictionReport('Should be Pg-13', 0)">Under 13</a></li>
+                                    @endif
+                                    <li><a href="#" @click.prevent="makeRestrictionReport('Should be Pg-13', 13)">Should be Pg-13</a></li>
+                                    <li><a href="#" @click.prevent="makeRestrictionReport('Should be rated R', 18)">Should be rated R</a></li>
+                                </ul>
+                              </div>                           
                             
                         </div>
                         <div  class="btn-group btn-group-xs "  data-toggle="tooltip" title="Please log in or sign up" v-else >
@@ -111,9 +129,7 @@
                                 <span class="glyphicon glyphicon-flag"></span>
                             </button> 
 
-                        </div>                      
-
-
+                        </div>  
                 </div>
             </div>
         </div>
@@ -144,7 +160,7 @@
     <div class="panel-footer thread-buttons">
 
         <div class="row" >
-            <div class="col-md-9 tag-list" style="padding-left: 15px;">  
+            <div class="col-md-8 tag-list" style="padding-left: 15px;">  
                 @if($thread->tags->count())
                     Tagged: 
                     @foreach($thread->tags as $tag)
@@ -155,13 +171,32 @@
                     <button class="btn btn-xs" @click="startEdit">Edit</button>
                 </div>
             </div>
-            <div class="col-md-3" style="padding: 0px;padding-right:5px;">                
+            <div class="col-md-4" style="padding: 0px;padding-right:5px;">                
                 <div class="btn-group btn-group-xs pull-right" role="group" v-if="signedIn">
                     <like-button :thread="{{ $thread }}"></like-button> 
-                    @include('threads._socialshare')                    
-                    <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
+                    @include('threads._socialshare')
+
+                    {{-- <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
                         <span class="glyphicon glyphicon-flag"></span>
                     </button>
+                     --}}
+                     <div class="btn-group ">
+
+                        <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg " @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
+                            <span class="glyphicon glyphicon-flag"></span>
+                        </button>
+
+                        <button type="button" class="btn btn-default dropdown-toggle btn-xs" title="Report Thread Age Restriction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="isThreadReported">
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            @if(auth()->id() == 1)
+                                <li><a href="#" @click.prevent="makeRestrictionReport('Should be Pg-13', 0)">Under 13</a></li>
+                            @endif
+                            <li><a href="#" @click.prevent="makeRestrictionReport('Should be Pg-13', 13)">Should be Pg-13</a></li>
+                            <li><a href="#" @click.prevent="makeRestrictionReport('Should be rated R', 18)">Should be rated R</a></li>
+                        </ul>
+                      </div>
                 </div>
 
 

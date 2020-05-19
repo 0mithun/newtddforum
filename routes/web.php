@@ -152,6 +152,8 @@ Route::middleware(['auth'])->group(function (){
 
 //Route::post('/threads/report','ThreadsController@report');
     Route::post('/threads/report','ReportController@thread');
+    Route::post('/threads/report-restriction','ReportController@threadRestriction');
+
     Route::post('/threads/check-thread-report','ReportController@checkThreadReport');
 
 

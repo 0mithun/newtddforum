@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Notifications\ReplywasReported;
+use App\Notifications\ThreadRestrictionReported;
 use App\Notifications\ThreadWasReported;
 use App\Notifications\UserWasReported;
 use Illuminate\Http\Request;
@@ -102,6 +103,50 @@ class ReportController extends Controller
         $user = User::find(1);
         $user->notify(new ThreadWasReported($thread, $reason));
     }
+
+    public function threadRestriction(){
+        request()->validate([
+            'reason'    =>  'required'
+        ]);
+
+        $id = \request('id');
+        $type = request('type');
+        $reason = \request('reason');
+
+        $thread = Thread::findOrFail($id);
+        $thread->age_restriction = $type;
+        $thread->save();
+
+        $authUser = auth()->user();
+
+        DB::table('reports')->insert([
+            'user_id'           =>  $authUser->id,
+            'reported_id'       =>  $id,
+            'reported_type'     =>  get_class($thread)
+        ]);
+        
+
+        if($authUser->id !=1){
+            $adminUser = User::find(1);
+            $reason = 'Check age for this item';
+            $adminUser->notify(new ThreadRestrictionReported($thread, $reason));
+            
+
+            $reason = "User " . $authUser->username . " ".  " reported thread with id = " . $thread->id . " has been flagged, we have changed it to PG/R pending review";
+            $creator = User::find($thread->creator->id);            
+            $creator->notify(new ThreadRestrictionReported($thread, $reason));
+
+
+            $reason = 'This item has been changed to pg/R pending review';
+            $authUser->notify(new ThreadRestrictionReported($thread, $reason));
+        }else{
+            $reason = "After review, your post changed to PG";
+            $creator = User::find($thread->creator->id);            
+            $creator->notify(new ThreadRestrictionReported($thread, $reason));
+        }
+        
+    }
+
 
     public function checkThreadReport(){
         $threadId = request('thread');

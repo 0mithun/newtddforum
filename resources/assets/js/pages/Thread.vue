@@ -158,6 +158,18 @@
 
                 }));
             },
+            makeRestrictionReport(reason, type){
+                axios.post('/threads/report-restriction',{
+                    id: this.thread.id,
+                    reason:reason,
+                    type:type
+                }).then((res=>{
+                    flash('Your have successfully report to this Thread','success')
+                    this.report =false;
+                    this.thread.isReportd = true;
+
+                }));
+            },
             reportCreator(){
                 this.userReport = true;
             },
@@ -264,7 +276,6 @@
                     this.tags = this.form.tags;
                     this.typeChannelId = '';
                    flash('Your thread has been updated.');
-                   console.log(res.data)
                 });
             },
             resetForm () {

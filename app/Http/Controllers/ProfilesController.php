@@ -109,6 +109,7 @@ class ProfilesController extends Controller
             ];
                 Mail::to($request->email)->send(new ConfirmNewEmail($token));
             session()->flash('message','Your profile information update successfully. New email need to confirm');
+            return redirect()->route('profile', auth()->user()->username);
         }
 
         session()->flash('message','Your profile information update successfully');
