@@ -245,10 +245,10 @@ class Thread extends Model
      * @param  string $body
      * @return string
      */
-    public function getBodyAttribute($body)
-    {
-        return \Purify::clean($body);
-    }
+    // public function getBodyAttribute($body)
+    // {
+    //     return \Purify::clean($body);
+    // }
 
     /**
      * Set the proper slug attribute.

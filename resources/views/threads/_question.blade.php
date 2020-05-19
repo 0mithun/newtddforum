@@ -145,7 +145,10 @@
         
         <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px;" width="250" /></a>
 
-        <div  v-html="body" style="display:inline;">            
+        <div  v-html="body" style="display:inline;">
+            
+            {{-- <iframe width="1280" height="720" src="https://www.youtube.com/embed/vl8MGmscV38" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> --}}
+                     
         </div>   
         
         <div >

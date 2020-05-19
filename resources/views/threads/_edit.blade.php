@@ -29,12 +29,12 @@
             <label for="body" class="control-label">Body:</label>
             <editor
                 v-model="form.body"
-
+                height="500"
                 api-key="{{  config('services.tiny.key')  }}}"
                 :init="{
                 selector: '#tinyeditor',
                         plugins: 'code',
-                        toolbar: 'formatselect fontsizeselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | code',
+                        toolbar: 'formatselect fontsizeselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | code | numlist bullist outdent indent  ',
                         menubar: 'tools',
                         toolbar_drawer: 'floating',
                         tinycomments_mode: 'embedded',
@@ -59,14 +59,14 @@
             <span class="help-block">Who is this story about</span>
         </div>
 
-        <div class="form-group ">
+        {{-- <div class="form-group ">
             <label for="age_restriction">Age Restriction</label>
             <select name="age_restriction" id="age_restriction" class="form-control " v-model="form.age_restriction">
                 <option value="0">Ok for everyone</option>
                 <option value="13">PG-13</option>
                 <option value="18">R-rated (18+)</option>
             </select>
-        </div>
+        </div> --}}
 
 
         <div class="form-group">

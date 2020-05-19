@@ -274,7 +274,7 @@ class ThreadsController extends Controller
             'channel_id' => 'required',
             'body' => 'required',
             'image_path'    => $rule,
-            'age_restriction'  => 'numeric', Rule::in([0, 13, 18]),
+            // 'age_restriction'  => 'numeric', Rule::in([0, 13, 18]),
 
         ]);
         
@@ -286,7 +286,7 @@ class ThreadsController extends Controller
             'source'  =>  request('source') == null ? "" : request('source'),
             'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
             'is_famous'  =>  request('is_famous',0),
-            'age_restriction'  =>  request('age_restriction',0),
+            // 'age_restriction'  =>  request('age_restriction',0),
             'allow_image'  =>  request('allow_image',0),
         ];
 

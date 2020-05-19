@@ -40,6 +40,37 @@
             border-top: 1px solid #d3e0e9;
             border-bottom-right-radius: 3px;
             border-bottom-left-radius: 3px;
+        } 
+
+        iframe{
+            margin-top: 5px;
+            max-width: 100%;
+            height: -webkit-fill-available;
+            height: fill-available;
+            height: -moz-available;
+            height: 350px;
+            /* width: 100%; */
+
+        }
+        .mce-content-body  iframe{
+            margin-top: 5px;
+            max-width: 80%!;
+            height: -webkit-fill-available;
+            height: fill-available;
+            height: -moz-available;
+            height: 350px;
+            /* width: 100%; */
+
+        }
+
+        body#tinymce iframe {
+            width: 500px!important;
+            height: 350px!important;
+        }
+
+        .tox-tinymce{
+            min-height:400px!important;
+            overflow: scroll;
         }
     </style>
     
@@ -49,7 +80,7 @@
     <thread-view :thread="{{ $thread }}" inline-template>
         <div class="container">
             <div class="row top-margin">
-                <div class="col-md-8" v-cloak>
+                <div style="overflow: hidden"class="col-md-8" v-cloak>
                     @include ('threads._question')                   
                 </div>
 

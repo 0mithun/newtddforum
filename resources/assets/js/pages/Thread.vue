@@ -301,3 +301,14 @@
         }
     }
 </script>
+
+
+<style scoped>
+     #tinymce iframe {
+            width: 100%!important;
+            height: 350px!important;
+        }
+    .tox-tinymce{
+        height:500px!important;
+    }
+</style>
