@@ -69,7 +69,7 @@
         }
 
         .tox-tinymce{
-            min-height:400px!important;
+            min-height:500px!important;
             overflow: scroll;
         }
     </style>
@@ -80,7 +80,7 @@
     <thread-view :thread="{{ $thread }}" inline-template>
         <div class="container">
             <div class="row top-margin">
-                <div style="overflow: hidden"class="col-md-8" v-cloak>
+                <div  class="col-md-8" v-cloak>
                     @include ('threads._question')                   
                 </div>
 
