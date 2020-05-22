@@ -117,6 +117,9 @@ class ChatController extends Controller
     public function sendMessage(Request $request){
 
         if($request->ajax()){
+            // return response()->json($request->all());
+
+
             $friend_message = $request->friend_message ? 1 : 0;
 
             $authUser = auth()->user();
@@ -125,7 +128,9 @@ class ChatController extends Controller
                 'from'      =>  $authUser->id,
                 'to'        =>  $request->friend,
                 'message'   =>  $request->message,
-                'friend_message'    => $friend_message
+                'friend_message'    => $friend_message,
+                'reply_id'  =>  $request->replyId,
+                'reply_message'  =>  $request->replyMessage,
             ]);
 
             $friend = User::where('id', $request->friend)->first();

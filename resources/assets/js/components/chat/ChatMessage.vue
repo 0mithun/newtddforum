@@ -61,7 +61,7 @@
                                 <i class="fa fa-star"></i>
                             </div> <!-- end chat-header -->
                             
-                            <div id="chat-history" class="chat-history" v-chat-scroll >
+                            <div id="chat-history" class="chat-history " v-chat-scroll >
                                 
                                 <ul style="margin:0px; padding:0px">
 
@@ -69,40 +69,80 @@
                                         <div class="alert alert-danger" role="alert" >No Message...</div>
                                     </li> -->
 
-                                    <li class="clearfix" v-for="(friendMessage, index) in friendMessages.messages" :key="index" >
+                                    <li class="clearfix message-list" v-for="(friendMessage, index) in friendMessages.messages" :key="index" >
                                         <div v-if="friendMessages.friend.id == (friendMessage.to || friendMessages.from) ">
 
                                             <div class="message-data align-right">
                                                 
-                                            <span class="message-data-time" >{{ formateMessageTime(friendMessage.created_at)}}</span> &nbsp; &nbsp;
-                                            <span class="message-data-name" >{{ authuser.name}}</span> 
-                                            
-                                            <!-- <i class="fa fa-circle me"></i> -->
-                                            
-                                            <img :src="authuser.profileAvatarPath" alt="" style="width:40px; border-radius:50%;height:40px">
+                                                    
+                                                <span class="message-data-time" >{{ formateMessageTime(friendMessage.created_at)}}</span> &nbsp; &nbsp;
+                                                <span class="message-data-name" >{{ authuser.name}}</span> 
+                                                
+                                                <!-- <i class="fa fa-circle me"></i> -->
+                                                
+                                                <img :src="authuser.profileAvatarPath" alt="" style="width:40px; border-radius:50%;height:40px">
                                             </div>
-                                            <div class="message other-message float-right">
+
+                                            <div class="btn-group reply-to-me">
+                                                <button class="btn btn-default btn-sm dropdown-toggle reply-btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#" @click.prevent="replyToMessage(friendMessage.id, friendMessage.message)">Reply</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="message other-message float-right">                                                
+                                                <blockquote class="reply-to-message" v-if="friendMessage.reply_message != null">
+                                                    
+                                                    <span class="reply-message-user">
+                                                        <i class="fa fa-share"></i>
+                                                        You replied to <strong>{{ friendMessages.friend.name }}</strong>  <br />
+                                                    </span>
+                                                
+                                                    <span class="text-muted">
+                                                        {{ friendMessage.reply_message }}
+                                                    </span> 
+                                                </blockquote>
                                                 {{ friendMessage.message }}
                                             </div>
 
                                         </div>
                                         <div v-else>
                                             <li>
-                                                <div class="message-data">
-                                                    
-                                                <img :src="friendMessages.friend.profileAvatarPath" alt="" style="width:40px; border-radius:50%;height:40px">
-                                                <span class="message-data-name">
+                                                <div class="message-data">                                                    
+                                                    <img :src="friendMessages.friend.profileAvatarPath" alt="" style="width:40px; border-radius:50%;height:40px">
+                                                    <span class="message-data-name">
 
                                                     <!-- <i class="fa fa-circle online"></i> -->
                                                     <user-online :user="friendMessages.friend" type="message"></user-online>
 
 
                                                     {{ friendMessages.friend.name}}</span> 
-                                                <span class="message-data-time">{{ formateMessageTime(friendMessage.created_at)}}</span>
+                                                    <span class="message-data-time">{{ formateMessageTime(friendMessage.created_at)}}</span>
                                                 </div>
                                                 <div class="message my-message" @click="seenMessage(friendMessage)">
-                                                    {{ friendMessage.message }}
+                                                    <!--  v-if="friendMessage.reply_message != null" -->
+                                                    <blockquote class="reply-to-message" v-if="friendMessage.reply_message != null">
                                                     
+                                                        <span class="reply-message-user">
+                                                            <i class="fa fa-share"></i>
+                                                            <strong>{{ friendMessages.friend.name }}</strong> replied to you   <br />
+                                                        </span>
+                                                    
+                                                        <span class="text-muted">
+                                                            {{ friendMessage.reply_message }}
+                                                        </span> 
+                                                    </blockquote>
+                                                    {{ friendMessage.message }}
+                                                                                                       
+                                                </div>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-default btn-sm dropdown-toggle reply-btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                       <li><a href="#" @click.prevent="replyToMessage(friendMessage.id, friendMessage.message)">Reply</a></li>
+                                                    </ul>
                                                 </div>
                                             </li>
                                         </div> 
@@ -114,9 +154,21 @@
                             
                             
                             <!-- <div class="chat-message clearfix" v-if="selectFriend"> -->
-                            <div class="chat-message clearfix">
+                            
+                            <div class="chat-message clearfix chat-message-reply">
                                 <div v-if="typing">   {{ typing.user.name }} <img src="/images/png/pen.png" alt=""> .........</div>
-                                <textarea @keydown.enter="sendMessage" @keyup="typingMessage(friendMessages.friend.id)" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message" :disabled="!selectFriend"></textarea>
+                                <div class="reply-to" v-if="selectFriend && showReplyBox">
+                                    Reply to <strong v-if="friendMessages.friend">{{friendMessages.friend.name}}</strong> <span class="close-reply" @click="cancelReplyMessage">X</span> <br />
+
+                                    <p class="text-muted reply-message" >
+                                        <small>{{replyMessage}}</small>
+                                    </p>
+
+                                </div>
+
+
+                               
+                                <textarea :class="showReplyBox ? 'remove-top-border': ''" @keydown.enter="sendMessage" @keyup="typingMessage(friendMessages.friend.id)" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="2" class="form-control" v-model="message" :disabled="!selectFriend"></textarea>
 <!--                                         
                                 <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
                                 <i class="fa fa-file-image-o"></i>
@@ -148,6 +200,9 @@
                 typing:'',
                 last_seen:'',
                 typingClock:null,
+                replyId:'',
+                replyMessage:'',
+                showReplyBox: false
             }
         },
         computed:{
@@ -227,6 +282,20 @@
 
         },
         methods:{
+            cancelReplyMessage(){
+                this.replyMessage = '';
+                this.replyId = '';
+                this.showReplyBox = false;
+            },
+
+            replyToMessage(messageId, replyMessage){
+                this.replyMessage = replyMessage;
+                this.replyId = messageId;
+                this.showReplyBox = true;
+                let messageBox = document.getElementById('message-to-send')
+                messageBox.focus();
+
+            },
 
             messageSound(){
                 let sound = new Audio('https://notificationsounds.com/soundfiles/acc3e0404646c57502b480dc052c4fe1/file-sounds-1140-just-saying.mp3');
@@ -294,8 +363,12 @@
                 if(this.message !=''){
                     axios.post('/chat-send-message',{
                         message:this.message,
-                        friend:this.selectFriend
+                        friend:this.selectFriend,
+                        replyMessage: this.replyMessage,
+                        replyId:this.replyId
                     }).then(res=>{
+                        console.log(res.data)
+                        this.showReplyBox = false;
                         this.selectUser(this.selectFriend)
                     })
                 }
@@ -566,5 +639,94 @@
         }
         .chat-page{
             margin-top: 55px;
+        }
+
+
+        .chat .chat-history .message{
+            color: white;
+            padding: 18px 20px;
+            line-height: 26px;
+            font-size: 16px;
+            border-radius: 7px;
+            margin-bottom: 30px;
+            width: 75%;
+            position: relative;
+            display: inline-block;
+        }
+        .reply-btn{
+            background:none;
+            border: none;
+        }
+        .dropdown-toggle.reply-btn:active{
+            background:none;
+        }
+        .reply-to{
+            border:1px solid #ccd0d2;            
+            min-height:50px;
+            padding:8px;
+            border: 1px solid #ccd0d2;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+            border-color: #98cbe8;
+            outline: 0;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(152, 203, 232, 0.6);
+            border-radius: 4px 4px 0px 0px;  
+            border-bottom: none;
+        }
+        .reply-message{
+            padding:0px;
+            margin:0px;
+        }
+        .remove-top-border{
+            border-top: none;
+            box-shadow: none;
+            border-radius: 0px 0px 4px 4px;
+        }
+
+        span.close-reply {
+            float: right;
+            padding: 0px 5px;
+            cursor: pointer;
+        }
+        .chat-message-reply.clearfix {
+            position: absolute;
+            width: 98%;
+            bottom: 0;
+            left: 0;
+            background: white;
+            padding: 0px!important;
+        }
+        /* .chat .chat-message-reply {
+            padding: 0px!important;
+        } */
+        .message-list:last-child{
+            margin-bottom: 50px;
+        }
+        .chat .chat-history .message{
+            
+            margin-bottom: 20px;
+        }
+        .reply-to-message{
+            border-left: 2px solid grey;
+            /* margin-right: 5px; */
+            padding: 0px;
+            margin: 0px;
+            padding-right: 0;
+            padding-left: 10px;
+            margin-bottom: 5px;
+            font-size:13px;
+        }
+        .reply-message-user{
+            color:#777777;
+            
+        }
+        .reply-to-me{
+            margin-left: 20%;
+            margin-top: 20px;
+
+        }
+        .chat .chat-history .message{
+            padding: 15px 10px;
         }
 </style>
