@@ -3,57 +3,23 @@
 @section('content')
     @php
         $user = auth()->user();
+        $profileUser = $user;
     @endphp
     <div class="container">
-        <div class="row">
+        <div class="row top-margin">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <h3>{{ strtoupper($user->name) }}</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <img src="{{ asset($user->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;">
-                                </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @include('profiles._header')
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-3">
+                                @include('profiles.sidebarmenu')
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-3">
-
-                                    @include('profiles.sidebarmenu')
-
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="panel  panel-primary">
-                                        <div class="panel-heading" style="padding: 0px 10px">
-
-                                            @if(session()->has('message'))
-                                                <div class="row">
-                                                    <div class="alert alert-success alert-dismissible" role="alert">
-                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <strong>{{ session('message')  }}</strong>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                                <div class="row">
-                                                    <div class="col-md-9">
-                                                        <h4>Tag List</h4>
-                                                    </div>
-{{--                                                    <div class="col-md-3">--}}
-{{--                                                        <button class="btn btn-primary" style="margin-right: 5px; float:right">Add New Tag</button>--}}
-{{--                                                    </div>--}}
-                                                </div>
-
-
-                                        </div>
-                                        <div class="panel-body">
-                                            <new-tag></new-tag>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
+                            <div class="col-md-9">
+                                <new-tag></new-tag>
                             </div>
                         </div>
                     </div>

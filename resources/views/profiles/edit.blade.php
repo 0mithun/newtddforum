@@ -4,6 +4,7 @@
 @section('content')
     @php
         $user = auth()->user();
+        $profileUser = $user;
         if($user->date_of_birth !=''){
             //$birth_date = date("d/m/yy", strtotime($user->date_of_birth));
         }else{
@@ -19,12 +20,7 @@
                     <div class="panel-heading">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-10">
-                                    <h3>{{ strtoupper(auth()->user()->name) }}</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <img src="{{ asset(auth()->user()->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;">
-                                </div>
+                                @include('profiles._header')
                             </div>
                             <hr>
                             <div class="row">

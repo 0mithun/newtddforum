@@ -32,6 +32,8 @@ class UserSettingsController extends Controller
 
     public function updatePrivacy(Request $request){
         //return $request->all();
+        $data['see_my_profiles'] = $request->see_my_profiles;
+
         $data['see_my_threads'] = $request->see_my_threads;
         $data['see_my_favorites'] = $request->see_my_favorites;
         $data['see_my_friends'] = $request->see_my_friends;

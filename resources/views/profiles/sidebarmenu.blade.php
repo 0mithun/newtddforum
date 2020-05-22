@@ -2,10 +2,7 @@
 
 @php 
     $routeName = \Request::route()->getName();
-
-    //dd($routeName)
-    
-        
+  
 @endphp
 
 
@@ -61,7 +58,7 @@
 
 
 {{-- Admiin Route --}}
-@if($user->isAdmin)
+@if($user->isAdmin && $profileUser->id == $user->id)
 
 {{--                                    For Admin--}}
 <a class="list-group-item @if($routeName == 'admin.setesettings') active @endif"  href="{{ route('admin.setesettings') }}">Site Settings</a>

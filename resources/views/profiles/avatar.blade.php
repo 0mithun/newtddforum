@@ -3,27 +3,21 @@
 
 @section('content')
     @php
-            $user = auth()->user();
+        $user = auth()->user();
+        $profileUser = $user;
     @endphp
     <div class="container">
         <div class="row top-margin">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-10">
-                                    <h3>{{ strtoupper($user->name) }}</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <img src="{{ asset($user->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;" id="avatarphoto">
-                                </div>
+                                @include('profiles._header')
                             </div>
                             <hr>
                             <div class="row" >
                                 <div class="col-md-3">
                                     @include('profiles.sidebarmenu')
-
                                 </div>
                                 <div class="col-md-9">
                                     <div class="row">
@@ -47,7 +41,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

@@ -10,110 +10,80 @@
         <div class="row top-margin">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <h3>{{ strtoupper($profileUser->name) }}</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <img src="{{ asset($profileUser->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;">
-                                </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @include('profiles._header')
+                            @include('profiles._friendstatus')
+                        </div>
+                        <hr>
+                        <div class="row">                                
+                            <div class="col-md-3">
+                                @include('profiles.sidebarmenu')
                             </div>
-                            <hr>
-                            <div class="row">
 
-                                
-                                <div class="col-md-3">
+                            <div class="col-md-9">
+                                <table class="table table-responsive table-hover table-bordered table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th class="td" width="10%">
+                                                Avatar
+                                            </th>
+                                            <th class="td" width="70%">Name</th>
+                                            <th class="td" colspan="3">
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse($friendLists as $friendList)
+                                        
+                                        @if($friendList->username != $user->username )
+                                        <tr>
+                                            <td>
+                                            <img src="{{ asset($friendList->avatar_path) }}" alt="" width="30px">
+                                            </td>
+                                            <td>{{ $friendList->name }}</td>
 
+                                            <td>
+                                                <button class="btn btn-default btn-sm">
+                                                    <a href="{{ route('profile', $friendList->username)  }}">Show Profile</a>
+                                                </button>
+                                            </td>
 
-                                   @include('profiles.sidebarmenu')
+                                            @if( $user->username == $userInfo->username)
+                                            <td>
+                                                <form action="{{ route('profile.friend.block', $user->username) }}" method="post">
+                                                    @csrf
 
+                                                    <input type="hidden" name="friend" value="{{ $friendList->id   }}">
+                                                    <input type="submit" value="Block" class="btn btn-info btn-sm">
+                                                </form>
+                                            </td>
 
+                                            <td>
+                                                <form action="{{ route('friend.unfriend') }}" method="post">
+                                                    @csrf
 
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="panel">
-                                        <div class="panel-heading">
-
-                                            @if(session()->has('message'))
-                                                <div class="row">
-                                                    <div class="alert alert-success alert-dismissible" role="alert">
-                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <strong>{{ session('message')  }}</strong>
-                                                    </div>
-                                                </div>
+                                                    <input type="hidden" name="friend" value="{{ $friendList->id   }}">
+                                                    <input type="submit" value="Unfriend" class="btn btn-danger btn-sm">
+                                                </form>
+                                            </td>
                                             @endif
-                                            <h4>My Friends</h4>
-                                        </div>
-                                        <div class="panel-body">
-                                            <table class="table table-responsive table-hover table-bordered table-condensed">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="td" width="10%">
-                                                            Avatar
-                                                        </th>
-                                                        <th class="td" width="70%">Name</th>
-                                                        <th class="td" colspan="3">
-                                                          Action
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                @forelse($friendLists as $friendList)
-                                                    
-                                                    @if($friendList->username != $user->username )
-                                                    <tr>
-                                                        <td>
-                                                        <img src="{{ asset($friendList->avatar_path) }}" alt="" width="30px">
-                                                        </td>
-                                                        <td>{{ $friendList->name }}</td>
+                                        </tr>
+                                        
+                                        @endif
 
-                                                        <td>
-                                                            <button class="btn btn-default btn-sm">
-                                                            <a href="{{ route('profile', $friendList->username)  }}">Show Profile</a>
-                                                            </button>
-                                                        </td>
-
-                                                        @if( $user->username == $userInfo->username)
-                                                        <td>
-                                                            <form action="{{ route('profile.friend.block', $user->username) }}" method="post">
-                                                                @csrf
-
-                                                                <input type="hidden" name="friend" value="{{ $friendList->id   }}">
-                                                                <input type="submit" value="Block" class="btn btn-info btn-sm">
-                                                            </form>
-                                                        </td>
-
-                                                        <td>
-                                                            <form action="{{ route('friend.unfriend') }}" method="post">
-                                                                @csrf
-
-                                                                <input type="hidden" name="friend" value="{{ $friendList->id   }}">
-                                                                <input type="submit" value="Unfriend" class="btn btn-danger btn-sm">
-                                                            </form>
-                                                        </td>
-                                                        @endif
-                                                    </tr>
-                                                    
-                                                    @endif
-
-                                                </tbody>
-                                                @empty
-                                                    <tr>
-                                                        <td colspan="3">
-                                                            <div class="alert alert-warning">
-                                                                You are don't have any Friends
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforelse
-                                            </table>
-
-                                        </div>
-                                    </div>
-                                </div>
+                                    </tbody>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3">
+                                                <div class="alert alert-warning">
+                                                    You are don't have any Friends
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -121,4 +91,12 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('head')
+    <style>
+        .alert{
+            margin-bottom: 0px;
+        }
+    </style>
 @endsection

@@ -66,6 +66,7 @@ class ProfilesController extends Controller
     }
 
     public  function  update(Request $request){
+        $user = auth()->user();
         $request->validate([
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
@@ -80,7 +81,7 @@ class ProfilesController extends Controller
             'about'         => $request->about,
         ];
 
-        if(request('city') !=null && auth()->user()->city != $request->city){
+        if(request('city') !=null && $user->city != $request->city){
             $location = $this->getGeocodeing(request('city'));
             if($location['accuracy'] != 'result_not_found'){
                 $data['lat'] = $location['lat'];
@@ -90,31 +91,32 @@ class ProfilesController extends Controller
 
         // dd($data);
 
-        auth()->user()->update($data);
+        $user->update($data);
         // auth()->user()->update($request->only(['first_name','last_name','date_of_birth','city','country','about']));
 
 
 
-        if(auth()->user()->email != $request->email){
+        if($user->email != $request->email){
             $token = md5(uniqid().str_random());
             DB::table('confirm_email')
                     ->insert([
                         'new_email'     =>  $request->email,
-                        'user_id'       =>  auth()->user()->id,
+                        'user_id'       =>  $user->id,
                         'confirmation_token'    =>$token
                     ])
                 ;
             $data = [
                 'confirmation_token'    => $token
             ];
-                Mail::to($request->email)->send(new ConfirmNewEmail($token));
+            
+            Mail::to($request->email)->send(new ConfirmNewEmail($token));
             session()->flash('message','Your profile information update successfully. New email need to confirm');
-            return redirect()->route('profile', auth()->user()->username);
+            return redirect()->route('profile', $user->username);
         }
 
         session()->flash('message','Your profile information update successfully');
 
-        return redirect()->route('profile', auth()->user()->username);
+        return redirect()->route('profile', $user->username);
     }
 
 
@@ -279,17 +281,14 @@ class ProfilesController extends Controller
         return view('profiles.subscriptions', compact('subscriptions','profileUser'));
     }
 
-    public  function myFavoritesShow(){
-        
+    public  function myFavoritesShow(){        
         $user =  request('user');
-        $getUserInfo = User::where('username', $user)->first();      
-        
+        $getUserInfo = User::where('username', $user)->first();
+        $this->authorize('show', $getUserInfo);
 
         if(!$this->checkFriend($getUserInfo,'see_my_favorites')){
             return redirect('/');
         }
-
-        
 
         $favoritesId = DB::table('favorites')
                 ->where('user_id', $getUserInfo->id)
@@ -299,9 +298,8 @@ class ProfilesController extends Controller
                 ->all()
 
             ;
+
         $auth_user = auth()->user();
-
-
         
         if($auth_user->username == $user){
             $favorites = Thread::whereIn('id', $favoritesId)->get();
@@ -316,7 +314,6 @@ class ProfilesController extends Controller
             $favorites = Thread::whereIn('id', $favoritesId)->where('age_restriction',0)->get();
         }
 
-
         $profileUser = $getUserInfo;   
         $is_friend = $auth_user->isFriendWith($getUserInfo);
 
@@ -326,20 +323,22 @@ class ProfilesController extends Controller
 
 
     public function myThreadsShow(){
-
         $user =  request('user');
-        
-                
+        $auth_user =auth()->user();
+
         $getUserInfo = User::with('userprivacy')->where('username', $user)->first();
+
+        $profileUser = $getUserInfo; 
+        $friend = User::where('username', $user)->first();                    
+        $is_friend = $auth_user->isFriendWith($friend);
         
+
+        $this->authorize('show', $getUserInfo);     
+              
         
         if(!$this->checkFriend($getUserInfo,'see_my_threads')){
             return redirect('/');
         }
-
-
-        $auth_user =auth()->user();
-
 
         if($auth_user->username == $user){
             $threads = Thread::where('user_id', $getUserInfo->id)->get();
@@ -353,14 +352,6 @@ class ProfilesController extends Controller
         }else {
             $threads = Thread::where('user_id', $getUserInfo->id)->where('age_restriction',0)->get();
         }
-        
-        
-        $profileUser = $getUserInfo;      
-
-        $friend = User::where('username', $user)
-                    ->first();
-                    
-        $is_friend = auth()->user()->isFriendWith($friend);
 
         return view('profiles.threads', compact('threads','profileUser', 'is_friend'));
     }
@@ -390,22 +381,19 @@ class ProfilesController extends Controller
 
 
     public function friendList(){
-
         $user = request('user');
-
         $userInfo = User::where('username', $user)->first();
+
+        $this->authorize('show', $userInfo);
 
         if(!$this->checkFriend($userInfo,'see_my_friends')){
             return redirect('/');
         }
-
         
         $friendLists = $userInfo->getFriends();
         $profileUser = $userInfo;
         $is_friend = auth()->user()->isFriendWith($userInfo);
-
-        return view('profiles.friendlist', compact('friendLists','userInfo','profileUser','is_friend'));
-        
+        return view('profiles.friendlist', compact('friendLists','userInfo','profileUser','is_friend'));        
     }
 
 

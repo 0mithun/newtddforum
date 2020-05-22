@@ -113,6 +113,9 @@
         .top-margin{
             margin-top: 55px;
         }
+        .top-30{
+            margin-top: 30px;
+        }
     </style>
 
     @yield('head')

@@ -3,70 +3,45 @@
 @section('content')
     @php
         $user = auth()->user();
+        $profileUser = $user;
     @endphp
     <div class="container">
-        <div class="row">
+        <div class="row top-margin">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-10">
-                                    <h3>{{ strtoupper($user->name) }}</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <img src="{{ asset($user->avatar_path)  }}" class="img-circle" alt="Cinque Terre" style="width:60px; height: auto;">
-                                </div>
+                                @include('profiles._header')
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-md-3">
-
                                     @include('profiles.sidebarmenu')
-
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="panel">
-                                        <div class="panel-heading" style="padding: 0px 10px">
+                                    <form action="{{  route('admin.tos.update') }}" method="post" class="form-horizontal">
+                                        @csrf
+                                        <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }}">
+                                            <label for="body" class="col-md-2 control-label">Tos Body </label>
 
-                                            @if(session()->has('successmessage'))
-                                                <div class="row">
-                                                    <div class="alert alert-success alert-dismissible" role="alert">
-                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <strong>{{ session('successmessage')  }}</strong>
-                                                    </div>
-                                                </div>
-                                            @endif
-
+                                            <div class="col-md-10">
+                                                <textarea name="body" id="body" cols="30" rows="20" class="form-control">{{ $adminInfo->tos }}</textarea>
+                                                @if ($errors->has('body'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('body') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </div>
-                                        {{--                                        <new-tag></new-tag>--}}
-                                        <div class="panel-body" style="padding-top: 0px">
-                                            <form action="{{  route('admin.tos.update') }}" method="post" class="form-horizontal">
-                                                @csrf
-                                                <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }}">
-                                                    <label for="body" class="col-md-2 control-label">Tos Body </label>
-
-                                                    <div class="col-md-10">
-                                                        <textarea name="body" id="body" cols="30" rows="10" class="form-control">{{ $adminInfo->tos }}</textarea>
-                                                        @if ($errors->has('body'))
-                                                            <span class="help-block">
-                                                                <strong>{{ $errors->first('body') }}</strong>
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-10 col-md-offset-2">
-                                                        <input type="submit" value="Update" class="btn btn-primary">
-                                                    </div>
-                                                </div>
-                                            </form>
+                                        <div class="form-group">
+                                            <div class="col-md-10 col-md-offset-2">
+                                                <input type="submit" value="Update" class="btn btn-primary">
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
