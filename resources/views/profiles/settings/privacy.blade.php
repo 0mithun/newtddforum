@@ -221,34 +221,42 @@
 
                                                             </div>
 
-                                                            <hr>
+                                                           
+                                                        
+
+                                                        
+                                                        </div>
+                                                        <hr>
                                                         <div class="row">
-                                                            <div class="col-md-3" >
+                                                            <div class="col-md-6" >
                                                                 <h4>Restrictions:</h4>
                                                             </div>
-                                                            <div class="col-md-9">
-
-                                                                
-
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <div class="checkbox">
                                                                         <label>
-                                                                            <input type="checkbox" name="show_restricted" value="1"
-                                                                                @if($privacy->show_restricted ==1)
+                                                                            <input type="checkbox" name="restricted_13" value="1"
+                                                                                @if($privacy->restricted_13 ==1)
                                                                                     checked
                                                                                 @endif
                                                                             >
-                                                                            I confirm that I am 13/18 years old & wish to view PG-13/R-Rated content
+                                                                            I confirm that I am 13+ and wish to view PG-13 content
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" name="restricted_18" value="1"
+                                                                                @if($privacy->restricted_18 ==1)
+                                                                                    checked
+                                                                                @endif
+                                                                            >
+                                                                            I confirm that I am 18+ and wish to view adult content
                                                                         </label>
                                                                     </div>
 
                                                                 </div>
-
                                                             </div>
                                                         </div>
-
-                                                        
-                                                </div>
                                             </div>
                                         </div>
 

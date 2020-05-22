@@ -44,25 +44,49 @@
                                 @endphp
 
                                 @foreach ($trending as $thread)
-                                    @if($thread->age_restriction == 0)
-                                        <li class="list-group-item">
-                                            <a href="{{ url($thread->path) }}">
-                                                {{ $thread->title }}
-                                            </a>
-                                        </li>
-                                    @elseif($auth_user !=null && $auth_user->userprivacy->show_restricted ==1)
-                                        <li class="list-group-item">
-                                            <a href="{{ url($thread->path) }}">
-                                                {{ $thread->title }}
-                                            </a>
-                                        </li>
-                                    @elseif($auth_user !=null && $thread->user_id == $auth_user->id)
-                                        <li class="list-group-item">
-                                            <a href="{{ url($thread->path) }}">
-                                                {{ $thread->title }}
-                                            </a>
-                                        </li>
+                                    @if($auth_user == null)
+                                        @if($thread->age_restriction == 0)
+                                            <li class="list-group-item">
+                                                <a href="{{ url($thread->path) }}">
+                                                    {{ $thread->title }}
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @else 
+                                        @if($thread->age_restriction == 0)
+                                            <li class="list-group-item">
+                                                <a href="{{ url($thread->path) }}">
+                                                    {{ $thread->title }}
+                                                </a>
+                                            </li>
+                                        @elseif($auth_user->id ==1)
+                                            <li class="list-group-item">
+                                                <a href="{{ url($thread->path) }}">
+                                                    {{ $thread->title }}
+                                                </a>
+                                            </li>
+                                        @elseif($thread->user_id == $auth_user->id)
+                                            <li class="list-group-item">
+                                                <a href="{{ url($thread->path) }}">
+                                                    {{ $thread->title }}
+                                                </a>
+                                            </li>
+                                        @elseif($auth_user->userprivacy->restricted_18==1)
+                                            <li class="list-group-item">
+                                                <a href="{{ url($thread->path) }}">
+                                                    {{ $thread->title }}
+                                                </a>
+                                            </li>
+                                        @elseif($auth_user->userprivacy->restricted_13==1 && $thread->age_restriction==13)
+                                            <li class="list-group-item">
+                                                <a href="{{ url($thread->path) }}">
+                                                    {{ $thread->title }}
+                                                </a>
+                                            </li>                                    
+                                        
+                                        @endif
                                     @endif
+                                    
                                 @endforeach
                             </ul>
                         </div>

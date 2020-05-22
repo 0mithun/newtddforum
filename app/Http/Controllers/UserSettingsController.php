@@ -42,15 +42,15 @@ class UserSettingsController extends Controller
 
         $data['anyone_share_my_thread_facebook'] = request('anyone_share_my_thread_facebook',0);
         $data['anyone_share_my_thread_twitter'] = request('anyone_share_my_thread_twitter',0);
-        $data['show_restricted'] = request('show_restricted',0);
+        $data['restricted_13'] = request('restricted_13',0);
+        $data['restricted_18'] = request('restricted_18',0);
 
-        
-        auth()->user()->userprivacy()->update($data);
 
+        $authUser = auth()->user();
+        $authUser->userprivacy()->update($data);
         session()->flash('successmessage','Privacy settings update successfully');
-        return redirect()->route('user.settnigs.privacy', auth()->user()->username);
+        return redirect()->route('user.settnigs.privacy', $authUser->username);
 
-        //$data[] = 
     }
 
 }

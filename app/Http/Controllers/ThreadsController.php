@@ -162,21 +162,7 @@ class ThreadsController extends Controller
             $thread->tags()->sync($new_tags);
         }
 
-        //Send user Notification
-        if($authUser->userprivacy->thread_create_share_facebook ==1){
-            $thread->notify(new ThreadPostFacebook);
-        }else if(request()->has('share_on_facebook') && request('share_on_facebook') ==1){
-            $thread ->notify(new ThreadPostFacebook);  
-        }
-        
-         //Send user Notification
-         if($authUser->userprivacy->thread_create_share_twitter ==1){
-            $thread ->notify(new ThreadPostTwitter);
-        }
-        else if(request()->has('share_on_twitter') && request('share_on_twitter') ==1){
-            $thread ->notify(new ThreadPostTwitter);  
-        }
-        
+        $this->sendNotification($thread, $authUser);
 
         if (request()->wantsJson()) {
             return response($thread, 201);
@@ -196,60 +182,12 @@ class ThreadsController extends Controller
      */
     public function show($channel, Thread $thread, Trending $trending)
     {
-        $auth_user = null;
-        $auth_user_privacy = null;
-
-        if (auth()->check()) {
-            $auth_user = auth()->user();
-            if($auth_user->id == 1){
-                $auth_user->read($thread);  
-            }
-            else if($thread->age_restriction!=0 && $auth_user->userprivacy->show_restricted==0 && $thread->user_id != $auth_user->id){
-                abort(404);
-            }         
-            
-            $auth_user->read($thread);
-        }else{
-            if($thread->age_restriction !=0){
-                return abort(404);
-            }
-        }
+        $this->authorize('show', $thread);
 
         $trending->push($thread);
         $thread->increment('visits');       
 
-        //Related Threads
-        $threadTags = $thread->tags->pluck('id')->all();       
-        $relatedThreads = [];
-        $relatedThreads = Thread::whereHas('tags', function ($q) use ($threadTags) {
-            $q->whereIn('id',$threadTags)
-            ; // or email <> ''
-        })
-        ->whereNotIn('id',[$thread->id])
-        ->get();
-        $relatedThreads = collect($relatedThreads);
-        if(auth()->check()){
-            $relatedThreads = $relatedThreads->filter(function($value, $key) use($auth_user){
-                if($value->age_restriction == 0){
-                    return true;
-                }else if($auth_user->userprivacy->show_restricted==1){
-                    return true;
-                }else if($value->user_id == $auth_user->id){
-                    return true;
-                }
-            });
-        }else{
-            $relatedThreads = $relatedThreads->filter(function($value, $key){
-                if($value->age_restriction == 0){
-                    return true;
-                }
-            });
-        }
-        if($relatedThreads->count()>4){
-            $relatedThreads = $relatedThreads->random(5);
-        }
-        
-        // $allTags = Tags::all();
+        $relatedThreads = $this->getRelatedThread($thread);
         return view('threads.show', compact('thread','relatedThreads'));
     }
 
@@ -265,7 +203,6 @@ class ThreadsController extends Controller
 
        $this->authorize('update', $thread);
        $authUser = auth()->user();
-    //    $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
         
         $rule = request()->hasFile('image_path') ? 'image|max:2048' : '';
 
@@ -349,22 +286,8 @@ class ThreadsController extends Controller
             $thread->tags()->sync($new_tags);
         }
         // return response()->json(request()->all());
-         //Send user Notification
-         if($authUser->userprivacy->thread_create_share_facebook ==1){
-             return response()->json('under default facebook');
-            $thread->notify(new ThreadPostFacebook);
-        }else if(request()->has('share_on_facebook') && request('share_on_facebook') =='true'){
-            $thread ->notify(new ThreadPostFacebook);  
-        }
-        
-         //Send user Notification
-        if($authUser->userprivacy->thread_create_share_twitter ==1){
-            return response()->json('under default twitter');
-            $thread ->notify(new ThreadPostTwitter);
-        }
-        else if(request()->has('share_on_twitter') &&  request('share_on_twitter') =='true'){
-            $thread ->notify(new ThreadPostTwitter);  
-        }
+
+        $this->sendNotification($thread, $authUser);
 
         return $thread;
     }
@@ -441,4 +364,63 @@ class ThreadsController extends Controller
         return $geocoder->getCoordinatesForAddress($address);
     }
 
+    public function getRelatedThread($thread){
+         //Related Threads
+         $threadTags = $thread->tags->pluck('id')->all();       
+         $relatedThreads = [];
+         $relatedThreads = Thread::whereHas('tags', function ($q) use ($threadTags) {
+             $q->whereIn('id',$threadTags)
+             ; // or email <> ''
+         })
+         ->whereNotIn('id',[$thread->id])
+         ->get();
+         $relatedThreads = collect($relatedThreads);
+         
+         if(auth()->check()){
+             $auth_user = auth()->user();
+             $relatedThreads = $relatedThreads->filter(function($value, $key) use($auth_user){
+                 if($value->age_restriction == 0){
+                     return true;
+                 }else if($value->user_id == $auth_user->id){
+                    return true;
+                }else if($auth_user->id ==1){
+                    return true;
+                }else if($auth_user->userprivacy->restricted_18==1){
+                     return true;
+                }else if($value->age_restriction ==13 && $auth_user->userprivacy->restricted_13==1){
+                    return true;
+                }
+             });
+         }else{
+             $relatedThreads = $relatedThreads->filter(function($value, $key){
+                 if($value->age_restriction == 0){
+                     return true;
+                 }
+             });
+         }
+         if($relatedThreads->count()>4){
+             $relatedThreads = $relatedThreads->random(5);
+         }
+
+         return $relatedThreads;
+    }
+
+    public function sendNotification($thread, $authUser){
+         //Send user Notification
+        if($authUser->userprivacy->thread_create_share_facebook ==1){
+            return response()->json('under default facebook');
+           $thread->notify(new ThreadPostFacebook);
+       }else if(request()->has('share_on_facebook') && request('share_on_facebook') =='true'){
+           $thread ->notify(new ThreadPostFacebook);  
+       }
+       
+        //Send user Notification
+       if($authUser->userprivacy->thread_create_share_twitter ==1){
+           return response()->json('under default twitter');
+           $thread ->notify(new ThreadPostTwitter);
+       }
+       else if(request()->has('share_on_twitter') &&  request('share_on_twitter') =='true'){
+           $thread ->notify(new ThreadPostTwitter);  
+       }
+    }
 }
