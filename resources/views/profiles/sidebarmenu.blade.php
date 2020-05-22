@@ -61,6 +61,7 @@
 @if($user->isAdmin && $profileUser->id == $user->id)
 
 {{--                                    For Admin--}}
+<a class="list-group-item @if($routeName == 'admin.batchtools') active @endif"  href="{{ route('admin.batchtools') }}">Batch Tools</a>
 <a class="list-group-item @if($routeName == 'admin.setesettings') active @endif"  href="{{ route('admin.setesettings') }}">Site Settings</a>
 <a class="list-group-item @if($routeName == 'admin.tag') active @endif"  href="{{ route('admin.tag') }}">Tags</a>
 <a class="list-group-item @if($routeName == 'admin.privacypolicy') active @endif"  href="{{ route('admin.privacypolicy') }}">Privacy</a>

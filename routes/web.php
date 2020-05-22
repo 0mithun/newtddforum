@@ -283,6 +283,8 @@ Route::post('/thread/check-thread-subscribe', 'ThreadSubscriptionsController@che
 Route::middleware(['admin'])->group(function (){
     Route::get('/admin/site-settings','AdminController@siteSettings')->name('admin.setesettings');
     Route::post('/admin/site-settings','AdminController@siteSettingsUpdate')->name('admin.setesettings.update');
+    
+    Route::get('/admin/batch-tools','AdminController@batchTools')->name('admin.batchtools');
 
     Route::get('/admin/tags','AdminController@tags')->name('admin.tag');
     Route::post('/admin/tags/add','AdminController@tagsAdd')->name('admin.tag.create');
@@ -304,6 +306,21 @@ Route::middleware(['admin'])->group(function (){
 
 //    Route::post('locked-threads/{thread}', 'LockedThreadsController@store')->name('locked-threads.store')->middleware('admin');
 //    Route::delete('locked-threads/{thread}', 'LockedThreadsController@destroy')->name('locked-threads.destroy')->middleware('admin');;
+
+
+    //Batch Tools 
+    Route::post('batch-tools/delete-thread', 'BatchToolController@deleteThread')->name('batchtools.delete.thread');
+
+    Route::post('batch-tools/set-age-thirteen', 'BatchToolController@setAgeThirteen')->name('batchtools.setage.thirteen');
+    Route::post('batch-tools/set-age-eighteen', 'BatchToolController@setAgeEighteen')->name('batchtools.setage.eighteen');
+
+    Route::post('batch-tools/thread-search-replace', 'BatchToolController@threadSearchReplace')->name('batchtools.search.replace');
+
+    Route::post('batch-tools/add-tag', 'BatchToolController@addTag')->name('batchtools.add.tag');   
+    Route::post('batch-tools/rename-tag', 'BatchToolController@renameTag')->name('batchtools.rename.tag');
+    Route::post('batch-tools/delete-tag', 'BatchToolController@deleteTag')->name('batchtools.delete.tag');
+
+
 });
 
 

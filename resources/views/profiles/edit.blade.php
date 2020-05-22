@@ -17,7 +17,6 @@
         <div class="row top-margin">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
                         <div class="panel-body">
                             <div class="row">
                                 @include('profiles._header')
@@ -132,7 +131,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

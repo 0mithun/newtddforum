@@ -166,4 +166,12 @@ class AdminController extends Controller
         ));
     }
 
+    public function batchTools(){
+        $profileUser = auth()->user();
+        $admin = Admin::first();
+        return view('pages.admin.batchtools', compact('admin','profileUser'));
+
+        // return 'batch tools';
+        // return redirect()->route('admin.batchtools');
+    }
 }
