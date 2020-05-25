@@ -52,7 +52,9 @@ class User extends Authenticatable
         'confirmed' => 'boolean'
     ];
 
-    protected $appends = ['profileAvatarPath'];
+    protected $appends = ['profileAvatarPath','isBanned'];
+
+    // protected $with  = ['userban'];
 
     /**
      * Get the route key name for Laravel.
@@ -261,4 +263,29 @@ class User extends Authenticatable
     public function chat(){
         return $this->hasMany(Chat::class,'from');
     }
+
+    public function userban(){
+        return $this->hasOne(Userban::class);
+    }
+    
+    public function isBanned(){
+
+        $userBan = $this->userban;
+        if($userBan){
+            $ban_expire_on = $userBan->ban_expire_on;
+            $now = Carbon::now();
+            if($ban_expire_on->lte($now)){
+                // $this->userban->delete();
+               return false;
+            }else{
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getIsBannedAttribute(){
+        return $this->isBanned();
+    }
+
 }

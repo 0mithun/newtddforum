@@ -1,6 +1,6 @@
 <template>
     <a :href="threadUrl" target="_blank" class="btn btn-xs btn-default" style="padding:0px;">
-        <i class="fa fa-twitter-square" aria-hidden="true" @click.prevent="share"></i>
+        <i class="fa fa-twitter-square" aria-hidden="true" @click.prevent="share" style="font-size:18px"></i>
     </a>
 </template>
 

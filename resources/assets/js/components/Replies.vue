@@ -11,7 +11,7 @@
             This thread has been locked. No more replies are allowed.
         </p>
 
-        <new-reply @created="add" v-else></new-reply>
+        <new-reply @created="add" v-if="!authorize('isBan')"></new-reply>
     </div>
 </template>
 

@@ -21,7 +21,7 @@
                 <div v-if="signedIn" class="col-md-2">
 
                     <div class="pull-left" v-if="!authorize('owns', reply)">
-                        <div class="dropdown">
+                        <div class="dropdown" v-if="!authorize('isBan')">
                             <button class="btn btn-light btn-sm  dropdown-toggle" type="button" data-toggle="dropdown" :disabled="isReplyOwnerReported"><span class="caret"></span></button>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="#" @click="reportUser" >Report User  <span class="text-danger glyphicon glyphicon-flag"></span> </a></li>
@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="pull-right">
-                        <favorite :reply="reply" type="sm"></favorite>
+                        <favorite :reply="reply" type="sm" v-if="!authorize('isBan')"></favorite>
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
 
                 <div class="div" v-else>
                     <NestedReply v-if="addNested" :reply="reply"></NestedReply>
-                    <div v-if="signedIn">
+                    <div v-if="signedIn && !authorize('isBan')">
 
                         <button class="btn btn-xs mr-1 btn-default" @click="addNestedReply" v-if="!addNested">Reply</button>
                     </div>
@@ -74,7 +74,7 @@
                     <ReplyNested v-for="(nestedReply, index) in nestedReplies" :reply="nestedReply" :key="index"></ReplyNested>
                     <NestedReply v-if="addNested" :reply="reply"></NestedReply>
                     <div class="col-md-12 no-margin" >
-                        <div v-if="signedIn">
+                        <div v-if="signedIn &&  !authorize('isBan')">
                             <button class="btn btn-xs mr-1 btn-default" @click="addNestedReply" v-if="!addNested">Reply</button>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
 
         <div class="panel-footer level reply-footer reply-footer" >
             <div class="col-md-12" v-if="authorize('owns', reply) || authorize('owns', reply.thread)">
-                <div v-if="authorize('owns', reply)">
+                <div v-if="!authorize('isBan')">
                     <button class="btn btn-xs mr-1" @click="editing = true" v-if="! editing">Edit</button>
                     <button class="btn btn-xs btn-danger red-bg mr-1" @click="destroy">Delete</button>
                 </div>
@@ -114,17 +114,17 @@
 
             <!-- Need Check Best Reply  -->
 
-            <div>
-                <button class="btn btn-xs btn-default ml-a pull-right" @click="markBestReply" v-if="authorize('owns', reply.thread) && !isReplyBest">Best Reply?</button>
+            <div v-if="authorize('owns', reply.thread) && !isReplyBest">
+                <button class="btn btn-xs btn-default ml-a pull-right" @click="markBestReply" v-if="!authorize('isBan')">Best Reply?</button>
             </div>
                 
 
-            <div  class="col-md-1" v-if="signedIn">                
-
+            <div  class="col-md-1" v-if="signedIn && !authorize('isBan')">              
                 <button class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply" v-if="!report && !authorize('owns', reply)" :disabled="isReplyReported" >
                     <span class="glyphicon glyphicon-flag"></span>
                 </button>
             </div>
+
 
         </div>
     </div>

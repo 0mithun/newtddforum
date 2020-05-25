@@ -1,6 +1,8 @@
 @php
     $creatorPrivacy =  $thread->creator->userprivacy;
 @endphp
+
+
 @if($creatorPrivacy->anyone_share_my_thread_facebook == 1)                            
     <fb-share :thread="thread"></fb-share>                            
 @else

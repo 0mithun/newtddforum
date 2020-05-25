@@ -15,7 +15,7 @@
                 </h5>
 
                 <div v-if="signedIn" class="col-md-2">
-                    <div class="pull-left" v-if="!authorize('owns', reply)">
+                    <div class="pull-left" v-if="!authorize('owns', reply) ">
                         <div class="dropdown">
                             <button class="btn btn-light btn-xs  dropdown-toggle" type="button" data-toggle="dropdown" :disabled="isReplyOwnerReported"><span class="caret"></span></button>
                             <ul class="dropdown-menu dropdown-menu-right">
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="pull-right">
-                        <favorite :reply="reply" type="xs"></favorite>
+                        <favorite :reply="reply" type="xs" v-if=" !authorize('isBan')"></favorite>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
             </div>
         </div>
 
-        <div class="panel-footer level reply-footer" >
+        <div class="panel-footer level reply-footer" v-if=" !authorize('isBan')">
             <div class="col-md-12" v-if="authorize('owns', reply) || authorize('owns', reply.thread)">
                 <div v-if="authorize('owns', reply)">
                     <button class="btn btn-xs mr-1" @click="editing = true" v-if="! editing">Edit</button>

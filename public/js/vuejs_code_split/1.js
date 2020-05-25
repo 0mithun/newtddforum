@@ -136,6 +136,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -173,27 +194,27 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     likeClass: function likeClass() {
-      return [this.isLiked ? 'blue-icon' : 'black-icon'];
+      return [this.isLiked ? "blue-icon" : "black-icon"];
     },
     dislikeClass: function dislikeClass() {
-      return [this.isDesliked ? 'red-icon' : 'black-icon'];
+      return [this.isDesliked ? "red-icon" : "black-icon"];
     },
     signedIn: function signedIn() {
       return window.App.user ? true : false;
     },
     emojiClass: function emojiClass() {
       if (this.emojiType == 1) {
-        return 'emoji-like-big';
+        return "emoji-like-big";
       } else if (this.emojiType == 2) {
-        return 'emoji-love-big';
+        return "emoji-love-big";
       } else if (this.emojiType == 3) {
-        return 'emoji-haha-big';
+        return "emoji-haha-big";
       } else if (this.emojiType == 4) {
-        return 'emoji-wow-big';
+        return "emoji-wow-big";
       } else if (this.emojiType == 5) {
-        return 'emoji-sad-big';
+        return "emoji-sad-big";
       } else if (this.emojiType == 6) {
-        return 'emoji-angry-big';
+        return "emoji-angry-big";
       } else {
         return null;
       }
@@ -202,17 +223,17 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     smallEmojiClass: function smallEmojiClass(type) {
       if (type == 1) {
-        return 'emoji-like-small';
+        return "emoji-like-small";
       } else if (type == 2) {
-        return 'emoji-love-small';
+        return "emoji-love-small";
       } else if (type == 3) {
-        return 'emoji-haha-small';
+        return "emoji-haha-small";
       } else if (type == 4) {
-        return 'emoji-wow-small';
+        return "emoji-wow-small";
       } else if (type == 5) {
-        return 'emoji-sad-small';
+        return "emoji-sad-small";
       } else if (type == 6) {
-        return 'emoji-angry-small';
+        return "emoji-angry-small";
       } else {
         return null;
       }
@@ -221,7 +242,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (this.signedIn) {
-        axios.post('/thread/' + this.thread.id + '/all-like-type').then(function (res) {
+        axios.post("/thread/" + this.thread.id + "/all-like-type").then(function (res) {
           _this.allLikeTypes = res.data;
         });
       }
@@ -230,7 +251,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       if (this.isLiked) {
-        axios.post('/thread/' + this.thread.id + '/like-type').then(function (res) {
+        axios.post("/thread/" + this.thread.id + "/like-type").then(function (res) {
           _this2.emojiType = res.data;
         });
       }
@@ -240,7 +261,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.likeTypeUsers = null;
       this.loadingUser = true;
-      axios.get('/thread/' + this.thread.id + '/like-type-users/' + type).then(function (res) {
+      axios.get("/thread/" + this.thread.id + "/like-type-users/" + type).then(function (res) {
         _this3.loadingUser = false;
         _this3.likeTypeUsers = res.data;
         _this3.showLikeTypeUser = true;
@@ -258,7 +279,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       // this.likesCount = 1;
-      axios.get('/thread/' + this.thread.id + '/likes-count').then(function (res) {
+      axios.get("/thread/" + this.thread.id + "/likes-count").then(function (res) {
         _this5.likesCount = res.data;
       });
     },
@@ -266,7 +287,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this6 = this;
 
       // this.dislikesCount = 1;
-      axios.get('/thread/' + this.thread.id + '/dislikes-count').then(function (res) {
+      axios.get("/thread/" + this.thread.id + "/dislikes-count").then(function (res) {
         _this6.dislikesCount = res.data;
       });
     },
@@ -277,7 +298,7 @@ __webpack_require__.r(__webpack_exports__);
         return false;
       }
 
-      axios.post('/thread/' + this.thread.id + '/dislikes').then(function (res) {
+      axios.post("/thread/" + this.thread.id + "/dislikes").then(function (res) {
         if (_this7.isDesliked) {
           _this7.isDesliked = false;
           _this7.dislikesCount--;
@@ -304,7 +325,7 @@ __webpack_require__.r(__webpack_exports__);
         return false;
       }
 
-      axios.post('/thread/' + this.thread.id + '/likes', {
+      axios.post("/thread/" + this.thread.id + "/likes", {
         type: type,
         isDelete: isDelete
       }).then(function (res) {
@@ -391,7 +412,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.like-buttons[data-v-7a27c6a0]{\n        position: relative;\n}\n.emoji-icons-div[data-v-7a27c6a0]{\n\t\tposition: absolute;\n\t\ttop: -100!important;\n\t\tleft: 100;\n\t\twidth: 150px;\n\t\theight: 35px;\n\t\tmargin-top: 3px;\n\t\tright: -55px;\n}\n.emoji-icons[data-v-7a27c6a0]{\n        color:red;\n        font-size: 18px;\n        font-weight: bold;\n}\n.Like[data-v-7a27c6a0] {\n  display: inline-block;\n    margin-top: 20px;\n}\n.Like__link[data-v-7a27c6a0] {\n  cursor: pointer;\n}\n.Emojis[data-v-7a27c6a0] {\n  position: absolute;\n  left: 0;\n  bottom: 120%;\n  transform: translate3d(-10%, 0, 0);\n  display: flex;\n  padding: .125rem;\n  border-radius: 100rem;\n  transition: .3s .3s;\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.15);\n  opacity: 0;\n  visibility: hidden;\n  background:white;\n}\n.Emojis[data-v-7a27c6a0]:hover, .Like__link.js-hover ~ .Emojis[data-v-7a27c6a0], .Like__link:hover ~ .Emojis[data-v-7a27c6a0] {\n  transition-delay: 0s;\n  opacity: 1;\n  visibility: visible;\n}\n.Emoji[data-v-7a27c6a0] {\n     position: relative;\n    width: 3rem;\n    height: 3rem;\n    color: #ffd972;\n    cursor: pointer;\n    transition-delay: .6s, .3s;\n    transition-duration: 0s, .3s;\n    transition-property: transform, opacity;\n    opacity: 0;\n    transform: translate3d(0, 100%, 0) scale(0.3);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0], .Like__link.js-hover + .Emojis .Emoji[data-v-7a27c6a0], .Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0] {\n  transform: none;\n  opacity: 1;\n}\n.Emoji .icon[data-v-7a27c6a0] {\n    position: absolute;\n    position: absolute;\n    top: -8px;\n    left: -8px;\n    right: -10px;\n    bottom: -10px;\n    transform: scale(0.4);\n    transition: transform .2s ease;\n    padding: 0px!important;\n}\n.Emoji:hover .icon[data-v-7a27c6a0] {\n  transform: scale(0.6) translate3d(0, -10%, 0);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(1), .Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(1) {\n  transition-duration: 0.2s;\n  transition-delay: 0s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(2), .Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(2) {\n  transition-duration: 0.3s;\n  transition-delay: 0.02s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.2);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(3), .Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(3) {\n  transition-duration: 0.4s;\n  transition-delay: 0.04s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.4);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(4), .Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(4) {\n  transition-duration: 0.5s;\n  transition-delay: 0.06s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.6);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(5), .Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(5) {\n  transition-duration: 0.6s;\n  transition-delay: 0.08s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.8);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(6), .Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(6) {\n  transition-duration: 0.7s;\n  transition-delay: 0.1s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 2);\n}\n.icon[data-v-7a27c6a0] {\n  background-image: url(\"https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif\");\n  background-repeat: no-repeat;\n}\n.icon--like[data-v-7a27c6a0] {\n  background-position: -6px -6px;\n}\n.icon--heart[data-v-7a27c6a0] {\n  background-position: -68px -4px;\n}\n.icon--haha[data-v-7a27c6a0] {\n  background-position: -129px -6px;\n}\n.icon--wow[data-v-7a27c6a0] {\n  background-position: -191px -6px;\n}\n.icon--sad[data-v-7a27c6a0] {\n  background-position: -252px -5px;\n}\n.icon--angry[data-v-7a27c6a0] {\n  background-position: -314px -6px;\n}\n*[data-v-7a27c6a0],\n*[data-v-7a27c6a0]::before,\n*[data-v-7a27c6a0]::after {\n  box-sizing: border-box;\n}\n.intro[data-v-7a27c6a0] {\n  width: 100%;\n  max-width: 30rem;\n  padding-bottom: 1rem;\n  margin: 0 auto 1em;\n  padding-top: .5em;\n  text-transform: capitalize;\n  border-bottom: 1px dashed rgba(0, 0, 0, 0.3);\n}\n.intro small[data-v-7a27c6a0] {\n  display: block;\n  opacity: .5;\n  font-style: italic;\n  text-transform: none;\n}\n.info[data-v-7a27c6a0] {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  margin: 0;\n  padding: 1em;\n  font-size: .9em;\n  font-style: italic;\n  font-family: serif;\n  text-align: right;\n  opacity: .5;\n}\n.info a[data-v-7a27c6a0] {\n  color: inherit;\n}\nkbd[data-v-7a27c6a0] {\n  display: inline-block;\n  background-color: rgba(0, 0, 0, 0.05);\n  color: #666;\n  text-shadow: 1px 1px #fff;\n  padding: 1px 2px;\n  border-radius: 2px;\n  box-shadow: inset 1px 1px 3px -1px rgba(0, 0, 0, 0.5);\n}\n.Emoji--like[data-v-7a27c6a0]::after,.Emoji--love[data-v-7a27c6a0]::after,.Emoji--haha[data-v-7a27c6a0]::after,.Emoji--wow[data-v-7a27c6a0]::after,.Emoji--sad[data-v-7a27c6a0]::after,.Emoji--angry[data-v-7a27c6a0]::after{\n\t    color: white;\n    position: absolute;\n    width: 40px;\n    top: -40;\n    left: 0;\n    margin-top: -24px;\n    background-color: rgb(0, 0, 0,0.6);\n    padding: 0px 0px;\n    border-radius: 25px;\n    text-align: center;\n    font-size: 13px;\n    font-weight: bold;\n}\n.Emoji--like[data-v-7a27c6a0]::after{\n\t\tcontent: 'like';\n\t\ttop: -40;\n\t\tleft: 0;\n\t\tmargin-top: -24px;\n\t\tdisplay: none;\n}\n.Emoji--like[data-v-7a27c6a0]:hover:after{\n\t\tdisplay: block;\n}\n.Emoji--love[data-v-7a27c6a0]::after{\n\t\tcontent: 'love';\n\t\ttop: -40;\n\t\tleft: 0;\n\t\tmargin-top: -24px;\n\t\tdisplay: none;\n}\n.Emoji--love[data-v-7a27c6a0]:hover:after{\n\t\tdisplay: block;\n}\n.Emoji--haha[data-v-7a27c6a0]::after{\n\t\tcontent: 'haha';\n\t\ttop: -40;\n\t\tleft: 0;\n\t\tmargin-top: -24px;\n\t\t width: 45px;\n\t\tdisplay: none;\n}\n.Emoji--haha[data-v-7a27c6a0]:hover:after{\n\t\tdisplay: block;\n}\n.Emoji--wow[data-v-7a27c6a0]::after{\n\t\tcontent: 'wow';\n\t\ttop: -40;\n\t\tleft: 0;\n\t\tmargin-top: -24px;\n\t\tdisplay: none;\n}\n.Emoji--wow[data-v-7a27c6a0]:hover:after{\n\t\tdisplay: block;\n}\n.Emoji--sad[data-v-7a27c6a0]::after{\n\t\tcontent: 'sad';\n\t\ttop: -40;\n\t\tleft: 0;\n\t\tmargin-top: -24px;\n\t\tdisplay: none;\n}\n.Emoji--sad[data-v-7a27c6a0]:hover:after{\n\t\tdisplay: block;\n}\n.Emoji--angry[data-v-7a27c6a0]::after{\n\t\tcontent: 'angry';\n\t\ttop: -40;\n\t\tleft: 0;\n\t\tmargin-top: -24px;\n\t\t width: 50px;\n\t\tdisplay: none;\n}\n.Emoji--angry[data-v-7a27c6a0]:hover::after{\n\t\tdisplay: block;\n}\n.icon[data-v-7a27c6a0][data-v-7a27c6a0] {\n\t\tbackground-image: url(https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif);\n\t\tbackground-repeat: no-repeat;\n}\n.icon[data-v-7a27c6a0][data-v-7a27c6a0] {\n\t\tbackground-image: url(https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif);\n\t\tbackground-repeat: no-repeat;\n}\nbutton.emoji-like-counts[data-v-7a27c6a0]{\n\t\tborder: none;\n\t\tbackground: none;\n\t\tborder: none;\n\t\tbackground: none;\n\t\t\n\t\tbackground-size: 14px;\n\t\theight: 14px;\n\t\twidth:14px;\n\t\tmargin-left: 0;\n\t\tmargin-top: 5px\n}\nbutton.emoji-like-counts.emoji-like-small[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -42px;\n}\nbutton.emoji-like-counts.emoji-love-small[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -56px;\n}\nbutton.emoji-like-counts.emoji-haha-small[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -28px;\n}\nbutton.emoji-like-counts.emoji-wow-small[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -112px;\n}\nbutton.emoji-like-counts.emoji-sad-small[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -70px;\n}\nbutton.emoji-like-counts.emoji-angry-small[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -0px;\n}\nbutton.emoji-like-counts span[data-v-7a27c6a0]{\n\t\tmargin-left: 7px;\n    \tmargin-top: -5px;\n\t\toverflow: hidden;\n\t\tdisplay: inline-block;\n\t\tfont-size: 13px;\n}\n.like-type-users[data-v-7a27c6a0]{\n\t\tcolor: white;\n\t\tposition: absolute;\n\t\twidth: 120px;\n\t\ttop: -40;\n\t\tleft: 40px;\n\t\tmargin-top: -84px;\n\t\tbackground-color: rgb(0, 0, 0,.9);\n\t\tpadding: 0px 0px;\n\t\tborder-radius: 5px;\n\t\ttext-align: left;\n\t\tfont-size: 12px;\n\t\tz-index: 99999999999;\n\t\tpadding: 5px;\n\t\tbottom: 0px;\n}\n.small-emoticion-icons[data-v-7a27c6a0]{\n\t\tbackground: red;\n\t\tposition: relative;\n\t\tz-index: 88888;\n\t\ttop: 0px;\n\t\theight: 0px;\n}\n.emoji-icons-div[data-v-7a27c6a0]{\n\t\t\theight: 0px;\n}\n.emoji-icons-div[data-v-7a27c6a0]{\n\t\t margin-top: -5px;\n}\n.like-emoji-icon[data-v-7a27c6a0]{\n\t\t border-radius: 3px 0px 0px 3px!important;\n}\n.like-buttons[data-v-7a27c6a0] {\n    position: relative;\n    width: 106px;\n}\n.small-emoticion-icons[data-v-7a27c6a0] {\n      background: red;\n      position: relative;\n      z-index: 88888;\n      top: 0px;\n      height: 0px;\n      left: 24px;\n      display: block;\n      width: 161px;\n      display: inline-block;\n}\nbutton.emoji-like-counts.emoji-like-big[data-v-7a27c6a0], button.emoji-like-counts.emoji-love-big[data-v-7a27c6a0],button.emoji-like-counts.emoji-haha-big[data-v-7a27c6a0],button.emoji-like-counts.emoji-wow-big[data-v-7a27c6a0],button.emoji-like-counts.emoji-sad-big[data-v-7a27c6a0],button.emoji-like-counts.emoji-angry-big[data-v-7a27c6a0]{\n      border: none;\n      background: none;\n      border: none;\n      background: none;\n      \n      background-size: 22px;\n      height: 22px;\n      width:22px;\n      margin-left: 0;\n      margin-top: 5px\n}\nbutton.emoji-like-counts.emoji-like-big[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -42px;\n}\nbutton.emoji-like-counts.emoji-like-big[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -66px;\n}\nbutton.emoji-like-counts.emoji-love-big[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -88px;\n}\nbutton.emoji-like-counts.emoji-haha-big[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -44px;\n}\nbutton.emoji-like-counts.emoji-wow-big[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -176px;\n}\nbutton.emoji-like-counts.emoji-sad-big[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px -110px;\n}\nbutton.emoji-like-counts.emoji-angry-big[data-v-7a27c6a0]{\n\t\tbackground-image: url(/images/png/facebook_iconset.png);\n\t\tbackground-repeat: no-repeat;\n\t\tbackground-position: 0px 0px;\n}\nbutton.emoji-like-counts[data-v-7a27c6a0] {\n    margin-right: 8px;\n}\n.small-emoticion-icons[data-v-7a27c6a0]{\n  left:0px\n}\n.small-emoticion-icons-left-margin[data-v-7a27c6a0]{\n  left:-20px;\n}\n.emoji-icons-div[data-v-7a27c6a0]{\n    margin-top: -10px;\n}\n.emoji-like-counts[data-v-7a27c6a0]:last-child{\n  margin-right: 0px;\n}\n\n", ""]);
+exports.push([module.i, "\n.like-buttons[data-v-7a27c6a0] {\n  position: relative;\n}\n.emoji-icons-div[data-v-7a27c6a0] {\n  position: absolute;\n  top: -100 !important;\n  left: 100;\n  width: 150px;\n  height: 35px;\n  margin-top: 3px;\n  right: -55px;\n}\n.emoji-icons[data-v-7a27c6a0] {\n  color: red;\n  font-size: 18px;\n  font-weight: bold;\n}\n.Like[data-v-7a27c6a0] {\n  display: inline-block;\n  margin-top: 20px;\n}\n.Like__link[data-v-7a27c6a0] {\n  cursor: pointer;\n}\n.Emojis[data-v-7a27c6a0] {\n  position: absolute;\n  left: 0;\n  bottom: 120%;\n  transform: translate3d(-10%, 0, 0);\n  display: flex;\n  padding: 0.125rem;\n  border-radius: 100rem;\n  transition: 0.3s 0.3s;\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.15);\n  opacity: 0;\n  visibility: hidden;\n  background: white;\n}\n.Emojis[data-v-7a27c6a0]:hover,\n.Like__link.js-hover ~ .Emojis[data-v-7a27c6a0],\n.Like__link:hover ~ .Emojis[data-v-7a27c6a0] {\n  transition-delay: 0s;\n  opacity: 1;\n  visibility: visible;\n}\n.Emoji[data-v-7a27c6a0] {\n  position: relative;\n  width: 3rem;\n  height: 3rem;\n  color: #ffd972;\n  cursor: pointer;\n  transition-delay: 0.6s, 0.3s;\n  transition-duration: 0s, 0.3s;\n  transition-property: transform, opacity;\n  opacity: 0;\n  transform: translate3d(0, 100%, 0) scale(0.3);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0],\n.Like__link.js-hover + .Emojis .Emoji[data-v-7a27c6a0],\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0] {\n  transform: none;\n  opacity: 1;\n}\n.Emoji .icon[data-v-7a27c6a0] {\n  position: absolute;\n  position: absolute;\n  top: -8px;\n  left: -8px;\n  right: -10px;\n  bottom: -10px;\n  transform: scale(0.4);\n  transition: transform 0.2s ease;\n  padding: 0px !important;\n}\n.Emoji:hover .icon[data-v-7a27c6a0] {\n  transform: scale(0.6) translate3d(0, -10%, 0);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(1),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(1) {\n  transition-duration: 0.2s;\n  transition-delay: 0s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(2),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(2) {\n  transition-duration: 0.3s;\n  transition-delay: 0.02s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.2);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(3),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(3) {\n  transition-duration: 0.4s;\n  transition-delay: 0.04s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.4);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(4),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(4) {\n  transition-duration: 0.5s;\n  transition-delay: 0.06s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.6);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(5),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(5) {\n  transition-duration: 0.6s;\n  transition-delay: 0.08s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.8);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(6),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(6) {\n  transition-duration: 0.7s;\n  transition-delay: 0.1s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 2);\n}\n.icon[data-v-7a27c6a0] {\n  background-image: url(\"https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif\");\n  background-repeat: no-repeat;\n}\n.icon--like[data-v-7a27c6a0] {\n  background-position: -6px -6px;\n}\n.icon--heart[data-v-7a27c6a0] {\n  background-position: -68px -4px;\n}\n.icon--haha[data-v-7a27c6a0] {\n  background-position: -129px -6px;\n}\n.icon--wow[data-v-7a27c6a0] {\n  background-position: -191px -6px;\n}\n.icon--sad[data-v-7a27c6a0] {\n  background-position: -252px -5px;\n}\n.icon--angry[data-v-7a27c6a0] {\n  background-position: -314px -6px;\n}\n*[data-v-7a27c6a0],\n*[data-v-7a27c6a0]::before,\n*[data-v-7a27c6a0]::after {\n  box-sizing: border-box;\n}\n.intro[data-v-7a27c6a0] {\n  width: 100%;\n  max-width: 30rem;\n  padding-bottom: 1rem;\n  margin: 0 auto 1em;\n  padding-top: 0.5em;\n  text-transform: capitalize;\n  border-bottom: 1px dashed rgba(0, 0, 0, 0.3);\n}\n.intro small[data-v-7a27c6a0] {\n  display: block;\n  opacity: 0.5;\n  font-style: italic;\n  text-transform: none;\n}\n.info[data-v-7a27c6a0] {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  margin: 0;\n  padding: 1em;\n  font-size: 0.9em;\n  font-style: italic;\n  font-family: serif;\n  text-align: right;\n  opacity: 0.5;\n}\n.info a[data-v-7a27c6a0] {\n  color: inherit;\n}\nkbd[data-v-7a27c6a0] {\n  display: inline-block;\n  background-color: rgba(0, 0, 0, 0.05);\n  color: #666;\n  text-shadow: 1px 1px #fff;\n  padding: 1px 2px;\n  border-radius: 2px;\n  box-shadow: inset 1px 1px 3px -1px rgba(0, 0, 0, 0.5);\n}\n.Emoji--like[data-v-7a27c6a0]::after,\n.Emoji--love[data-v-7a27c6a0]::after,\n.Emoji--haha[data-v-7a27c6a0]::after,\n.Emoji--wow[data-v-7a27c6a0]::after,\n.Emoji--sad[data-v-7a27c6a0]::after,\n.Emoji--angry[data-v-7a27c6a0]::after {\n  color: white;\n  position: absolute;\n  width: 40px;\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  background-color: rgb(0, 0, 0, 0.6);\n  padding: 0px 0px;\n  border-radius: 25px;\n  text-align: center;\n  font-size: 13px;\n  font-weight: bold;\n}\n.Emoji--like[data-v-7a27c6a0]::after {\n  content: \"like\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  display: none;\n}\n.Emoji--like[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--love[data-v-7a27c6a0]::after {\n  content: \"love\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  display: none;\n}\n.Emoji--love[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--haha[data-v-7a27c6a0]::after {\n  content: \"haha\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  width: 45px;\n  display: none;\n}\n.Emoji--haha[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--wow[data-v-7a27c6a0]::after {\n  content: \"wow\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  display: none;\n}\n.Emoji--wow[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--sad[data-v-7a27c6a0]::after {\n  content: \"sad\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  display: none;\n}\n.Emoji--sad[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--angry[data-v-7a27c6a0]::after {\n  content: \"angry\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  width: 50px;\n  display: none;\n}\n.Emoji--angry[data-v-7a27c6a0]:hover::after {\n  display: block;\n}\n.icon[data-v-7a27c6a0][data-v-7a27c6a0] {\n  background-image: url(https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif);\n  background-repeat: no-repeat;\n}\n.icon[data-v-7a27c6a0][data-v-7a27c6a0] {\n  background-image: url(https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif);\n  background-repeat: no-repeat;\n}\nbutton.emoji-like-counts[data-v-7a27c6a0] {\n  border: none;\n  background: none;\n  border: none;\n  background: none;\n\n  background-size: 14px;\n  height: 14px;\n  width: 14px;\n  margin-left: 0;\n  margin-top: 5px;\n}\nbutton.emoji-like-counts.emoji-like-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -42px;\n}\nbutton.emoji-like-counts.emoji-love-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -56px;\n}\nbutton.emoji-like-counts.emoji-haha-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -28px;\n}\nbutton.emoji-like-counts.emoji-wow-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -112px;\n}\nbutton.emoji-like-counts.emoji-sad-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -70px;\n}\nbutton.emoji-like-counts.emoji-angry-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -0px;\n}\nbutton.emoji-like-counts span[data-v-7a27c6a0] {\n  margin-left: 7px;\n  margin-top: -5px;\n  overflow: hidden;\n  display: inline-block;\n  font-size: 13px;\n}\n.like-type-users[data-v-7a27c6a0] {\n  color: white;\n  position: absolute;\n  width: 120px;\n  top: -40;\n  left: 40px;\n  margin-top: -84px;\n  background-color: rgb(0, 0, 0, 0.9);\n  padding: 0px 0px;\n  border-radius: 5px;\n  text-align: left;\n  font-size: 12px;\n  z-index: 99999999999;\n  padding: 5px;\n  bottom: 0px;\n}\n.small-emoticion-icons[data-v-7a27c6a0] {\n  background: red;\n  position: relative;\n  z-index: 88888;\n  top: 0px;\n  height: 0px;\n}\n.emoji-icons-div[data-v-7a27c6a0] {\n  height: 0px;\n}\n.emoji-icons-div[data-v-7a27c6a0] {\n  margin-top: -5px;\n}\n.like-emoji-icon[data-v-7a27c6a0] {\n  border-radius: 3px 0px 0px 3px !important;\n}\n.like-buttons[data-v-7a27c6a0] {\n  position: relative;\n  width: 106px;\n}\n.small-emoticion-icons[data-v-7a27c6a0] {\n  background: red;\n  position: relative;\n  z-index: 88888;\n  top: 0px;\n  height: 0px;\n  left: 24px;\n  display: block;\n  width: 161px;\n  display: inline-block;\n}\nbutton.emoji-like-counts.emoji-like-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-love-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-haha-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-wow-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-sad-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-angry-big[data-v-7a27c6a0] {\n  border: none;\n  background: none;\n  border: none;\n  background: none;\n\n  background-size: 22px;\n  height: 22px;\n  width: 22px;\n  margin-left: 0;\n  margin-top: 5px;\n}\nbutton.emoji-like-counts.emoji-like-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -42px;\n}\nbutton.emoji-like-counts.emoji-like-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -66px;\n}\nbutton.emoji-like-counts.emoji-love-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -88px;\n}\nbutton.emoji-like-counts.emoji-haha-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -44px;\n}\nbutton.emoji-like-counts.emoji-wow-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -176px;\n}\nbutton.emoji-like-counts.emoji-sad-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -110px;\n}\nbutton.emoji-like-counts.emoji-angry-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px 0px;\n}\nbutton.emoji-like-counts[data-v-7a27c6a0] {\n  margin-right: 8px;\n}\n.small-emoticion-icons[data-v-7a27c6a0] {\n  left: 0px;\n}\n.small-emoticion-icons-left-margin[data-v-7a27c6a0] {\n  left: -20px;\n}\n.emoji-icons-div[data-v-7a27c6a0] {\n  margin-top: -10px;\n}\n.emoji-like-counts[data-v-7a27c6a0]:last-child {\n  margin-right: 0px;\n}\n.like-buttons[data-v-7a27c6a0] {\n    position: relative;\n    width: 89px;\n}\n", ""]);
 
 // exports
 
@@ -459,6 +480,7 @@ var render = function() {
     [
       _c("i", {
         staticClass: "fa fa-facebook-square",
+        staticStyle: { "font-size": "18px" },
         attrs: { "aria-hidden": "true" }
       })
     ]
@@ -490,6 +512,7 @@ var render = function() {
     "div",
     {
       staticClass: "btn-group btn-group-xs pull-left like-buttons",
+      style: _vm.signedIn ? "width:83px" : "width:89px",
       attrs: { role: "group" }
     },
     [
@@ -596,7 +619,7 @@ var render = function() {
       _c(
         "button",
         {
-          staticClass: "btn btn-xs btn-default ml-a  like-emoji-icon ",
+          staticClass: "btn btn-xs btn-default ml-a like-emoji-icon",
           on: {
             click: function($event) {
               return _vm.toggleLike(1, true)
@@ -619,7 +642,7 @@ var render = function() {
       _c(
         "button",
         {
-          staticClass: "btn btn-xs btn-default ml-a  ",
+          staticClass: "btn btn-xs btn-default ml-a",
           on: { click: _vm.toggleDislike }
         },
         [
@@ -633,8 +656,6 @@ var render = function() {
           )
         ]
       ),
-      _vm._v(" "),
-      _c("favorite-thread", { attrs: { thread: _vm.thread } }),
       _vm._v(" "),
       _c(
         "div",
@@ -651,7 +672,7 @@ var render = function() {
                 [
                   _vm._l(_vm.likeTypeUsers, function(user, index) {
                     return _c("span", { key: index }, [
-                      _vm._v(_vm._s(user) + " "),
+                      _vm._v("\n          " + _vm._s(user) + "\n          "),
                       _c("br")
                     ])
                   }),
@@ -673,7 +694,7 @@ var render = function() {
           _vm._l(_vm.allLikeTypes, function(likeType, index) {
             return _c("button", {
               key: index,
-              staticClass: "emoji-like-counts ",
+              staticClass: "emoji-like-counts",
               class: _vm.smallEmojiClass(likeType),
               on: {
                 mouseenter: function($event) {
@@ -688,8 +709,7 @@ var render = function() {
         ],
         2
       )
-    ],
-    1
+    ]
   )
 }
 var staticRenderFns = [
@@ -703,7 +723,10 @@ var staticRenderFns = [
         staticClass: "Like__link js-hover",
         staticStyle: { visibility: "hidden" }
       },
-      [_vm._v("Like "), _c("kbd", [_vm._v("hover me!!")])]
+      [
+        _vm._v("\n            Like\n            "),
+        _c("kbd", [_vm._v("hover me!!")])
+      ]
     )
   }
 ]
@@ -738,6 +761,7 @@ var render = function() {
     [
       _c("i", {
         staticClass: "fa fa-twitter-square",
+        staticStyle: { "font-size": "18px" },
         attrs: { "aria-hidden": "true" },
         on: {
           click: function($event) {

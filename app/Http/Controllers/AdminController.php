@@ -174,4 +174,10 @@ class AdminController extends Controller
         // return 'batch tools';
         // return redirect()->route('admin.batchtools');
     }
+
+    public function banUsers(){
+        $profileUser = auth()->user();
+        $admin = Admin::first();
+        return view('pages.admin.banusers', compact('admin','profileUser'));
+    }
 }

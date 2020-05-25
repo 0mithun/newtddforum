@@ -1,6 +1,6 @@
 <template>
-    <a :href="threadUrl" target="_blank" class="btn btn-xs btn-default" style="padding:0px;" @click.prevent="share"    >
-        <i class="fa fa-facebook-square" aria-hidden="true"></i>
+    <a :href="threadUrl" target="_blank" class="btn btn-xs btn-default" style="padding:0px;"   @click.prevent="share"    >
+        <i class="fa fa-facebook-square" aria-hidden="true" style="font-size:18px"></i>
     </a>
 </template>
 

@@ -284,7 +284,7 @@ Route::middleware(['admin'])->group(function (){
     Route::get('/admin/site-settings','AdminController@siteSettings')->name('admin.setesettings');
     Route::post('/admin/site-settings','AdminController@siteSettingsUpdate')->name('admin.setesettings.update');
     
-    Route::get('/admin/batch-tools','AdminController@batchTools')->name('admin.batchtools');
+   
 
     Route::get('/admin/tags','AdminController@tags')->name('admin.tag');
     Route::post('/admin/tags/add','AdminController@tagsAdd')->name('admin.tag.create');
@@ -309,6 +309,7 @@ Route::middleware(['admin'])->group(function (){
 
 
     //Batch Tools 
+    Route::get('/admin/batch-tools','AdminController@batchTools')->name('admin.batchtools');
     Route::post('batch-tools/delete-thread', 'BatchToolController@deleteThread')->name('batchtools.delete.thread');
 
     Route::post('batch-tools/set-age-thirteen', 'BatchToolController@setAgeThirteen')->name('batchtools.setage.thirteen');
@@ -319,6 +320,15 @@ Route::middleware(['admin'])->group(function (){
     Route::post('batch-tools/add-tag', 'BatchToolController@addTag')->name('batchtools.add.tag');   
     Route::post('batch-tools/rename-tag', 'BatchToolController@renameTag')->name('batchtools.rename.tag');
     Route::post('batch-tools/delete-tag', 'BatchToolController@deleteTag')->name('batchtools.delete.tag');
+
+
+    //Ban User
+    Route::get('admin/manage-users', 'AdminController@banUsers')->name('admin.manage.user');
+    Route::post('admin/users/ban-all-users', 'UserbanController@ban')->name('admin.bans.users');
+    Route::post('admin/users/unban-all-users', 'UserbanController@unban')->name('admin.unbans.users');
+    Route::post('admin/users/ban-single-users', 'UserbanController@banSingleUser')->name('admin.bans.singleusers');
+
+
 
 
 });

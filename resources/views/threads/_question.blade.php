@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-md-1">
                     <div v-if="signedIn">
-                        <button data-toggle="tooltip" title="Report Thread Creator" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportCreator"  :disabled="isCreatorReported" data-placement="right">
+                        <button v-if="!authorize('isBan')" data-toggle="tooltip" title="Report Thread Creator" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportCreator"  :disabled="isCreatorReported" data-placement="right">
                             <span class="glyphicon glyphicon-flag"></span>
                         </button>
                     </div>
@@ -90,14 +90,14 @@
                         {{ $thread->word_count }} words
                         
                         <div class="btn-group btn-group-xs " v-if="signedIn">
-                            @include('threads._socialshare')                           
+                                                      
 
                             {{-- <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported" data-placement="left">
                                 <span class="glyphicon glyphicon-flag"></span>
                             </button> --}}
 
-                            <div class="btn-group ">
-
+                            <div class="btn-group " v-if="!authorize('isBan')">
+                                @include('threads._socialshare') 
                                 <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg " @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
                                     <span class="glyphicon glyphicon-flag"></span>
                                 </button>
@@ -170,21 +170,20 @@
                         <span> <a href="{{ strtolower(route('tags.threads.list', $tag->name))  }}">{{ strtolower($tag->name)  }}</a> </span>
                     @endforeach
                 @endif
+
                 <div class=" col-md-12"  v-if="authorize('owns', thread)" style="margin-top:5px;">
-                    <button class="btn btn-xs" @click="startEdit">Edit</button>
+                    {{-- <button class="btn btn-xs" @click="startEdit" v-if="authorize('isBan', thread)">Ban</button> --}}
+                    <button class="btn btn-xs" @click="startEdit" v-if="!authorize('isBan')">Edit</button>
+                    
                 </div>
+
             </div>
-            <div class="col-md-4" style="padding: 0px;padding-right:5px;">                
-                <div class="btn-group btn-group-xs pull-right" role="group" v-if="signedIn">
-                    <like-button :thread="{{ $thread }}"></like-button> 
-                    @include('threads._socialshare')
-
-                    {{-- <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
-                        <span class="glyphicon glyphicon-flag"></span>
-                    </button>
-                     --}}
+            <div class="col-md-4" style="padding: 0px;padding-right:5px;" v-if="!authorize('isBan')">                
+                <div class="btn-group btn-group-xs pull-right" role="group" v-if="signedIn ">
                      <div class="btn-group ">
-
+                        <like-button :thread="{{ $thread }}"></like-button>
+                        <favorite-thread :thread="thread"></favorite-thread>
+                        @include('threads._socialshare')
                         <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg " @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
                             <span class="glyphicon glyphicon-flag"></span>
                         </button>
@@ -204,11 +203,12 @@
 
 
                 <div class="btn-group btn-group-xs pull-right" data-toggle="tooltip" title="Please log in or sign up" v-else  onclick="alert('Please log in or sign up')">
-                    <like-button :thread="{{ $thread }}"></like-button> 
-
+                    <like-button :thread="{{ $thread }}"></like-button>
+                    <favorite-thread :thread="thread"></favorite-thread>
+                    
                     <fb-share :thread="thread"></fb-share>
                     <twitter-share :thread="thread"></twitter-share>
-
+                    
                     <button data-toggle="tooltip"  class="btn btn-xs btn-danger ml-a red-bg pull-right" data-placement="left">
                         <span class="glyphicon glyphicon-flag"></span>
                     </button>

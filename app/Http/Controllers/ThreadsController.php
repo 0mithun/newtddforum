@@ -27,6 +27,7 @@ class ThreadsController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show','loadByTag']);
+        $this->middleware('userban')->only(['create', 'update','destroy']);
     }
 
     /**

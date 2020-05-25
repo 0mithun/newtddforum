@@ -109,7 +109,7 @@
 
                                 
                                 {{-- <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button> --}}
-                            <subscribe-button :thread="{{ $thread }}"></subscribe-button>
+                            <subscribe-button :thread="{{ $thread }}" v-if="!authorize('isBan')"></subscribe-button>
 
                                 <button class="btn btn-default"
                                         v-if="authorize('isAdmin')"
