@@ -26,13 +26,24 @@ class SearchController extends Controller
 
         if(auth()->check()){
             $user = auth()->user();
-            $restriction = $user->userprivacy->show_restricted;
-            if($restriction ==1){
+            $privacy = $user->userprivacy;
+            if($privacy->restricted_18 ==1){
                 $threads = Thread::search($query)
                     ->with('emojis')
                     ->paginate(10)
                     ;
-            }else{
+            }else if($privacy->restricted_13 ==1){
+                $threads = Thread::search($query)
+                    ->with('emojis')
+                    ;
+                $collect = collect($threads->get());     
+
+                $threads = $collect->where('age_restriction', '!=', 18);
+                $threads = $this->paginate($threads, 10);
+            }
+            
+            
+            else{
                 $threads = Thread::search($query)
                     ->with('emojis')
                     ;
@@ -40,7 +51,9 @@ class SearchController extends Controller
 
                 $threads = $collect->where('age_restriction', 0);
                 $threads = $this->paginate($threads, 10);
-            } 
+            }
+
+
         }else{
             $threads = Thread::search($query)
             ->with('emojis')
@@ -71,13 +84,22 @@ class SearchController extends Controller
                 // $threads = Thread::search(request('query'))->with('emojis')->paginate(10);
                 if(auth()->check()){
                     $user = auth()->user();
-                    $restriction = $user->userprivacy->show_restricted;
-                    if($restriction ==1){
+                    $privacy = $user->userprivacy;
+                    if($privacy->restricted_18 ==1){
                         $threads = Thread::search($query)
                             ->with('emojis')
                             ->paginate(10)
                             ;
-                    }else{
+                    }else if($privacy->restricted_13 ==1){
+                        $threads = Thread::search($query)
+                            ->with('emojis')
+                            ;
+                        $collect = collect($threads->get());     
+        
+                        $threads = $collect->where('age_restriction', '!=', 18);
+                        $threads = $this->paginate($threads, 10);
+                    }
+                    else{
                         $threads = Thread::search($query)
                             ->with('emojis')
                             ;

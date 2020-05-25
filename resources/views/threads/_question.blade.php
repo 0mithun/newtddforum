@@ -105,7 +105,7 @@
                                 <button type="button" class="btn btn-default dropdown-toggle btn-xs" title="Report Thread Age Restriction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="isThreadReported">
                                   <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" >
                                     @if(auth()->id() == 1)
                                         <li><a href="#" @click.prevent="makeRestrictionReport('Should be Pg-13', 0)">Under 13</a></li>
                                     @endif
@@ -191,7 +191,7 @@
                         <button type="button" class="btn btn-default dropdown-toggle btn-xs" title="Report Thread Age Restriction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="isThreadReported">
                           <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu age-restrictd-dropdown" style="left:45px;top:50%">
                             @if(auth()->id() == 1)
                                 <li><a href="#" @click.prevent="makeRestrictionReport('Should be Pg-13', 0)">Under 13</a></li>
                             @endif

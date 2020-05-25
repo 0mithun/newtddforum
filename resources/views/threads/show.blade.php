@@ -191,3 +191,11 @@
     </script>
     
     @endsection
+@section('head')
+    <style>
+        ul.dropdown-menu.age-restrictd-dropdown {
+    left: 45px;
+    top: 50%;
+}
+    </style>
+@endsection
