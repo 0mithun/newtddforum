@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Admin;
+use App\Emoji;
 use App\Tags;
 use App\Thread;
 use Illuminate\Http\Request;
@@ -169,7 +170,8 @@ class AdminController extends Controller
     public function batchTools(){
         $profileUser = auth()->user();
         $admin = Admin::first();
-        return view('pages.admin.batchtools', compact('admin','profileUser'));
+        $emojis = Emoji::all();
+        return view('pages.admin.batchtools', compact('admin','profileUser','emojis'));
 
         // return 'batch tools';
         // return redirect()->route('admin.batchtools');

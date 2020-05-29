@@ -132,5 +132,26 @@ class BatchToolController extends Controller
         return redirect()->route('admin.batchtools');
     }
 
+    public function setFamaus(Request $request){
+       
+        $threads = Thread::
+            where('title', 'LIKE', "%{$this->findKeyword}%")
+            ->orWhere('body', 'LIKE', "%{$this->findKeyword}%")
+            ->get()
+        ;
+
+        $threads->map(function($thread){
+
+            $thread->is_famous = 1;
+            $thread->save();
+        });
+
+        session()->flash('successmessage','Set famaous Successfully');
+        return redirect()->route('admin.batchtools');
+    }
+
+    public function addEmoji(Request $request){
+        return $request->all();
+    }
 
 }

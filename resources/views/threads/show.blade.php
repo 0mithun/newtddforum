@@ -186,7 +186,9 @@
                 titlePosition:'inside'
             });
         });
-        
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
 
     </script>
     

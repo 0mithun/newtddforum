@@ -17,26 +17,16 @@ class LikeController extends Controller
     public function like($thread){
         $thread = Thread::findOrFail($thread);
 
-        $type = request('type');
-        $isDelete = request('isDelete');
-       
         if($thread->isLiked()){
-            if($isDelete){
                 $thread->decrement('like_count');
                 return $thread->unlike();
-            }else{
-                $thread->changeEmoji($type);
-            }
-            
-
-
         }else{
             if($thread->isDesliked()){
                 $thread->decrement('dislike_count');
                 $thread->unlike();
-                return $thread->like($type);
+                return $thread->like();
             }
-            return $thread->like($type);
+            return $thread->like();
         }
 
     }
@@ -89,6 +79,11 @@ class LikeController extends Controller
         
      }
 
+
+     /**
+      * Not using now
+      */
+
      public function getAllLikeType($thread){
         $likes = DB::table('thread_emoji')
             ->groupBy('emoji_id')
@@ -118,4 +113,8 @@ class LikeController extends Controller
         return abort(404);
         
      }
+
+     /**
+      * Not using now
+      */
 }

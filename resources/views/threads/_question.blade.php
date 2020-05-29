@@ -179,9 +179,10 @@
 
             </div>
             <div class="col-md-4" style="padding: 0px;padding-right:5px;" v-if="!authorize('isBan')">                
-                <div class="btn-group btn-group-xs pull-right" role="group" v-if="signedIn ">
-                     <div class="btn-group ">
+                <div class=" pull-right" role="group" v-if="signedIn ">
+                     <div class="btn-group  btn-group-xs pull-right">
                         <like-button :thread="{{ $thread }}"></like-button>
+                       
                         <favorite-thread :thread="thread"></favorite-thread>
                         @include('threads._socialshare')
                         <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg " @click="reportReply"  :disabled="isThreadReported"  data-placement="left">
@@ -199,8 +200,10 @@
                             <li><a href="#" @click.prevent="makeRestrictionReport('Should be rated R', 18)">Should be rated R</a></li>
                         </ul>
                       </div>
+                      <thread-emojis :thread="{{ $thread }}"></thread-emojis>
                 </div>
 
+                
 
                 <div class="btn-group btn-group-xs pull-right" data-toggle="tooltip" title="Please log in or sign up" v-else  onclick="alert('Please log in or sign up')">
                     <like-button :thread="{{ $thread }}"></like-button>

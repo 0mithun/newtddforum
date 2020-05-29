@@ -13,7 +13,7 @@ trait Likeable
     }
 
 
-    public function like($type)
+    public function like()
     {
         $user = auth()->user();
         $attributes = [
@@ -23,12 +23,7 @@ trait Likeable
 
         if (!$this->likes()->where($attributes)->exists()) {
             $this->increment('like_count');
-
-            
-            $this->emojis()->attach($type, ['user_id'=> $user->id]);
-
             return $this->likes()->create($attributes);
-
         }
     }
 
@@ -42,7 +37,6 @@ trait Likeable
 
         if (!$this->likes()->where($attributes)->exists()) {
             $this->increment('dislike_count');
-            $this->deleteThreadEmoji();
             return $this->likes()->create($attributes);
         }
 
@@ -56,7 +50,6 @@ trait Likeable
             'user_id' => auth()->id(),
             //'up' => 1
         ];
-        $this->deleteThreadEmoji();
         $this->likes()->where($attributes)->delete();
     }
 
@@ -89,22 +82,5 @@ trait Likeable
     }
     public function getDislikesCountAttribute(){
         return $this->likes()->where('down',1)->count();
-    }
-
-    public function changeEmoji($type){
-        $this->deleteThreadEmoji();
-        $user = auth()->user();
-
-        $this->emojis()->attach($type, ['user_id'=> (int) $user->id]);
-    }
-
-
-    public function deleteThreadEmoji(){
-        $user = auth()->user();
-        $usersId = DB::table('thread_emoji')
-                // ->groupBy('user_id')
-                ->where('thread_id', $this->id)
-                ->where('user_id', $user->id)
-                ->delete();
     }
 }

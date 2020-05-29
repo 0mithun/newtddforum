@@ -12,12 +12,13 @@ class EmojiTableSeeder extends Seeder
     public function run()
     {
         $emojis = [
-            'like',
-            'love',
-            'haha',
-            'wow',
+            'funny',
             'sad',
-            'angry',
+            'strange',
+            'inspiring',
+            'amazing',
+            'dumb',
+            'famous',
         ];
 
         foreach ($emojis as $emoji){

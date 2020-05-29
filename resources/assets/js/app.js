@@ -96,6 +96,10 @@ Vue.component('fb-share', ()=>import('./components/FbShare.vue'));
 Vue.component('twitter-share', ()=>import('./components/TwitterShare.vue'));
 
 
+Vue.component('thread-emojis', ()=>import('./components/ThreadEmojis.vue'))
+
+
+
 
 // import ThreadMap from './components/gmap/ThreadMap.vue';
 // Vue.component('thread-map', ThreadMap);

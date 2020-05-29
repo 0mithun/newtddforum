@@ -116,6 +116,70 @@
                                         
                                     </div>
                                 </div>
+                                <hr> 
+
+                                <div class="row">
+                                    <div class="col-md-9" >
+                                        <h5>Set famous = true : if thread (title, body, or tag) contains XXX, set famous = true</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                    <form action="{{ route('batchtools.set.famaus') }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-primary btn-sm">Set Famous</button>
+                                        </form>
+                                        
+                                    </div>
+                                </div>
+                                <hr> 
+
+                                <div class="row">
+                                    <div class="col-md-9" >
+                                        <h5>Add emoji : if thread has tag XXX, add emoji </h5>
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <div class="modal fade" id="addEmojiModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                              <div class="modal-content">
+                                                <div class="modal-header">
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                  <h4 class="modal-title" id="myModalLabel">Ban Single Users</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                <form action="{{ route('batchtools.add.emoji') }}" class="form-horizontal" method="POST">
+                                                    @csrf
+                                                      <div class="form-group">
+                                                          <label for="emoji" class="control-label col-md-3">Emoji:</label>
+                                                          <div class="col-md-9">
+                                                             <select name="emoji" id="emoji" class="form-control">
+                                                                 <option value="">Select Emoji</option>
+
+                                                                 @foreach ($emojis as $emoji)
+                                                                    <option value="{{ $emoji->id }}" >                                                                    
+                                                                        {{ $emoji->name }}
+                                                                    </option>
+                                                                 @endforeach
+                                                                 
+                                                             </select>
+                                                          </div>
+                                                      </div>
+
+                                                      <div class="form-group">
+                                                          <div class="col-md-9 col-md-offset-3">
+                                                            <button type="submit" class="btn btn-primary">Add Emoji</button>
+                                                          </div>
+                                                      </div>
+                                                  </form>
+                                                </div>
+                                               
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        <button class="btn btn-primary btn-sm" type="button"  data-target="#addEmojiModal" data-toggle="modal">Add Emoji</button>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
@@ -136,5 +200,26 @@
         h5{
             font-size: 15px;
         }
+        .funny{
+      background-image :url(/images/emojis/funny.png);
+    }
+    .sad{
+      background-image :url(/images/emojis/sad.png);
+    }
+    .strange{
+      background-image :url(/images/emojis/strange.png);
+    }
+    .inspiring{
+      background-image :url(/images/emojis/inspiring.png);
+    }
+    .amazing{
+      background-image :url(/images/emojis/amazing.png);
+    }
+    .dumb{
+      background-image :url(/images/emojis/dumb1.png);
+    }
+    .famous{
+      background-image :url(/images/emojis/famous.png);
+    }
     </style>
 @endsection

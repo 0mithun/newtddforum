@@ -79,84 +79,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -177,20 +99,12 @@ __webpack_require__.r(__webpack_exports__);
       // likesCount:this.thread.likesCount,
       likesCount: 0,
       // dislikesCount:this.thread.dislikesCount
-      dislikesCount: 0,
-      visibleEmoticion: false,
-      showLikeTypeUser: false,
-      emojiType: null,
-      allLikeTypes: null,
-      likeTypeUsers: null,
-      loadingUser: false
+      dislikesCount: 0
     };
   },
   created: function created() {
     this.getLikesCount();
     this.getDislikeCount();
-    this.getUserLikeType();
-    this.getThreadAllLikeType();
   },
   computed: {
     likeClass: function likeClass() {
@@ -201,156 +115,71 @@ __webpack_require__.r(__webpack_exports__);
     },
     signedIn: function signedIn() {
       return window.App.user ? true : false;
-    },
-    emojiClass: function emojiClass() {
-      if (this.emojiType == 1) {
-        return "emoji-like-big";
-      } else if (this.emojiType == 2) {
-        return "emoji-love-big";
-      } else if (this.emojiType == 3) {
-        return "emoji-haha-big";
-      } else if (this.emojiType == 4) {
-        return "emoji-wow-big";
-      } else if (this.emojiType == 5) {
-        return "emoji-sad-big";
-      } else if (this.emojiType == 6) {
-        return "emoji-angry-big";
-      } else {
-        return null;
-      }
     }
   },
   methods: {
-    smallEmojiClass: function smallEmojiClass(type) {
-      if (type == 1) {
-        return "emoji-like-small";
-      } else if (type == 2) {
-        return "emoji-love-small";
-      } else if (type == 3) {
-        return "emoji-haha-small";
-      } else if (type == 4) {
-        return "emoji-wow-small";
-      } else if (type == 5) {
-        return "emoji-sad-small";
-      } else if (type == 6) {
-        return "emoji-angry-small";
-      } else {
-        return null;
-      }
-    },
-    getThreadAllLikeType: function getThreadAllLikeType() {
-      var _this = this;
-
-      if (this.signedIn) {
-        axios.post("/thread/" + this.thread.id + "/all-like-type").then(function (res) {
-          _this.allLikeTypes = res.data;
-        });
-      }
-    },
-    getUserLikeType: function getUserLikeType() {
-      var _this2 = this;
-
-      if (this.isLiked) {
-        axios.post("/thread/" + this.thread.id + "/like-type").then(function (res) {
-          _this2.emojiType = res.data;
-        });
-      }
-    },
-    likeTypeUserHandle: function likeTypeUserHandle(type) {
-      var _this3 = this;
-
-      this.likeTypeUsers = null;
-      this.loadingUser = true;
-      axios.get("/thread/" + this.thread.id + "/like-type-users/" + type).then(function (res) {
-        _this3.loadingUser = false;
-        _this3.likeTypeUsers = res.data;
-        _this3.showLikeTypeUser = true;
-      });
-    },
-    showEmoticion: function showEmoticion() {
-      var _this4 = this;
-
-      this.visibleEmoticion = true;
-      setTimeout(function () {
-        _this4.visibleEmoticion = false;
-      }, 5000);
-    },
     getLikesCount: function getLikesCount() {
-      var _this5 = this;
+      var _this = this;
 
       // this.likesCount = 1;
       axios.get("/thread/" + this.thread.id + "/likes-count").then(function (res) {
-        _this5.likesCount = res.data;
+        _this.likesCount = res.data;
       });
     },
     getDislikeCount: function getDislikeCount() {
-      var _this6 = this;
+      var _this2 = this;
 
       // this.dislikesCount = 1;
       axios.get("/thread/" + this.thread.id + "/dislikes-count").then(function (res) {
-        _this6.dislikesCount = res.data;
+        _this2.dislikesCount = res.data;
       });
     },
     toggleDislike: function toggleDislike() {
-      var _this7 = this;
+      var _this3 = this;
 
       if (!this.signedIn) {
         return false;
       }
 
       axios.post("/thread/" + this.thread.id + "/dislikes").then(function (res) {
-        if (_this7.isDesliked) {
-          _this7.isDesliked = false;
-          _this7.dislikesCount--;
+        if (_this3.isDesliked) {
+          _this3.isDesliked = false;
+          _this3.dislikesCount--;
         } else {
-          _this7.isDesliked = true;
+          _this3.isDesliked = true;
 
-          if (_this7.isLiked) {
-            _this7.likesCount--;
+          if (_this3.isLiked) {
+            _this3.likesCount--;
           }
 
-          _this7.dislikesCount++;
+          _this3.dislikesCount++;
         }
 
-        _this7.isLiked = false;
-        _this7.emojiType = null;
-
-        _this7.getThreadAllLikeType();
+        _this3.isLiked = false;
       });
     },
-    toggleLike: function toggleLike(type, isDelete) {
-      var _this8 = this;
+    toggleLike: function toggleLike() {
+      var _this4 = this;
 
       if (!this.signedIn) {
         return false;
       }
 
-      axios.post("/thread/" + this.thread.id + "/likes", {
-        type: type,
-        isDelete: isDelete
-      }).then(function (res) {
-        if (_this8.isLiked) {
-          if (isDelete) {
-            _this8.isLiked = false;
-            _this8.likesCount--;
-            _this8.emojiType = null;
-          } else {
-            _this8.emojiType = type;
-          }
+      axios.post("/thread/" + this.thread.id + "/likes").then(function (res) {
+        if (_this4.isLiked) {
+          _this4.isLiked = false;
+          _this4.likesCount--;
         } else {
-          _this8.isLiked = true;
+          _this4.isLiked = true;
 
-          if (_this8.isDesliked) {
-            _this8.dislikesCount--;
+          if (_this4.isDesliked) {
+            _this4.dislikesCount--;
           }
 
-          _this8.likesCount++;
-          _this8.emojiType = type;
+          _this4.likesCount++;
         }
 
-        _this8.isDesliked = false;
-
-        _this8.getThreadAllLikeType();
+        _this4.isDesliked = false;
       });
     }
   }
@@ -400,55 +229,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css&":
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css& ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.like-buttons[data-v-7a27c6a0] {\n  position: relative;\n}\n.emoji-icons-div[data-v-7a27c6a0] {\n  position: absolute;\n  top: -100 !important;\n  left: 100;\n  width: 150px;\n  height: 35px;\n  margin-top: 3px;\n  right: -55px;\n}\n.emoji-icons[data-v-7a27c6a0] {\n  color: red;\n  font-size: 18px;\n  font-weight: bold;\n}\n.Like[data-v-7a27c6a0] {\n  display: inline-block;\n  margin-top: 20px;\n}\n.Like__link[data-v-7a27c6a0] {\n  cursor: pointer;\n}\n.Emojis[data-v-7a27c6a0] {\n  position: absolute;\n  left: 0;\n  bottom: 120%;\n  transform: translate3d(-10%, 0, 0);\n  display: flex;\n  padding: 0.125rem;\n  border-radius: 100rem;\n  transition: 0.3s 0.3s;\n  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.15);\n  opacity: 0;\n  visibility: hidden;\n  background: white;\n}\n.Emojis[data-v-7a27c6a0]:hover,\n.Like__link.js-hover ~ .Emojis[data-v-7a27c6a0],\n.Like__link:hover ~ .Emojis[data-v-7a27c6a0] {\n  transition-delay: 0s;\n  opacity: 1;\n  visibility: visible;\n}\n.Emoji[data-v-7a27c6a0] {\n  position: relative;\n  width: 3rem;\n  height: 3rem;\n  color: #ffd972;\n  cursor: pointer;\n  transition-delay: 0.6s, 0.3s;\n  transition-duration: 0s, 0.3s;\n  transition-property: transform, opacity;\n  opacity: 0;\n  transform: translate3d(0, 100%, 0) scale(0.3);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0],\n.Like__link.js-hover + .Emojis .Emoji[data-v-7a27c6a0],\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0] {\n  transform: none;\n  opacity: 1;\n}\n.Emoji .icon[data-v-7a27c6a0] {\n  position: absolute;\n  position: absolute;\n  top: -8px;\n  left: -8px;\n  right: -10px;\n  bottom: -10px;\n  transform: scale(0.4);\n  transition: transform 0.2s ease;\n  padding: 0px !important;\n}\n.Emoji:hover .icon[data-v-7a27c6a0] {\n  transform: scale(0.6) translate3d(0, -10%, 0);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(1),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(1) {\n  transition-duration: 0.2s;\n  transition-delay: 0s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(2),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(2) {\n  transition-duration: 0.3s;\n  transition-delay: 0.02s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.2);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(3),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(3) {\n  transition-duration: 0.4s;\n  transition-delay: 0.04s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.4);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(4),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(4) {\n  transition-duration: 0.5s;\n  transition-delay: 0.06s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.6);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(5),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(5) {\n  transition-duration: 0.6s;\n  transition-delay: 0.08s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 1.8);\n}\n.Emojis:hover .Emoji[data-v-7a27c6a0]:nth-of-type(6),\n.Like__link:hover + .Emojis .Emoji[data-v-7a27c6a0]:nth-of-type(6) {\n  transition-duration: 0.7s;\n  transition-delay: 0.1s;\n  transition-timing-function: cubic-bezier(0.6, 0.6, 0.5, 2);\n}\n.icon[data-v-7a27c6a0] {\n  background-image: url(\"https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif\");\n  background-repeat: no-repeat;\n}\n.icon--like[data-v-7a27c6a0] {\n  background-position: -6px -6px;\n}\n.icon--heart[data-v-7a27c6a0] {\n  background-position: -68px -4px;\n}\n.icon--haha[data-v-7a27c6a0] {\n  background-position: -129px -6px;\n}\n.icon--wow[data-v-7a27c6a0] {\n  background-position: -191px -6px;\n}\n.icon--sad[data-v-7a27c6a0] {\n  background-position: -252px -5px;\n}\n.icon--angry[data-v-7a27c6a0] {\n  background-position: -314px -6px;\n}\n*[data-v-7a27c6a0],\n*[data-v-7a27c6a0]::before,\n*[data-v-7a27c6a0]::after {\n  box-sizing: border-box;\n}\n.intro[data-v-7a27c6a0] {\n  width: 100%;\n  max-width: 30rem;\n  padding-bottom: 1rem;\n  margin: 0 auto 1em;\n  padding-top: 0.5em;\n  text-transform: capitalize;\n  border-bottom: 1px dashed rgba(0, 0, 0, 0.3);\n}\n.intro small[data-v-7a27c6a0] {\n  display: block;\n  opacity: 0.5;\n  font-style: italic;\n  text-transform: none;\n}\n.info[data-v-7a27c6a0] {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  margin: 0;\n  padding: 1em;\n  font-size: 0.9em;\n  font-style: italic;\n  font-family: serif;\n  text-align: right;\n  opacity: 0.5;\n}\n.info a[data-v-7a27c6a0] {\n  color: inherit;\n}\nkbd[data-v-7a27c6a0] {\n  display: inline-block;\n  background-color: rgba(0, 0, 0, 0.05);\n  color: #666;\n  text-shadow: 1px 1px #fff;\n  padding: 1px 2px;\n  border-radius: 2px;\n  box-shadow: inset 1px 1px 3px -1px rgba(0, 0, 0, 0.5);\n}\n.Emoji--like[data-v-7a27c6a0]::after,\n.Emoji--love[data-v-7a27c6a0]::after,\n.Emoji--haha[data-v-7a27c6a0]::after,\n.Emoji--wow[data-v-7a27c6a0]::after,\n.Emoji--sad[data-v-7a27c6a0]::after,\n.Emoji--angry[data-v-7a27c6a0]::after {\n  color: white;\n  position: absolute;\n  width: 40px;\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  background-color: rgb(0, 0, 0, 0.6);\n  padding: 0px 0px;\n  border-radius: 25px;\n  text-align: center;\n  font-size: 13px;\n  font-weight: bold;\n}\n.Emoji--like[data-v-7a27c6a0]::after {\n  content: \"like\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  display: none;\n}\n.Emoji--like[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--love[data-v-7a27c6a0]::after {\n  content: \"love\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  display: none;\n}\n.Emoji--love[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--haha[data-v-7a27c6a0]::after {\n  content: \"haha\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  width: 45px;\n  display: none;\n}\n.Emoji--haha[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--wow[data-v-7a27c6a0]::after {\n  content: \"wow\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  display: none;\n}\n.Emoji--wow[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--sad[data-v-7a27c6a0]::after {\n  content: \"sad\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  display: none;\n}\n.Emoji--sad[data-v-7a27c6a0]:hover:after {\n  display: block;\n}\n.Emoji--angry[data-v-7a27c6a0]::after {\n  content: \"angry\";\n  top: -40;\n  left: 0;\n  margin-top: -24px;\n  width: 50px;\n  display: none;\n}\n.Emoji--angry[data-v-7a27c6a0]:hover::after {\n  display: block;\n}\n.icon[data-v-7a27c6a0][data-v-7a27c6a0] {\n  background-image: url(https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif);\n  background-repeat: no-repeat;\n}\n.icon[data-v-7a27c6a0][data-v-7a27c6a0] {\n  background-image: url(https://media.giphy.com/media/xT9DPr2QnsfTFoykFO/giphy.gif);\n  background-repeat: no-repeat;\n}\nbutton.emoji-like-counts[data-v-7a27c6a0] {\n  border: none;\n  background: none;\n  border: none;\n  background: none;\n\n  background-size: 14px;\n  height: 14px;\n  width: 14px;\n  margin-left: 0;\n  margin-top: 5px;\n}\nbutton.emoji-like-counts.emoji-like-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -42px;\n}\nbutton.emoji-like-counts.emoji-love-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -56px;\n}\nbutton.emoji-like-counts.emoji-haha-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -28px;\n}\nbutton.emoji-like-counts.emoji-wow-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -112px;\n}\nbutton.emoji-like-counts.emoji-sad-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -70px;\n}\nbutton.emoji-like-counts.emoji-angry-small[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -0px;\n}\nbutton.emoji-like-counts span[data-v-7a27c6a0] {\n  margin-left: 7px;\n  margin-top: -5px;\n  overflow: hidden;\n  display: inline-block;\n  font-size: 13px;\n}\n.like-type-users[data-v-7a27c6a0] {\n  color: white;\n  position: absolute;\n  width: 120px;\n  top: -40;\n  left: 40px;\n  margin-top: -84px;\n  background-color: rgb(0, 0, 0, 0.9);\n  padding: 0px 0px;\n  border-radius: 5px;\n  text-align: left;\n  font-size: 12px;\n  z-index: 99999999999;\n  padding: 5px;\n  bottom: 0px;\n}\n.small-emoticion-icons[data-v-7a27c6a0] {\n  background: red;\n  position: relative;\n  z-index: 88888;\n  top: 0px;\n  height: 0px;\n}\n.emoji-icons-div[data-v-7a27c6a0] {\n  height: 0px;\n}\n.emoji-icons-div[data-v-7a27c6a0] {\n  margin-top: -5px;\n}\n.like-emoji-icon[data-v-7a27c6a0] {\n  border-radius: 3px 0px 0px 3px !important;\n}\n.like-buttons[data-v-7a27c6a0] {\n  position: relative;\n  width: 106px;\n}\n.small-emoticion-icons[data-v-7a27c6a0] {\n  background: red;\n  position: relative;\n  z-index: 88888;\n  top: 0px;\n  height: 0px;\n  left: 24px;\n  display: block;\n  width: 161px;\n  display: inline-block;\n}\nbutton.emoji-like-counts.emoji-like-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-love-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-haha-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-wow-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-sad-big[data-v-7a27c6a0],\nbutton.emoji-like-counts.emoji-angry-big[data-v-7a27c6a0] {\n  border: none;\n  background: none;\n  border: none;\n  background: none;\n\n  background-size: 22px;\n  height: 22px;\n  width: 22px;\n  margin-left: 0;\n  margin-top: 5px;\n}\nbutton.emoji-like-counts.emoji-like-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -42px;\n}\nbutton.emoji-like-counts.emoji-like-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -66px;\n}\nbutton.emoji-like-counts.emoji-love-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -88px;\n}\nbutton.emoji-like-counts.emoji-haha-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -44px;\n}\nbutton.emoji-like-counts.emoji-wow-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -176px;\n}\nbutton.emoji-like-counts.emoji-sad-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px -110px;\n}\nbutton.emoji-like-counts.emoji-angry-big[data-v-7a27c6a0] {\n  background-image: url(/images/png/facebook_iconset.png);\n  background-repeat: no-repeat;\n  background-position: 0px 0px;\n}\nbutton.emoji-like-counts[data-v-7a27c6a0] {\n  margin-right: 8px;\n}\n.small-emoticion-icons[data-v-7a27c6a0] {\n  left: 0px;\n}\n.small-emoticion-icons-left-margin[data-v-7a27c6a0] {\n  left: -20px;\n}\n.emoji-icons-div[data-v-7a27c6a0] {\n  margin-top: -10px;\n}\n.emoji-like-counts[data-v-7a27c6a0]:last-child {\n  margin-right: 0px;\n}\n.like-buttons[data-v-7a27c6a0] {\n    position: relative;\n    width: 89px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css&");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/FbShare.vue?vue&type=template&id=31a90b1c&":
 /*!*****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/FbShare.vue?vue&type=template&id=31a90b1c& ***!
@@ -493,10 +273,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&scoped=true&":
-/*!********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&scoped=true& ***!
-  \********************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0& ***!
+  \********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -512,119 +292,17 @@ var render = function() {
     "div",
     {
       staticClass: "btn-group btn-group-xs pull-left like-buttons",
-      style: _vm.signedIn ? "width:83px" : "width:89px",
       attrs: { role: "group" }
     },
     [
       _c(
-        "div",
-        {
-          staticClass: "emoji-icons-div",
-          staticStyle: { background: "green" }
-        },
-        [
-          _c("div", { staticClass: "box" }, [
-            _c("div", { staticClass: "Like" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _vm.visibleEmoticion
-                ? _c("div", { staticClass: "Emojis" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "Emoji Emoji--like",
-                        on: {
-                          click: function($event) {
-                            return _vm.toggleLike(1, false)
-                          },
-                          mouseout: function($event) {
-                            _vm.showLikeTypeUser = false
-                          }
-                        }
-                      },
-                      [_c("div", { staticClass: "icon icon--like" })]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "Emoji Emoji--love",
-                        on: {
-                          click: function($event) {
-                            return _vm.toggleLike(2, false)
-                          }
-                        }
-                      },
-                      [_c("div", { staticClass: "icon icon--heart" })]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "Emoji Emoji--haha",
-                        on: {
-                          click: function($event) {
-                            return _vm.toggleLike(3, false)
-                          }
-                        }
-                      },
-                      [_c("div", { staticClass: "icon icon--haha" })]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "Emoji Emoji--wow",
-                        on: {
-                          click: function($event) {
-                            return _vm.toggleLike(4, false)
-                          }
-                        }
-                      },
-                      [_c("div", { staticClass: "icon icon--wow" })]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "Emoji Emoji--sad",
-                        on: {
-                          click: function($event) {
-                            return _vm.toggleLike(5, false)
-                          }
-                        }
-                      },
-                      [_c("div", { staticClass: "icon icon--sad" })]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "Emoji Emoji--angry",
-                        on: {
-                          click: function($event) {
-                            return _vm.toggleLike(6, false)
-                          }
-                        }
-                      },
-                      [_c("div", { staticClass: "icon icon--angry" })]
-                    )
-                  ])
-                : _vm._e()
-            ])
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
         "button",
         {
-          staticClass: "btn btn-xs btn-default ml-a like-emoji-icon",
+          staticClass: "btn btn-xs btn-default ",
           on: {
             click: function($event) {
-              return _vm.toggleLike(1, true)
-            },
-            mouseenter: _vm.showEmoticion
+              return _vm.toggleLike()
+            }
           }
         },
         [
@@ -655,81 +333,11 @@ var render = function() {
             [_vm._v(" " + _vm._s(_vm.dislikesCount))]
           )
         ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "small-emoticion-icons",
-          class: { "small-emoticion-icons-left-margin": !_vm.isLiked },
-          staticStyle: { background: "red" }
-        },
-        [
-          _vm.showLikeTypeUser
-            ? _c(
-                "div",
-                { staticClass: "like-type-users" },
-                [
-                  _vm._l(_vm.likeTypeUsers, function(user, index) {
-                    return _c("span", { key: index }, [
-                      _vm._v("\n          " + _vm._s(user) + "\n          "),
-                      _c("br")
-                    ])
-                  }),
-                  _vm._v(" "),
-                  _vm.loadingUser
-                    ? _c("span", [_vm._v("loading...")])
-                    : _vm._e()
-                ],
-                2
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c("button", {
-            staticClass: "emoji-like-counts",
-            class: _vm.emojiClass,
-            staticStyle: { "margin-top": "5px", "padding-bottom": "3px" }
-          }),
-          _vm._v(" "),
-          _vm._l(_vm.allLikeTypes, function(likeType, index) {
-            return _c("button", {
-              key: index,
-              staticClass: "emoji-like-counts",
-              class: _vm.smallEmojiClass(likeType),
-              on: {
-                mouseenter: function($event) {
-                  return _vm.likeTypeUserHandle(likeType)
-                },
-                mouseout: function($event) {
-                  _vm.showLikeTypeUser = false
-                }
-              }
-            })
-          })
-        ],
-        2
       )
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "Like__link js-hover",
-        staticStyle: { visibility: "hidden" }
-      },
-      [
-        _vm._v("\n            Like\n            "),
-        _c("kbd", [_vm._v("hover me!!")])
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -858,11 +466,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _LikeButton_vue_vue_type_template_id_7a27c6a0_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LikeButton.vue?vue&type=template&id=7a27c6a0&scoped=true& */ "./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&scoped=true&");
+/* harmony import */ var _LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LikeButton.vue?vue&type=template&id=7a27c6a0& */ "./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&");
 /* harmony import */ var _LikeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LikeButton.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/LikeButton.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _LikeButton_vue_vue_type_style_index_0_id_7a27c6a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css& */ "./resources/assets/js/components/LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -870,13 +476,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _LikeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _LikeButton_vue_vue_type_template_id_7a27c6a0_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _LikeButton_vue_vue_type_template_id_7a27c6a0_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "7a27c6a0",
+  null,
   null
   
 )
@@ -902,35 +508,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css&":
-/*!****************************************************************************************************************!*\
-  !*** ./resources/assets/js/components/LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css& ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_style_index_0_id_7a27c6a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=style&index=0&id=7a27c6a0&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_style_index_0_id_7a27c6a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_style_index_0_id_7a27c6a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_style_index_0_id_7a27c6a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_style_index_0_id_7a27c6a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_style_index_0_id_7a27c6a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&scoped=true&":
-/*!**************************************************************************************************!*\
-  !*** ./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&scoped=true& ***!
-  \**************************************************************************************************/
+/***/ "./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&":
+/*!**************************************************************************************!*\
+  !*** ./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0& ***!
+  \**************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_7a27c6a0_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./LikeButton.vue?vue&type=template&id=7a27c6a0&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_7a27c6a0_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./LikeButton.vue?vue&type=template&id=7a27c6a0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_7a27c6a0_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

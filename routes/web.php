@@ -134,9 +134,21 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/thread/{thread}/likes', 'LikeController@like');
     Route::post('/thread/{thread}/dislikes', 'LikeController@dislike');
 
+
+    //Emojis
+
+//Not using
     Route::post('/thread/{thread}/like-type', 'LikeController@getUserLikeType');
     Route::post('/thread/{thread}/all-like-type', 'LikeController@getAllLikeType');
     Route::get('/thread/{thread}/like-type-users/{type}', 'LikeController@getLikeTypeUsers');
+//Not Using
+
+
+
+    Route::get('/thread/{thread}/emojis','EmojiController@index');
+    Route::post('/thread/{thread}/emojis','EmojiController@saveEmoji');
+    Route::get('/thread/{thread}/user-emoji-type','EmojiController@getUserEmojiType');
+    //Emojis
  
 
 /**
@@ -320,6 +332,8 @@ Route::middleware(['admin'])->group(function (){
     Route::post('batch-tools/add-tag', 'BatchToolController@addTag')->name('batchtools.add.tag');   
     Route::post('batch-tools/rename-tag', 'BatchToolController@renameTag')->name('batchtools.rename.tag');
     Route::post('batch-tools/delete-tag', 'BatchToolController@deleteTag')->name('batchtools.delete.tag');
+    Route::post('batch-tools/set-famaus', 'BatchToolController@setFamaus')->name('batchtools.set.famaus');
+    Route::post('batch-tools/add-emoji', 'BatchToolController@addEmoji')->name('batchtools.add.emoji');
 
 
     //Ban User
