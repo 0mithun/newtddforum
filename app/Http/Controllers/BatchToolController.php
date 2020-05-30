@@ -6,7 +6,7 @@ use App\Tags;
 use App\Thread;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\DocBlock\Tag;
-
+use DB;
 class BatchToolController extends Controller
 {
     protected $findKeyword = 'xxx';
@@ -151,7 +151,43 @@ class BatchToolController extends Controller
     }
 
     public function addEmoji(Request $request){
-        return $request->all();
+        $type = $request->emoji;
+        $user = auth()->user();
+        $threads = Thread::
+            where('title', 'LIKE', "%{$this->findKeyword}%")
+            ->orWhere('body', 'LIKE', "%{$this->findKeyword}%")
+            ->get()
+        ;
+
+        $threads->map(function($thread) use($user, $type){
+            if($this->isVote($thread->id, $user->id)){
+                $this->removeVote($thread->id, $user->id);                
+            }
+
+            $thread->emojis()->attach($type,['user_id'=>$user->id]);
+        });
+
+
+        session()->flash('successmessage','Emoji add Successfully');
+        return redirect()->route('admin.batchtools');
+
     }
 
+
+    private function isVote($thread, $user){
+        $count = DB::table('thread_emoji')
+                    ->where('thread_id', $thread)
+                    ->where('user_id', $user)
+                    ->first(); 
+        
+        return $count;
+    }
+
+
+    private function removeVote($thread, $user){
+        DB::table('thread_emoji')
+        ->where('thread_id', $thread)
+        ->where('user_id', $user)
+        ->delete(); 
+    }
 }

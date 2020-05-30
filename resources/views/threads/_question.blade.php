@@ -200,7 +200,7 @@
                             <li><a href="#" @click.prevent="makeRestrictionReport('Should be rated R', 18)">Should be rated R</a></li>
                         </ul>
                       </div>
-                      <thread-emojis :thread="{{ $thread }}"></thread-emojis>
+                      <thread-emojis :thread="{{ $thread }}" v-if="!authorize('isBan')"></thread-emojis>
                 </div>
 
                 
