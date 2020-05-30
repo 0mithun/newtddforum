@@ -51,6 +51,21 @@ return [
         'consumer_key'    => env('TWITTER_CONSUMER_KEY'),
         'consumer_secret' => env('TWITTER_CONSUMER_SECRET'),
         'access_token'    => env('TWITTER_ACCESS_TOKEN'),
-        'access_secret'   => env('TWITTER_ACCESS_SECRET')
-    ]
+        'access_secret'   => env('TWITTER_ACCESS_SECRET'),
+
+        'client_id'       => env('TWITTER_CLIENT_ID'),
+        'client_secret'   => env('TWITTER_CLIENT_SECRET'),
+        'redirect'        => env('TWITTER_REDIRECT')
+    ],
+    'facebook' => [
+        'client_id'     => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect'      => env('FACEBOOK_REDIRECT'),
+    ],
+
+    'instagram' => [
+        'client_id'     => env('INSTAGRAM_CLIENT_ID'),
+        'client_secret' => env('INSTAGRAM_CLIENT_SECRET'),
+        'redirect'      => env('INSTAGRAM_REDIRECT'),
+    ],
 ];

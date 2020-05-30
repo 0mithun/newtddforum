@@ -5,7 +5,10 @@
     <div class="row top-margin">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
+                <div class="panel-heading">Register
+
+                    @include('auth._alert')
+                </div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
@@ -92,6 +95,17 @@
                                 <button type="submit" class="btn btn-primary">
                                     Register
                                 </button>
+                            </div>
+                        </div>
+                        @include('auth._social', ['text'=>'Register'])
+
+                        <div class="form-group">
+                            <div class="col-md-8 col-md-offset-4">
+                                    Already Have an account
+
+                                <a class="" href="{{ route('login') }}">
+                                    Login
+                                </a>
                             </div>
                         </div>
                     </form>

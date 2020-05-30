@@ -161,6 +161,29 @@
         .messageBox{
             margin-top: 20px;
         }
+
+
+        .social-icon{
+            text-decoration: none;
+            background-repeat: no-repeat;
+            background-size: 32px;
+            background-position: 0 0;
+            display: inline-block;
+            overflow: hidden;
+            margin-top: 10px;
+            margin-right: 10px;
+            padding-left: 36px;
+        }
+        .facebook{
+            background-image: url(/images/social/facebook.png);
+        }
+        .twitter{
+            background-image: url(/images/social/twitter.png);
+        }
+        .instagram{
+            background-image: url(/images/social/instagram.png);
+        }
+
     </style>
 </head>
 <body>

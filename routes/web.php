@@ -11,6 +11,22 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
+
+/*
+*
+Sociali Login
+*/
+Route::get('login/facebook', 'Auth\LoginController@redirectToFacebookProvider');
+Route::get('login/facebook/callback', 'Auth\LoginController@handleFacebookProviderCallback');
+
+Route::get('login/twitter', 'Auth\LoginController@redirectToTwitterProvider');
+Route::get('login/twitter/callback', 'Auth\LoginController@handleTwitterProviderCallback');
+
+Route::get('login/instagram', 'Auth\LoginController@redirectToInstagramProvider');
+Route::get('login/instagram/callback', 'Auth\LoginController@handleInstagramProviderCallback');
+
+
 
 
 Route::get('/map/show','UserlocationController@show')->name('map.show');
@@ -23,7 +39,7 @@ Route::post('/map/thread-details','UserlocationController@threadDetails')->name(
 
 Route::get('/','ThreadsController@index');
 
-Auth::routes();
+
 
 Route::get('/home', 'ThreadsController@index');
 
