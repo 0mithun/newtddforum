@@ -17,6 +17,11 @@ export default {
       userEmoji:null
     }
   },
+  computed:{
+    signedIn() {
+      return window.App.user ? true : false;
+    },
+  },
 
   created(){
     this.getUserEmojiType();
@@ -24,6 +29,9 @@ export default {
   },
   methods:{
     voteEmoji(type){
+      if (!this.signedIn) {
+        return false;
+      }
       axios.post(`/thread/${this.thread.id}/emojis`,{
           type:type
       }).then(res => {
@@ -41,6 +49,9 @@ export default {
       });
     },
     getUserEmojiType(){
+      if (!this.signedIn) {
+        return false;
+      }
        axios.get(`/thread/${this.thread.id}/user-emoji-type`).then(res => {
          this.userEmoji = res.data
       });

@@ -84,6 +84,24 @@ Route::get('/thread/{thread}/dislikes-count','LikeController@getDisikesCount');
 
 
 
+    //Emojis
+
+//Not using
+Route::post('/thread/{thread}/like-type', 'LikeController@getUserLikeType');
+Route::post('/thread/{thread}/all-like-type', 'LikeController@getAllLikeType');
+Route::get('/thread/{thread}/like-type-users/{type}', 'LikeController@getLikeTypeUsers');
+//Not Using
+
+
+
+Route::get('/thread/{thread}/emojis','EmojiController@index');
+Route::post('/thread/{thread}/emojis','EmojiController@saveEmoji')->middleware('auth');;
+Route::get('/thread/{thread}/user-emoji-type','EmojiController@getUserEmojiType')->middleware('auth');;
+//Emojis
+
+
+
+
 
 Route::middleware(['auth'])->group(function (){
 
@@ -135,20 +153,6 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/thread/{thread}/dislikes', 'LikeController@dislike');
 
 
-    //Emojis
-
-//Not using
-    Route::post('/thread/{thread}/like-type', 'LikeController@getUserLikeType');
-    Route::post('/thread/{thread}/all-like-type', 'LikeController@getAllLikeType');
-    Route::get('/thread/{thread}/like-type-users/{type}', 'LikeController@getLikeTypeUsers');
-//Not Using
-
-
-
-    Route::get('/thread/{thread}/emojis','EmojiController@index');
-    Route::post('/thread/{thread}/emojis','EmojiController@saveEmoji');
-    Route::get('/thread/{thread}/user-emoji-type','EmojiController@getUserEmojiType');
-    //Emojis
  
 
 /**

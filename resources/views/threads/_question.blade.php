@@ -212,10 +212,19 @@
                     <fb-share :thread="thread"></fb-share>
                     <twitter-share :thread="thread"></twitter-share>
                     
-                    <button data-toggle="tooltip"  class="btn btn-xs btn-danger ml-a red-bg pull-right" data-placement="left">
+                    <button data-toggle="tooltip"  class="btn btn-xs btn-danger ml-a red-bg" data-placement="left">
                         <span class="glyphicon glyphicon-flag"></span>
                     </button>
+                    <button type="button" class="btn btn-default dropdown-toggle btn-xs" title="Report Thread Age Restriction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="isThreadReported">
+                        <span class="caret"></span>
+                      </button>
+                    <ul class="dropdown-menu age-restrictd-dropdown">
+                        <li><a href="#" >Should be Pg-13</a></li>
+                        <li><a href="#" >Should be rated R</a></li>
+                    </ul>
+                    <thread-emojis :thread="{{ $thread }}"></thread-emojis>
                 </div>
+                
             </div>            
         </div>
 
