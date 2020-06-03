@@ -71,6 +71,23 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <h4 class="filter-title">Include anecdotes</h4>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class=" filter-rated " >
+                                            <input type="checkbox" name="rated" id="" value="celebrities"  v-model="tags">   Celebrities 
+                                        </div>
+                                        <div class=" filter-rated " >
+                                            <input type="checkbox" name="rated" id=""  :value="1" v-model="famous" >   Notables 
+                                        </div>
+                                        <div class=" filter-rated " >
+                                            <input type="checkbox" name="rated" id=""  :value="0" v-model="famous" e>    Other People
+                                        </div>
+                                    </div>
+                                </div>
                                
                             </div>
                         </div>
@@ -147,7 +164,9 @@ export default {
             filter_emojis:[],
             filter_rated:[],
             search: false,
-            emojis:[]
+            emojis:[],
+            famous:[0,1],
+            tags:[]
         }
     },
     watch:{
@@ -160,6 +179,14 @@ export default {
             if(this.filter_rated.length>0){
                 this.filterByRated(this.filter_rated, this.allThreads);
             }
+
+            if(this.famous.length>0){
+                this.filterByFamaous(this.famous, this.allThreads);
+            }
+
+            if(this.tags.length>0){
+                this.filterByTags(this.tags, this.allThreads);
+            }
         },
         filter_rated(filter){
             if(filter.length>0){
@@ -171,23 +198,56 @@ export default {
             if(this.filter_emojis.length>0){
                 this.filterByEmojis(this.filter_emojis, this.allThreads);
             }
+
+            if(this.famous.length>0){
+                this.filterByFamaous(this.famous, this.allThreads);
+            }
+             if(this.tags.length>0){
+                this.filterByTags(this.tags, this.allThreads);
+            }
+        },
+        famous(filter){
+            if(filter.length>0){
+               this.filterByFamaous(filter, this.threads.data);
+            }else{
+                this.allThreads = this.threads.data;
+            }
+
+            if(this.filter_rated.length>0){
+                this.filterByRated(this.filter_rated, this.allThreads);
+            }
+            if(this.filter_emojis.length>0){
+                this.filterByRated(this.filter_emojis, this.allThreads);
+            }
+
+            if(this.tags.length>0){
+                this.filterByTags(this.tags, this.allThreads);
+            }
+
+        },
+        tags(filter){
+            if(filter.length>0){
+               this.filterByTags(filter, this.threads.data);
+            }else{
+                this.allThreads = this.threads.data;
+            }
+
+            if(this.filter_rated.length>0){
+                this.filterByRated(this.filter_rated, this.allThreads);
+            }
+            if(this.filter_emojis.length>0){
+                this.filterByRated(this.filter_emojis, this.allThreads);
+            }
+
+            if(this.famous.length>0){
+                this.filterByFamaous(this.famous, this.allThreads);
+            }
+            
         }
     },
     created(){
         this.allThreads = this.threads.data;
         this.getAllEmojis();
-        // let filtered = this.threads.data.filter((value)=>{
-        //         if(this.restriction ==1){
-        //             return ;
-        //         }else{
-        //             return value.age_restriction == 0;
-        //         }
-            
-        // })
-        // this.allThreads = filtered;
-
-        //this.allThreads = this.threads.data;
-        //  this.allThreads =_.orderBy(this.threads.data, [this.sort_by],'desc');
     },
     computed:{
         
@@ -214,6 +274,28 @@ export default {
                     return true;
                 }
             });
+            this.allThreads = filterThreads;
+        },
+        filterByFamaous(filter, data){
+           let filterThreads = _.filter(data, (thread)=>{  
+                if(_.includes(filter, thread.is_famous)){
+                    return true;
+                }
+            });
+            this.allThreads = filterThreads;
+        },
+
+        filterByTags(filter, data){
+            let newThreads = _.filter(data, (thread)=>{
+                return thread.tags.length>0;
+            })
+            let filterThreads = _.filter(newThreads, (thread)=>{
+                for(let i = 0; i<thread.tags.length; i++){
+                    if(_.includes(filter, thread.tags[i].name.toLowerCase())){
+                        return true;
+                    }
+                }
+            })
             this.allThreads = filterThreads;
         },
 

@@ -211,6 +211,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -228,7 +245,9 @@ __webpack_require__.r(__webpack_exports__);
       filter_emojis: [],
       filter_rated: [],
       search: false,
-      emojis: []
+      emojis: [],
+      famous: [0, 1],
+      tags: []
     };
   },
   watch: {
@@ -242,6 +261,14 @@ __webpack_require__.r(__webpack_exports__);
       if (this.filter_rated.length > 0) {
         this.filterByRated(this.filter_rated, this.allThreads);
       }
+
+      if (this.famous.length > 0) {
+        this.filterByFamaous(this.famous, this.allThreads);
+      }
+
+      if (this.tags.length > 0) {
+        this.filterByTags(this.tags, this.allThreads);
+      }
     },
     filter_rated: function filter_rated(filter) {
       if (filter.length > 0) {
@@ -253,20 +280,57 @@ __webpack_require__.r(__webpack_exports__);
       if (this.filter_emojis.length > 0) {
         this.filterByEmojis(this.filter_emojis, this.allThreads);
       }
+
+      if (this.famous.length > 0) {
+        this.filterByFamaous(this.famous, this.allThreads);
+      }
+
+      if (this.tags.length > 0) {
+        this.filterByTags(this.tags, this.allThreads);
+      }
+    },
+    famous: function famous(filter) {
+      if (filter.length > 0) {
+        this.filterByFamaous(filter, this.threads.data);
+      } else {
+        this.allThreads = this.threads.data;
+      }
+
+      if (this.filter_rated.length > 0) {
+        this.filterByRated(this.filter_rated, this.allThreads);
+      }
+
+      if (this.filter_emojis.length > 0) {
+        this.filterByRated(this.filter_emojis, this.allThreads);
+      }
+
+      if (this.tags.length > 0) {
+        this.filterByTags(this.tags, this.allThreads);
+      }
+    },
+    tags: function tags(filter) {
+      if (filter.length > 0) {
+        this.filterByTags(filter, this.threads.data);
+      } else {
+        this.allThreads = this.threads.data;
+      }
+
+      if (this.filter_rated.length > 0) {
+        this.filterByRated(this.filter_rated, this.allThreads);
+      }
+
+      if (this.filter_emojis.length > 0) {
+        this.filterByRated(this.filter_emojis, this.allThreads);
+      }
+
+      if (this.famous.length > 0) {
+        this.filterByFamaous(this.famous, this.allThreads);
+      }
     }
   },
   created: function created() {
     this.allThreads = this.threads.data;
-    this.getAllEmojis(); // let filtered = this.threads.data.filter((value)=>{
-    //         if(this.restriction ==1){
-    //             return ;
-    //         }else{
-    //             return value.age_restriction == 0;
-    //         }
-    // })
-    // this.allThreads = filtered;
-    //this.allThreads = this.threads.data;
-    //  this.allThreads =_.orderBy(this.threads.data, [this.sort_by],'desc');
+    this.getAllEmojis();
   },
   computed: {},
   methods: {
@@ -289,6 +353,30 @@ __webpack_require__.r(__webpack_exports__);
       var filterThreads = _.filter(data, function (thread) {
         if (_.includes(filter, thread.age_restriction)) {
           return true;
+        }
+      });
+
+      this.allThreads = filterThreads;
+    },
+    filterByFamaous: function filterByFamaous(filter, data) {
+      var filterThreads = _.filter(data, function (thread) {
+        if (_.includes(filter, thread.is_famous)) {
+          return true;
+        }
+      });
+
+      this.allThreads = filterThreads;
+    },
+    filterByTags: function filterByTags(filter, data) {
+      var newThreads = _.filter(data, function (thread) {
+        return thread.tags.length > 0;
+      });
+
+      var filterThreads = _.filter(newThreads, function (thread) {
+        for (var i = 0; i < thread.tags.length; i++) {
+          if (_.includes(filter, thread.tags[i].name.toLowerCase())) {
+            return true;
+          }
         }
       });
 
@@ -868,6 +956,153 @@ var render = function() {
                           )
                         ])
                       ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _vm._m(2),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-10" }, [
+                        _c("div", { staticClass: " filter-rated " }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.tags,
+                                expression: "tags"
+                              }
+                            ],
+                            attrs: {
+                              type: "checkbox",
+                              name: "rated",
+                              id: "",
+                              value: "celebrities"
+                            },
+                            domProps: {
+                              checked: Array.isArray(_vm.tags)
+                                ? _vm._i(_vm.tags, "celebrities") > -1
+                                : _vm.tags
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$a = _vm.tags,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = "celebrities",
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 && (_vm.tags = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.tags = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.tags = $$c
+                                }
+                              }
+                            }
+                          }),
+                          _vm._v(
+                            "   Celebrities \n                                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: " filter-rated " }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.famous,
+                                expression: "famous"
+                              }
+                            ],
+                            attrs: { type: "checkbox", name: "rated", id: "" },
+                            domProps: {
+                              value: 1,
+                              checked: Array.isArray(_vm.famous)
+                                ? _vm._i(_vm.famous, 1) > -1
+                                : _vm.famous
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$a = _vm.famous,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = 1,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 && (_vm.famous = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.famous = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.famous = $$c
+                                }
+                              }
+                            }
+                          }),
+                          _vm._v(
+                            "   Notables \n                                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: " filter-rated " }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.famous,
+                                expression: "famous"
+                              }
+                            ],
+                            attrs: {
+                              type: "checkbox",
+                              name: "rated",
+                              id: "",
+                              e: ""
+                            },
+                            domProps: {
+                              value: 0,
+                              checked: Array.isArray(_vm.famous)
+                                ? _vm._i(_vm.famous, 0) > -1
+                                : _vm.famous
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$a = _vm.famous,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = 0,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 && (_vm.famous = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.famous = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.famous = $$c
+                                }
+                              }
+                            }
+                          }),
+                          _vm._v(
+                            "    Other People\n                                    "
+                          )
+                        ])
+                      ])
                     ])
                   ])
                 : _vm._e()
@@ -1010,6 +1245,14 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-md-2" }, [
       _c("h4", { staticClass: "filter-title" }, [_vm._v("Include")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-2" }, [
+      _c("h4", { staticClass: "filter-title" }, [_vm._v("Include anecdotes")])
     ])
   }
 ]
