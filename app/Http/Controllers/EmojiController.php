@@ -23,6 +23,16 @@ class EmojiController extends Controller
         
         return abort(404);
     }
+    public function allEmojis(){
+        if(\Request::ajax()){
+            $emojis = Emoji::all();
+            return response()->json($emojis);
+        }
+        
+        return abort(404);
+    }
+
+
 
     public function saveEmoji($thread){
         $authUser = auth()->user();

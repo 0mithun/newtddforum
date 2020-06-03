@@ -39,35 +39,39 @@
                         </div>
                         <div class="row filter-row">
                             <div class="col-md-12">
-                                <button class="btn btn-default mt-10" @click.prevent="filterOpen = !filterOpen">Filter 
+                                <button class="btn btn-default btn-sm mt-10" @click.prevent="filterOpen = !filterOpen">Filter 
                                     <!-- <span class="glyphicon  glyphicon-chevron-up "></span> -->
                                     <span class="glyphicon " :class="filterOpen ? 'glyphicon-chevron-up': 'glyphicon-chevron-down'" ></span>
                                 </button>
                             </div>
                             <div class="col-md-12" v-if="filterOpen">
-                                <div class="col-md-2">
-                                    <h3 class="filter-title">Emoji</h3>
+                                <div class="row">
+                                     <div class="col-md-2">
+                                        <h4 class="filter-title">Emoji</h4>
+                                    </div>
+                                    <div class="col-md-10">
+                                            <div class=" filter-emoji filter-emoji-like" :class="emoji.name" v-for="(emoji, index) in emojis" :key="index">
+                                                <input type="checkbox" name="like" id="" :value="emoji.name" class="filter-emoji-checkbox" v-model="filter_emojis"> {{emoji.name}}
+                                            </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-10">
-                                        <div class="col-md-2 filter-emoji filter-emoji-like">
-                                            <input type="checkbox" name="like" id="" value="like" class="filter-emoji-checkbox" v-model="filter_emojis"> Like
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <h4 class="filter-title">Include</h4>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class=" filter-rated " >
+                                            <input type="checkbox" name="rated" id=""  :value="0" v-model="filter_rated">   G-rated 
                                         </div>
-                                        <div class="col-md-2 filter-emoji filter-emoji-love">
-                                            <input type="checkbox" name="like" id="" value="love" class="filter-emoji-checkbox" v-model="filter_emojis"> Love
+                                        <div class=" filter-rated " >
+                                            <input type="checkbox" name="rated" id=""  :value="13" v-model="filter_rated">   PG-rated 
                                         </div>
-                                        <div class="col-md-2 filter-emoji filter-emoji-haha">
-                                            <input type="checkbox" name="like" id="" value="haha" class="filter-emoji-checkbox" v-model="filter_emojis"> Haha
+                                        <div class=" filter-rated " >
+                                            <input type="checkbox" name="rated" id=""  :value="18" v-model="filter_rated">    R-rated
                                         </div>
-                                        <div class="col-md-2 filter-emoji filter-emoji-wow">
-                                            <input type="checkbox" name="like" id="" value="wow" class="filter-emoji-checkbox" v-model="filter_emojis"> Wow
-                                        </div>
-                                        <div class="col-md-2 filter-emoji filter-emoji-sad">
-                                            <input type="checkbox" name="like" id="" value="sad" class="filter-emoji-checkbox" v-model="filter_emojis"> Sad
-                                        </div>
-                                        <div class="col-md-2 filter-emoji filter-emoji-angry">
-                                            <input type="checkbox" name="like" id="" value="angry" class="filter-emoji-checkbox" v-model="filter_emojis"> Angry
-                                        </div>
+                                    </div>
                                 </div>
+                               
                             </div>
                         </div>
 
@@ -141,32 +145,37 @@ export default {
             sort_by:'created_at',
             filterOpen:false,
             filter_emojis:[],
-            search: false
+            filter_rated:[],
+            search: false,
+            emojis:[]
         }
     },
     watch:{
         filter_emojis(filter){
             if(filter.length>0){
-                let newThreads = _.filter(this.threads.data, (thread)=>{
-                    return thread.emojis.length>0;
-                })
-                let filterThreads = _.filter(newThreads, (thread)=>{
-                    for(let i = 0; i<thread.emojis.length; i++){
-                        if(_.includes(filter, thread.emojis[i].name)){
-                            return true;
-                        }
-                    }
-                })
-                this.allThreads = filterThreads;
+               this.filterByEmojis(filter, this.threads.data);
             }else{
                 this.allThreads = this.threads.data;
             }
-            
+            if(this.filter_rated.length>0){
+                this.filterByRated(this.filter_rated, this.allThreads);
+            }
+        },
+        filter_rated(filter){
+            if(filter.length>0){
+                this.filterByRated(filter, this.threads.data);
+            }else{
+                this.allThreads = this.threads.data;
+            }
+
+            if(this.filter_emojis.length>0){
+                this.filterByEmojis(this.filter_emojis, this.allThreads);
+            }
         }
     },
     created(){
         this.allThreads = this.threads.data;
-
+        this.getAllEmojis();
         // let filtered = this.threads.data.filter((value)=>{
         //         if(this.restriction ==1){
         //             return ;
@@ -185,12 +194,39 @@ export default {
     },
     
     methods:{
+        filterByEmojis(filter, data){
+             let newThreads = _.filter(data, (thread)=>{
+                return thread.emojis.length>0;
+            })
+            let filterThreads = _.filter(newThreads, (thread)=>{
+                for(let i = 0; i<thread.emojis.length; i++){
+                    if(_.includes(filter, thread.emojis[i].name)){
+                        return true;
+                    }
+                }
+            })
+            this.allThreads = filterThreads;
+        },
+
+        filterByRated(filter, data){
+            let filterThreads = _.filter(data, (thread)=>{  
+                if(_.includes(filter, thread.age_restriction)){
+                    return true;
+                }
+            });
+            this.allThreads = filterThreads;
+        },
+
+        getAllEmojis(){
+            axios.get('/all-emojis')
+            .then(res=>{
+                this.emojis = res.data
+            })
+        },
         searchThread(){
             // /threads/search
             let url = '/threads/search?query='+this.q;
-
-            window.location.href = url;
-          
+            window.location.href = url;          
         },
         sortBy(){
             if(this.sort_by == 'top_rated'){
@@ -225,23 +261,17 @@ export default {
             }
             this.search = true;
             axios.get('/search-vue?query='+this.q+'&sort_by='+this.sort_by).then(res=>{
-                //console.log(res.data.data);
-
-               
                 this.allThreads = res.data.data;
                 this.threads.data = res.data.data
-
                 let pageUrl = {
                     prev_page_url: res.data.prev_page_url,
                     next_page_url: res.data.next_page_url,
                 }
                 eventBus.$emit('pageChange',pageUrl );
-
                 this.search = false;
             })
         },
         fetch(page) {
-
             axios.get('/search-vue?query='+this.q+'&page='+page)
             .then(res=>{
                 this.allThreads = res.data.data
@@ -269,37 +299,47 @@ export default {
     .filter-title{
         margin-top:10px;
     }
+    
+    
     .filter-emoji{
-        background-size: 28px;
-        background-image: url(/images/png/facebook_iconset.png);
+        height: 24px;
+        background-color: transparent;
+        background-size: 24px;
         background-repeat: no-repeat;
-        margin-left: 0px;
-        padding-left: 35px!important;
+        padding-left: 30px;
+        display: inline-flex;
+        margin-right: 20px;
+        padding-top: 3px;
         margin-top: 10px;
-        height: 28px;
-        padding-right: 0px!important;
-        font-weight: bold;
     }
-    .filter-emoji-like{
-        background-position: 0px -84px;
-    }
-     .filter-emoji-love{
-        background-position: 0px -112px;
-    }
-     .filter-emoji-haha{
-        background-position: 0px -56px;
-    }
-     .filter-emoji-wow{
-        background-position: 0px -224px;
-    }
-     .filter-emoji-sad{
-        background-position: 0px -140px;
-    }
-     .filter-emoji-angry{
-        background-position: 0px 0px;
+    .filter-rated{
+        display: inline-flex;
+        margin-right: 20px;
+        padding-top: 3px;
+        margin-top: 10px;
+
     }
 
-    .filter-emoji-checkbox{
-        margin-top: 10px;
+    .funny{
+      background-image :url(/images/emojis/funny.png);
     }
+    .sad{
+      background-image :url(/images/emojis/sad.png);
+    }
+    .strange{
+      background-image :url(/images/emojis/strange.png);
+    }
+    .inspiring{
+      background-image :url(/images/emojis/inspiring.png);
+    }
+    .amazing{
+      background-image :url(/images/emojis/amazing.png);
+    }
+    .dumb{
+      background-image :url(/images/emojis/dumb1.png);
+    }
+    .famous{
+      background-image :url(/images/emojis/famous.png);
+    }
+
 </style>

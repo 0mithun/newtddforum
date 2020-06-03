@@ -33,8 +33,6 @@ Route::get('/map/show','UserlocationController@show')->name('map.show');
 Route::post('/map/nearest-threads','UserlocationController@getNearestThread')->name('map.nearest');
 Route::post('/map/all-threads','UserlocationController@getAllThread');
 
-Route::get('/test','UserlocationController@getNearestThread');
-
 Route::post('/map/thread-details','UserlocationController@threadDetails')->name('thread.details');
 
 
@@ -115,7 +113,8 @@ Route::get('/thread/{thread}/like-type-users/{type}', 'LikeController@getLikeTyp
 
 Route::get('/thread/{thread}/emojis','EmojiController@index');
 Route::post('/thread/{thread}/emojis','EmojiController@saveEmoji')->middleware('auth');;
-Route::get('/thread/{thread}/user-emoji-type','EmojiController@getUserEmojiType')->middleware('auth');;
+Route::get('/thread/{thread}/user-emoji-type','EmojiController@getUserEmojiType')->middleware('auth');
+Route::get('/all-emojis','EmojiController@allEmojis');
 //Emojis
 
 

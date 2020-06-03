@@ -207,6 +207,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -222,32 +226,38 @@ __webpack_require__.r(__webpack_exports__);
       sort_by: 'created_at',
       filterOpen: false,
       filter_emojis: [],
-      search: false
+      filter_rated: [],
+      search: false,
+      emojis: []
     };
   },
   watch: {
     filter_emojis: function filter_emojis(filter) {
       if (filter.length > 0) {
-        var newThreads = _.filter(this.threads.data, function (thread) {
-          return thread.emojis.length > 0;
-        });
-
-        var filterThreads = _.filter(newThreads, function (thread) {
-          for (var i = 0; i < thread.emojis.length; i++) {
-            if (_.includes(filter, thread.emojis[i].name)) {
-              return true;
-            }
-          }
-        });
-
-        this.allThreads = filterThreads;
+        this.filterByEmojis(filter, this.threads.data);
       } else {
         this.allThreads = this.threads.data;
+      }
+
+      if (this.filter_rated.length > 0) {
+        this.filterByRated(this.filter_rated, this.allThreads);
+      }
+    },
+    filter_rated: function filter_rated(filter) {
+      if (filter.length > 0) {
+        this.filterByRated(filter, this.threads.data);
+      } else {
+        this.allThreads = this.threads.data;
+      }
+
+      if (this.filter_emojis.length > 0) {
+        this.filterByEmojis(this.filter_emojis, this.allThreads);
       }
     }
   },
   created: function created() {
-    this.allThreads = this.threads.data; // let filtered = this.threads.data.filter((value)=>{
+    this.allThreads = this.threads.data;
+    this.getAllEmojis(); // let filtered = this.threads.data.filter((value)=>{
     //         if(this.restriction ==1){
     //             return ;
     //         }else{
@@ -260,6 +270,37 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {},
   methods: {
+    filterByEmojis: function filterByEmojis(filter, data) {
+      var newThreads = _.filter(data, function (thread) {
+        return thread.emojis.length > 0;
+      });
+
+      var filterThreads = _.filter(newThreads, function (thread) {
+        for (var i = 0; i < thread.emojis.length; i++) {
+          if (_.includes(filter, thread.emojis[i].name)) {
+            return true;
+          }
+        }
+      });
+
+      this.allThreads = filterThreads;
+    },
+    filterByRated: function filterByRated(filter, data) {
+      var filterThreads = _.filter(data, function (thread) {
+        if (_.includes(filter, thread.age_restriction)) {
+          return true;
+        }
+      });
+
+      this.allThreads = filterThreads;
+    },
+    getAllEmojis: function getAllEmojis() {
+      var _this = this;
+
+      axios.get('/all-emojis').then(function (res) {
+        _this.emojis = res.data;
+      });
+    },
     searchThread: function searchThread() {
       // /threads/search
       var url = '/threads/search?query=' + this.q;
@@ -286,7 +327,7 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(created_at, 'YYYY-MM-DD HH:mm:ss').fromNow() + '...';
     },
     searchThreads: function searchThreads() {
-      var _this = this;
+      var _this2 = this;
 
       if (this.q == '') {
         return;
@@ -294,22 +335,21 @@ __webpack_require__.r(__webpack_exports__);
 
       this.search = true;
       axios.get('/search-vue?query=' + this.q + '&sort_by=' + this.sort_by).then(function (res) {
-        //console.log(res.data.data);
-        _this.allThreads = res.data.data;
-        _this.threads.data = res.data.data;
+        _this2.allThreads = res.data.data;
+        _this2.threads.data = res.data.data;
         var pageUrl = {
           prev_page_url: res.data.prev_page_url,
           next_page_url: res.data.next_page_url
         };
         eventBus.$emit('pageChange', pageUrl);
-        _this.search = false;
+        _this2.search = false;
       });
     },
     fetch: function fetch(page) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('/search-vue?query=' + this.q + '&page=' + page).then(function (res) {
-        _this2.allThreads = res.data.data;
+        _this3.allThreads = res.data.data;
         var pageUrl = {
           prev_page_url: res.data.prev_page_url,
           next_page_url: res.data.next_page_url
@@ -334,7 +374,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.panel-body .row[data-v-6b02d08c] {\n    margin-top: 0px;\n}\n.row.filter-row[data-v-6b02d08c]{\n    margin-top: 10px;\n}\n.filter-title[data-v-6b02d08c]{\n    margin-top:10px;\n}\n.filter-emoji[data-v-6b02d08c]{\n    background-size: 28px;\n    background-image: url(/images/png/facebook_iconset.png);\n    background-repeat: no-repeat;\n    margin-left: 0px;\n    padding-left: 35px!important;\n    margin-top: 10px;\n    height: 28px;\n    padding-right: 0px!important;\n    font-weight: bold;\n}\n.filter-emoji-like[data-v-6b02d08c]{\n    background-position: 0px -84px;\n}\n.filter-emoji-love[data-v-6b02d08c]{\n    background-position: 0px -112px;\n}\n.filter-emoji-haha[data-v-6b02d08c]{\n    background-position: 0px -56px;\n}\n.filter-emoji-wow[data-v-6b02d08c]{\n    background-position: 0px -224px;\n}\n.filter-emoji-sad[data-v-6b02d08c]{\n    background-position: 0px -140px;\n}\n.filter-emoji-angry[data-v-6b02d08c]{\n    background-position: 0px 0px;\n}\n.filter-emoji-checkbox[data-v-6b02d08c]{\n    margin-top: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.panel-body .row[data-v-6b02d08c] {\n    margin-top: 0px;\n}\n.row.filter-row[data-v-6b02d08c]{\n    margin-top: 10px;\n}\n.filter-title[data-v-6b02d08c]{\n    margin-top:10px;\n}\n.filter-emoji[data-v-6b02d08c]{\n    height: 24px;\n    background-color: transparent;\n    background-size: 24px;\n    background-repeat: no-repeat;\n    padding-left: 30px;\n    display: inline-flex;\n    margin-right: 20px;\n    padding-top: 3px;\n    margin-top: 10px;\n}\n.filter-rated[data-v-6b02d08c]{\n    display: inline-flex;\n    margin-right: 20px;\n    padding-top: 3px;\n    margin-top: 10px;\n}\n.funny[data-v-6b02d08c]{\n  background-image :url(/images/emojis/funny.png);\n}\n.sad[data-v-6b02d08c]{\n  background-image :url(/images/emojis/sad.png);\n}\n.strange[data-v-6b02d08c]{\n  background-image :url(/images/emojis/strange.png);\n}\n.inspiring[data-v-6b02d08c]{\n  background-image :url(/images/emojis/inspiring.png);\n}\n.amazing[data-v-6b02d08c]{\n  background-image :url(/images/emojis/amazing.png);\n}\n.dumb[data-v-6b02d08c]{\n  background-image :url(/images/emojis/dumb1.png);\n}\n.famous[data-v-6b02d08c]{\n  background-image :url(/images/emojis/famous.png);\n}\n\n", ""]);
 
 // exports
 
@@ -593,7 +633,7 @@ var render = function() {
                 _c(
                   "button",
                   {
-                    staticClass: "btn btn-default mt-10",
+                    staticClass: "btn btn-default btn-sm mt-10",
                     on: {
                       click: function($event) {
                         $event.preventDefault()
@@ -616,333 +656,218 @@ var render = function() {
               _vm._v(" "),
               _vm.filterOpen
                 ? _c("div", { staticClass: "col-md-12" }, [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-md-10" }, [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "col-md-2 filter-emoji filter-emoji-like"
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.filter_emojis,
-                                expression: "filter_emojis"
-                              }
-                            ],
-                            staticClass: "filter-emoji-checkbox",
-                            attrs: {
-                              type: "checkbox",
-                              name: "like",
-                              id: "",
-                              value: "like"
-                            },
-                            domProps: {
-                              checked: Array.isArray(_vm.filter_emojis)
-                                ? _vm._i(_vm.filter_emojis, "like") > -1
-                                : _vm.filter_emojis
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.filter_emojis,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = "like",
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.filter_emojis = $$a.concat([$$v]))
-                                  } else {
-                                    $$i > -1 &&
-                                      (_vm.filter_emojis = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
-                                  }
-                                } else {
-                                  _vm.filter_emojis = $$c
-                                }
-                              }
-                            }
-                          }),
-                          _vm._v(" Like\n                                    ")
-                        ]
-                      ),
+                    _c("div", { staticClass: "row" }, [
+                      _vm._m(0),
                       _vm._v(" "),
                       _c(
                         "div",
-                        {
-                          staticClass: "col-md-2 filter-emoji filter-emoji-love"
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.filter_emojis,
-                                expression: "filter_emojis"
-                              }
-                            ],
-                            staticClass: "filter-emoji-checkbox",
-                            attrs: {
-                              type: "checkbox",
-                              name: "like",
-                              id: "",
-                              value: "love"
+                        { staticClass: "col-md-10" },
+                        _vm._l(_vm.emojis, function(emoji, index) {
+                          return _c(
+                            "div",
+                            {
+                              key: index,
+                              staticClass: " filter-emoji filter-emoji-like",
+                              class: emoji.name
                             },
-                            domProps: {
-                              checked: Array.isArray(_vm.filter_emojis)
-                                ? _vm._i(_vm.filter_emojis, "love") > -1
-                                : _vm.filter_emojis
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.filter_emojis,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = "love",
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.filter_emojis = $$a.concat([$$v]))
-                                  } else {
-                                    $$i > -1 &&
-                                      (_vm.filter_emojis = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.filter_emojis,
+                                    expression: "filter_emojis"
                                   }
-                                } else {
-                                  _vm.filter_emojis = $$c
-                                }
-                              }
-                            }
-                          }),
-                          _vm._v(" Love\n                                    ")
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "col-md-2 filter-emoji filter-emoji-haha"
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.filter_emojis,
-                                expression: "filter_emojis"
-                              }
-                            ],
-                            staticClass: "filter-emoji-checkbox",
-                            attrs: {
-                              type: "checkbox",
-                              name: "like",
-                              id: "",
-                              value: "haha"
-                            },
-                            domProps: {
-                              checked: Array.isArray(_vm.filter_emojis)
-                                ? _vm._i(_vm.filter_emojis, "haha") > -1
-                                : _vm.filter_emojis
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.filter_emojis,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = "haha",
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.filter_emojis = $$a.concat([$$v]))
-                                  } else {
-                                    $$i > -1 &&
-                                      (_vm.filter_emojis = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
+                                ],
+                                staticClass: "filter-emoji-checkbox",
+                                attrs: {
+                                  type: "checkbox",
+                                  name: "like",
+                                  id: ""
+                                },
+                                domProps: {
+                                  value: emoji.name,
+                                  checked: Array.isArray(_vm.filter_emojis)
+                                    ? _vm._i(_vm.filter_emojis, emoji.name) > -1
+                                    : _vm.filter_emojis
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$a = _vm.filter_emojis,
+                                      $$el = $event.target,
+                                      $$c = $$el.checked ? true : false
+                                    if (Array.isArray($$a)) {
+                                      var $$v = emoji.name,
+                                        $$i = _vm._i($$a, $$v)
+                                      if ($$el.checked) {
+                                        $$i < 0 &&
+                                          (_vm.filter_emojis = $$a.concat([
+                                            $$v
+                                          ]))
+                                      } else {
+                                        $$i > -1 &&
+                                          (_vm.filter_emojis = $$a
+                                            .slice(0, $$i)
+                                            .concat($$a.slice($$i + 1)))
+                                      }
+                                    } else {
+                                      _vm.filter_emojis = $$c
+                                    }
                                   }
-                                } else {
-                                  _vm.filter_emojis = $$c
                                 }
-                              }
-                            }
-                          }),
-                          _vm._v(" Haha\n                                    ")
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "col-md-2 filter-emoji filter-emoji-wow"
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.filter_emojis,
-                                expression: "filter_emojis"
-                              }
-                            ],
-                            staticClass: "filter-emoji-checkbox",
-                            attrs: {
-                              type: "checkbox",
-                              name: "like",
-                              id: "",
-                              value: "wow"
-                            },
-                            domProps: {
-                              checked: Array.isArray(_vm.filter_emojis)
-                                ? _vm._i(_vm.filter_emojis, "wow") > -1
-                                : _vm.filter_emojis
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.filter_emojis,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = "wow",
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.filter_emojis = $$a.concat([$$v]))
-                                  } else {
-                                    $$i > -1 &&
-                                      (_vm.filter_emojis = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
-                                  }
-                                } else {
-                                  _vm.filter_emojis = $$c
-                                }
-                              }
-                            }
-                          }),
-                          _vm._v(" Wow\n                                    ")
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "col-md-2 filter-emoji filter-emoji-sad"
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.filter_emojis,
-                                expression: "filter_emojis"
-                              }
-                            ],
-                            staticClass: "filter-emoji-checkbox",
-                            attrs: {
-                              type: "checkbox",
-                              name: "like",
-                              id: "",
-                              value: "sad"
-                            },
-                            domProps: {
-                              checked: Array.isArray(_vm.filter_emojis)
-                                ? _vm._i(_vm.filter_emojis, "sad") > -1
-                                : _vm.filter_emojis
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.filter_emojis,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = "sad",
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.filter_emojis = $$a.concat([$$v]))
-                                  } else {
-                                    $$i > -1 &&
-                                      (_vm.filter_emojis = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
-                                  }
-                                } else {
-                                  _vm.filter_emojis = $$c
-                                }
-                              }
-                            }
-                          }),
-                          _vm._v(" Sad\n                                    ")
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "col-md-2 filter-emoji filter-emoji-angry"
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.filter_emojis,
-                                expression: "filter_emojis"
-                              }
-                            ],
-                            staticClass: "filter-emoji-checkbox",
-                            attrs: {
-                              type: "checkbox",
-                              name: "like",
-                              id: "",
-                              value: "angry"
-                            },
-                            domProps: {
-                              checked: Array.isArray(_vm.filter_emojis)
-                                ? _vm._i(_vm.filter_emojis, "angry") > -1
-                                : _vm.filter_emojis
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.filter_emojis,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = "angry",
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.filter_emojis = $$a.concat([$$v]))
-                                  } else {
-                                    $$i > -1 &&
-                                      (_vm.filter_emojis = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
-                                  }
-                                } else {
-                                  _vm.filter_emojis = $$c
-                                }
-                              }
-                            }
-                          }),
-                          _vm._v(" Angry\n                                    ")
-                        ]
+                              }),
+                              _vm._v(
+                                " " +
+                                  _vm._s(emoji.name) +
+                                  "\n                                        "
+                              )
+                            ]
+                          )
+                        }),
+                        0
                       )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-10" }, [
+                        _c("div", { staticClass: " filter-rated " }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.filter_rated,
+                                expression: "filter_rated"
+                              }
+                            ],
+                            attrs: { type: "checkbox", name: "rated", id: "" },
+                            domProps: {
+                              value: 0,
+                              checked: Array.isArray(_vm.filter_rated)
+                                ? _vm._i(_vm.filter_rated, 0) > -1
+                                : _vm.filter_rated
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$a = _vm.filter_rated,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = 0,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      (_vm.filter_rated = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.filter_rated = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.filter_rated = $$c
+                                }
+                              }
+                            }
+                          }),
+                          _vm._v(
+                            "   G-rated \n                                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: " filter-rated " }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.filter_rated,
+                                expression: "filter_rated"
+                              }
+                            ],
+                            attrs: { type: "checkbox", name: "rated", id: "" },
+                            domProps: {
+                              value: 13,
+                              checked: Array.isArray(_vm.filter_rated)
+                                ? _vm._i(_vm.filter_rated, 13) > -1
+                                : _vm.filter_rated
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$a = _vm.filter_rated,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = 13,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      (_vm.filter_rated = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.filter_rated = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.filter_rated = $$c
+                                }
+                              }
+                            }
+                          }),
+                          _vm._v(
+                            "   PG-rated \n                                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: " filter-rated " }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.filter_rated,
+                                expression: "filter_rated"
+                              }
+                            ],
+                            attrs: { type: "checkbox", name: "rated", id: "" },
+                            domProps: {
+                              value: 18,
+                              checked: Array.isArray(_vm.filter_rated)
+                                ? _vm._i(_vm.filter_rated, 18) > -1
+                                : _vm.filter_rated
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$a = _vm.filter_rated,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = 18,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      (_vm.filter_rated = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.filter_rated = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.filter_rated = $$c
+                                }
+                              }
+                            }
+                          }),
+                          _vm._v(
+                            "    R-rated\n                                    "
+                          )
+                        ])
+                      ])
                     ])
                   ])
                 : _vm._e()
@@ -1076,7 +1001,15 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-md-2" }, [
-      _c("h3", { staticClass: "filter-title" }, [_vm._v("Emoji")])
+      _c("h4", { staticClass: "filter-title" }, [_vm._v("Emoji")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-2" }, [
+      _c("h4", { staticClass: "filter-title" }, [_vm._v("Include")])
     ])
   }
 ]
