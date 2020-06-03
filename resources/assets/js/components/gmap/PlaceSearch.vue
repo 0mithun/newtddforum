@@ -10,6 +10,7 @@
             <div class="col-md-3">
                 <select name="" id="" class="form-control" v-model="radius" @change="fetchNearestLocations">
                     <option value="">Select Radius</option>  
+                    <option value="0"> {{ nearest ? '0' : 'Full' }}</option>  
                     <option value="100">100</option>  
                     <option value="200">200</option>  
                     <option value="300">300</option>   
@@ -26,27 +27,37 @@
 
 <script>
 export default {
-    props:['userlat', 'userlng'],
+    props:['userlat', 'userlng','defaultradius','nearest'],
     data(){
         return{
-           radius:0,
+           radius: 0,
         //    center:{lat:42.363211, lng:-105.071875},
-            center:{lat: parseInt(this.userlat),lng: parseInt(this.userlng)},
-           radiusOptions:[100, 200, 300,400,500,1000, 2000, 5000]
+            center:{lat: parseFloat(this.userlat),lng: parseFloat(this.userlng)},
+           radiusOptions:[0, 100, 200, 300,400,500,1000, 2000, 5000]
         }
     },
     created(){
+        this.radius = this.defaultradius;
         this.fetchNearestLocations();
     },
     methods:{
         fetchNearestLocations(){
-            
-            axios.post('/map/nearest-threads',{
+            if(this.center.lat == NaN || this.center.lng == NaN){
+                alert('You must provide your location first')
+            }
+            let url = ''
+            if(this.nearest == true){
+                url = '/map/nearest-threads'
+            }else{
+                url = '/map/all-threads'
+            }
+
+            axios.post(url,{
                 center:this.center, radius:this.radius
             }).then(res=>{
                 let data = res.data;
                 let center = this.center;
-                let zoom = 5;
+                let zoom = 6;
                 eventBus.$emit('markers_fetched', data);
                 eventBus.$emit('change_center', center);
                 if(this.radius ==0){

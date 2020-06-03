@@ -10,7 +10,7 @@
                     <div class="col-md-3">
                         <div class="panel">
                             <div class="panel-heading">
-                                <place-search  userLat={{ $userLocations['lat'] }} userLng={{ $userLocations['lng'] }} :defaultradius=0 :nearest=false></place-search>
+                                <place-search  userLat={{ $userLocations['lat'] }} userLng={{ $userLocations['lng'] }} :defaultradius=500 :nearest=true></place-search>
                             </div>
                             <div class="panel-body">
                                 <map-results></map-results>
@@ -21,7 +21,7 @@
                     <div class="col-md-9">
                     
                         <div class="row">
-                            <thread-map userLat={{ $userLocations['lat'] }} userLng={{ $userLocations['lng'] }} :nearest=false ></thread-map>
+                            <thread-map userLat={{ $userLocations['lat'] }} userLng={{ $userLocations['lng'] }} :nearest=true ></thread-map>
                         </div>
                     
                     </div>

@@ -31,6 +31,9 @@ Route::get('login/instagram/callback', 'Auth\LoginController@handleInstagramProv
 
 Route::get('/map/show','UserlocationController@show')->name('map.show');
 Route::post('/map/nearest-threads','UserlocationController@getNearestThread')->name('map.nearest');
+Route::post('/map/all-threads','UserlocationController@getAllThread');
+
+Route::get('/test','UserlocationController@getNearestThread');
 
 Route::post('/map/thread-details','UserlocationController@threadDetails')->name('thread.details');
 
@@ -133,7 +136,7 @@ Route::middleware(['auth'])->group(function (){
     // Route::get('/other-users-message','ChatController@getOtherUsersMessage');
 
 
-   Route::get('/closet/threads','UserlocationController@show')->name('closet.thread');
+   Route::get('/closet/threads','UserlocationController@showCloset')->name('closet.thread');
 
 
 

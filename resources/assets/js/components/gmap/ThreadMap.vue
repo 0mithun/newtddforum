@@ -28,12 +28,11 @@
             
         </gmap-cluster> -->
 
-        <!-- <GmapMarker
+        <GmapMarker
                 :position="center"
                 :clickable="true"
-                :draggable="true"
-                icon='/images/png/google-maps.png'
-            /> -->
+                :draggable="false"
+            />
 
         <gmap-info-window
             :options="infoOptions"
@@ -54,7 +53,7 @@ import InfoContent from './InfoContent.vue';
 export default {
     
     //@click="center=m.position"
-    props:['userlat', 'userlng'],
+    props:['userlat', 'userlng','nearest'],
     components:{
         InfoContent
     },
@@ -83,11 +82,24 @@ export default {
     },
     methods:{
         fetchLocations(){
-            axios.post('/map/nearest-threads',{
+            if(this.center.lat == NaN || this.center.lng == NaN){
+                alert('You must provide your location first')
+            }
+            let url = ''
+            if(this.nearest == true){
+                url = '/map/nearest-threads'
+            }else{
+                url = '/map/all-threads'
+            }
+            axios.post(url,{
                 center:this.center, 
             }).then(res=>{
                 let data = res.data;
-                eventBus.$emit('markers_fetched', data);
+                if(res.data.status =='failed'){
+                    alert('You must provide your location first')
+                }else{
+                    eventBus.$emit('markers_fetched', data);
+                }
             })
         },
         toggleInfoWindow(marker, idx){
@@ -116,6 +128,7 @@ export default {
         }
     },
     created(){
+        
         this.fetchLocations();
         eventBus.$on('markers_fetched', data=>{
             this.markers = null;
