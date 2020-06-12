@@ -1,7 +1,13 @@
 <template>
   <div>
     <div class="btn-group btn-group-xs emoji-buttons" >
-      <button data-toggle="tooltip" :title="emoji.name" class="btn btn-xs  emoji-btn" :class="[{ 'big-emoji-btn': emoji.id == userEmoji }, emoji.name]"  @click="voteEmoji(emoji.id)" v-for="(emoji, index) in emojis" :key="index"> 
+      <button data-toggle="tooltip" 
+        :title="emoji.name" class="btn btn-xs  emoji-btn" 
+        :class="[{ 'big-emoji-btn': emoji.id == userEmoji }, emoji.name]" 
+        v-bind:style="{ 'background-image': 'url(/images/emojis/' + emoji.name + '.png)' }" 
+        @click="voteEmoji(emoji.id)" v-for="(emoji, index) in emojis" 
+        :key="index"
+      > 
         {{ emoji.count }}
       </button>
   </div>
@@ -87,25 +93,5 @@ export default {
     margin-right: 5px;
     width: 32px;
   }
-    .funny{
-      background-image :url(/images/emojis/funny.png);
-    }
-    .sad{
-      background-image :url(/images/emojis/sad.png);
-    }
-    .strange{
-      background-image :url(/images/emojis/strange.png);
-    }
-    .inspiring{
-      background-image :url(/images/emojis/inspiring.png);
-    }
-    .amazing{
-      background-image :url(/images/emojis/amazing.png);
-    }
-    .dumb{
-      background-image :url(/images/emojis/dumb1.png);
-    }
-    .famous{
-      background-image :url(/images/emojis/famous.png);
-    }
+
 </style>

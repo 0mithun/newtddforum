@@ -160,33 +160,12 @@ class ThreadFilters extends Filters
         
     }
 
-    public function emoji($type){
-        $emoji_type = '';
-
-        switch($type){
-            case 'like':
-                $emoji_type = 1;
-                break;
-            case 'love':
-                $emoji_type = 2;
-                break;
-            case 'haha':
-                $emoji_type = 3;
-                break;
-            case 'wow':
-                $emoji_type = 4;
-                break;
-            case 'sad':
-                $emoji_type = 5;
-                break;
-            case 'angry':
-                $emoji_type = 6;
-                break;
-        }
+    public function emoji($type){        
+        $emoji = Emoji::where('name', $type)->first();
 
         $threadsId = DB::table('thread_emoji')
             ->groupBy('thread_id')
-            ->where('emoji_id', $emoji_type)
+            ->where('emoji_id', $emoji->id)
             ->pluck('thread_id')
             ->all() 
             ;

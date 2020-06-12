@@ -50,7 +50,7 @@
                                         <h4 class="filter-title">Emoji</h4>
                                     </div>
                                     <div class="col-md-10">
-                                            <div class=" filter-emoji filter-emoji-like" :class="emoji.name" v-for="(emoji, index) in emojis" :key="index">
+                                            <div class=" filter-emoji filter-emoji-like" :class="emoji.name" v-for="(emoji, index) in emojis" :key="index" v-bind:style="{ 'background-image': 'url(/images/emojis/' + emoji.name + '.png)' }" >
                                                 <input type="checkbox" name="like" id="" :value="emoji.name" class="filter-emoji-checkbox" v-model="filter_emojis"> {{emoji.name}}
                                             </div>
                                     </div>
@@ -401,7 +401,7 @@ export default {
         margin-top: 10px;
 
     }
-
+/* 
     .funny{
       background-image :url(/images/emojis/funny.png);
     }
@@ -422,6 +422,6 @@ export default {
     }
     .famous{
       background-image :url(/images/emojis/famous.png);
-    }
+    } */
 
 </style>

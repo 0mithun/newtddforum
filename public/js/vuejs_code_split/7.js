@@ -19,6 +19,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['thread'],
   data: function data() {
@@ -91,7 +97,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.emoji-buttons[data-v-23d7c1ce]{\n  margin-top: 5px;\n}\nbutton.emoji-btn[data-v-23d7c1ce]{\n      height: 40px;\n  background-color: transparent;\n  background-size: 20px;\n  background-repeat: no-repeat;\n  vertical-align: bottom;\n  text-align: center;\n  padding-top: 20px;\n  margin-right: 5px;\n  width: 24px;\n}\nbutton.big-emoji-btn[data-v-23d7c1ce]{\n  height: 40px;\n  background-color: transparent;\n  background-size: 32px;\n  background-repeat: no-repeat;\n  vertical-align: bottom;\n  text-align: center;\n  padding-top: 28px;\n  margin-right: 5px;\n  width: 32px;\n}\n.funny[data-v-23d7c1ce]{\n    background-image :url(/images/emojis/funny.png);\n}\n.sad[data-v-23d7c1ce]{\n    background-image :url(/images/emojis/sad.png);\n}\n.strange[data-v-23d7c1ce]{\n    background-image :url(/images/emojis/strange.png);\n}\n.inspiring[data-v-23d7c1ce]{\n    background-image :url(/images/emojis/inspiring.png);\n}\n.amazing[data-v-23d7c1ce]{\n    background-image :url(/images/emojis/amazing.png);\n}\n.dumb[data-v-23d7c1ce]{\n    background-image :url(/images/emojis/dumb1.png);\n}\n.famous[data-v-23d7c1ce]{\n    background-image :url(/images/emojis/famous.png);\n}\n", ""]);
+exports.push([module.i, "\n.emoji-buttons[data-v-23d7c1ce]{\n  margin-top: 5px;\n}\nbutton.emoji-btn[data-v-23d7c1ce]{\n      height: 40px;\n  background-color: transparent;\n  background-size: 20px;\n  background-repeat: no-repeat;\n  vertical-align: bottom;\n  text-align: center;\n  padding-top: 20px;\n  margin-right: 5px;\n  width: 24px;\n}\nbutton.big-emoji-btn[data-v-23d7c1ce]{\n  height: 40px;\n  background-color: transparent;\n  background-size: 32px;\n  background-repeat: no-repeat;\n  vertical-align: bottom;\n  text-align: center;\n  padding-top: 28px;\n  margin-right: 5px;\n  width: 32px;\n}\n\n", ""]);
 
 // exports
 
@@ -154,6 +160,9 @@ var render = function() {
             key: index,
             staticClass: "btn btn-xs  emoji-btn",
             class: [{ "big-emoji-btn": emoji.id == _vm.userEmoji }, emoji.name],
+            style: {
+              "background-image": "url(/images/emojis/" + emoji.name + ".png)"
+            },
             attrs: { "data-toggle": "tooltip", title: emoji.name },
             on: {
               click: function($event) {

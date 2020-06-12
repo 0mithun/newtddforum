@@ -462,7 +462,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.panel-body .row[data-v-6b02d08c] {\n    margin-top: 0px;\n}\n.row.filter-row[data-v-6b02d08c]{\n    margin-top: 10px;\n}\n.filter-title[data-v-6b02d08c]{\n    margin-top:10px;\n}\n.filter-emoji[data-v-6b02d08c]{\n    height: 24px;\n    background-color: transparent;\n    background-size: 24px;\n    background-repeat: no-repeat;\n    padding-left: 30px;\n    display: inline-flex;\n    margin-right: 20px;\n    padding-top: 3px;\n    margin-top: 10px;\n}\n.filter-rated[data-v-6b02d08c]{\n    display: inline-flex;\n    margin-right: 20px;\n    padding-top: 3px;\n    margin-top: 10px;\n}\n.funny[data-v-6b02d08c]{\n  background-image :url(/images/emojis/funny.png);\n}\n.sad[data-v-6b02d08c]{\n  background-image :url(/images/emojis/sad.png);\n}\n.strange[data-v-6b02d08c]{\n  background-image :url(/images/emojis/strange.png);\n}\n.inspiring[data-v-6b02d08c]{\n  background-image :url(/images/emojis/inspiring.png);\n}\n.amazing[data-v-6b02d08c]{\n  background-image :url(/images/emojis/amazing.png);\n}\n.dumb[data-v-6b02d08c]{\n  background-image :url(/images/emojis/dumb1.png);\n}\n.famous[data-v-6b02d08c]{\n  background-image :url(/images/emojis/famous.png);\n}\n\n", ""]);
+exports.push([module.i, "\n.panel-body .row[data-v-6b02d08c] {\n        margin-top: 0px;\n}\n.row.filter-row[data-v-6b02d08c]{\n        margin-top: 10px;\n}\n.filter-title[data-v-6b02d08c]{\n        margin-top:10px;\n}\n.filter-emoji[data-v-6b02d08c]{\n        height: 24px;\n        background-color: transparent;\n        background-size: 24px;\n        background-repeat: no-repeat;\n        padding-left: 30px;\n        display: inline-flex;\n        margin-right: 20px;\n        padding-top: 3px;\n        margin-top: 10px;\n}\n.filter-rated[data-v-6b02d08c]{\n        display: inline-flex;\n        margin-right: 20px;\n        padding-top: 3px;\n        margin-top: 10px;\n}\n/* \n    .funny{\n      background-image :url(/images/emojis/funny.png);\n    }\n    .sad{\n      background-image :url(/images/emojis/sad.png);\n    }\n    .strange{\n      background-image :url(/images/emojis/strange.png);\n    }\n    .inspiring{\n      background-image :url(/images/emojis/inspiring.png);\n    }\n    .amazing{\n      background-image :url(/images/emojis/amazing.png);\n    }\n    .dumb{\n      background-image :url(/images/emojis/dumb1.png);\n    }\n    .famous{\n      background-image :url(/images/emojis/famous.png);\n    } */\n\n", ""]);
 
 // exports
 
@@ -756,7 +756,11 @@ var render = function() {
                             {
                               key: index,
                               staticClass: " filter-emoji filter-emoji-like",
-                              class: emoji.name
+                              class: emoji.name,
+                              style: {
+                                "background-image":
+                                  "url(/images/emojis/" + emoji.name + ".png)"
+                              }
                             },
                             [
                               _c("input", {

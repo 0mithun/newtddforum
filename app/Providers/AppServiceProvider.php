@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Admin;
+use App\Emoji;
 use App\Channel;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,6 +28,12 @@ class AppServiceProvider extends ServiceProvider
             $admin = Admin::first();
             
             $view->with('admin',$admin);
+        });
+
+        \View::composer('layouts.nav', function($view){
+            $emojis = Emoji::all();
+            
+            $view->with('emojis',$emojis);
         });
 
         \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');

@@ -76,14 +76,17 @@
                        aria-expanded="false">Emoticions <span class="caret"></span></a>
 
                     <ul class="dropdown-menu">
+                        @foreach($emojis as $emoji)
+                            <li class="navigation-emoji-icon"><a href="/threads?emoji={{ $emoji->name }}" class="navigation-emoji " style="background-image: url(images/emojis/{{ $emoji->name }}.png)">{{ $emoji->name }}</a></li>
 
+                        @endforeach 
                     <!-- Need to change -->
-                        <li class="navigation-emoji-icon"><a href="/threads?emoji=like" class="navigation-emoji navigation-emoji-like">Like</a></li>
+                        {{-- <li class="navigation-emoji-icon"><a href="/threads?emoji=like" class="navigation-emoji navigation-emoji-like">Like</a></li>
                         <li class="navigation-emoji-icon"><a href="/threads?emoji=love" class="navigation-emoji navigation-emoji-love">Love</a></li>
                         <li class="navigation-emoji-icon"><a href="/threads?emoji=haha" class="navigation-emoji navigation-emoji-haha">Haha</a></li>
                         <li class="navigation-emoji-icon"><a href="/threads?emoji=wow" class="navigation-emoji navigation-emoji-wow">Wow</a></li>
                         <li class="navigation-emoji-icon"><a href="/threads?emoji=sad" class="navigation-emoji navigation-emoji-sad">Sad</a></li>
-                        <li class="navigation-emoji-icon"><a href="/threads?emoji=angry" class="navigation-emoji navigation-emoji-angry">Angry</a></li>
+                        <li class="navigation-emoji-icon"><a href="/threads?emoji=angry" class="navigation-emoji navigation-emoji-angry">Angry</a></li> --}}
                     </ul>
                 </li>
 
