@@ -70,12 +70,23 @@
 
 
         <div class="form-group">
-            <label for="is_famous" class="control-label">Category:</label>
+            <label for="category" class="control-label"> This story involves:</label>
+
             <div class="checkbox">
-                <label><input type="checkbox" value="1" name="is_famous" :checked="checked()" @change="updateChecked()">Famous</label>
-                <span class="help-block">Check this box if the subject is Famous</span>
+                <label><input type="checkbox" value="C" v-model="category">Celebrities</label>
+                {{-- <span class="help-block">Check this box if the subject is Famous</span> --}}
             </div>
+            <div class="checkbox">
+                <label><input type="checkbox" value="N" v-model="category">Other notables</label>
+                {{-- <span class="help-block">Check this box if the subject is Famous</span> --}}
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" value="O" v-model="category">Other people</label>
+                {{-- <span class="help-block">Check this box if the subject is Famous</span> --}}
+            </div>
+
         </div>
+
         <div class="form-group " :class="image_path_error ? 'has-error' : ''">
             <label for="image_path" class="control-label"> Upload an image </label>
 
@@ -85,13 +96,21 @@
                 <strong class="" v-text="image_path_error_message"></strong>
             </span>
 
-            <div class="checkbox">
-                <label><input type="checkbox" value="1" name="allow_image" id="allow_image"
-                    @if($thread->allow_image == 1) checked @endif
-                    > Allow us to choose a Wikimedia Commons image</label>
-            </div>
+        </div>
 
-            <hr>
+        <div class="form-group {{ $errors->has('wiki_info_page_url') ? ' has-error' : '' }}">
+            <label for="wiki_info_page_url" class="control-label"> Wikipedia info-page link </label>
+
+            <input type="text" name="wiki_info_page_url" id="wiki_info_page_url" class="form-control" v-model="wiki_info_page_url">
+
+            @if ($errors->has('wiki_info_page_url'))
+                <span class="help-block ">
+                    <strong class="">{{ $errors->first('wiki_info_page_url') }}</strong>
+                </span>
+            @endif
+        </div>
+
+        <hr>
             <div class="form-group">
                 <div class="checkbox">
                     <label><input type="checkbox" value="1" name="share_on_facebook" v-model="form.share_on_facebook">Share on Facebook</label>
@@ -102,7 +121,6 @@
                 </div>
             </div>
 
-        </div>
     </div>
 
     <div class="panel-footer">

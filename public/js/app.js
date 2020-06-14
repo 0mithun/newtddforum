@@ -4724,11 +4724,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       title: this.thread.title,
       body: this.thread.body,
       location: this.thread.location,
-      is_famous: this.thread.is_famous,
+      // is_famous:this.thread.is_famous,
+      // category: this.thread.category === null ? []: this.thread.category.split('|'),
+      category: this.thread.splitCategory,
       main_subject: this.thread.main_subject,
       image_path: null,
       age_restriction: this.thread.age_restriction,
-      allow_image: this.thread.allow_image,
+      // allow_image: this.thread.allow_image,
+      wiki_info_page_url: null,
       share_on_facebook: false,
       share_on_twitter: false,
       selectFile: null,
@@ -4941,14 +4944,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.formData.append('title', this.form.title);
       this.formData.append('channel_id', this.form.channel_id);
-      this.formData.append('body', this.form.body);
-      this.formData.append('is_famous', this.form.is_famous);
+      this.formData.append('body', this.form.body); // this.formData.append('is_famous', this.form.is_famous);
+
+      this.formData.append('category', this.category);
       this.formData.append('age_restriction', this.form.age_restriction);
       this.formData.append('source', this.form.source);
       this.formData.append('location', this.form.location);
       this.formData.append('main_subject', this.form.main_subject);
       this.formData.append('tags', tagId);
       this.formData.append('channel_id', channel_id);
+      this.formData.append('wiki_info_page_url', this.form.wiki_info_page_url);
       this.formData.append('share_on_facebook', this.form.share_on_facebook);
       this.formData.append('share_on_twitter', this.form.share_on_twitter);
     },
@@ -4958,21 +4963,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.appendData();
       var uri = "/threads/".concat(this.thread.channel.slug, "/").concat(this.thread.slug);
       axios.post(uri, this.formData).then(function (res) {
+        // console.log(res.data)
         _this9.editing = false;
         _this9.channel_id = _this9.form.channel_id;
         _this9.title = _this9.form.title;
-        _this9.body = _this9.form.body;
-        _this9.is_famous = _this9.form.source;
+        _this9.body = _this9.form.body; // this.is_famous = this.form.source;
+
+        _this9.category = _this9.category;
         _this9.location = _this9.form.location;
         _this9.age_restriction = _this9.form.age_restriction;
         _this9.is_famous = _this9.form.is_famous;
         _this9.main_subject = _this9.form.main_subject;
         _this9.source = _this9.form.source;
-        _this9.image_path = _this9.form.image_path;
-        _this9.allow_image = _this9.form.allow_image;
+        _this9.image_path = _this9.form.image_path; // this.allow_image = this.form.allow_image;
+
+        _this9.wiki_info_page_url = _this9.form.wiki_info_page_url;
         _this9.share_on_facebook = false;
         _this9.share_on_twitter = false;
-        _this9.allow_image = _this9.form.allow_image;
         _this9.tags = _this9.form.tags;
         _this9.typeChannelId = '';
         flash('Your thread has been updated.');
@@ -4986,10 +4993,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         location: this.thread.location,
         source: this.thread.source,
         age_restriction: this.thread.age_restriction,
-        is_famous: this.thread.is_famous,
+        // is_famous: this.thread.is_famous,
+        category: this.thread.splitCategory,
         main_subject: this.thread.main_subject,
         image_path: null,
-        allow_image: false,
+        // allow_image: false,
+        wiki_info_page_url: this.thread.wiki_info_page_url,
         share_on_facebook: false,
         share_on_twitter: false,
         tags: this.thread.tags,

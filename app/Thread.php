@@ -63,7 +63,7 @@ class Thread extends Model
      * @var array
      */
     // protected $appends = ['isSubscribedTo','isReported','isFavorited','excerpt','threadImagePath','path'];
-    protected $appends = ['excerpt','threadImagePath','path','isLiked','isDesliked'];
+    protected $appends = ['excerpt','threadImagePath','path','isLiked','isDesliked','splitCategory'];
 
     /**
      * The attributes that should be cast to native types.
@@ -363,4 +363,15 @@ class Thread extends Model
         return $this->threadImagePath();
     }
 
+    public function splitCategory(){
+        $categories = $this->category;
+        if($categories !=null){
+            $categories = explode('|', $categories);
+        }
+        return $categories;
+    }
+
+    public function getSplitCategoryAttribute(){
+        return $this->splitCategory();
+    }
 }

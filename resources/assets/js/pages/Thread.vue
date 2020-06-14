@@ -17,11 +17,18 @@
 
                 body: this.thread.body,
                 location: this.thread.location,
-                is_famous:this.thread.is_famous,
+
+                // is_famous:this.thread.is_famous,
+                // category: this.thread.category === null ? []: this.thread.category.split('|'),
+                category: this.thread.splitCategory,
+
                 main_subject: this.thread.main_subject,
                 image_path:null,
                 age_restriction:this.thread.age_restriction,
-                allow_image: this.thread.allow_image,
+                // allow_image: this.thread.allow_image,
+
+                wiki_info_page_url:null,
+
                 share_on_facebook:false,
                 share_on_twitter:false,
 
@@ -241,13 +248,17 @@
                 this.formData.append('title', this.form.title);
                 this.formData.append('channel_id', this.form.channel_id);
                 this.formData.append('body', this.form.body);
-                this.formData.append('is_famous', this.form.is_famous);
+                // this.formData.append('is_famous', this.form.is_famous);
+                this.formData.append('category', this.category);
                 this.formData.append('age_restriction', this.form.age_restriction);
                 this.formData.append('source', this.form.source);
                 this.formData.append('location', this.form.location);
                 this.formData.append('main_subject', this.form.main_subject);
                 this.formData.append('tags',tagId);
                 this.formData.append('channel_id', channel_id);
+
+                this.formData.append('wiki_info_page_url', this.form.wiki_info_page_url);
+
                 this.formData.append('share_on_facebook', this.form.share_on_facebook);
                 this.formData.append('share_on_twitter', this.form.share_on_twitter);
 
@@ -256,26 +267,38 @@
                 this.appendData();
                 let uri = `/threads/${this.thread.channel.slug}/${this.thread.slug}`;
                 axios.post(uri, this.formData).then((res) => {
+                    // console.log(res.data)
+
                     this.editing = false;
                     this.channel_id = this.form.channel_id;
                     this.title = this.form.title;
                     this.body = this.form.body;
-                    this.is_famous = this.form.source;
+
+                    // this.is_famous = this.form.source;
+
+                    this.category = this.category;
+
                     this.location = this.form.location;
                     this.age_restriction = this.form.age_restriction;
                     this.is_famous = this.form.is_famous;
                     this.main_subject = this.form.main_subject;
                     this.source = this.form.source;
                     this.image_path = this.form.image_path;
-                    this.allow_image = this.form.allow_image;
+
+                    // this.allow_image = this.form.allow_image;
+
+                    this.wiki_info_page_url = this.form.wiki_info_page_url;
+
                     this.share_on_facebook = false;
                     this.share_on_twitter = false;
-                    this.allow_image = this.form.allow_image;
+                    
 
 
                     this.tags = this.form.tags;
                     this.typeChannelId = '';
                    flash('Your thread has been updated.');
+                   
+                   
                 });
             },
             resetForm () {
@@ -286,10 +309,18 @@
                     location: this.thread.location,
                     source: this.thread.source,
                     age_restriction: this.thread.age_restriction,
-                    is_famous: this.thread.is_famous,
+
+                    // is_famous: this.thread.is_famous,
+
+                    category: this.thread.splitCategory,
+
                     main_subject: this.thread.main_subject,
                     image_path: null,
-                    allow_image: false,
+
+                    // allow_image: false,
+
+                    wiki_info_page_url: this.thread.wiki_info_page_url,
+
                     share_on_facebook: false,
                     share_on_twitter: false,
 

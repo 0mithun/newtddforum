@@ -208,7 +208,7 @@ class ThreadsController extends Controller
      */
     public function update($channel, Thread $thread)
     {
-        // return response()->json(request()->all());
+        // return response()->json(request('category'));
 
        $this->authorize('update', $thread);
        $authUser = auth()->user();
@@ -231,10 +231,19 @@ class ThreadsController extends Controller
             'location'  =>  request('location') == null ? "" : request('location'),
             'source'  =>  request('source') == null ? "" : request('source'),
             'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
-            'is_famous'  =>  request('is_famous',0),
+
+            // 'is_famous'  =>  request('is_famous',0),
             // 'age_restriction'  =>  request('age_restriction',0),
-            'allow_image'  =>  request('allow_image',0),
+            // 'allow_image'  =>  request('allow_image',0),
+            'wiki_info_page_url'  =>  request('wiki_info_page_url') == null ? '' : request('wiki_info_page_url'),
+
         ];
+
+        if(request()->has('category')){
+            $category = request('category');
+            $category = str_replace(",",'|', $category);
+            $data['category'] = $category;
+        }
 
         if(request('location') !=null){
             $location = $this->getGeocodeing(request('location'));
