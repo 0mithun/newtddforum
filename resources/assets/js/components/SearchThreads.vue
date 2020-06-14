@@ -78,13 +78,13 @@
                                     </div>
                                     <div class="col-md-10">
                                         <div class=" filter-rated " >
-                                            <input type="checkbox" name="rated" id="" value="celebrities"  v-model="tags">   Celebrities 
+                                            <input type="checkbox" name="rated" id="" value="C"  v-model="category">   Celebrities 
                                         </div>
                                         <div class=" filter-rated " >
-                                            <input type="checkbox" name="rated" id=""  :value="1" v-model="famous" >   Notables 
+                                            <input type="checkbox" name="rated" id=""  value="N" v-model="category" >   Other notables 
                                         </div>
                                         <div class=" filter-rated " >
-                                            <input type="checkbox" name="rated" id=""  :value="0" v-model="famous" e>    Other People
+                                            <input type="checkbox" name="rated" id=""  value="O" v-model="category" >    Other People
                                         </div>
                                     </div>
                                 </div>
@@ -164,8 +164,8 @@ export default {
             filter_emojis:[],
             filter_rated:[],
             search: false,
-            emojis:[],
-            famous:[0,1],
+            category:[],
+            // famous:[0,1],
             tags:[]
         }
     },
@@ -181,7 +181,7 @@ export default {
             }
 
             if(this.famous.length>0){
-                this.filterByFamaous(this.famous, this.allThreads);
+                this.filterByCategory(this.famous, this.allThreads);
             }
 
             if(this.tags.length>0){
@@ -200,15 +200,15 @@ export default {
             }
 
             if(this.famous.length>0){
-                this.filterByFamaous(this.famous, this.allThreads);
+                this.filterByCategory(this.famous, this.allThreads);
             }
              if(this.tags.length>0){
                 this.filterByTags(this.tags, this.allThreads);
             }
         },
-        famous(filter){
+        category(filter){
             if(filter.length>0){
-               this.filterByFamaous(filter, this.threads.data);
+               this.filterByCategory(filter, this.threads.data);
             }else{
                 this.allThreads = this.threads.data;
             }
@@ -240,7 +240,7 @@ export default {
             }
 
             if(this.famous.length>0){
-                this.filterByFamaous(this.famous, this.allThreads);
+                this.filterByCategory(this.famous, this.allThreads);
             }
             
         }
@@ -276,12 +276,23 @@ export default {
             });
             this.allThreads = filterThreads;
         },
-        filterByFamaous(filter, data){
-           let filterThreads = _.filter(data, (thread)=>{  
-                if(_.includes(filter, thread.is_famous)){
-                    return true;
+        filterByCategory(filter, data){
+
+            let category = [];
+            let newThreads = _.filter(data, (thread)=>{
+                let threadCategory = thread.category;
+                if(threadCategory !== null){
+                    category = threadCategory.split('|');
+                    return category.length>0;
                 }
-            });
+            })
+            let filterThreads = _.filter(newThreads, (thread)=>{
+                for(let i = 0; i<category.length; i++){
+                    if(_.includes(filter, category[i])){
+                        return true;
+                    }
+                }
+            })
             this.allThreads = filterThreads;
         },
 

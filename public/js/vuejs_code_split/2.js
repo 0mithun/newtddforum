@@ -245,8 +245,8 @@ __webpack_require__.r(__webpack_exports__);
       filter_emojis: [],
       filter_rated: [],
       search: false,
-      emojis: [],
-      famous: [0, 1],
+      category: [],
+      // famous:[0,1],
       tags: []
     };
   },
@@ -263,7 +263,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (this.famous.length > 0) {
-        this.filterByFamaous(this.famous, this.allThreads);
+        this.filterByCategory(this.famous, this.allThreads);
       }
 
       if (this.tags.length > 0) {
@@ -282,16 +282,16 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (this.famous.length > 0) {
-        this.filterByFamaous(this.famous, this.allThreads);
+        this.filterByCategory(this.famous, this.allThreads);
       }
 
       if (this.tags.length > 0) {
         this.filterByTags(this.tags, this.allThreads);
       }
     },
-    famous: function famous(filter) {
+    category: function category(filter) {
       if (filter.length > 0) {
-        this.filterByFamaous(filter, this.threads.data);
+        this.filterByCategory(filter, this.threads.data);
       } else {
         this.allThreads = this.threads.data;
       }
@@ -324,7 +324,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (this.famous.length > 0) {
-        this.filterByFamaous(this.famous, this.allThreads);
+        this.filterByCategory(this.famous, this.allThreads);
       }
     }
   },
@@ -358,10 +358,23 @@ __webpack_require__.r(__webpack_exports__);
 
       this.allThreads = filterThreads;
     },
-    filterByFamaous: function filterByFamaous(filter, data) {
-      var filterThreads = _.filter(data, function (thread) {
-        if (_.includes(filter, thread.is_famous)) {
-          return true;
+    filterByCategory: function filterByCategory(filter, data) {
+      var category = [];
+
+      var newThreads = _.filter(data, function (thread) {
+        var threadCategory = thread.category;
+
+        if (threadCategory !== null) {
+          category = threadCategory.split('|');
+          return category.length > 0;
+        }
+      });
+
+      var filterThreads = _.filter(newThreads, function (thread) {
+        for (var i = 0; i < category.length; i++) {
+          if (_.includes(filter, category[i])) {
+            return true;
+          }
         }
       });
 
@@ -972,39 +985,40 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.tags,
-                                expression: "tags"
+                                value: _vm.category,
+                                expression: "category"
                               }
                             ],
                             attrs: {
                               type: "checkbox",
                               name: "rated",
                               id: "",
-                              value: "celebrities"
+                              value: "C"
                             },
                             domProps: {
-                              checked: Array.isArray(_vm.tags)
-                                ? _vm._i(_vm.tags, "celebrities") > -1
-                                : _vm.tags
+                              checked: Array.isArray(_vm.category)
+                                ? _vm._i(_vm.category, "C") > -1
+                                : _vm.category
                             },
                             on: {
                               change: function($event) {
-                                var $$a = _vm.tags,
+                                var $$a = _vm.category,
                                   $$el = $event.target,
                                   $$c = $$el.checked ? true : false
                                 if (Array.isArray($$a)) {
-                                  var $$v = "celebrities",
+                                  var $$v = "C",
                                     $$i = _vm._i($$a, $$v)
                                   if ($$el.checked) {
-                                    $$i < 0 && (_vm.tags = $$a.concat([$$v]))
+                                    $$i < 0 &&
+                                      (_vm.category = $$a.concat([$$v]))
                                   } else {
                                     $$i > -1 &&
-                                      (_vm.tags = $$a
+                                      (_vm.category = $$a
                                         .slice(0, $$i)
                                         .concat($$a.slice($$i + 1)))
                                   }
                                 } else {
-                                  _vm.tags = $$c
+                                  _vm.category = $$c
                                 }
                               }
                             }
@@ -1020,41 +1034,46 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.famous,
-                                expression: "famous"
+                                value: _vm.category,
+                                expression: "category"
                               }
                             ],
-                            attrs: { type: "checkbox", name: "rated", id: "" },
+                            attrs: {
+                              type: "checkbox",
+                              name: "rated",
+                              id: "",
+                              value: "N"
+                            },
                             domProps: {
-                              value: 1,
-                              checked: Array.isArray(_vm.famous)
-                                ? _vm._i(_vm.famous, 1) > -1
-                                : _vm.famous
+                              checked: Array.isArray(_vm.category)
+                                ? _vm._i(_vm.category, "N") > -1
+                                : _vm.category
                             },
                             on: {
                               change: function($event) {
-                                var $$a = _vm.famous,
+                                var $$a = _vm.category,
                                   $$el = $event.target,
                                   $$c = $$el.checked ? true : false
                                 if (Array.isArray($$a)) {
-                                  var $$v = 1,
+                                  var $$v = "N",
                                     $$i = _vm._i($$a, $$v)
                                   if ($$el.checked) {
-                                    $$i < 0 && (_vm.famous = $$a.concat([$$v]))
+                                    $$i < 0 &&
+                                      (_vm.category = $$a.concat([$$v]))
                                   } else {
                                     $$i > -1 &&
-                                      (_vm.famous = $$a
+                                      (_vm.category = $$a
                                         .slice(0, $$i)
                                         .concat($$a.slice($$i + 1)))
                                   }
                                 } else {
-                                  _vm.famous = $$c
+                                  _vm.category = $$c
                                 }
                               }
                             }
                           }),
                           _vm._v(
-                            "   Notables \n                                    "
+                            "   Other notables \n                                    "
                           )
                         ]),
                         _vm._v(" "),
@@ -1064,40 +1083,40 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.famous,
-                                expression: "famous"
+                                value: _vm.category,
+                                expression: "category"
                               }
                             ],
                             attrs: {
                               type: "checkbox",
                               name: "rated",
                               id: "",
-                              e: ""
+                              value: "O"
                             },
                             domProps: {
-                              value: 0,
-                              checked: Array.isArray(_vm.famous)
-                                ? _vm._i(_vm.famous, 0) > -1
-                                : _vm.famous
+                              checked: Array.isArray(_vm.category)
+                                ? _vm._i(_vm.category, "O") > -1
+                                : _vm.category
                             },
                             on: {
                               change: function($event) {
-                                var $$a = _vm.famous,
+                                var $$a = _vm.category,
                                   $$el = $event.target,
                                   $$c = $$el.checked ? true : false
                                 if (Array.isArray($$a)) {
-                                  var $$v = 0,
+                                  var $$v = "O",
                                     $$i = _vm._i($$a, $$v)
                                   if ($$el.checked) {
-                                    $$i < 0 && (_vm.famous = $$a.concat([$$v]))
+                                    $$i < 0 &&
+                                      (_vm.category = $$a.concat([$$v]))
                                   } else {
                                     $$i > -1 &&
-                                      (_vm.famous = $$a
+                                      (_vm.category = $$a
                                         .slice(0, $$i)
                                         .concat($$a.slice($$i + 1)))
                                   }
                                 } else {
-                                  _vm.famous = $$c
+                                  _vm.category = $$c
                                 }
                               }
                             }

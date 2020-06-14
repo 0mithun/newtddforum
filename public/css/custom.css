@@ -93,6 +93,10 @@ li.list-group-item{
     margin-left: 10px;
     padding-left: 35px!important;
 }
+.navigation-emoji:hover{
+    background-size: 28px!important;
+    background-repeat: no-repeat!important;
+}
 
 .navigation-emoji.navigation-emoji-like{
     background-position: 0px -84px;

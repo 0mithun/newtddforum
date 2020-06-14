@@ -124,12 +124,23 @@
 
 
                             <div class="form-group">
-                                <label for="is_famous" class="control-label">Category:</label>
+                                <label for="category" class="control-label"> This story involves:</label>
+
                                 <div class="checkbox">
-                                    <label><input type="checkbox" value="1" name="is_famous">Famous</label>
-                                    <span class="help-block">Check this box if the subject is Famous</span>
+                                    <label><input type="checkbox" value="C" name="category[]">Celebrities</label>
+                                    {{-- <span class="help-block">Check this box if the subject is Famous</span> --}}
                                 </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="N" name="category[]">Other notables</label>
+                                    {{-- <span class="help-block">Check this box if the subject is Famous</span> --}}
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="O" name="category[]">Other people</label>
+                                    {{-- <span class="help-block">Check this box if the subject is Famous</span> --}}
+                                </div>
+
                             </div>
+
 
                             <div class="form-group {{ $errors->has('age_restriction') ? ' has-error' : '' }}">
                                 <label for="age_restriction">Age Restriction</label>
@@ -157,12 +168,20 @@
                                         <strong class="">{{ $errors->first('image_path') }}</strong>
                                     </span>
                                 @endif
-
-                                <div class="checkbox">
-                                    <label><input type="checkbox" value="1" name="allow_image" id="allow_image"> Allow us to choose a Wikimedia Commons image</label>
-                                </div>
-
                             </div>
+
+                            <div class="form-group {{ $errors->has('wiki_info_page_url') ? ' has-error' : '' }}">
+                                <label for="wiki_info_page_url" class="control-label"> Wikipedia info-page link </label>
+
+                                <input type="text" name="wiki_info_page_url" id="wiki_info_page_url" class="form-control" value="{{ old('wiki_info_page_url') }}">
+
+                                @if ($errors->has('wiki_info_page_url'))
+                                    <span class="help-block ">
+                                        <strong class="">{{ $errors->first('wiki_info_page_url') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+
                             <hr>
                             <div class="form-group">
                                 <div class="checkbox">
@@ -218,20 +237,6 @@
             tinycomments_mode: 'embedded',
             tinycomments_author: 'Author name',
         });
-    </script>
-
-
-    <script type="text/javascript">
-        (function($) {
-            $(document).ready(function () {
-                $("#image_path").change(function (){
-                    var fileName = $(this).val();
-                    $('#allow_image').attr('disabled', true);
-                });
-
-
-            });
-        })(jQuery);
     </script>
     <script>
         $(document).ready(function(){
