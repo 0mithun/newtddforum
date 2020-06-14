@@ -32,7 +32,7 @@ class CreateUsersTable extends Migration
             $table->text('about')->nullable();
 
 
-
+            $table->string('auth_type')->default('email');
             $table->boolean('confirmed')->default(false);
             $table->string('confirmation_token', 25)->nullable();
             $table->rememberToken();

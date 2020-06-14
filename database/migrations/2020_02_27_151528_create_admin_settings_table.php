@@ -18,7 +18,7 @@ class CreateAdminSettingsTable extends Migration
             $table->string('app_name')->default(' Anecdotage');
             $table->text('faq')->nullable();
             $table->text('tos')->nullable();
-            $table->string('privacypolicy')->nullable();
+            $table->text('privacypolicy')->nullable();
             $table->text('mail_driver')->nullable();
             $table->text('mail_host')->nullable();
             $table->text('mail_port')->nullable();

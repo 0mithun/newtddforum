@@ -25,7 +25,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'first_name' => $first_name,
         'last_name' => $last_name,
         'email' => $faker->unique()->safeEmail,
-        'username'  =>  $faker->unique()->name,
+        'username'  =>  strtolower($first_name.$last_name.uniqid()),
         'lat'       =>   $faker->latitude(19.5,64.5),
         'lng'       =>  $faker->longitude(-161.75583, -68.01197),
         'password' => $password ?: $password = bcrypt('secret'),
@@ -35,17 +35,6 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 
-$factory->define(App\Userlocation::class, function (Faker\Generator $faker) {
-    return [
-        'ip'            =>  $faker->ipv4,
-        'country'       =>  $faker->country,
-        'city'          =>  $faker->city,
-        'state'         =>  $faker->state,
-        'zip'           =>  $faker->postcode,
-        'lat'           =>  $faker->latitude(19.5,64.5),
-        'lng'           =>  $faker->longitude(-161.75583, -68.01197),
-    ];
-});
 
 
 
@@ -86,18 +75,9 @@ $factory->define(App\Thread::class, function ($faker) {
         'visits' => 0,
         'slug' => str_slug($title),
         'locked' => false,
-        'image_path'    =>  '',
-        'lat'       =>   $faker->latitude(19.5,64.5),
-        'lng'       =>  $faker->longitude(-161.75583, -68.01197),
     ];
 });
 
-$factory->define(App\Tags::class, function ($faker) {
-
-    return [
-        'name' => $faker->unique()->word,
-    ];
-});
 
 
 $factory->define(App\Channel::class, function ($faker) {

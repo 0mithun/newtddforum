@@ -30,16 +30,36 @@ class CreateThreadsTable extends Migration
             $table->string('source')->nullable();
             $table->string('location')->nullable();
             $table->string('main_subject')->nullable();
-            $table->boolean('is_famous')->default(0);
+
+
             $table->string('image_path')->nullable();
             $table->boolean('image_pending')->default(0);
-            $table->boolean('allow_image')->default(0);
             $table->unsignedInteger('best_reply_id')->nullable();
-
             $table->boolean('locked')->default(false);
 
             $table->float('lat',10,6)->nullable();
             $table->float('lng',10,6)->nullable();
+
+            $table->string('category')->nullable();//changed
+
+            $table->integer('age_restriction')->default(0);
+
+            // - wiki Info Page Url
+            // - wiki Image Page Url (do we need to store this?)
+            // - wiki Image Url (what you called "Image Link" in test.csv)
+            // - amazon product URL
+            // - amazon image URL
+            // - description or caption
+            // - image_saved (bool)
+            $table->string('wiki_info_page_url')->nullable();
+            $table->string('wiki_image_page_url')->nullable();
+            $table->string('wiki_image_url')->nullable();
+            $table->string('wiki_image_path')->nullable();
+            $table->string('amazon_product_url')->nullable();
+            $table->string('amazon_image_url')->nullable();
+            $table->text('description')->nullable();
+            $table->boolean('image_saved')->default(0);
+
 
             $table->timestamps();
 
