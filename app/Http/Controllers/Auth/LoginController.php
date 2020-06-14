@@ -60,6 +60,10 @@ class LoginController extends Controller
      */
     public function handleFacebookProviderCallback()
     {
+        if(request()->has('error')){
+            return redirect('/login');
+        }
+    
         $user = Socialite::driver('facebook')->user();
         return $this->oauthLogin($user, 'facebook');
         // $user->token;
@@ -95,7 +99,9 @@ class LoginController extends Controller
      */
     public function redirectToInstagramProvider()
     {
-        return Socialite::driver('instagram')->redirect();
+        // return Socialite::driver('instagram')->redirect();
+        return Socialite::with('instagram')->redirect();
+
     }
 
     /**
@@ -105,7 +111,9 @@ class LoginController extends Controller
      */
     public function handleInstagramProviderCallback()
     {
+        // $user = Socialite::driver('instagram')->user();
         $user = Socialite::driver('instagram')->user();
+        dd($user);
         return $this->oauthLogin($user, 'instagram');
         // $user->token;
     }

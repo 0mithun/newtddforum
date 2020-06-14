@@ -173,6 +173,7 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
 
+        // \SocialiteProviders\Manager\ServiceProvider::class, // add
         /*
          * Application Service Providers...
          */
@@ -181,6 +182,9 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+
+
 
     ],
 
