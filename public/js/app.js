@@ -4731,7 +4731,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       image_path: null,
       age_restriction: this.thread.age_restriction,
       // allow_image: this.thread.allow_image,
-      wiki_info_page_url: null,
+      wiki_info_page_url: this.thread.wiki_info_page_url,
       share_on_facebook: false,
       share_on_twitter: false,
       selectFile: null,
@@ -4946,7 +4946,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.formData.append('channel_id', this.form.channel_id);
       this.formData.append('body', this.form.body); // this.formData.append('is_famous', this.form.is_famous);
 
-      this.formData.append('category', this.category);
+      this.formData.append('category', this.form.category);
       this.formData.append('age_restriction', this.form.age_restriction);
       this.formData.append('source', this.form.source);
       this.formData.append('location', this.form.location);
@@ -4963,13 +4963,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.appendData();
       var uri = "/threads/".concat(this.thread.channel.slug, "/").concat(this.thread.slug);
       axios.post(uri, this.formData).then(function (res) {
-        // console.log(res.data)
         _this9.editing = false;
         _this9.channel_id = _this9.form.channel_id;
         _this9.title = _this9.form.title;
         _this9.body = _this9.form.body; // this.is_famous = this.form.source;
 
-        _this9.category = _this9.category;
+        _this9.category = _this9.form.category;
         _this9.location = _this9.form.location;
         _this9.age_restriction = _this9.form.age_restriction;
         _this9.is_famous = _this9.form.is_famous;

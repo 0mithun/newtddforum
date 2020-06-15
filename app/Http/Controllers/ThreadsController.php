@@ -11,6 +11,7 @@ use http\Env\Request;
 use App\Rules\Recaptcha;
 use Spatie\Geocoder\Geocoder;
 use App\Filters\ThreadFilters;
+use App\Jobs\WikiImageProcess;
 use Illuminate\Validation\Rule;
 
 
@@ -172,7 +173,9 @@ class ThreadsController extends Controller
         }
 
         $this->sendNotification($thread, $authUser);
-
+        if(request('wiki_info_page_url') != ''){
+            WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
+        }
         if (request()->wantsJson()) {
             return response($thread, 201);
         }
@@ -208,8 +211,6 @@ class ThreadsController extends Controller
      */
     public function update($channel, Thread $thread)
     {
-        // return response()->json(request('category'));
-
        $this->authorize('update', $thread);
        $authUser = auth()->user();
         
@@ -263,7 +264,7 @@ class ThreadsController extends Controller
             $file_path = request()->image_path->storeAs('threads', $file_name);
             $data['image_path']  = 'uploads/'. $file_path;
         }
-
+        $old_wiki_info_page_url = $thread->wiki_info_page_url;
         $thread->update($data);
 
         $main_subject = \request('main_subject');
@@ -306,6 +307,10 @@ class ThreadsController extends Controller
         // return response()->json(request()->all());
 
         $this->sendNotification($thread, $authUser);
+        
+        if($old_wiki_info_page_url != request('wiki_info_page_url') && request('wiki_info_page_url') != ''){
+            WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, true);
+        }
 
         return $thread;
     }

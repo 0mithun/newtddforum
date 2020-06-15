@@ -27,7 +27,7 @@
                 age_restriction:this.thread.age_restriction,
                 // allow_image: this.thread.allow_image,
 
-                wiki_info_page_url:null,
+                wiki_info_page_url:this.thread.wiki_info_page_url,
 
                 share_on_facebook:false,
                 share_on_twitter:false,
@@ -249,7 +249,7 @@
                 this.formData.append('channel_id', this.form.channel_id);
                 this.formData.append('body', this.form.body);
                 // this.formData.append('is_famous', this.form.is_famous);
-                this.formData.append('category', this.category);
+                this.formData.append('category', this.form.category);
                 this.formData.append('age_restriction', this.form.age_restriction);
                 this.formData.append('source', this.form.source);
                 this.formData.append('location', this.form.location);
@@ -267,7 +267,6 @@
                 this.appendData();
                 let uri = `/threads/${this.thread.channel.slug}/${this.thread.slug}`;
                 axios.post(uri, this.formData).then((res) => {
-                    // console.log(res.data)
 
                     this.editing = false;
                     this.channel_id = this.form.channel_id;
@@ -276,7 +275,7 @@
 
                     // this.is_famous = this.form.source;
 
-                    this.category = this.category;
+                    this.category = this.form.category;
 
                     this.location = this.form.location;
                     this.age_restriction = this.form.age_restriction;

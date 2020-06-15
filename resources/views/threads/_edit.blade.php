@@ -73,15 +73,15 @@
             <label for="category" class="control-label"> This story involves:</label>
 
             <div class="checkbox">
-                <label><input type="checkbox" value="C" v-model="category">Celebrities</label>
+                <label><input type="checkbox" value="C" v-model="form.category">Celebrities</label>
                 {{-- <span class="help-block">Check this box if the subject is Famous</span> --}}
             </div>
             <div class="checkbox">
-                <label><input type="checkbox" value="N" v-model="category">Other notables</label>
+                <label><input type="checkbox" value="N" v-model="form.category">Other notables</label>
                 {{-- <span class="help-block">Check this box if the subject is Famous</span> --}}
             </div>
             <div class="checkbox">
-                <label><input type="checkbox" value="O" v-model="category">Other people</label>
+                <label><input type="checkbox" value="O" v-model="form.category">Other people</label>
                 {{-- <span class="help-block">Check this box if the subject is Famous</span> --}}
             </div>
 
@@ -101,7 +101,7 @@
         <div class="form-group {{ $errors->has('wiki_info_page_url') ? ' has-error' : '' }}">
             <label for="wiki_info_page_url" class="control-label"> Wikipedia info-page link </label>
 
-            <input type="text" name="wiki_info_page_url" id="wiki_info_page_url" class="form-control" v-model="wiki_info_page_url">
+            <input type="text" name="wiki_info_page_url" id="wiki_info_page_url" class="form-control" v-model="form.wiki_info_page_url">
 
             @if ($errors->has('wiki_info_page_url'))
                 <span class="help-block ">
