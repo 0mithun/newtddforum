@@ -14,8 +14,8 @@ use DB;
 
 class Thread extends Model
 {
-    // use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
-    use RecordsActivity,  Notifiable, Favoritable, Likeable;
+    use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
+    // use RecordsActivity,  Notifiable, Favoritable, Likeable;
 
     protected $indexConfigurator = ThreadsIndexConfigurator::class;
 
