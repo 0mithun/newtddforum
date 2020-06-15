@@ -77,8 +77,8 @@ window.Echo = new Echo({
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     wsHost: window.location.hostname,
-    wsPort: process.env.MIX_PUSHER_WS_PORT | 6001,
-    wssPort: process.env.MIX_PUSHER_WSS_PORT | 6001,
+    wsPort: 80,
+    wssPort: 443,
     disableStats: true,
     enabledTransports:['ws','wss'],
 });
