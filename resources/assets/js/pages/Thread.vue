@@ -20,6 +20,7 @@
 
                 // is_famous:this.thread.is_famous,
                 // category: this.thread.category === null ? []: this.thread.category.split('|'),
+                
                 category: this.thread.splitCategory,
 
                 main_subject: this.thread.main_subject,
