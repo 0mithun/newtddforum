@@ -79,7 +79,6 @@ window.Echo = new Echo({
     wsHost: window.location.hostname,
     wsPort: 80,
     wssPort: 443,
-    disableStats: true,
-    
+    disableStats: true,    
     enabledTransports:['ws','wss'],
 });
