@@ -364,7 +364,10 @@ Route::middleware(['admin'])->group(function (){
     Route::post('admin/users/unban-all-users', 'UserbanController@unban')->name('admin.unbans.users');
     Route::post('admin/users/ban-single-users', 'UserbanController@banSingleUser')->name('admin.bans.singleusers');
 
-
+    /**
+     * New Batch Tools
+     */
+    Route::post('batch-tools/set-age-thirteen', 'BatchToolController@setAgeThirteen')->name('batchtools.setage.thirteen');
 
 
 });

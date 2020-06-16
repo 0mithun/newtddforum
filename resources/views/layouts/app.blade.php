@@ -48,6 +48,7 @@
             color: #ffffff;
             height: 50px;
             padding: 15px;
+            z-index: 2;
         }
         
         .footer-content{
