@@ -7,7 +7,7 @@ use ScoutElastic\Searchable;
 
 class Tags extends Model
 {   
-    use Searchable;
+    // use Searchable;
 
     protected $indexConfigurator = ThreadsIndexConfigurator::class;
 

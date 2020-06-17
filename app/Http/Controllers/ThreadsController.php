@@ -72,9 +72,6 @@ class ThreadsController extends Controller
      */
     public function store(Recaptcha $recaptcha)
     {
-       
-
-
         $authUser = auth()->user();
         // $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
         $rule = request()->hasFile('image_path') ? 'image|max:2048' : '';

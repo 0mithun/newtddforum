@@ -342,10 +342,30 @@ Route::middleware(['admin'])->group(function (){
 //    Route::delete('locked-threads/{thread}', 'LockedThreadsController@destroy')->name('locked-threads.destroy')->middleware('admin');;
 
 
-    //Batch Tools 
-    Route::get('/admin/batch-tools','AdminController@batchTools')->name('admin.batchtools');
-    Route::post('batch-tools/delete-thread', 'BatchToolController@deleteThread')->name('batchtools.delete.thread');
+   
 
+    
+
+
+    //Ban User
+    Route::get('admin/manage-users', 'AdminController@banUsers')->name('admin.manage.user');
+    Route::post('admin/users/ban-all-users', 'UserbanController@ban')->name('admin.bans.users');
+    Route::post('admin/users/unban-all-users', 'UserbanController@unban')->name('admin.unbans.users');
+    Route::post('admin/users/ban-single-users', 'UserbanController@banSingleUser')->name('admin.bans.singleusers');
+
+    /**
+     * New Batch Tools
+     */
+       Route::get('/admin/batch-tools','AdminController@batchTools')->name('admin.batchtools');
+     
+     
+     /**
+      * Currently Not use
+      */
+     Route::post('batch-tools/delete-thread', 'BatchToolController@deleteThread')->name('batchtools.delete.thread');
+
+
+    Route::post('batch-tools/set-age-thirteen', 'BatchToolController@setAgeThirteen')->name('batchtools.setage.thirteen');
     Route::post('batch-tools/set-age-thirteen', 'BatchToolController@setAgeThirteen')->name('batchtools.setage.thirteen');
     Route::post('batch-tools/set-age-eighteen', 'BatchToolController@setAgeEighteen')->name('batchtools.setage.eighteen');
 
@@ -358,17 +378,8 @@ Route::middleware(['admin'])->group(function (){
     Route::post('batch-tools/add-emoji', 'BatchToolController@addEmoji')->name('batchtools.add.emoji');
 
 
-    //Ban User
-    Route::get('admin/manage-users', 'AdminController@banUsers')->name('admin.manage.user');
-    Route::post('admin/users/ban-all-users', 'UserbanController@ban')->name('admin.bans.users');
-    Route::post('admin/users/unban-all-users', 'UserbanController@unban')->name('admin.unbans.users');
-    Route::post('admin/users/ban-single-users', 'UserbanController@banSingleUser')->name('admin.bans.singleusers');
-
-    /**
-     * New Batch Tools
-     */
-    Route::post('batch-tools/set-age-thirteen', 'BatchToolController@setAgeThirteen')->name('batchtools.setage.thirteen');
-
+    Route::post('batch-tools/thread-replace', 'BatchToolController@replaceSource')->name('batchtools.replace.source');
+    Route::post('batch-tools/thread-assign-user', 'BatchToolController@assignUser')->name('batchtools.assign.user');
 
 });
 
