@@ -15,17 +15,60 @@ class BatchToolController extends Controller
     protected $replaceKeyword = 'yyy';
 
     /**
-     * Currently Not Use
+     * Delete thread by field
      */
     public function deleteThread(Request $request){
         
-        $thread = Thread::
-                    where('title', 'LIKE', "%{$this->findKeyword}%")
-                    ->orWhere('body', 'LIKE', "%{$this->findKeyword}%")
+        
+
+        if($request->field == 'delete_thread_title'){
+            $request->validate([
+                'delete_thread_title' =>  'required'
+            ],[
+                'delete_thread_title.required'  => 'The title field is required.'
+            ]);
+
+            $thread = Thread::
+                    where('title', 'LIKE', "%{$request->delete_thread_title}%")
                     ->delete()
                     ;
-        session()->flash('successmessage','Delete Thread Successfully');
+
+        }else if($request->field == 'delete_thread_body'){
+            $request->validate([
+                'delete_thread_body' =>  'required'
+            ],[
+                'delete_thread_body.required'  => 'The body field is required.'
+            ]);
+            
+            $thread = Thread::
+                    where('body', 'LIKE', "%{$request->delete_thread_body}%")
+                    ->delete()
+                    ;
+            
+        }else if($request->field == 'delete_thread_tag'){
+            $request->validate([
+                'delete_thread_tag' =>  'required'
+            ],[
+                'delete_thread_tag.required' => 'The tag field is required.'
+            ]);
+
+            $tag = Tags::where('name', strtolower($request->delete_thread_tag))->first();
+            if($tag){
+                $threads = $tag->threads;
+                $threads->each(function($thread) use($tag){
+                    $thread->tags()->detach($tag->id);
+                    $thread->delete();
+                });
+
+            }else{
+                session()->flash('errormessage','No tag found');
+                return redirect()->route('admin.batchtools');
+            }
+        }
+        
+        session()->flash('successmessage','Thread delete Successfully');
         return redirect()->route('admin.batchtools');
+
     }
 
     /**

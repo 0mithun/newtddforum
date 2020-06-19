@@ -277,9 +277,93 @@
                                         
                                     </tbody>
                                 </table>
-                                                               
 
 
+                                
+                                <table class="table table-bordered table-responsive table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th width="70%">Description</th>
+                                            <th width="30%">Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Delete thread: if thread title contains
+                                            </td>
+                                            <td colspan="2">
+                                                <form action="{{ route('batchtools.delete.thread') }}" class="form-inline" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="field" value="delete_thread_title">
+                                                    <div class="form-group form-group-sm {{ $errors->has('delete_thread_title') ? ' has-error' : '' }}">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="Enter title text" name="delete_thread_title">
+                                                            <span class="input-group-btn ">
+                                                                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                                            </span>
+                                                        </div>
+                                                        @if ($errors->has('delete_thread_title'))
+                                                            <span class="help-block ">
+                                                                <strong class="">{{ $errors->first('delete_thread_title') }}</strong>
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Delete thread: if thread body contains
+                                            </td>
+                                            <td colspan="2">
+                                                <form action="{{ route('batchtools.delete.thread') }}" class="form-inline" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="field" value="delete_thread_body">
+                                                    <div class="form-group form-group-sm {{ $errors->has('delete_thread_body') ? ' has-error' : '' }}">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="Enter body text" name="delete_thread_body">
+                                                            <span class="input-group-btn ">
+                                                                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                                            </span>
+                                                        </div>
+                                                        @if ($errors->has('delete_thread_body'))
+                                                            <span class="help-block ">
+                                                                <strong class="">{{ $errors->first('delete_thread_body') }}</strong>
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Delete thread: if thread has tag
+                                            </td>
+                                            <td colspan="2">
+                                                <form action="{{ route('batchtools.delete.thread') }}" class="form-inline" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="field" value="delete_thread_tag">
+                                                    <div class="form-group form-group-sm {{ $errors->has('delete_thread_tag') ? ' has-error' : '' }}">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="Enter tag name" name="delete_thread_tag">
+                                                            <span class="input-group-btn ">
+                                                                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                                            </span>
+                                                        </div>
+                                                        @if ($errors->has('delete_thread_tag'))
+                                                            <span class="help-block ">
+                                                                <strong class="">{{ $errors->first('delete_thread_tag') }}</strong>
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>                                                               
+
+                               
                                 <table class="table table-bordered table-responsive table-condensed">
                                     <thead>
                                         <tr>
@@ -789,7 +873,7 @@
                                                         @csrf
                                                         <input type="hidden" name="field" value="assign_user_title">
                                                         <div class="form-group form-group-sm {{ $errors->has('assign_user_title') ? ' has-error' : '' }}">
-                                                            <input type="text" class="form-control" placeholder="Enter body text" name="assign_user_title">
+                                                            <input type="text" class="form-control" placeholder="Enter title text" name="assign_user_title">
                                                             @if ($errors->has('assign_user_title'))
                                                                 <span class="help-block ">
                                                                     {{ $errors->first('assign_user_title') }}
@@ -854,32 +938,6 @@
                                     </tbody>
                                 </table>
                                 
-
-                                {{--
-                                    Need check
-                                    <hr>
-
-                                <div class="row">
-                                    <div class="col-md-9" >
-                                        <h5>Delete thread: if thread (title or body) contains XXX, delete thread</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                    <form action="{{ route('batchtools.delete.thread') }}" method="POST">
-                                            @csrf
-                                            <button class="btn btn-primary btn-sm">Delete Thread</button>
-                                        </form>
-                                        
-                                    </div>
-                                </div>
-                                <hr>  --}}
-
-                               
-                                
-
-
-
-
-
 
                             </div>
                         </div>
