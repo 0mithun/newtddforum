@@ -161,38 +161,36 @@ class ProfilesController extends Controller
     }
 
     public function updatePassword(Request $request){
+        $auth_user = auth()->user();
 
         $request->validate([
-            'old_password' => 'required',
             'password' => 'required|min:6|confirmed',
             'password_confirmation' => 'required|min:6',
         ],[
             'password.required' =>  'The mew password field is required.',
             'password.min' =>  'The mew password must be at least 6 characters.',
         ]);
-
-        $data = [];
-
-        $user = auth()->user();
-
-        $auth_user = DB::table('users')->where('id', $user->id)->first();
-
-
-        if (Hash::check($request->old_password, $auth_user->password)) {
-            $user->update([
-                'password'  =>  bcrypt($request->password)
+        
+        if($auth_user->auth_type == 'email'){
+            $request->validate([
+                'old_password' => 'required',
             ]);
-            session()->flash('successmessage','Your password change successfully.');
-            return redirect()->back();
-
+            if (Hash::check($request->old_password, $auth_user->password)) {
+                $auth_user->update([
+                    'password'  =>  bcrypt($request->password)
+                ]);
+            }else{
+                session()->flash('errormessage','Your current password dose not match.');
+                return redirect()->back();
+            }
         }else{
-            session()->flash('errormessage','Your current password dose not match.');
-            return redirect()->back();
+            $auth_user->update([
+                'password'      =>  bcrypt($request->password),
+                'auth_type'     => 'email'
+            ]);
         }
-
-
-
-
+        session()->flash('successmessage','Your password change successfully.');
+        return redirect()->back();
     }
 
 

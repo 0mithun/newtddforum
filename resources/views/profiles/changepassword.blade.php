@@ -1,17 +1,7 @@
-
 @extends('layouts.app')
-
 @section('content')
     @php
         $user = auth()->user();
-        $profileUser = $user;
-        if($user->date_of_birth !=''){
-            //$birth_date = date("d/m/yy", strtotime($user->date_of_birth));
-        }else{
-            $birth_date = '';
-        }
-
-
     @endphp
     <div class="container">
         <div class="row top-margin">
@@ -29,18 +19,20 @@
                             <div class="col-md-9">
                                 <form action="{{ route('user.update.password', $user->username) }}" class="form-horizontal" method="post">
                                     @csrf
-                                    <div class="form-group{{ $errors->has('old_password') ? ' has-error' : '' }}">
-                                        <label for="old_password" class="col-md-3 control-label">Old Password:</label>
-                                        <div class="col-md-9">
-                                            <input id="old_password" type="text" class="form-control" name="old_password" value="{{ old('old_password', $user->old_password) }}"  autofocus>
-                                            @if ($errors->has('old_password'))
-                                                <span class="help-block">
-                                                <strong>{{ $errors->first('old_password') }}</strong>
-                                            </span>
-                                            @endif
+                                    
+                                    @if($user->auth_type == 'email')
+                                        <div class="form-group{{ $errors->has('old_password') ? ' has-error' : '' }}">
+                                            <label for="old_password" class="col-md-3 control-label">Old Password:</label>
+                                            <div class="col-md-9">
+                                                <input id="old_password" type="text" class="form-control" name="old_password" value="{{ old('old_password', $user->old_password) }}"  autofocus>
+                                                @if ($errors->has('old_password'))
+                                                    <span class="help-block">
+                                                    <strong>{{ $errors->first('old_password') }}</strong>
+                                                </span>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-
+                                    @endif
                                     <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                                         <label for="password" class="col-md-3 control-label">New Password:</label>
                                         <div class="col-md-9">
