@@ -81,51 +81,62 @@ class ThreadFilters extends Filters
 
     public function rated(){
     //        likes_count / (dislikes_count+1)
-        $this->builder->getQuery()->orders = [];
-            $threads = DB::table('threads')
-                    ->where('like_count','>',0)
-                    ->orderBy('like_count','desc')
-                    ->get()
-            ;
-        $filterThread = [];
-        foreach ($threads as $thread){
-            $like = $thread->like_count;
-            $dislike = $thread->dislike_count;
+        // $this->builder->getQuery()->orders = [];
+        //     $threads = DB::table('threads')
+        //             ->where('like_count','>',0)
+        //             ->orderBy('like_count','desc')
+        //             ->get()
+        //     ;
+        // $filterThread = [];
+        // foreach ($threads as $thread){
+        //     $like = $thread->like_count;
+        //     $dislike = $thread->dislike_count;
 
-            $formula = $like>$dislike+1;
-            if($formula){
-                $filterThread[] = $thread->id;
-            }
-        }
-        return $this->builder->whereIn('id', $filterThread)->orderBy('like_count','desc');
+        //     $formula = $like>$dislike+1;
+        //     if($formula){
+        //         $filterThread[] = $thread->id;
+        //     }
+        // }
+        // return $this->builder->whereIn('id', $filterThread)->orderBy('like_count','desc');
+
+            // $threads = DB::table('threads')
+            //         ->where('average_rating','>',0)
+            //         ->orderBy('average_rating','desc')
+            //         ->get()
+            // ;
+         return $this->builder->where('average_rating', '>', 0)->orderBy('average_rating','desc');
+
     }
 
     public function bestofweek(){
-        $days = Carbon::now()->subDays(7)->toDateTimeString();
-        $likes = DB::table('likes')
-             ->where('created_at','<=',$days)
-            ->where('likeable_type','App\Thread')
-            ->get()
-        ;
+        // $days = Carbon::now()->subDays(7)->toDateTimeString();
+        // $likes = DB::table('likes')
+        //      ->where('created_at','<=',$days)
+        //     ->where('likeable_type','App\Thread')
+        //     ->get()
+        // ;
 
-        $likesId = [];
+        // $likesId = [];
 
-        foreach ($likes as $like){
-            $likesId[] = $like->likeable_id;
-        }
+        // foreach ($likes as $like){
+        //     $likesId[] = $like->likeable_id;
+        // }
 
-        $threads = DB::table('threads')->whereIn('id',$likesId)->get();
+        // $threads = DB::table('threads')->whereIn('id',$likesId)->get();
 
-        $filterThread = [];
-        foreach ($threads as $thread){
+        // $filterThread = [];
+        // foreach ($threads as $thread){
 
-            $like = $thread->like_count;
-            $dislike = $thread->dislike_count;
-            if($like>$dislike){
-                $filterThread[] = $thread->id;
-            }
-        }
-        return $this->builder->whereIn('id', $filterThread)->orderBy('created_at','desc');
+        //     $like = $thread->like_count;
+        //     $dislike = $thread->dislike_count;
+        //     if($like>$dislike){
+        //         $filterThread[] = $thread->id;
+        //     }
+        // }
+        // return $this->builder->whereIn('id', $filterThread)->orderBy('created_at','desc');
+
+        return $this->builder->where('average_rating', '>', 0)->where('created_at', '>=', now()->subDays(7) )->orderBy('average_rating','desc');
+
     }
 
 

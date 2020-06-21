@@ -60,6 +60,8 @@ export default {
       }
        axios.get(`/thread/${this.thread.id}/user-emoji-type`).then(res => {
          this.userEmoji = res.data
+      }).catch(err=>{
+        
       });
     }
   }

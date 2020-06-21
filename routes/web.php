@@ -58,7 +58,7 @@ Route::get('search-vue', 'SearchController@search');
 
 
 //Replace threads with anecdotes
-Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show');
+Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show')->middleware(['throttle:10']);
 
 Route::post('threads', 'ThreadsController@store')->middleware('must-be-confirmed');
 Route::get('threads/{channel}', 'ThreadsController@index');
@@ -112,9 +112,13 @@ Route::get('/thread/{thread}/like-type-users/{type}', 'LikeController@getLikeTyp
 
 
 Route::get('/thread/{thread}/emojis','EmojiController@index');
-Route::post('/thread/{thread}/emojis','EmojiController@saveEmoji')->middleware('auth');;
+Route::post('/thread/{thread}/emojis','EmojiController@saveEmoji')->middleware('auth');
+
 Route::get('/thread/{thread}/user-emoji-type','EmojiController@getUserEmojiType')->middleware('auth');
 Route::get('/all-emojis','EmojiController@allEmojis');
+
+Route::get('/thread/{thread}/is-rated','RatingController@isRated')->middleware('auth');
+Route::post('/thread/{thread}/rating','RatingController@saveRating')->middleware('auth');
 //Emojis
 
 
@@ -134,8 +138,8 @@ Route::middleware(['auth'])->group(function (){
     // Route::get('/chat-others','ChatController@getOtherMessageUsers');
     // Route::get('/other-users-message','ChatController@getOtherUsersMessage');
 
-
-   Route::get('/closet/threads','UserlocationController@showCloset')->name('closet.thread');
+    
+    Route::get('/closet/threads','UserlocationController@showCloset')->name('closet.thread');
 
 
 
@@ -342,10 +346,31 @@ Route::middleware(['admin'])->group(function (){
 //    Route::delete('locked-threads/{thread}', 'LockedThreadsController@destroy')->name('locked-threads.destroy')->middleware('admin');;
 
 
-    //Batch Tools 
-    Route::get('/admin/batch-tools','AdminController@batchTools')->name('admin.batchtools');
+   
+
+    
+
+
+
+
+    /**
+     * Batch Tools
+     */
+    
+    //Ban User
+    Route::get('admin/manage-users', 'AdminController@banUsers')->name('admin.manage.user');
+    Route::post('admin/users/ban-all-users', 'UserbanController@ban')->name('admin.bans.users');
+    Route::post('admin/users/unban-all-users', 'UserbanController@unban')->name('admin.unbans.users');
+    Route::post('admin/users/unban-single-user', 'UserbanController@unbanSingleUser')->name('admin.unbans.single.users');
+    Route::post('admin/users/ban-single-users', 'UserbanController@banSingleUser')->name('admin.bans.singleusers');
+
+
+    //Thread 
+    Route::get('/admin/batch-tools','AdminController@batchTools')->name('admin.batchtools');     
     Route::post('batch-tools/delete-thread', 'BatchToolController@deleteThread')->name('batchtools.delete.thread');
 
+
+    Route::post('batch-tools/set-age-thirteen', 'BatchToolController@setAgeThirteen')->name('batchtools.setage.thirteen');
     Route::post('batch-tools/set-age-thirteen', 'BatchToolController@setAgeThirteen')->name('batchtools.setage.thirteen');
     Route::post('batch-tools/set-age-eighteen', 'BatchToolController@setAgeEighteen')->name('batchtools.setage.eighteen');
 
@@ -358,14 +383,8 @@ Route::middleware(['admin'])->group(function (){
     Route::post('batch-tools/add-emoji', 'BatchToolController@addEmoji')->name('batchtools.add.emoji');
 
 
-    //Ban User
-    Route::get('admin/manage-users', 'AdminController@banUsers')->name('admin.manage.user');
-    Route::post('admin/users/ban-all-users', 'UserbanController@ban')->name('admin.bans.users');
-    Route::post('admin/users/unban-all-users', 'UserbanController@unban')->name('admin.unbans.users');
-    Route::post('admin/users/ban-single-users', 'UserbanController@banSingleUser')->name('admin.bans.singleusers');
-
-
-
+    Route::post('batch-tools/thread-replace', 'BatchToolController@replaceSource')->name('batchtools.replace.source');
+    Route::post('batch-tools/thread-assign-user', 'BatchToolController@assignUser')->name('batchtools.assign.user');
 
 });
 

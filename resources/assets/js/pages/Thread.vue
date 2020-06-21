@@ -32,6 +32,7 @@
 
                 share_on_facebook:false,
                 share_on_twitter:false,
+                anonymous: this.thread.anonymous,
 
                 selectFile: null,
                 formData: new FormData,
@@ -262,13 +263,14 @@
 
                 this.formData.append('share_on_facebook', this.form.share_on_facebook);
                 this.formData.append('share_on_twitter', this.form.share_on_twitter);
+                this.formData.append('anonymous', this.form.anonymous ? 1 : 0);
 
             },
             update () {
                 this.appendData();
                 let uri = `/threads/${this.thread.channel.slug}/${this.thread.slug}`;
                 axios.post(uri, this.formData).then((res) => {
-
+                    console.log(res.data)
                     this.editing = false;
                     this.channel_id = this.form.channel_id;
                     this.title = this.form.title;
@@ -291,6 +293,7 @@
 
                     this.share_on_facebook = false;
                     this.share_on_twitter = false;
+                    this.anonymous = this.form.anonymous;
                     
 
 
@@ -323,6 +326,7 @@
 
                     share_on_facebook: false,
                     share_on_twitter: false,
+                    anonymous: this.thread.anonymous,
 
                     tags: this.thread.tags,
                     typeChannelId: ''

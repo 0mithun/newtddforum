@@ -85,6 +85,8 @@ class EmojiController extends Controller
         
             if($emoji){
                 return response()->json($emoji);
+            }else{
+                return response()->json([]);
             }
         }        
         return abort(404);

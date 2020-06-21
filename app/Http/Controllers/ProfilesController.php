@@ -161,38 +161,36 @@ class ProfilesController extends Controller
     }
 
     public function updatePassword(Request $request){
+        $auth_user = auth()->user();
 
         $request->validate([
-            'old_password' => 'required',
             'password' => 'required|min:6|confirmed',
             'password_confirmation' => 'required|min:6',
         ],[
             'password.required' =>  'The mew password field is required.',
             'password.min' =>  'The mew password must be at least 6 characters.',
         ]);
-
-        $data = [];
-
-        $user = auth()->user();
-
-        $auth_user = DB::table('users')->where('id', $user->id)->first();
-
-
-        if (Hash::check($request->old_password, $auth_user->password)) {
-            $user->update([
-                'password'  =>  bcrypt($request->password)
+        
+        if($auth_user->auth_type == 'email'){
+            $request->validate([
+                'old_password' => 'required',
             ]);
-            session()->flash('successmessage','Your password change successfully.');
-            return redirect()->back();
-
+            if (Hash::check($request->old_password, $auth_user->password)) {
+                $auth_user->update([
+                    'password'  =>  bcrypt($request->password)
+                ]);
+            }else{
+                session()->flash('errormessage','Your current password dose not match.');
+                return redirect()->back();
+            }
         }else{
-            session()->flash('errormessage','Your current password dose not match.');
-            return redirect()->back();
+            $auth_user->update([
+                'password'      =>  bcrypt($request->password),
+                'auth_type'     => 'email'
+            ]);
         }
-
-
-
-
+        session()->flash('successmessage','Your password change successfully.');
+        return redirect()->back();
     }
 
 
@@ -346,13 +344,19 @@ class ProfilesController extends Controller
         else if($auth_user->id ==1){
             $threads = Thread::where('user_id', $getUserInfo->id)->get();
         }else if($auth_user->userprivacy->restricted_18==1){
-            $threads = Thread::where('user_id', $getUserInfo->id)->get();
+            $threads = Thread::where('user_id', $getUserInfo->id)
+            ->where('anonymous', '=',0)
+            ->get();
         }else if($auth_user->userprivacy->restricted_13==1){
-            $threads = Thread::where('user_id', $getUserInfo->id)->where('age_restriction', '!=',18)->get();
+            $threads = Thread::where('user_id', $getUserInfo->id)->where('age_restriction', '!=',18)
+            ->where('anonymous', '=',0)
+            ->get();
         }else {
-            $threads = Thread::where('user_id', $getUserInfo->id)->where('age_restriction',0)->get();
+            $threads = Thread::where('user_id', $getUserInfo->id)->where('age_restriction',0)
+            ->where('anonymous', '=',0)
+            ->get();
         }
-
+        
         return view('profiles.threads', compact('threads','profileUser', 'is_friend'));
     }
 

@@ -111,15 +111,22 @@
         </div>
 
         <hr>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label><input type="checkbox" value="1" name="share_on_facebook" v-model="form.share_on_facebook">Share on Facebook</label>
-                </div>
-
-                <div class="checkbox">
-                    <label><input type="checkbox" value="1" name="share_on_twitter" v-model="form.share_on_twitter">Share on Twitter</label>
-                </div>
+        <div class="form-group">
+            <div class="checkbox">
+                <label><input type="checkbox" value="1" name="share_on_facebook" v-model="form.share_on_facebook">Share on Facebook</label>
             </div>
+
+            <div class="checkbox">
+                <label><input type="checkbox" value="1" name="share_on_twitter" v-model="form.share_on_twitter">Share on Twitter</label>
+            </div>
+        </div>
+
+        <hr>
+        <div class="form-group">
+            <div class="checkbox">
+                <label><input type="checkbox" v-bind:value="1" name="anonymous" v-model="form.anonymous">Remain anonymous</label>
+            </div>
+        </div>
 
     </div>
 

@@ -41,6 +41,7 @@
     "vue-instantsearch": "^2.7.0",
     "vue-mce": "^1.5.3",
     "vue-select": "^3.4.0",
+    "vue-star-rating": "^1.6.1",
     "vue-text-highlight": "^2.0.10",
     "vue-tinymce-editor": "^1.6.2",
     "vue2-google-maps": "^0.10.7",

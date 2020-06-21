@@ -223,9 +223,12 @@
                         <li><a href="#" >Should be rated R</a></li>
                     </ul>
                     <thread-emojis :thread="{{ $thread }}"></thread-emojis>
+                   
                 </div>
                 
-            </div>            
+                
+            </div>  
+            <star-rating :thread="{{ $thread }}"></star-rating>          
         </div>
 
 
