@@ -21,6 +21,10 @@ class UserbanMiddleware
 
             $userBan = $user->userban;
             if($userBan){
+                if($userBan->ban_type ==1){
+                    return redirect('/');
+                }
+
                 $ban_expire_on = $userBan->ban_expire_on;
                 $now = Carbon::now();
                 if($ban_expire_on->lte($now)){

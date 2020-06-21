@@ -357,6 +357,7 @@ Route::middleware(['admin'])->group(function (){
     Route::get('admin/manage-users', 'AdminController@banUsers')->name('admin.manage.user');
     Route::post('admin/users/ban-all-users', 'UserbanController@ban')->name('admin.bans.users');
     Route::post('admin/users/unban-all-users', 'UserbanController@unban')->name('admin.unbans.users');
+    Route::post('admin/users/unban-single-user', 'UserbanController@unbanSingleUser')->name('admin.unbans.single.users');
     Route::post('admin/users/ban-single-users', 'UserbanController@banSingleUser')->name('admin.bans.singleusers');
 
 

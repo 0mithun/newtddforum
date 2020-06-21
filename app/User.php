@@ -257,6 +257,10 @@ class User extends Authenticatable
 
         $userBan = $this->userban;
         if($userBan){
+            if($userBan->ban_type ==1){
+                return true;
+            }
+
             $ban_expire_on = $userBan->ban_expire_on;
             $now = Carbon::now();
             if($ban_expire_on->lte($now)){
@@ -265,6 +269,8 @@ class User extends Authenticatable
             }else{
                 return true;
             }
+
+
         }
         return false;
     }
