@@ -14,6 +14,9 @@ use App\Filters\ThreadFilters;
 use App\Jobs\WikiImageProcess;
 use Illuminate\Validation\Rule;
 
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 use function GuzzleHttp\Promise\all;
 use App\Notifications\ThreadPostTwitter;
@@ -42,6 +45,41 @@ class ThreadsController extends Controller
     public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
         $threads = $this->getThreads($channel, $filters);
+        if(auth()->check()){
+            $user = auth()->user();
+            $privacy = $user->userprivacy;
+            if($privacy->restricted_18 ==1){
+                $threads = collect($threads->get());
+            }else if($user->id ==1){
+                $threads = collect($threads->get());
+            }
+            else if($privacy->restricted_13 ==1){
+                $collect = collect($threads->get());
+                $threads = $collect->filter(function($thread) use($user){
+                    if($thread->user_id == $user->id){
+                        return true;
+                    }else if($thread->age_restriction != 18){
+                        return true;
+                    }
+                });
+            } else{                
+                $collect = collect($threads->get()); 
+                $threads = $collect->filter(function($thread) use($user){
+                    if($thread->user_id == $user->id){
+                        return true;
+                    }else if($thread->age_restriction == 0){
+                        return true;
+                    }
+                });
+            }
+
+
+        }else{
+            $collect = collect($threads->get());
+            $threads = $collect->where('age_restriction', 0);
+        }
+
+        $threads = $this->paginate($threads, 10);
 
         if (request()->wantsJson()) {
             return $threads;
@@ -71,9 +109,11 @@ class ThreadsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Recaptcha $recaptcha)
-    {
+    {   
+
+        
+
         $authUser = auth()->user();
-        // $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
         $rule = request()->hasFile('image_path') ? 'image|max:2048' : '';
 
         request()->validate([
@@ -105,6 +145,7 @@ class ThreadsController extends Controller
             'age_restriction'  =>  request('age_restriction',0),
             // 'allow_image'  =>  request('allow_image',0),
             'wiki_info_page_url'  =>  request('wiki_info_page_url') == null ? '' : request('wiki_info_page_url'),
+            'anonymous'  =>  request('anonymous', 0),
         ];
 
         if(request()->has('category')){
@@ -208,6 +249,8 @@ class ThreadsController extends Controller
      */
     public function update($channel, Thread $thread)
     {
+        
+
        $this->authorize('update', $thread);
        $authUser = auth()->user();
         
@@ -218,8 +261,6 @@ class ThreadsController extends Controller
             'channel_id' => 'required',
             'body' => 'required',
             'image_path'    => $rule,
-            // 'age_restriction'  => 'numeric', Rule::in([0, 13, 18]),
-
         ]);
         
         $data = [
@@ -229,12 +270,8 @@ class ThreadsController extends Controller
             'location'  =>  request('location') == null ? "" : request('location'),
             'source'  =>  request('source') == null ? "" : request('source'),
             'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
-
-            // 'is_famous'  =>  request('is_famous',0),
-            // 'age_restriction'  =>  request('age_restriction',0),
-            // 'allow_image'  =>  request('allow_image',0),
             'wiki_info_page_url'  =>  request('wiki_info_page_url') == null ? '' : request('wiki_info_page_url'),
-
+            'anonymous'  =>  request('anonymous'),
         ];
 
         if(request()->has('category')){
@@ -343,12 +380,25 @@ class ThreadsController extends Controller
     {
         $threads = Thread::latest()->filter($filters);
 
+    
+
         if ($channel->exists) {
             $threads->where('channel_id', $channel->id);
         }
 
-        return $threads->paginate(10);
+        return $threads;
+        // return $threads->paginate(10);
     }
+
+    public function paginate($items, $perPage = 2, $page = null){
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, [
+        'path' => Paginator::resolveCurrentPath(),
+        'pageName' => 'page',
+        ]);
+    }
+
 
     public function report(){
         $id = \request('id');

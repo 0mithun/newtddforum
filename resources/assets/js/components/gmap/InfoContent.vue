@@ -3,12 +3,11 @@
         <div class="">
             {{ this.infoContent.title }}
         </div>
-        <div class="" style="margin-top:10px">
+        <div class="" style="margin-top:10px" v-if="infoContent.anonymous ==0">
             <img :src="infoContent.creator.profileAvatarPath" alt="" width="25"> Posted By: {{ this.infoContent.creator.name }}   
-<!--             
-            <span>
-                <a :href="infoContent.path" class="btn btn-default btn-xs pull-right" target="_blank" style="margin-left:5px">View</a>
-            </span>          -->
+        </div>
+        <div class="" style="margin-top:10px" v-else>
+            <img src="/images/default.png" alt="" width="25"> Posted By: Anonymous
         </div>
     </div>  
 </template>

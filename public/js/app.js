@@ -4734,6 +4734,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       wiki_info_page_url: this.thread.wiki_info_page_url,
       share_on_facebook: false,
       share_on_twitter: false,
+      anonymous: this.thread.anonymous,
       selectFile: null,
       formData: new FormData(),
       form: {},
@@ -4956,6 +4957,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.formData.append('wiki_info_page_url', this.form.wiki_info_page_url);
       this.formData.append('share_on_facebook', this.form.share_on_facebook);
       this.formData.append('share_on_twitter', this.form.share_on_twitter);
+      this.formData.append('anonymous', this.form.anonymous ? 1 : 0);
     },
     update: function update() {
       var _this9 = this;
@@ -4963,6 +4965,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.appendData();
       var uri = "/threads/".concat(this.thread.channel.slug, "/").concat(this.thread.slug);
       axios.post(uri, this.formData).then(function (res) {
+        console.log(res.data);
         _this9.editing = false;
         _this9.channel_id = _this9.form.channel_id;
         _this9.title = _this9.form.title;
@@ -4979,6 +4982,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this9.wiki_info_page_url = _this9.form.wiki_info_page_url;
         _this9.share_on_facebook = false;
         _this9.share_on_twitter = false;
+        _this9.anonymous = _this9.form.anonymous;
         _this9.tags = _this9.form.tags;
         _this9.typeChannelId = '';
         flash('Your thread has been updated.');
@@ -5000,6 +5004,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         wiki_info_page_url: this.thread.wiki_info_page_url,
         share_on_facebook: false,
         share_on_twitter: false,
+        anonymous: this.thread.anonymous,
         tags: this.thread.tags,
         typeChannelId: ''
       };

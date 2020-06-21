@@ -193,7 +193,13 @@
                                 </div>
                             </div>
 
-
+                            <hr>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="1" name="anonymous">Remain anonymous</label>
+                                </div>
+                            </div>
+                            
 
                             <div class="form-group  {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }} recaptcha" style="margin-bottom: 40px">
                                 <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site')  }}">
@@ -206,6 +212,7 @@
                                 @endif
                             </div>
 
+                            
                             
 
 

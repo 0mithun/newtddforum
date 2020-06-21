@@ -23,7 +23,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['infoContent'],
   data: function data() {
@@ -294,19 +293,30 @@ var render = function() {
     { staticClass: "info-content", on: { click: _vm.openThread } },
     [
       _c("div", {}, [
-        _vm._v("\n            " + _vm._s(this.infoContent.title) + "\n        ")
+        _vm._v("\n        " + _vm._s(this.infoContent.title) + "\n    ")
       ]),
       _vm._v(" "),
-      _c("div", { staticStyle: { "margin-top": "10px" } }, [
-        _c("img", {
-          attrs: {
-            src: _vm.infoContent.creator.profileAvatarPath,
-            alt: "",
-            width: "25"
-          }
-        }),
-        _vm._v(" Posted By: " + _vm._s(this.infoContent.creator.name) + "   \n")
-      ])
+      _vm.infoContent.anonymous == 0
+        ? _c("div", { staticStyle: { "margin-top": "10px" } }, [
+            _c("img", {
+              attrs: {
+                src: _vm.infoContent.creator.profileAvatarPath,
+                alt: "",
+                width: "25"
+              }
+            }),
+            _vm._v(
+              " Posted By: " +
+                _vm._s(this.infoContent.creator.name) +
+                "   \n    "
+            )
+          ])
+        : _c("div", { staticStyle: { "margin-top": "10px" } }, [
+            _c("img", {
+              attrs: { src: "/images/default.png", alt: "", width: "25" }
+            }),
+            _vm._v(" Posted By: Anonymous\n    ")
+          ])
     ]
   )
 }

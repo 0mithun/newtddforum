@@ -40,7 +40,6 @@
                                                     </button>
                                                 </td>
                                             </tr>
-                                        
                                         @empty
                                             <tr>
                                                 <td colspan="2">
