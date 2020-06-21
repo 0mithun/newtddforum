@@ -272,10 +272,7 @@ class Thread extends Model
      * @param string $value
      */
 
-    //  public function setWordCountAttribute($value){
-    //      //$this->attributes['word_count'] = str_word_count($value);
-    //      $this->attributes['word_count'] = str_word_count($this->body);
-    //  }
+
 
 
     /**
@@ -373,5 +370,15 @@ class Thread extends Model
 
     public function getSplitCategoryAttribute(){
         return $this->splitCategory();
+    }
+
+    /**
+     * A thread may have many ratings.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
     }
 }

@@ -58,7 +58,7 @@ Route::get('search-vue', 'SearchController@search');
 
 
 //Replace threads with anecdotes
-Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show');
+Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show')->middleware(['throttle:10']);
 
 Route::post('threads', 'ThreadsController@store')->middleware('must-be-confirmed');
 Route::get('threads/{channel}', 'ThreadsController@index');
@@ -112,9 +112,13 @@ Route::get('/thread/{thread}/like-type-users/{type}', 'LikeController@getLikeTyp
 
 
 Route::get('/thread/{thread}/emojis','EmojiController@index');
-Route::post('/thread/{thread}/emojis','EmojiController@saveEmoji')->middleware('auth');;
+Route::post('/thread/{thread}/emojis','EmojiController@saveEmoji')->middleware('auth');
+
 Route::get('/thread/{thread}/user-emoji-type','EmojiController@getUserEmojiType')->middleware('auth');
 Route::get('/all-emojis','EmojiController@allEmojis');
+
+Route::get('/thread/{thread}/is-rated','RatingController@isRated')->middleware('auth');
+Route::post('/thread/{thread}/rating','RatingController@saveRating')->middleware('auth');
 //Emojis
 
 

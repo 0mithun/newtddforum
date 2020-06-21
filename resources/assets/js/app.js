@@ -191,6 +191,9 @@ Vue.component('add-friend', ()=>import('./components/AddFriend.vue'))
 // import TextHighlight from 'vue-text-highlight'; 
 Vue.component('text-highlight', ()=>import('vue-text-highlight'));
 
+Vue.component('star-rating', ()=>import('./components/StarRating.vue'));
+
+
 
 window.eventBus = new  Vue();
 const app = new Vue({
