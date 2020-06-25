@@ -14,7 +14,7 @@
 
         computed: {
             threadUrl(){
-               return "https://twitter.com/intent/tweet?url="+this.thread.path+"&text="+this.thread.title+"&via=0mithun_mithun"
+               return "https://twitter.com/intent/tweet?url="+this.thread.path+"&text="+this.thread.title+"&via=anecdotage_com"
             },
              signedIn(){
                 return  (window.App.user)? true : false;

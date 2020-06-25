@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\PostToTwitter::class
     ];
 
     /**
@@ -26,6 +26,11 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        
+        $schedule->command('share:twitter')
+                 ->twiceDaily(17, 22)
+                 ->timezone('America/New_York')
+                 ;
     }
 
     /**

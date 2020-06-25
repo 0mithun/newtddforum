@@ -62,10 +62,23 @@ class ThreadPostTwitter extends Notification
     }
 
     public function toTwitter($notifiable){
+        $limit =270; 
+        // $title_count = strlen($notifiable->title);
+        $tag_count = strlen("#anecdotes");
+        $path_count = strlen($notifiable->path);
+        $total_count = $path_count + $tag_count;
+        $end = $limit - $total_count;
+
+        $description = substr(strip_tags($notifiable->body), 0, $end);
+
+        $status = "{$description} #anecdotes {$notifiable->path} ";
+
         if($notifiable->image_path == ''){
-            return (new TwitterStatusUpdate($notifiable->title));
+            // return (new TwitterStatusUpdate($notifiable->title));
+            return (new TwitterStatusUpdate($status));
         }else{
-            return (new TwitterStatusUpdate($notifiable->title))
+            // return (new TwitterStatusUpdate($notifiable->title))
+            return (new TwitterStatusUpdate($status))
             ->withImage($notifiable->image_path);
         }        
     }

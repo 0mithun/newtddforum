@@ -8,7 +8,15 @@
 <meta property="og:type" content="article">
 <meta property="og:description" content="{{ $thread->excerpt }}">
 
-   
+<meta name=twitter:card content=summary_large_image />
+<meta name=twitter:site content="@anecdotage" />
+<meta name=twitter:creator content="@anecdotage" />
+<meta name=twitter:url content="{{ url($thread->path) }}" />
+<meta name=twitter:title content="{{ $thread->title }}" />
+<meta name=twitter:description content="{{ $thread->excerpt }}" />
+<meta name=twitter:image content="{{ $thread->threadImagePath }}" />	
+
+
 
     <link rel="stylesheet" href="/css/vendor/jquery.atwho.css">
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" /> --}}
