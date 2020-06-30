@@ -193,6 +193,8 @@ Vue.component('text-highlight', ()=>import('vue-text-highlight'));
 
 Vue.component('star-rating', ()=>import('./components/StarRating.vue'));
 
+Vue.component('thread-show', ()=>import('./pages/TheeadShow.vue'));
+Vue.component('new-thread', ()=>import('./pages/NewThread.vue'));
 
 
 window.eventBus = new  Vue();

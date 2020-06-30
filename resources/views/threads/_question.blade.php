@@ -38,7 +38,6 @@
                          height="25"
                          class="avatar-photo">
                 </a>
-                {{-- <a href="{{ asset($thread->creator->avatar_path) }}" data-lightbox="{{ asset($thread->creator->avatar_path) }}" data-title="My caption">Image #1</a> --}}
                 
             </div>
 
@@ -59,8 +58,6 @@
             <div class="media-body" >
                 <h4 class="media-heading thread-info">
                     Posted by: 
-
-                    {{-- <a href="{{ route('threadsbyuser', $thread->creator->username) }}">{{ $thread->creator->name }}  --}}
                         <a href="{{ route('profile', $thread->creator->username)  }}">{{ $thread->creator->name }}</a>
 
 
@@ -145,10 +142,7 @@
         
         <a id="single_image" href="{{ $thread->threadImagePath() }}" ><img src="{{ $thread->threadImagePath() }}" alt="" style="display:inline; float:left;margin-bottom:0px;margin-right:20px;" width="250" /></a>
 
-        <div  v-html="body" style="display:inline;">
-            
-            {{-- <iframe width="1280" height="720" src="https://www.youtube.com/embed/vl8MGmscV38" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> --}}
-                     
+        <div  v-html="body" style="display:inline;">      
         </div>   
         
         <div >
@@ -172,7 +166,6 @@
                 @endif
 
                 <div class=" col-md-12"  v-if="authorize('owns', thread)" style="margin-top:5px;">
-                    {{-- <button class="btn btn-xs" @click="startEdit" v-if="authorize('isBan', thread)">Ban</button> --}}
                     <button class="btn btn-xs" @click="startEdit" v-if="!authorize('isBan')">Edit</button>
                     
                 </div>
@@ -247,36 +240,6 @@
                 </div>
             </div>
         </div>
-
-
-
-        {{-- <div class="row" >
-            <div class=" col-md-12"  v-if="authorize('owns', thread)">
-                <button class="btn btn-xs" @click="startEdit">Edit</button>
-            </div>
-            
-            <!-- Change like/dislike posistion to top -->
-
-            <!-- <div class="col-md-12">
-                <div v-if=signedIn >
-                    <div class="col-md-8">
-                    </div>
-                    <div class="col-md-4">
-                        <div class="btn-group btn-group-xs pull-right" role="group" >
-                            <like-button :thread="{{ $thread }}"></like-button>
-                            <button data-toggle="tooltip" title="Report Thread" class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply" v-if="!report" :disabled=thread.isReported  data-placement="left">
-                                <span class="glyphicon glyphicon-flag"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </div> -->
-
-            <!-- Change like/dislike posistion to top -->
-        </div> --}}
-
-
 
     </div>
 </div>

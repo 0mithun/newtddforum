@@ -89,7 +89,9 @@
         <div class="container">
             <div class="row top-margin">
                 <div  class="col-md-8" v-cloak>
-                    @include ('threads._question')                   
+                    {{-- @include ('threads._question')                    --}}
+                {{-- <thread-show :thread="{{ $thread }}"></thread-show> --}}
+                <new-thread :thread="{{ $thread }}"></new-thread>
                 </div>
 
                 <div class="col-md-4">
