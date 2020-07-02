@@ -43,6 +43,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 moment_timezone__WEBPACK_IMPORTED_MODULE_0___default.a.tz.setDefault("America/New_York");
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -182,7 +184,10 @@ var render = function() {
         attrs: { href: "#", "data-toggle": "dropdown" }
       },
       [
-        _c("i", { staticClass: "fa fa-envelope text-default" }),
+        _c("img", {
+          staticClass: "navbar-icon pen",
+          attrs: { src: "images/mail.png", alt: "" }
+        }),
         _vm._v(" "),
         _c(
           "span",
@@ -201,7 +206,7 @@ var render = function() {
     _vm.messageNotifications.length
       ? _c(
           "ul",
-          { staticClass: "dropdown-menu list-group" },
+          { staticClass: "dropdown-menu dropdown-menu-left list-group" },
           _vm._l(_vm.messageNotifications, function(notification, index) {
             return _c("li", { key: index, staticClass: "list-group-item" }, [
               _c(
@@ -259,7 +264,9 @@ var render = function() {
           }),
           0
         )
-      : _c("ul", { staticClass: "dropdown-menu" }, [_vm._m(0)])
+      : _c("ul", { staticClass: "dropdown-menu dropdown-menu-left" }, [
+          _vm._m(0)
+        ])
   ])
 }
 var staticRenderFns = [
@@ -267,9 +274,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "list-group-item" }, [
-      _c("span", { staticClass: "text-center" }, [_vm._v("No Message")])
-    ])
+    return _c(
+      "li",
+      {
+        staticClass: "list-group-item",
+        staticStyle: { height: "30px", width: "175px" }
+      },
+      [_c("span", { staticClass: "text-center" }, [_vm._v("No Message")])]
+    )
   }
 ]
 render._withStripped = true

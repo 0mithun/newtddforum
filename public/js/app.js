@@ -86545,7 +86545,7 @@ Vue.component('AvatarForm', function () {
   return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./components/AvatarForm */ "./resources/assets/js/components/AvatarForm.vue"));
 });
 Vue.component('Wysiwyg', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(25), __webpack_require__.e(19)]).then(__webpack_require__.bind(null, /*! ./components/Wysiwyg */ "./resources/assets/js/components/Wysiwyg.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(26), __webpack_require__.e(19)]).then(__webpack_require__.bind(null, /*! ./components/Wysiwyg */ "./resources/assets/js/components/Wysiwyg.vue"));
 });
 Vue.component('ThreadView', function () {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ./pages/Thread.vue */ "./resources/assets/js/pages/Thread.vue"));
@@ -86575,7 +86575,7 @@ Vue.component('new-tag', function () {
 // Vue.component('v-select', vSelect)
 
 Vue.component('v-select', function () {
-  return __webpack_require__.e(/*! import() */ 26).then(__webpack_require__.t.bind(null, /*! vue-select */ "./node_modules/vue-select/dist/vue-select.js", 7));
+  return __webpack_require__.e(/*! import() */ 27).then(__webpack_require__.t.bind(null, /*! vue-select */ "./node_modules/vue-select/dist/vue-select.js", 7));
 });
  // import * as uiv from 'uiv'
 // Vue.use(uiv)
@@ -86626,7 +86626,7 @@ Vue.component('profile-map', function () {
 // Vue.component('GmapCluster', GmapCluster)
 
 Vue.component('GmapCluster', function () {
-  return __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.t.bind(null, /*! vue2-google-maps/dist/components/cluster */ "./node_modules/vue2-google-maps/dist/components/cluster.js", 7));
+  return __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.t.bind(null, /*! vue2-google-maps/dist/components/cluster */ "./node_modules/vue2-google-maps/dist/components/cluster.js", 7));
 }); // import UserOnline from './components/chat/UserOnline.vue'
 // Vue.component('user-online',UserOnline);
 
@@ -86669,16 +86669,16 @@ Vue.component('add-friend', function () {
 }); // import TextHighlight from 'vue-text-highlight'; 
 
 Vue.component('text-highlight', function () {
-  return __webpack_require__.e(/*! import() */ 28).then(__webpack_require__.bind(null, /*! vue-text-highlight */ "./node_modules/vue-text-highlight/dist/vue-text-highlight.esm.js"));
+  return __webpack_require__.e(/*! import() */ 29).then(__webpack_require__.bind(null, /*! vue-text-highlight */ "./node_modules/vue-text-highlight/dist/vue-text-highlight.esm.js"));
 });
 Vue.component('star-rating', function () {
   return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! ./components/StarRating.vue */ "./resources/assets/js/components/StarRating.vue"));
 });
 Vue.component('thread-show', function () {
-  return __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! ./pages/TheeadShow.vue */ "./resources/assets/js/pages/TheeadShow.vue"));
+  return __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! ./pages/TheeadShow.vue */ "./resources/assets/js/pages/TheeadShow.vue"));
 });
 Vue.component('new-thread', function () {
-  return __webpack_require__.e(/*! import() */ 29).then(__webpack_require__.bind(null, /*! ./pages/NewThread.vue */ "./resources/assets/js/pages/NewThread.vue"));
+  return __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! ./pages/NewThread.vue */ "./resources/assets/js/pages/NewThread.vue"));
 });
 window.eventBus = new Vue();
 var app = new Vue({

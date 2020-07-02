@@ -124,3 +124,71 @@ li.list-group-item{
     margin-bottom: 0px;
 }
 
+.container .nav-col{
+    padding: 0 ;
+}
+
+.navbar-menu{
+    display: flex;
+}
+
+.main-logo{
+    width: 10%;
+}
+
+
+.main-menu-logo{
+    height: 100%;
+    width: auto;
+    display: block;
+    /* display: inline; */
+}
+
+.navbar-icon{
+    width: 24px;
+    height: auto;
+}
+
+.main-menu{
+    width: 25%;
+}
+
+.tools-menu {
+    width: 31%;
+    margin-right: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.tools-menu .navbar-nav > li > a{
+    padding-top: 7px;
+    padding-bottom: 8px;
+}
+
+.user-menu{
+    width: 32%;
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-nav-menu{
+    float: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-menu .nav:before, .user-menu  .nav:after {
+    content: none;
+}
+.navbar-nav > li > a.profile-avatar{
+    padding: 0;
+}
+.profile-photo{
+    height: 44px;
+    width: auto;
+    margin-right: 5px;
+}

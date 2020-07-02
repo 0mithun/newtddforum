@@ -19,7 +19,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['thread'],
   components: {
     VStar: function VStar() {
-      return __webpack_require__.e(/*! import() */ 27).then(__webpack_require__.t.bind(null, /*! vue-star-rating */ "./node_modules/vue-star-rating/dist/star-rating.min.js", 7));
+      return __webpack_require__.e(/*! import() */ 28).then(__webpack_require__.t.bind(null, /*! vue-star-rating */ "./node_modules/vue-star-rating/dist/star-rating.min.js", 7));
     }
   },
   data: function data() {
