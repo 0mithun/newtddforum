@@ -111,7 +111,11 @@ Route::get('/thread/{thread}/like-type-users/{type}', 'LikeController@getLikeTyp
 
 
 
+//Should be change
 Route::get('/thread/{thread}/emojis','EmojiController@index');
+
+Route::get('/thread/{thread}/emoji-counts','EmojiController@emojiCounts');
+
 Route::post('/thread/{thread}/emojis','EmojiController@saveEmoji')->middleware('auth');
 
 Route::get('/thread/{thread}/user-emoji-type','EmojiController@getUserEmojiType')->middleware('auth');

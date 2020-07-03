@@ -96,7 +96,6 @@ Vue.component('fb-share', ()=>import('./components/FbShare.vue'));
 Vue.component('twitter-share', ()=>import('./components/TwitterShare.vue'));
 
 
-Vue.component('thread-emojis', ()=>import('./components/ThreadEmojis.vue'))
 
 
 
@@ -196,6 +195,14 @@ Vue.component('star-rating', ()=>import('./components/StarRating.vue'));
 Vue.component('thread-show', ()=>import('./pages/TheeadShow.vue'));
 Vue.component('new-thread', ()=>import('./pages/NewThread.vue'));
 
+
+Vue.component('thread-emojis', ()=>import('./components/ThreadEmojis.vue'))
+Vue.component('emoji-counts', ()=>import('./components/EmojiCounts.vue'))
+
+
+Vue.component('view-counts', ()=>import('./components/ViewCounts.vue'));
+Vue.component('point-counts', ()=>import('./components/PointCounts.vue'));
+Vue.component('comment-counts', ()=>import('./components/CommentCounts.vue'));
 
 window.eventBus = new  Vue();
 const app = new Vue({

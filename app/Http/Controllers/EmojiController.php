@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Emoji;
 use App\Thread;
+use Illuminate\Database\Eloquent\Builder;
+
 use Illuminate\Http\Request;
 use DB;
 class EmojiController extends Controller
@@ -23,6 +25,26 @@ class EmojiController extends Controller
         
         return abort(404);
     }
+
+    public function emojiCounts($thread){
+
+
+        if(\Request::ajax()){
+            $thread = Thread::where('id', $thread)->first();
+            $threadEmojis = $thread->emojis()->groupBy('id')->pluck('id');
+            $emojis = Emoji::whereIn('id', $threadEmojis)->get();
+            foreach($emojis as $emoji){
+                $count = DB::table('thread_emoji')
+                        ->where('thread_id', $thread->id)
+                        ->where('emoji_id', $emoji->id)
+                        ->count() ; 
+                $emoji['count'] = $count;
+            }
+            return response()->json($emojis);
+        }        
+        return abort(404);
+    }
+
     public function allEmojis(){
         if(\Request::ajax()){
             $emojis = Emoji::all();

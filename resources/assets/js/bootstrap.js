@@ -65,7 +65,7 @@ window.flash = function (message, level = 'success') {
 };
 
 
-
+window.abbreviate = require('number-abbreviate');
 
 
 import Echo from "laravel-echo"

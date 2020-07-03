@@ -22,8 +22,7 @@
         },
 
         methods: {
-            share(){
-                
+            share(){                
                 if(this.signedIn){
                     window.open(this.threadUrl, 'Share on Twitter', 'width=600, height=400')
                 }
