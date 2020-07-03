@@ -22,22 +22,25 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">Emoji <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false" >
+                        <img src="images/emojis/funny.png" class="navbar-icon" alt="">
+                    <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu">
-                        <li><a href="/threads?rated=1">Top</a></li>
+                        @foreach($emojis as $emoji)
+                            <li class="navigation-emoji-icon"><a href="/threads?emoji={{ $emoji->name }}" class="navigation-emoji " style="background-image: url(images/emojis/{{ $emoji->name }}.png)">{{ $emoji->name }}</a></li>
+                        @endforeach 
                     </ul>
                 </li>
             </ul>
        </div>
        <div class="nav-col tools-menu">
-            <form class="navbar-form ">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
-                </div>
-            </form>
+            <form class="navbar-form search-form"  method="GET" action="/threads/search">
+                    <input type="text" class="form-control search-box" placeholder="Search">
 
-            <ul class="nav navbar-nav  ">
+            </form>
+            <ul class="nav navbar-nav tools-right">
                 <li>
                     <a href="/threads?rated=1" class="navbar-menu-icon">
                         <img class="navbar-icon marker" src="{{ asset('images/map_marker.png') }}" alt="">
@@ -50,25 +53,47 @@
                 </li> 
             </ul>
        </div>
-       <div class="nav-col user-menu">
-            
+        @if (Auth::guest())
+            <div class="nav-col auth-btn"> 
+                    <a href="{{ route('login') }}" class="btn sign-in-btn  btn-primary navbar-btn">Sign In</a>
+                    {{-- <a href="{{ route('register') }}" class="btn btn-block  btn-primary navbar-btn">Sign Up</a> --}}
+            </div>
+        @else
+            <div class="nav-col user-menu">
+                <ul class="nav navbar-nav user-nav-menu">
+                    <message-notification></message-notification>
+                    <user-notifications></user-notifications>    
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle profile-avatar" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">
+                        <img class="profile-photo " src="{{ asset('images/default.png') }}" alt=""> {{ Auth::user()->name  }}
+                        <span class="caret"></span></a>
 
-            <ul class="nav navbar-nav user-nav-menu">
-                <message-notification></message-notification>
-                <user-notifications></user-notifications> 
- 
-            </ul>
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle profile-avatar" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">
-                    <img class="profile-photo " src="{{ asset('images/default.png') }}" alt=""> Emoji 
-                    <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/threads?rated=1">Top</a></li>
-                    </ul>
-                </li>
-            </ul>
-       </div>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="{{ route('profile', Auth::user()->username) }}">My Profile</a>
+                                <a href="{{ route('user.settnigs', Auth::user()->username) }}">Settings</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                      style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                            </li>
+                        </ul>
+
+                    </li>
+                </ul>
+            </div>
+       @endif
     </div>
 </nav>
