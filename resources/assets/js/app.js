@@ -204,6 +204,8 @@ Vue.component('view-counts', ()=>import('./components/ViewCounts.vue'));
 Vue.component('point-counts', ()=>import('./components/PointCounts.vue'));
 Vue.component('comment-counts', ()=>import('./components/CommentCounts.vue'));
 
+Vue.component('thread-replies', ()=>import('./components/Replies'));
+
 window.eventBus = new  Vue();
 const app = new Vue({
     el: '#app',

@@ -85,94 +85,75 @@
 @endsection
 
 @section('content')
-    <div class="container">
-        <div class="row top-margin" >
-            <div class="panel">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="channel-name"></span>
-                        <span class="created_time">{{ $thread->created_at->diffForHumans() }}</span>
+    <thread-view :thread="{{ $thread }}" inline-template>
+        <div class="container">
+            <div class="row top-margin">
+                <div  class="col-md-8" v-cloak>
+                    {{-- @include ('threads._question')                    --}}
+                {{-- <thread-show :thread="{{ $thread }}"></thread-show> --}}
+                <new-thread :thread="{{ $thread }}"></new-thread>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Search
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                        <h1 class="thread_title"> {{ $thread->title }}</h1>
-                        </div>
-                    </div>
-                    <div class="row thread-show-item-counts">
-                        <div class="col-md-3 thread_item_counts">
-                            <view-counts :thread="{{ $thread }}"></view-counts>
-                            <point-counts :like_count="{{ $thread->like_count }}" :dislike_count="{{ $thread->dislike_count }}"></point-counts>
-                            <comment-counts :comment_counts="{{ $thread->replies_count }}"></comment-counts>
-                        </div>
-                        <div class="col-md-5 ">
-                            {{-- <thread-emojis :thread="{{ $thread }}"></thread-emojis> --}}
-                            <emoji-counts :thread="{{ $thread }}"></emoji-counts>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="thread_creator">
-                                @if($thread->anonymous ==1)
-                                    <a href="#" class="creator_name">
-                                        <img src="{{ asset('images/default.png') }}"
-                                            alt="anonymous"
-                                            width="25"
-                                            height="25"
-                                            class="avatar-photo">
-                                        <user-online :user="{{ json_encode($thread->creator) }}"></user-online>
-                                        anonymous
-                                    </a>
-                                @else 
-                                    <a href="{{ route('profile', $thread->creator->username)  }}" class="creator_name">
-                                        <img src="{{ asset($thread->creator->avatar_path) }}"
-                                            alt="{{ $thread->creator->name }}"
-                                            width="25"
-                                            height="25"
-                                            class="avatar-photo">
-                                        <user-online :user="{{ json_encode($thread->creator) }}"></user-online>
-                                        {{ $thread->creator->name }}
-                                    </a> 
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row thread-show-tool-items">
-                        <div class="col-md-3 social-share-btn">
-                            <fb-share :thread="{{ $thread }}"></fb-share>
-                            <twitter-share :thread="{{ $thread }}"></twitter-share>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="story">
-                                <figure class="thread_thumb">
-                                    <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image">
-                                </figure>
-                                <div class="story-text">
-                                    {!! $thread->body !!}
+    
+                        <div class="panel-body">
+                            <form method="GET" action="/threads/search">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Search for something..." name="query" class="form-control">
                                 </div>
-                            </div>
+    
+                                <div class="form-group" style="margin-bottom: 0px;">
+                                    <button class="btn btn-default" type="submit">Search</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 thread-show-tags">
-                            Tags:
-                            @foreach ($thread->tags as $tag)
-                                <a  href="{{ strtolower(route('tags.threads.list', $tag->name))  }}" class="tag-name">{{ $tag->name }}</a>
-                            @endforeach
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <p>
+                               
+
+                                
+                                {{-- <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button> --}}
+                            <subscribe-button :thread="{{ $thread }}" v-if="!authorize('isBan')"></subscribe-button>
+
+                                <button class="btn btn-default"
+                                        v-if="authorize('isAdmin')"
+                                        @click="toggleLock"
+                                        v-text="locked ? 'Unlock' : 'Lock'"></button>
+                               
+                            </p>
+                        </div>
+                        <div class="panel-body">
+                            <h4 style="padding: 0px;">Related Threads</h4>
+                            <ul  class="list-group">
+                                @forelse ($relatedThreads as $relatedThread)
+                                    <li class="list-group-item">
+                                        <a href="{{ url($relatedThread->path) }}">{{ $relatedThread->title }}</a>
+                                    </li>
+                                @empty
+                                    <li class="list-group-item">Currently No Related Threads </li>
+                                @endforelse
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <thread-replies @added="repliesCount++" @removed="repliesCount--"></thread-replies>
+            <div class="row">
+                @if($thread->lat != null && $thread->lng != null )
+                    <div class="col-md-12">
+                        <simple-map :thread="{{ $thread }}"></simple-map>
+                    </div>
+                    
+                @endif
             </div>
+            <replies @added="repliesCount++" @removed="repliesCount--"></replies>
         </div>
-    </div>
+    </thread-view>
 @endsection
 @section('footer_script')
 

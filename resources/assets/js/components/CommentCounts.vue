@@ -1,6 +1,6 @@
 <template>
     <div  class="counts-item" :style="commentStyle">
-        <i class="fa fa-comment-alt"></i><strong>{{ replyCounts }}</strong>  comments
+        <i class="fa fa-comment"></i><strong>{{ replyCounts }}</strong> comments
     </div>
 </template>
 

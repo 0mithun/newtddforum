@@ -371,3 +371,56 @@ li.list-group-item{
     align-items: center;
     padding: 5px 0px;
 }
+
+/**
+    Thread Show Page
+*/
+
+.thread_title{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: black;
+    font-weight: bold;
+}
+
+.thread-show-item-counts{
+    margin: 10px 0;
+}
+
+.thread-show-tool-items{
+    margin: 15px 0;
+}
+.thread_thumb{
+    float: left;
+}
+.thread-image{
+    display: inline-block;
+    padding: 20px;
+    padding-bottom: 10px;
+}
+
+.story-text{
+    text-align: justify;
+    line-height: 25px;
+}
+.thread-show-tags{
+    text-transform: uppercase;
+}
+
+.tag-name:link,
+.tag-name:visited{
+    color: #ff4301;
+    text-transform: lowercase;
+    text-decoration: none;
+    display: inline;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.tag-name:hover,
+.tag-name:active{
+    text-decoration: none;
+}
+.tag-name:not(:last-child){
+    border-right: 1px solid grey;
+}

@@ -1,6 +1,6 @@
 <div class="panel">
     <div class="card-header">
-        <img src="{{ $thread->threadImagePath }}" class="img-responsive" alt="Responsive image">
+        <a href="{{ $thread->path }}">  <img src="{{ $thread->threadImagePath }}" class="img-responsive" alt="Responsive image"></a>
         {{-- @php 
             dd($thread);
         @endphp --}}

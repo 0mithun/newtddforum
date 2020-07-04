@@ -71,7 +71,7 @@
             },
             checkValidation(){
                 if(this.form.title == '' || this.form.body == '' || this.defaultChannel ==''){
-                    return true;
+                    return true;কর
                 }
                 return false;
             },
