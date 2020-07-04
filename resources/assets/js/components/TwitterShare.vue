@@ -1,6 +1,6 @@
 <template>
-    <a :href="threadUrl" target="_blank" class="btn btn-xs btn-default" style="padding:0px;">
-        <i class="fa fa-twitter-square" aria-hidden="true" @click.prevent="share" style="font-size:18px"></i>
+    <a :href="threadUrl" target="_blank" class="btn btn-xs twitter-share-btn" @click.prevent="share">
+        <i class="fa fa-twitter" aria-hidden="true" @click.prevent="share"></i> Share
     </a>
 </template>
 
@@ -31,3 +31,12 @@
         }
     }
 </script>
+
+
+<style scoped>
+    .twitter-share-btn{
+        /* padding: 5px; */
+        color: white;
+        background-color: #12cad6;
+    }
+</style>

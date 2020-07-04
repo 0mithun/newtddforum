@@ -16,14 +16,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    thread: {
-      type: Object
-    }
-  },
+  props: ['comment_counts', 'color'],
   computed: {
     replyCounts: function replyCounts() {
-      return abbreviate(this.thread.replies_count, 1);
+      return abbreviate(this.comment_counts, 1);
+    },
+    commentStyle: function commentStyle() {
+      return {
+        color: this.color ? this.color : '#636b6f'
+      };
     }
   }
 });
@@ -94,7 +95,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "counts-item" }, [
+  return _c("div", { staticClass: "counts-item", style: _vm.commentStyle }, [
     _c("i", { staticClass: "fa fa-comment-alt" }),
     _c("strong", [_vm._v(_vm._s(_vm.replyCounts))]),
     _vm._v("  comments\n")

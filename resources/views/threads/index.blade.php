@@ -10,71 +10,50 @@
             </div>
 
             <div class="col-md-4">
-
-                @if (count($trending))
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Trending Threads
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="social-follow-btn">
+                            <a href="#" class="follow-item">
+                                <img class="follow-item-icon" src="{{ asset('images/social/facebook.png') }}" alt="">
+                            </a>
+                            <a href="#" class="follow-item">
+                                <img class="follow-item-icon" src="{{ asset('images/social/twitter.png') }}" alt="">
+                            </a>
+                            <a href="#" class="follow-item">
+                                <img class="follow-item-icon" src="{{ asset('images/social/instagram.png') }}" alt="">
+                            </a>
                         </div>
-
-                        <div class="panel-body">
-                            <ul class="list-group">
-                                @php
-                                    $auth_user = null;
-                                    if(auth()->check()){
-                                        $auth_user = auth()->user();
-                                    }
-                                @endphp
-
-                                @foreach ($trending as $thread)
-                                    @if($auth_user == null)
-                                        @if($thread->age_restriction == 0)
-                                            <li class="list-group-item">
-                                                <a href="{{ url($thread->path) }}">
-                                                    {{ $thread->title }}
-                                                </a>
-                                            </li>
-                                        @endif
-                                    @else 
-                                        @if($thread->age_restriction == 0)
-                                            <li class="list-group-item">
-                                                <a href="{{ url($thread->path) }}">
-                                                    {{ $thread->title }}
-                                                </a>
-                                            </li>
-                                        @elseif($auth_user->id ==1)
-                                            <li class="list-group-item">
-                                                <a href="{{ url($thread->path) }}">
-                                                    {{ $thread->title }}
-                                                </a>
-                                            </li>
-                                        @elseif($thread->user_id == $auth_user->id)
-                                            <li class="list-group-item">
-                                                <a href="{{ url($thread->path) }}">
-                                                    {{ $thread->title }}
-                                                </a>
-                                            </li>
-                                        @elseif($auth_user->userprivacy->restricted_18==1)
-                                            <li class="list-group-item">
-                                                <a href="{{ url($thread->path) }}">
-                                                    {{ $thread->title }}
-                                                </a>
-                                            </li>
-                                        @elseif($auth_user->userprivacy->restricted_13==1 && $thread->age_restriction==13)
-                                            <li class="list-group-item">
-                                                <a href="{{ url($thread->path) }}">
-                                                    {{ $thread->title }}
-                                                </a>
-                                            </li>                                    
-                                        
-                                        @endif
-                                    @endif
-                                    
-                                @endforeach
-                            </ul>
-                        </div>
+                        <h3 class="follow-on-title">Follow Us On</h3>
                     </div>
+                </div>
+                @if (count($trending))
+                        @php
+                            $auth_user = null;
+                            if(auth()->check()){
+                                $auth_user = auth()->user();
+                            }
+                        @endphp
+                        @foreach ($trending as $thread)
+                            @if($auth_user == null)
+                                @if($thread->age_restriction == 0)
+                                    @include('threads._trendingitem')
+                                @endif
+                            @else 
+                                @if($thread->age_restriction == 0)
+                                    @include('threads._trendingitem')
+                                @elseif($auth_user->id ==1)
+                                     @include('threads._trendingitem')
+                                @elseif($thread->user_id == $auth_user->id)
+                                    @include('threads._trendingitem')
+                                @elseif($auth_user->userprivacy->restricted_18==1)
+                                    @include('threads._trendingitem')
+                                @elseif($auth_user->userprivacy->restricted_13==1 && $thread->age_restriction==13)
+                                    @include('threads._trendingitem')                                  
+                                @endif
+                            @endif
+                        @endforeach
                 @endif
+               
             </div>
         </div>
     </div>

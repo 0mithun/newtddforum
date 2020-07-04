@@ -1,20 +1,21 @@
 <template>
-    <div  class="counts-item">
+    <div  class="counts-item" :style="commentStyle">
         <i class="fa fa-comment-alt"></i><strong>{{ replyCounts }}</strong>  comments
     </div>
 </template>
 
 <script>
     export default {
-        props: {
-            thread:{
-                type:Object
-            }
-        },
-
+        props: ['comment_counts', 'color'],
+        
         computed: {
             replyCounts(){
-                return abbreviate(this.thread.replies_count, 1)
+                return abbreviate(this.comment_counts, 1)
+            },
+            commentStyle(){
+                return {
+                    color: this.color ? this.color : '#636b6f'
+                }
             }
         },
     }
@@ -23,5 +24,6 @@
 
 <style  scoped>
     .counts-item{
+        
     }
 </style>

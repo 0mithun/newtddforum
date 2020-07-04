@@ -11,16 +11,13 @@
 @forelse ($threads as $thread)
     <div class="panel panel-default">
         <div class="card-header">
-
-            <img src="{{ $thread->threadImagePath }}" class="img-responsive" alt="Responsive image">
+            <a href="{{ $thread->path() }}"> 
+                <img src="{{ $thread->threadImagePath }}" class="img-responsive" alt="Responsive image">
+            </a>
         </div>
         <div class="panel-body">
             <div class="thread_title">
-                <h2>
-                    <strong>
-                        {{ $thread->title }}
-                    </strong>
-                </h2>
+                    <a href="{{ $thread->path() }}"> <strong> {{ $thread->title }}</strong></a> 
             </div>
             <div class="thread_excerpt">
                 {!! $thread->excerpt !!}
@@ -51,14 +48,14 @@
         </div>
         <div class="panel-footer">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-3 social-share-btn">
                     <fb-share :thread="{{ $thread }}"></fb-share>
                     <twitter-share :thread="{{ $thread }}"></twitter-share>
                 </div>
-                <div class="col-md-5 thread_item_counts">
+                <div class="col-md-4 thread_item_counts">
                     <view-counts :thread="{{ $thread }}"></view-counts>
-                    <point-counts :thread="{{ $thread }}"></point-counts>
-                    <comment-counts :thread="{{ $thread }}"></comment-counts>
+                    <comment-counts :comment_counts="{{ $thread->replies_count }}"></comment-counts>
+                    <point-counts :like_count="{{ $thread->like_count }}" :dislike_count="{{ $thread->dislike_count }}"></point-counts>
                 </div>
                 <div class="col-md-5 thread_emoji_count_map">
                     {{-- <thread-emojis :thread="{{ $thread }}"></thread-emojis> --}}

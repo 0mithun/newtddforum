@@ -85,19 +85,6 @@
             padding: 0px
         }
 
-        i.fa.fa-facebook-square {
-            font-size: 17px;
-            color: blue;
-            padding: 0px 3px;
-            
-        }
-
-        i.fa.fa-twitter-square {
-            font-size: 17px;
-            color: #3097d1;
-            padding: 0px 3px;
-        }
-
         .userprivacy hr{
             margin-top:10px;
             margin-bottom: 10px;

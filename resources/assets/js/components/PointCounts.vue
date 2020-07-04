@@ -6,15 +6,11 @@
 
 <script>
     export default {
-        props: {
-            thread:{
-                type:Object
-            }
-        },
+        props: ['like_count','dislike_count'],
 
         computed: {
             pointCounts(){
-                return abbreviate((this.thread.like_count - this.thread.dislike_count), 1) 
+                return abbreviate((this.like_count - this.dislike_count), 1) 
             }
         },
     }

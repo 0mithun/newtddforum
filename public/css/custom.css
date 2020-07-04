@@ -267,8 +267,15 @@ li.list-group-item{
     Homepage
 **/
 
-.thread_title{
+.thread_title a:link,
+.thread_title a:visited{
     color: black;
+    text-decoration: none;
+    font-size: 30px;
+}
+.thread_title a:hover,
+.thread_title a:active{
+    text-decoration: none;
 }
 
 .thread_excerpt{
@@ -309,4 +316,58 @@ li.list-group-item{
 }
 .thread-map-icon{
     margin-left: 15px;
+}
+
+.social-share-btn{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.thread_item_counts{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.thread_emoji_count_map{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.social-follow-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.follow-item{
+    display: inline-block;
+    padding: 10px;
+}
+
+.follow-item-icon{
+    width: 48px;
+    height: 48px;
+}
+
+.follow-on-title{
+    padding: 0;
+    margin-top: 0px;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+}
+
+.trendig_thread_title a:link,
+.trendig_thread_title a:visited{
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+}
+.trendig_thread_title a:hover,
+.trendig_thread_title a:active{
+    text-decoration: none;
+}
+.trendong_footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0px;
 }
