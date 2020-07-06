@@ -83,41 +83,15 @@ class ReportController extends Controller
         return response()->json(['reported'=>false]);
     }
 
-
     public function thread(){
 
-        request()->validate([
-            'reason'    =>  'required'
-        ]);
-
         $id = \request('id');
-        $reason = \request('reason');
-        $thread = Thread::findOrFail($id);
-
-        DB::table('reports')->insert([
-            'user_id'           =>  auth()->id(),
-            'reported_id'       =>  $id,
-            'reported_type'     =>  get_class($thread)
-        ]);
-
-        $user = User::find(1);
-        $user->notify(new ThreadWasReported($thread, $reason));
-    }
-
-    public function threadRestriction(){
-        request()->validate([
-            'reason'    =>  'required'
-        ]);
-
-        $id = \request('id');
-        $type = request('type');
+        $restrictions = request('restrictions');
         $reason = \request('reason');
 
-        $thread = Thread::findOrFail($id);
-        $thread->age_restriction = $type;
-        $thread->save();
 
         $authUser = auth()->user();
+        $thread = Thread::findOrFail($id);
 
         DB::table('reports')->insert([
             'user_id'           =>  $authUser->id,
@@ -125,26 +99,35 @@ class ReportController extends Controller
             'reported_type'     =>  get_class($thread)
         ]);
         
-
-        if($authUser->id !=1){
-            $adminUser = User::find(1);
-            $reason = 'Check age for this item';
-            $adminUser->notify(new ThreadRestrictionReported($thread, $reason));
-            
-
-            $reason = "User " . $authUser->username . " ".  " reported thread with id = " . $thread->id . " has been flagged, we have changed it to PG/R pending review";
-            $creator = User::find($thread->creator->id);            
-            $creator->notify(new ThreadRestrictionReported($thread, $reason));
-
-
-            $reason = 'This item has been changed to pg/R pending review';
-            $authUser->notify(new ThreadRestrictionReported($thread, $reason));
+        
+        if($restrictions !=''){
+            $thread->age_restriction = $restrictions;
+            $thread->save();
+    
+            if($authUser->id !=1){
+                $adminUser = User::find(1);
+                $reason = 'Check age for this item';
+                $adminUser->notify(new ThreadRestrictionReported($thread, $reason));
+                
+    
+                $reason = "User " . $authUser->username . " ".  " reported thread with id = " . $thread->id . " has been flagged, we have changed it to PG/R pending review";
+                $creator = User::find($thread->creator->id);            
+                $creator->notify(new ThreadRestrictionReported($thread, $reason));
+    
+    
+                $reason = 'This item has been changed to pg/R pending review';
+                $authUser->notify(new ThreadRestrictionReported($thread, $reason));
+            }else{
+                $reason = "After review, your post changed to PG";
+                $creator = User::find($thread->creator->id);            
+                $creator->notify(new ThreadRestrictionReported($thread, $reason));
+            }
         }else{
-            $reason = "After review, your post changed to PG";
-            $creator = User::find($thread->creator->id);            
-            $creator->notify(new ThreadRestrictionReported($thread, $reason));
+            $user = User::find(1);
+            $user->notify(new ThreadWasReported($thread, $reason));
         }
         
+        return \response()->json(['status'=>'success','message'=>'Thread Reported Successfully']);
     }
 
 

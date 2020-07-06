@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('head')
 <meta property="og:image" content="{{ $thread->threadImagePath }}"/>
 <meta property="og:site_name" content="{{ config('app.name') }}">
@@ -107,7 +106,6 @@
                             <comment-counts :comment_counts="{{ $thread->replies_count }}"></comment-counts>
                         </div>
                         <div class="col-md-5 ">
-                            {{-- <thread-emojis :thread="{{ $thread }}"></thread-emojis> --}}
                             <emoji-counts :thread="{{ $thread }}"></emoji-counts>
                         </div>
                     </div>
@@ -139,9 +137,19 @@
                         </div>
                     </div>
                     <div class="row thread-show-tool-items">
+                        <vote-emoji-list :thread="{{ $thread }}"></vote-emoji-list>
                         <div class="col-md-3 social-share-btn">
                             <fb-share :thread="{{ $thread }}"></fb-share>
                             <twitter-share :thread="{{ $thread }}"></twitter-share>
+                        </div>
+                        <div class="col-md-9 thread-show-tools">
+                            <focus-comment></focus-comment>
+                            <vote-emojis :thread="{{ $thread }}"></vote-emojis>
+                            <favorite-thread :thread="{{ $thread }}"></favorite-thread>
+                            <up-votes :thread="{{ $thread }}"></up-votes>
+                            <down-votes :thread="{{ $thread }}"></down-votes>
+                            <report-thread :thread="{{ $thread }}"></report-thread>                             
+                            <show-source :thread="{{ $thread }}"></show-source>                            
                         </div>
                     </div>
                     <div class="row">
@@ -168,9 +176,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <thread-replies @added="repliesCount++" @removed="repliesCount--"></thread-replies>
-            </div>
+            <thread-replies ></thread-replies>
         </div>
     </div>
 @endsection

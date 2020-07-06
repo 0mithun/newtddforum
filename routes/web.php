@@ -186,23 +186,18 @@ Route::middleware(['auth'])->group(function (){
  * Report Controller
  */
 
-
-//Route::post('/replies/{reply}/report', 'RepliesController@report');
-    Route::post('/replies/{reply}/report', 'ReportController@reply');
-    Route::post('/reply/check-reply-report','ReportController@checkReplyReport');
-    //Need New Route for check isReply Report
-
-//Route::post('/threads/report','ThreadsController@report');
-    Route::post('/threads/report','ReportController@thread');
-    Route::post('/threads/report-restriction','ReportController@threadRestriction');
-
+    Route::post('/report/thread','ReportController@thread');
     Route::post('/threads/check-thread-report','ReportController@checkThreadReport');
 
+    
 
-//Route::post('api/users/report','Api\UsersController@report');
-    Route::post('api/users/report','ReportController@user');
-    Route::post('api/users/check-user-report','ReportController@checkUserReport');
-//Route::post('/users/report', '')
+    // Route::post('/replies/{reply}/report', 'ReportController@reply');
+    // Route::post('/reply/check-reply-report','ReportController@checkReplyReport');
+    // //Need New Route for check isReply Report
+
+
+    // Route::post('api/users/report','ReportController@user');
+    // Route::post('api/users/check-user-report','ReportController@checkUserReport');
 
 
 

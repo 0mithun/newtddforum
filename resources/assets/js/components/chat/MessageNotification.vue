@@ -3,7 +3,7 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
              <!-- <i class="fa fa-envelope text-default" >  </i> -->
 
-             <img class="navbar-icon pen" src="images/mail.png" alt="">
+             <img class="navbar-icon pen" src="/images/mail.png" alt="">
               <span style="color:red;font-weight:bold;font-size:14px" >{{ unreadNotifications.length }}</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-left list-group"  v-if="messageNotifications.length">

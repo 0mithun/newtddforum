@@ -24,17 +24,11 @@
 </template>
 
 <script>
-import FbShare from "./FbShare.vue";
-import TwitterShare from "./TwitterShare.vue";
 export default {
   props: {
     thread: {
       type: Object
     }
-  },
-  components: {
-    FbShare,
-    TwitterShare
   },
 
   data() {

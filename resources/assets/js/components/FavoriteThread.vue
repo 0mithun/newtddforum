@@ -1,9 +1,11 @@
+
+
 <template>
-
-   <button class="btn btn-xs btn-default">
-        <span :class="classes"  class="glyphicon glyphicon-heart "  @click="toggle"></span>
+  <div class="tools-single-item"  >
+    <button class="btn  thread-items-show-tools-btn" @click="toggle" :class="classes">
+      <i class="fa fa-heart"></i>
     </button>
-
+  </div>
 </template>
 
 <script>
@@ -13,8 +15,6 @@
                 type:Object
             }
         },
-
-
         data() {
             return {
                 active: this.thread.isFavorited,
@@ -22,11 +22,10 @@
 
             }
         },
-
         computed: {
             classes() {
                 return [
-                    this.isFavoriteThread ? 'red-icon' : 'grey-icon'
+                    this.isFavoriteThread ? 'active-favorite' : 'inactive-favorite'
                 ];
             },
 
@@ -45,33 +44,26 @@
                 if(this.signedIn){
                     this.isFavoriteThread ? this.destroy() : this.create();
                 }
-                return;
-                
+                return;                
             },
 
             create() {
                 axios.post(this.endpoint).then((res)=>{
                 });
-
                 this.isFavoriteThread = true;
                 flash('You are successfully favorite this thread','success')
-                //this.count++;
             },
 
             destroy() {
                 axios.delete(this.endpoint);
-
                 this.isFavoriteThread = false;
                 flash('You are successfully un favorite this thread','success')
-                //this.count--;
             },
             checkIsFavoriteThread(){
                 if(this.signedIn){
-                     //console.log('calling')
                     axios.post('/thread/check-thread-favorite',{
                         thread: this.thread.id,
                         user:window.App.user.id
-
                     })
                     .then((res=>{
                         if(res.data.favorited){

@@ -22,7 +22,7 @@ window.tinekey = 'l1vdc832pqx5u7o6t5umdpxns0sak10bu9mrtb0m1qbspk9g';
 //  import AvatarForm from './components/AvatarForm';
 //  import Wysiwyg from './components/Wysiwyg';
 
-import ThreadView from './pages/Thread.vue';
+// import ThreadView from './pages/Thread.vue';
 // import Typhaed from './components/Typehead.vue';
 
 
@@ -30,8 +30,8 @@ Vue.component('Flash', () => import('./components/Flash'));
 Vue.component('Paginator', () => import('./components/Paginator'));
 Vue.component('UserNotifications', () => import('./components/UserNotifications'));
 Vue.component('AvatarForm', () => import('./components/AvatarForm'));
-Vue.component('Wysiwyg', () => import('./components/Wysiwyg'));
-Vue.component('ThreadView', () => import('./pages/Thread.vue'));
+// Vue.component('Wysiwyg', () => import('./components/Wysiwyg'));
+// Vue.component('ThreadView', () => import('./pages/Thread.vue'));
 
 
 // import TinyMCE from 'tinymce-vue-2';
@@ -55,7 +55,7 @@ Vue.component('favorite-thread', () => import('./components/FavoriteThread.vue')
 
 // import LikeButton from './components/LikeButton.vue';
 // Vue.component('like-button', LikeButton);
-Vue.component('like-button', ()=>import('./components/LikeButton.vue'));
+// Vue.component('like-button', ()=>import('./components/LikeButton.vue'));
 
 
 
@@ -205,6 +205,14 @@ Vue.component('point-counts', ()=>import('./components/PointCounts.vue'));
 Vue.component('comment-counts', ()=>import('./components/CommentCounts.vue'));
 
 Vue.component('thread-replies', ()=>import('./components/Replies'));
+Vue.component('up-votes', ()=>import('./components/UpVotes.vue'));
+Vue.component('down-votes', ()=>import('./components/DownVotes.vue'));
+Vue.component('focus-comment', ()=>import('./components/FocusComment.vue'));
+Vue.component('vote-emojis', ()=>import('./components/VoteEmojis.vue'));
+Vue.component('vote-emoji-list', ()=>import('./components/VoteEmojiList.vue'));
+Vue.component('report-thread', ()=>import('./components/ReportThread.vue'));
+Vue.component('show-source', ()=>import('./components/ShowSource.vue'));
+
 
 window.eventBus = new  Vue();
 const app = new Vue({

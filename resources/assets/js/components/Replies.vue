@@ -1,17 +1,15 @@
 <template>
     <div>
-
-        <div v-for="(reply, index) in items" :key="reply.id">
-            <reply :reply="reply" @deleted="remove(index)"></reply>
+                <new-reply @created="add" v-if="!authorize('isBan')"></new-reply>
+        <div class="panel panel-default">
+            <div class="panel-">
+                <div v-for="(reply, index) in items" :key="reply.id">
+                    <reply :reply="reply" @deleted="remove(index)"></reply>
+                </div>
+                <paginator :dataSet="dataSet" @changed="fetch"></paginator>
+            </div>
         </div>
-
-        <paginator :dataSet="dataSet" @changed="fetch"></paginator>
-
-        <p v-if="$parent.locked">
-            This thread has been locked. No more replies are allowed.
-        </p>
-
-        <new-reply @created="add" v-if="!authorize('isBan')"></new-reply>
+        
     </div>
 </template>
 

@@ -1,142 +1,71 @@
 <template>
-    <div :id="'reply-'+id"  class="panel panel-default panel-no-margin ">
-        
-        <div class="panel-heading reply-heading">
-            <div class="level">
-                <h5 class="flex">
-                    <img :src="reply.owner.profileAvatarPath"
-                         alt=""
-                         width="25"
-                         height="25"
-                         class="mr-1 avatar-photo">
-                    <a :href="reply.ownerThreadUrl"
-                        v-text="reply.owner.name">
+    <div :id="'reply-'+id"  class="single-reply">        
+        <div class="row reply-heading">
+            <div class="col-md-4">
+                <div class="thread_creator">               
+                    <a :href="reply.ownerProfileUrl" class="creator_name">
+                        <img :src="reply.owner.profileAvatarPath"
+                            :alt="reply.owner.name"
+                            width="25"
+                            height="25"
+                            class="avatar-photo">
+                        <user-online :user="reply.owner"></user-online>
+                        {{ reply.owner.name }}
                     </a>
-                    said <span v-text="ago"></span>
-                </h5>
-
-
-                <!-- Reply User Reprot Start  -->
-
-                <div v-if="signedIn" class="col-md-2">
-
-                    <div class="pull-left" v-if="!authorize('owns', reply)">
-                        <div class="dropdown" v-if="!authorize('isBan')">
-                            <button class="btn btn-light btn-sm  dropdown-toggle" type="button" data-toggle="dropdown" :disabled="isReplyOwnerReported"><span class="caret"></span></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#" @click="reportUser" >Report User  <span class="text-danger glyphicon glyphicon-flag"></span> </a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="pull-right">
-                        <favorite :reply="reply" type="sm" v-if="!authorize('isBan')"></favorite>
-                    </div>
+                   <span v-text="ago" class="reply_created_at"></span>
                 </div>
+            </div>
+            <div class="col-md-8">
 
-
-                <!-- Reply User Report End -->
-
-                
             </div>
         </div>
 
-        <div class="panel-body reply-body">
-            <div v-if="editing">
-                <form @submit="update">
-                    <div class="form-group">
-                        <textarea name="body" id="bodyedit" cols="30" rows="3" class="form-control" v-model="body" @keyup="bodyChange"></textarea>
-                    </div>
-                    <button class="btn btn-xs btn-primary">Update</button>
-                    <button class="btn btn-xs btn-link" @click="editing = false" type="button">Cancel</button>
-                </form>
-            </div>
-
-            <div v-else v-html="body"></div>
-
-
-            <!-- Nested Reply Load Start -->
-            <div class="" style="margin-top: 10px;" >
-                <div class="col-md-1 no-margin" v-if="nestedReplyCount >0">
-                    <button class="btn btn-default btn-xs" @click="showNested = !showNested">
-                        <span class="caret"></span>
-                    </button>
-                </div>
-
-                <div class="div" v-else>
-                    <NestedReply v-if="addNested" :reply="reply"></NestedReply>
-                    <div v-if="signedIn && !authorize('isBan')">
-
-                        <button class="btn btn-xs mr-1 btn-default" @click="addNestedReply" v-if="!addNested">Reply</button>
-                    </div>
-                </div>
-                <div class="col-md-11 no-margin" v-if="showNested">
-                    <ReplyNested v-for="(nestedReply, index) in nestedReplies" :reply="nestedReply" :key="index"></ReplyNested>
-                    <NestedReply v-if="addNested" :reply="reply"></NestedReply>
-                    <div class="col-md-12 no-margin" >
-                        <div v-if="signedIn &&  !authorize('isBan')">
-                            <button class="btn btn-xs mr-1 btn-default" @click="addNestedReply" v-if="!addNested">Reply</button>
+        <div class="row reply-body">
+            <div class="col-md-12">
+                <div v-html="body" class="reply-body"></div>
+                <div class="nested-reply-btn">
+                    Reply
+                    <div class="add-new-reply">
+                        <div >
+                            <form action="" @submit.prevent="addReply">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" aria-label="..." name="body" id="body"  v-model="body" placeholder="Add a comment">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Post</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
-
-
-            <!-- Nested Reply Load End -->
-
-
-
-            <!-- Reply Reprot Start -->
-            <div v-if="report" style="margin-top: 10px;overflow: hidden;display:block;width:100%;">
-                <div class="form-group">
-                    <label for="report_reason">Reason for report the reply:</label>
-                    <textarea name="report_reason" id="report_reason" cols="30" rows="2" v-model="report_reason" class="form-control"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <button class="btn btn-xs btn-primary mr-1" @click="makeReport">Make Report</button>
-                    <button class="btn btn-xs btn-danger mr-1 red-bg" @click="report = false">Cancel</button>
+                <div class="more-reply">
+                    View more replies
+                    <NestedReplies :reply="reply" v-for="(reply, index) in replies"  :key="index"></NestedReplies>
                 </div>
             </div>
-
-            <!-- Reply Report End -->
 
         </div>
 
-        <div class="panel-footer level reply-footer reply-footer" >
+        <!-- <div class="panel-footer level reply-footer reply-footer" >
             <div class="col-md-12" v-if="authorize('owns', reply) || authorize('owns', reply.thread)">
                 <div v-if="!authorize('isBan')">
                     <button class="btn btn-xs mr-1" @click="editing = true" v-if="! editing">Edit</button>
                     <button class="btn btn-xs btn-danger red-bg mr-1" @click="destroy">Delete</button>
                 </div>
             </div>
-
-
-            <!-- Need Check Best Reply  -->
-
-            <div v-if="authorize('owns', reply.thread) && !isReplyBest">
-                <button class="btn btn-xs btn-default ml-a pull-right" @click="markBestReply" v-if="!authorize('isBan')">Best Reply?</button>
-            </div>
-                
-
             <div  class="col-md-1" v-if="signedIn && !authorize('isBan')">              
-                <button class="btn btn-xs btn-danger ml-a red-bg pull-right" @click="reportReply" v-if="!report && !authorize('owns', reply)" :disabled="isReplyReported" >
+                <button class="btn btn-xs btn-danger ml-a red-bg pull-right" v-if="!authorize('owns', reply)">
                     <span class="glyphicon glyphicon-flag"></span>
                 </button>
             </div>
-
-
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
     import Favorite from './Favorite.vue';
-    import Report from './Report'
     import moment from 'moment';
-    import Editor from '@tinymce/tinymce-vue'
-    import NestedReply from './NestedReply'
-    import ReplyNested from  './ReplyNested.vue'
+    import NestedReplies from './NestedReplies.vue'
 
     import 'jquery.caret';
     import 'at.js';
@@ -144,24 +73,19 @@
     export default {
         props: ['reply'],
 
-        components: { Favorite, Editor, Report, NestedReply,ReplyNested},
+        components: {
+            NestedReplies
+        },
 
         data() {
             return {
                 editing: false,
                 id: this.reply.id,
                 body: this.reply.body,
-                // isBest: this.reply.isBest,
-                // isBest: this.reply.isBest,
-                report: false,
-                report_reason: '',
-                report_user_reason: '',
                 addNested: false,
-                nestedReplies: [],
+                replies: [],
                 showNested: false,
-                isReplyOwnerReported:false,
-                isReplyReported:false,
-                isReplyBest:false
+
             };
         },
         mounted(){
@@ -180,9 +104,6 @@
 
 
         computed: {
-            nestedReplyCount(){
-              return this.nestedReplies.length;
-            },
             ago() {
                 return  moment(this.reply.created_at, 'YYYY-MM-DD HH:mm:ss').fromNow() + '...';
             },
@@ -193,10 +114,6 @@
 
         created () {
             this.loadNestedReply();
-            window.events.$on('best-reply-selected', id => {
-                // this.isBest = (id === this.id);
-                this.isReplyBest = (id === this.id);
-            });
             eventBus.$on('cancelAddReply',()=>{
                 this.addNested = false;
             });
@@ -209,17 +126,12 @@
 
 
             eventBus.$on('deleteNested',(id)=>{
-                let newData = this.nestedReplies.filter(item=>{
+                let newData = this.replies.filter(item=>{
                     return item.id !=id;
                 });
-                this.nestedReplies = newData;
+                this.replies = newData;
                 flash('Your reply has been deleted.');
             });
-
-            this.checkUserReported();
-            this.checkReplyReported();
-            this.checkReplyIsBest()
-
         },
 
 
@@ -241,81 +153,12 @@
               let url = `/replies/${this.reply.id}/load-reply`;
                 axios.get(url).then(({data})=>{
                     // console.log(data)
-                    this.nestedReplies = data
+                    this.replies = data
                 });
             },
             addNestedReply(){
                 this.addNested = true;
             },
-            reportReply(){
-                this.report = true;
-            },
-            makeReport(){
-                axios.post('/replies/' + this.id + '/report',{
-                    reason:this.report_reason
-                }).then((res=>{
-                    this.report = false;
-                    flash('Your have successfully report to this reply','success')
-                }));
-            },
-            reportUser(){
-                axios.post('/api/users/report',{
-                    user_id: this.reply.owner.id
-                }).then((res=>{
-                    flash('Your have successfully report to this user','success')
-                }));
-            },
-            checkUserReported(){
-                //isCreatorReported
-                if(this.signedIn){
-                    axios.post('/api/users/check-user-report',{
-                        reported_id: this.reply.owner.id,
-                        user:window.App.user.id
-
-                    })
-                    .then((res=>{
-                        if(res.data.reported){
-                            return this.isReplyOwnerReported = true;
-                        }
-                       return this.isReplyOwnerReported = false;
-                    }));
-                }
-                return this.isReplyOwnerReported = false;
-            },
-            checkReplyReported(){
-                //isCreatorReported
-                if(this.signedIn){
-                    axios.post('/reply/check-reply-report',{
-                        reply: this.reply.id,
-                        user:window.App.user.id
-
-                    })
-                    .then((res=>{
-                        if(res.data.reported){
-                            return this.isReplyReported = true;
-                        }
-                       return this.isReplyReported = false;
-                    }));
-                }
-                return this.isReplyReported = false;
-            },
-            checkReplyIsBest(){
-                 if(this.signedIn){
-                    axios.post('/reply/check-reply-isbest',{
-                        reply: this.reply.id,
-                        thread_id:this.reply.thread_id
-
-                    })
-                    .then((res=>{
-                        if(res.data.isBest){
-                            return this.isReplyBest = true;
-                        }
-                       return this.isReplyBest = false;
-                    }));
-                }
-                return this.isReplyBest = false;
-            },
-
             update() {
                 axios.patch(
                     '/replies/' + this.id, {
@@ -336,12 +179,36 @@
                     this.$emit('deleted', this.id);
                 }
 
-            },
-
-            markBestReply() {
-                axios.post('/replies/' + this.id + '/best');
-                window.events.$emit('best-reply-selected', this.id);
             }
         }
     }
 </script>
+
+
+<style  scoped>
+    .single-reply{
+        margin: 5px;
+    }
+    .comment-body{
+        resize: vertical !important;
+    }
+
+    .reply_created_at{
+        color: #92959e;
+        font-size: 12px;
+        font-style: italic;
+        margin-right: 10px;
+    }
+    .reply-body{
+        padding: 0;
+        margin-left: 20px;
+        margin-top: -8px;
+        color: #92959e;
+    }
+    .nested-reply-btn{
+        margin-left: 20px;
+    }
+    .more-reply{
+        margin-left: 20px;
+    }
+</style>

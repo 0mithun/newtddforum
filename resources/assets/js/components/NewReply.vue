@@ -1,15 +1,20 @@
 <template>
-    <div>
+    <div class="add-new-reply">
         <div v-if="signedIn" >
-            <h3>Add New Reply</h3>
-            <div class="form-group">
-                <textarea name="body" id="body" cols="30" rows="3" class="form-control" v-model="body"></textarea>
+            <!-- <div class="form-group">
+                <textarea name="body" id="body" cols="30" rows="3" class="form-control comment-body" v-model="body" placeholder="Add a comment"></textarea>
             </div>
+            <button type="submit" class="btn btn-default" @click="addReply">Post</button> -->
 
+            <form action="" @submit.prevent="addReply">
+                <div class="input-group">
+                    <input type="text" class="form-control" aria-label="..." name="body" id="body"  v-model="body" placeholder="Add a comment">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Post</button>
+                    </div>
+                </div>
+            </form>
 
-            <button type="submit"
-                    class="btn btn-default"
-                    @click="addReply">Post</button>
         </div>
 
         <p class="text-center" v-else>
@@ -22,7 +27,6 @@
 <script>
     import 'jquery.caret';
     import 'at.js';
-    import Editor from '@tinymce/tinymce-vue'
 
     export default {
         data() {
@@ -64,3 +68,13 @@
         }
     }
 </script>
+
+
+<style  scoped>
+    .comment-body{
+        resize: vertical !important;
+    }
+    .add-new-reply{
+        margin-bottom: 30px;
+    }
+</style>

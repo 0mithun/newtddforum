@@ -1,14 +1,19 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[25],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/LikeButton.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -30,31 +35,111 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['lat', 'lng'],
+  props: {
+    thread: {
+      type: Object
+    }
+  },
   data: function data() {
     return {
-      center: {
-        lat: parseFloat(this.lat),
-        lng: parseFloat(this.lng)
-      },
-      markers: [{
-        position: {
-          //lat: 42.363211, lng:-105.071875
-          lat: parseFloat(this.lat),
-          lng: parseFloat(this.lng)
-        }
-      }],
-      zoom: 4
+      //isDesliked:false
+      isLiked: this.thread.isLiked,
+      isDesliked: this.thread.isDesliked,
+      // likesCount:this.thread.likesCount,
+      likesCount: 0,
+      // dislikesCount:this.thread.dislikesCount
+      dislikesCount: 0
     };
+  },
+  created: function created() {
+    this.getLikesCount();
+    this.getDislikeCount();
+  },
+  computed: {
+    likeClass: function likeClass() {
+      return [this.isLiked ? "blue-icon" : "black-icon"];
+    },
+    dislikeClass: function dislikeClass() {
+      return [this.isDesliked ? "red-icon" : "black-icon"];
+    },
+    signedIn: function signedIn() {
+      return window.App.user ? true : false;
+    }
+  },
+  methods: {
+    getLikesCount: function getLikesCount() {
+      var _this = this;
+
+      // this.likesCount = 1;
+      axios.get("/thread/" + this.thread.id + "/likes-count").then(function (res) {
+        _this.likesCount = res.data;
+      });
+    },
+    getDislikeCount: function getDislikeCount() {
+      var _this2 = this;
+
+      // this.dislikesCount = 1;
+      axios.get("/thread/" + this.thread.id + "/dislikes-count").then(function (res) {
+        _this2.dislikesCount = res.data;
+      });
+    },
+    toggleDislike: function toggleDislike() {
+      var _this3 = this;
+
+      if (!this.signedIn) {
+        return false;
+      }
+
+      axios.post("/thread/" + this.thread.id + "/dislikes").then(function (res) {
+        if (_this3.isDesliked) {
+          _this3.isDesliked = false;
+          _this3.dislikesCount--;
+        } else {
+          _this3.isDesliked = true;
+
+          if (_this3.isLiked) {
+            _this3.likesCount--;
+          }
+
+          _this3.dislikesCount++;
+        }
+
+        _this3.isLiked = false;
+      });
+    },
+    toggleLike: function toggleLike() {
+      var _this4 = this;
+
+      if (!this.signedIn) {
+        return false;
+      }
+
+      axios.post("/thread/" + this.thread.id + "/likes").then(function (res) {
+        if (_this4.isLiked) {
+          _this4.isLiked = false;
+          _this4.likesCount--;
+        } else {
+          _this4.isLiked = true;
+
+          if (_this4.isDesliked) {
+            _this4.dislikesCount--;
+          }
+
+          _this4.likesCount++;
+        }
+
+        _this4.isDesliked = false;
+      });
+    }
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=template&id=6d718286&":
-/*!*************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=template&id=6d718286& ***!
-  \*************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0& ***!
+  \********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -67,18 +152,52 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "GmapMap",
+    "div",
     {
-      staticStyle: { width: "100%", height: "35vh" },
-      attrs: { center: _vm.center, zoom: _vm.zoom, "map-type-id": "terrain" }
+      staticClass: "btn-group btn-group-xs pull-left like-buttons",
+      attrs: { role: "group" }
     },
-    _vm._l(_vm.markers, function(m, index) {
-      return _c("GmapMarker", {
-        key: index,
-        attrs: { position: m.position, clickable: true, draggable: false }
-      })
-    }),
-    1
+    [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-xs btn-default ",
+          on: {
+            click: function($event) {
+              return _vm.toggleLike()
+            }
+          }
+        },
+        [
+          _c(
+            "span",
+            {
+              staticClass: "glyphicon glyphicon-thumbs-up like-icon",
+              class: _vm.likeClass
+            },
+            [_vm._v(" " + _vm._s(_vm.likesCount))]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-xs btn-default ml-a",
+          on: { click: _vm.toggleDislike }
+        },
+        [
+          _c(
+            "span",
+            {
+              staticClass: "glyphicon glyphicon-thumbs-down like-icon",
+              class: _vm.dislikeClass
+            },
+            [_vm._v(" " + _vm._s(_vm.dislikesCount))]
+          )
+        ]
+      )
+    ]
   )
 }
 var staticRenderFns = []
@@ -88,18 +207,18 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/gmap/ProfileMap.vue":
-/*!************************************************************!*\
-  !*** ./resources/assets/js/components/gmap/ProfileMap.vue ***!
-  \************************************************************/
+/***/ "./resources/assets/js/components/LikeButton.vue":
+/*!*******************************************************!*\
+  !*** ./resources/assets/js/components/LikeButton.vue ***!
+  \*******************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ProfileMap_vue_vue_type_template_id_6d718286___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProfileMap.vue?vue&type=template&id=6d718286& */ "./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=template&id=6d718286&");
-/* harmony import */ var _ProfileMap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProfileMap.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LikeButton.vue?vue&type=template&id=7a27c6a0& */ "./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&");
+/* harmony import */ var _LikeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LikeButton.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/LikeButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -108,9 +227,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ProfileMap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ProfileMap_vue_vue_type_template_id_6d718286___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ProfileMap_vue_vue_type_template_id_6d718286___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _LikeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -120,38 +239,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/assets/js/components/gmap/ProfileMap.vue"
+component.options.__file = "resources/assets/js/components/LikeButton.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************!*\
-  !*** ./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************/
+/***/ "./resources/assets/js/components/LikeButton.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/assets/js/components/LikeButton.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileMap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ProfileMap.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileMap_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./LikeButton.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=template&id=6d718286&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=template&id=6d718286& ***!
-  \*******************************************************************************************/
+/***/ "./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&":
+/*!**************************************************************************************!*\
+  !*** ./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0& ***!
+  \**************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileMap_vue_vue_type_template_id_6d718286___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ProfileMap.vue?vue&type=template&id=6d718286& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/gmap/ProfileMap.vue?vue&type=template&id=6d718286&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileMap_vue_vue_type_template_id_6d718286___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./LikeButton.vue?vue&type=template&id=7a27c6a0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/LikeButton.vue?vue&type=template&id=7a27c6a0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileMap_vue_vue_type_template_id_6d718286___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LikeButton_vue_vue_type_template_id_7a27c6a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

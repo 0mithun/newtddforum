@@ -106,6 +106,7 @@ class EmojiController extends Controller
             ;
         
             if($emoji){
+                $emoji = Emoji::where('id', $emoji)->first();
                 return response()->json($emoji);
             }else{
                 return response()->json([]);

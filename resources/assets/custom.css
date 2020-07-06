@@ -389,6 +389,10 @@ li.list-group-item{
 
 .thread-show-tool-items{
     margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 }
 .thread_thumb{
     float: left;
@@ -423,4 +427,72 @@ li.list-group-item{
 }
 .tag-name:not(:last-child){
     border-right: 1px solid grey;
+}
+
+.thread-show-tools{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.tools-single-item{
+    margin: 0px 5px;
+}
+
+.thread-items-show-tools-btn{
+    background-color: transparent;
+    border-radius: 50%;
+    border: 2px solid #92959e;
+    color:#92959e;
+    font-weight: 900;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    font-size: 25px;
+    line-height: 0;
+}
+.btn.thread-items-show-tools-btn:focus{
+    outline: none;
+}
+
+
+.active-icon{
+    color: black;
+    border: 2px solid black;
+}
+.active-icon:hover{
+    color: #92959e;
+    border: 2px solid #92959e;
+}
+
+.inactive-icon{
+    color: #92959e;
+    border: 2px solid #92959e;
+}
+
+.inactive-icon:hover{
+    color: black;
+    border: 2px solid black;
+}
+
+.active-favorite{
+    color: red;
+    border: 2px solid red;
+}
+.active-favorite:hover{
+    color: #92959e;
+    border: 2px solid #92959e;
+}
+
+.inactive-favorite{
+    color: #92959e;
+    border: 2px solid #92959e;
+}
+.inactive-favorite:hover{
+    color: red;
+    border: 2px solid red;
+}
+
+.focus-comment-btn:hover{
+    color: black;
+    border: 2px solid black;
 }

@@ -77,6 +77,7 @@ export default {
             })
         },
         setRelatedThread(place){
+            console.log(place)
             this.radius = 500;
             let center = {
                 lat:place.geometry.location.lat(),
