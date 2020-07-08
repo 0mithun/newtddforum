@@ -15,60 +15,73 @@
                    <span v-text="ago" class="reply_created_at"></span>
                 </div>
             </div>
-            <div class="col-md-8">
-
+            <div class="col-md-8 reply-edit-delete-btn">
+                <div class="form-g">                        
+                    <button class="btn btn-xs btn-danger" @click="destroy">Delete</button>
+                    <button class="btn btn-xs btn-primary" @click="editing=true">Edit</button>
+                </div>
             </div>
         </div>
 
         <div class="row reply-body">
             <div class="col-md-12">
                 <div v-html="body" class="reply-body"></div>
-                <div class="nested-reply-btn">
-                    Reply
-                    <div class="add-new-reply">
+                <div class="nested-reply-btn" >
+                    <button class="btn btn-link add-nested-reply-btn" @click="addNested = true; showLoadMore= false">Reply</button>
+                    <div class="edit-reply" v-if="editing">
                         <div >
-                            <form action="" @submit.prevent="addReply">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" aria-label="..." name="body" id="body"  v-model="body" placeholder="Add a comment">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-default" type="submit">Post</button>
-                                    </div>
+                            <form action="" @submit.prevent="update">
+                                <div class="form-group">
+                                    <input @keyup="addReplySuggest" type="text" class="form-control" aria-label="..."  :id="'bodyedit-'+reply.id"  v-model="editBody" placeholder="Add a comment">
+                                </div>
+                                <div class="form-group" >
+                                    <button class="btn btn-primary btn-xs" type="submit">Save</button>
+                                    <button class="btn btn-danger btn-xs" @click="editing=false">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="edit-reply" v-if="addNested">
+                        <div >
+                            <form action="" @submit.prevent="addNestedReply">
+                                <div class="form-group">
+                                    <input @keyup="addNestedReplySuggest" type="text" class="form-control" aria-label="..." :id="'addNested-'+reply.id"   v-model="nestedbody" placeholder="Add a comment">
+                                </div>
+                                <div class="form-group" >
+                                    <button class="btn btn-primary btn-xs" type="submit">Add</button>
+                                    <button class="btn btn-danger btn-xs" @click="addNested=false; showLoadMore = true">Cancel</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="more-reply">
-                    View more replies
-                    <NestedReplies :reply="reply" v-for="(reply, index) in replies"  :key="index"></NestedReplies>
+                <div class="more-reply" v-if="showLoadMore && reply.reply_count>0">
+                    <button class="btn btn-xs btn-link show-nested-replies-btn" @click="toggleNestedReplies">
+                        <div v-if="showNested">
+                            <span class="glyphicon glyphicon-triangle-top"></span> Hide Reply
+                        </div>
+                         <div v-else>
+                            <span class="glyphicon glyphicon-triangle-bottom"></span> View Reply
+                        </div>
+                    </button>
+                   
+                    <NestedReplies :reply="reply" v-for="(reply, index) in replies"  :key="index" v-if="showNested"></NestedReplies>
                 </div>
             </div>
 
         </div>
-
-        <!-- <div class="panel-footer level reply-footer reply-footer" >
-            <div class="col-md-12" v-if="authorize('owns', reply) || authorize('owns', reply.thread)">
-                <div v-if="!authorize('isBan')">
-                    <button class="btn btn-xs mr-1" @click="editing = true" v-if="! editing">Edit</button>
-                    <button class="btn btn-xs btn-danger red-bg mr-1" @click="destroy">Delete</button>
-                </div>
-            </div>
-            <div  class="col-md-1" v-if="signedIn && !authorize('isBan')">              
-                <button class="btn btn-xs btn-danger ml-a red-bg pull-right" v-if="!authorize('owns', reply)">
-                    <span class="glyphicon glyphicon-flag"></span>
-                </button>
-            </div>
-        </div> -->
     </div>
 </template>
 
 <script>
-    import Favorite from './Favorite.vue';
     import moment from 'moment';
     import NestedReplies from './NestedReplies.vue'
 
     import 'jquery.caret';
     import 'at.js';
+
+    
 
     export default {
         props: ['reply'],
@@ -82,26 +95,14 @@
                 editing: false,
                 id: this.reply.id,
                 body: this.reply.body,
-                addNested: false,
+                editBody: this.reply.body,
                 replies: [],
                 showNested: false,
-
+                addNested: false,
+                nestedbody: '',
+                showLoadMore: true,
             };
         },
-        mounted(){
-            $('#bodyedit').atwho({
-                at: "@",
-                delay: 750,
-                callbacks: {
-                    remoteFilter: function(query, callback) {
-                        $.getJSON("/api/users", {name: query}, function(usernames) {
-                            callback(usernames)
-                        });
-                    }
-                }
-            });
-        },
-
 
         computed: {
             ago() {
@@ -112,32 +113,43 @@
             },
         },
 
-        created () {
-            this.loadNestedReply();
-            eventBus.$on('cancelAddReply',()=>{
-                this.addNested = false;
-            });
-
-            eventBus.$on('addNestedReply',data=>{
-                this.loadNestedReply();
-                this.addNested = false;
-                flash('Your reply has been posted.');
-            });
-
-
-            eventBus.$on('deleteNested',(id)=>{
-                let newData = this.replies.filter(item=>{
-                    return item.id !=id;
-                });
-                this.replies = newData;
-                flash('Your reply has been deleted.');
-            });
-        },
-
-
         methods: {
-            bodyChange(){
-                $('#bodyedit').atwho({
+            toggleNestedReplies(){
+                if(this.showNested){
+                     this.showNested = false;
+                }else{
+                    this.loadNestedReply();
+                    this.showNested = true;
+                }
+            },
+
+            addReplySuggest(){
+                $('#bodyedit-'+this.reply.id).atwho({
+                    at: "@",
+                    delay: 750,
+                    callbacks: {
+                        remoteFilter: function(query, callback) {
+                            $.getJSON("/api/users", {name: query}, function(usernames) {
+                                callback(usernames)
+                            });
+                        }
+                    }
+                });
+
+                $('#addNested-'+this.reply.id).atwho({
+                    at: "@",
+                    delay: 750,
+                    callbacks: {
+                        remoteFilter: function(query, callback) {
+                            $.getJSON("/api/users", {name: query}, function(usernames) {
+                                callback(usernames)
+                            });
+                        }
+                    }
+                });
+            },
+            addNestedReplySuggest(){
+                $('#addNested-'+this.reply.id).atwho({
                     at: "@",
                     delay: 750,
                     callbacks: {
@@ -152,7 +164,6 @@
             loadNestedReply(){
               let url = `/replies/${this.reply.id}/load-reply`;
                 axios.get(url).then(({data})=>{
-                    // console.log(data)
                     this.replies = data
                 });
             },
@@ -162,15 +173,21 @@
             update() {
                 axios.patch(
                     '/replies/' + this.id, {
-                        body: this.body
+                        body: this.editBody
                     })
                     .catch(error => {
                         flash(error.response.data, 'danger');
                     });
-
+                this.body = this.editBody
                 this.editing = false;
 
                 flash('Updated!');
+
+
+                this.renderComponent = false;
+                this. $nextTick (() => {
+                    this.renderComponent = true;
+                });
             },
 
             destroy() {
@@ -179,6 +196,20 @@
                     this.$emit('deleted', this.id);
                 }
 
+            },
+             addNestedReply() {
+                let url = `/replies/${this.reply.id}/new-reply`;
+                axios.post(url, { body: this.nestedbody })
+                    .catch(error => {
+                        flash(error.response.data, 'danger');
+                    })
+                    .then(({data}) => {
+                        this.nestedbody = '';
+                        this.replies.push(data)
+                        this.addNested = false
+                        this.showLoadMore = true
+                         flash('Your reply has been posted.');
+                    });
             }
         }
     }
@@ -206,9 +237,43 @@
         color: #92959e;
     }
     .nested-reply-btn{
-        margin-left: 20px;
+        margin-left: 10px;
     }
     .more-reply{
         margin-left: 20px;
+    }
+
+    .add-nested-reply-btn{
+        color: #92959e;
+    }
+    .add-nested-reply-btn:hover{
+        color: #92959e;
+        text-decoration: none;
+    }
+    .add-nested-reply-btn:focus{
+        outline: none;
+        text-decoration: none;
+    }
+    .reply-edit-delete-btn{
+        display: flex;
+        justify-content: flex-end;
+    }
+    .show-nested-replies-btn{
+        /* color: black; */
+         color: #92959e;
+    }
+
+    
+    .show-nested-replies-btn:focus{
+        outline: none;
+        text-decoration: none;
+    }
+    .show-nested-replies-btn:hover{
+        color: #92959e;
+        text-decoration: none;
+    }
+    .glyphicon-triangle-top,
+    .glyphicon-triangle-bottom{
+        margin-right: 5px;
     }
 </style>

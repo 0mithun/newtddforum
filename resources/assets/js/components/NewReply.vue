@@ -1,11 +1,6 @@
 <template>
     <div class="add-new-reply">
         <div v-if="signedIn" >
-            <!-- <div class="form-group">
-                <textarea name="body" id="body" cols="30" rows="3" class="form-control comment-body" v-model="body" placeholder="Add a comment"></textarea>
-            </div>
-            <button type="submit" class="btn btn-default" @click="addReply">Post</button> -->
-
             <form action="" @submit.prevent="addReply">
                 <div class="input-group">
                     <input type="text" class="form-control" aria-label="..." name="body" id="body"  v-model="body" placeholder="Add a comment">
