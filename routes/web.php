@@ -125,6 +125,7 @@ Route::get('/all-emojis','EmojiController@allEmojis');
 
 Route::get('/thread/{thread}/is-rated','RatingController@isRated')->middleware('auth');
 Route::post('/thread/{thread}/rating','RatingController@saveRating')->middleware('auth');
+Route::get('/thread/{thread}/total','RatingController@totalRating');
 //Emojis
 
 

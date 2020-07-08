@@ -86,97 +86,124 @@
 @section('content')
     <div class="container">
         <div class="row top-margin" >
-            <div class="panel">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="channel-name"></span>
-                        <span class="created_time">{{ $thread->created_at->diffForHumans() }}</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                        <h1 class="thread_title"> {{ $thread->title }}</h1>
-                        </div>
-                    </div>
-                    <div class="row thread-show-item-counts">
-                        <div class="col-md-3 thread_item_counts">
-                            <view-counts :thread="{{ $thread }}"></view-counts>
-                            <point-counts :like_count="{{ $thread->like_count }}" :dislike_count="{{ $thread->dislike_count }}"></point-counts>
-                            <comment-counts :comment_counts="{{ $thread->replies_count }}"></comment-counts>
-                        </div>
-                        <div class="col-md-5 ">
-                            <emoji-counts :thread="{{ $thread }}"></emoji-counts>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="thread_creator">
-                                @if($thread->anonymous ==1)
-                                    <a href="#" class="creator_name">
-                                        <img src="{{ asset('images/default.png') }}"
-                                            alt="anonymous"
-                                            width="25"
-                                            height="25"
-                                            class="avatar-photo">
-                                        <user-online :user="{{ json_encode($thread->creator) }}"></user-online>
-                                        anonymous
-                                    </a>
-                                @else 
-                                    <a href="{{ route('profile', $thread->creator->username)  }}" class="creator_name">
-                                        <img src="{{ asset($thread->creator->avatar_path) }}"
-                                            alt="{{ $thread->creator->name }}"
-                                            width="25"
-                                            height="25"
-                                            class="avatar-photo">
-                                        <user-online :user="{{ json_encode($thread->creator) }}"></user-online>
-                                        {{ $thread->creator->name }}
-                                    </a> 
-                                @endif
+            <div class="col-md-12">
+
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span class="channel-name"></span>
+                            <span class="created_time">{{ $thread->created_at->diffForHumans() }}</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="row thread-show-tool-items">
-                        <vote-emoji-list :thread="{{ $thread }}"></vote-emoji-list>
-                        <div class="col-md-3 social-share-btn">
-                            <fb-share :thread="{{ $thread }}"></fb-share>
-                            <twitter-share :thread="{{ $thread }}"></twitter-share>
+                        <div class="row">
+                            <div class="col-md-12">
+                            <h1 class="thread_title"> {{ $thread->title }}</h1>
+                            </div>
                         </div>
-                        <div class="col-md-9 thread-show-tools">
-                            <focus-comment></focus-comment>
-                            <vote-emojis :thread="{{ $thread }}"></vote-emojis>
-                            <favorite-thread :thread="{{ $thread }}"></favorite-thread>
-                            <up-votes :thread="{{ $thread }}"></up-votes>
-                            <down-votes :thread="{{ $thread }}"></down-votes>
-                            <report-thread :thread="{{ $thread }}"></report-thread>                             
-                            <show-source :thread="{{ $thread }}"></show-source>                            
+                        <div class="row thread-show-item-counts">
+                            <div class="col-md-4 thread_item_counts">
+                                <view-counts :thread="{{ $thread }}"></view-counts>
+                                <point-counts :like_count="{{ $thread->like_count }}" :dislike_count="{{ $thread->dislike_count }}"></point-counts>
+                                <comment-counts :comment_counts="{{ $thread->replies_count }}"></comment-counts>
+                            </div>
+                            <div class="col-md-3">
+                                <star-rating :thread="{{ $thread }}"></star-rating>
+                            </div>
+                            <div class="col-md-5 thread_emoji_count_map">
+                                {{-- <thread-emojis :thread="{{ $thread }}"></thread-emojis> --}}
+                                <emoji-counts :thread="{{ $thread }}"></emoji-counts>
+            
+                                <div  class="thread-map-icon">
+                                    @if($thread->location != NULL)
+                                        <img src="{{ asset('images/png/map-icon-red.png') }}" alt="">
+                                    @else
+                                        <img src="{{ asset('images/png/map-icon-black.png') }}" alt="">
+                                    @endif
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="story">
-                                <figure class="thread_thumb">
-                                    <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image">
-                                </figure>
-                                <div class="story-text">
-                                    {!! $thread->body !!}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="thread_creator">
+                                    @if($thread->anonymous ==1)
+                                        <a href="#" class="creator_name">
+                                            <img src="{{ asset('images/default.png') }}"
+                                                alt="anonymous"
+                                                width="25"
+                                                height="25"
+                                                class="avatar-photo">
+                                            <user-online :user="{{ json_encode($thread->creator) }}"></user-online>
+                                            anonymous
+                                        </a>
+                                    @else 
+                                        <a href="{{ route('profile', $thread->creator->username)  }}" class="creator_name">
+                                            <img src="{{ asset($thread->creator->avatar_path) }}"
+                                                alt="{{ $thread->creator->name }}"
+                                                width="25"
+                                                height="25"
+                                                class="avatar-photo">
+                                            <user-online :user="{{ json_encode($thread->creator) }}"></user-online>
+                                            {{ $thread->creator->name }}
+                                        </a> 
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 thread-show-tags">
-                            Tags:
-                            @foreach ($thread->tags as $tag)
-                                <a  href="{{ strtolower(route('tags.threads.list', $tag->name))  }}" class="tag-name">{{ $tag->name }}</a>
-                            @endforeach
+                        <div class="row thread-show-tool-items">
+                            <vote-emoji-list :thread="{{ $thread }}"></vote-emoji-list>
+                            <div class="col-md-3 social-share-btn">
+                                <fb-share :thread="{{ $thread }}"></fb-share>
+                                <twitter-share :thread="{{ $thread }}"></twitter-share>
+                            </div>
+                            <div class="col-md-9 thread-show-tools">
+                                <focus-comment></focus-comment>
+                                <vote-emojis :thread="{{ $thread }}"></vote-emojis>
+                                <favorite-thread :thread="{{ $thread }}"></favorite-thread>
+                                <up-votes :thread="{{ $thread }}"></up-votes>
+                                <down-votes :thread="{{ $thread }}"></down-votes>
+                                <report-thread :thread="{{ $thread }}"></report-thread>                             
+                                <show-source :thread="{{ $thread }}"></show-source>                            
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="story">
+                                    <figure class="thread_thumb">
+                                        <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image">
+                                    </figure>
+                                    <div class="story-text">
+                                        {!! $thread->body !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 thread-show-tags">
+                                Tags:
+                                @foreach ($thread->tags as $tag)
+                                    <a  href="{{ strtolower(route('tags.threads.list', $tag->name))  }}" class="tag-name">{{ $tag->name }}</a>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        @if($thread->location != NULL)
+            <div class="row">
+                <div class="col-md-12">
+                    <simple-map :thread="{{ $thread }}"></simple-map>                    
+                </div>
+            </div>
+        @endif
+
         <div class="row">
-            <thread-replies ></thread-replies>
+            <div class="col-md-12">
+                <thread-replies ></thread-replies>
+            </div>
         </div>
     </div>
 @endsection
@@ -205,13 +232,8 @@
                     }
                 }
             });
-            // $('#tags').select2({
-            //     placeholder: 'Select tags',
-            //     cache:true
-            // });
         })
     </script>
-    {{-- <script src="//cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script> --}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
     <script>
@@ -228,11 +250,11 @@
     </script>
     
     @endsection
-@section('head')
-    <style>
-        ul.dropdown-menu.age-restrictd-dropdown {
-    left: 45px;
-    top: 50%;
-}
+        @section('head')
+            <style>
+                ul.dropdown-menu.age-restrictd-dropdown {
+            left: 45px;
+            top: 50%;
+        }
     </style>
 @endsection

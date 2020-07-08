@@ -310,7 +310,7 @@ li.list-group-item{
 
 .thread_emoji_count_map{
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     float: none;
 }
