@@ -37,7 +37,7 @@
        </div>
        <div class="nav-col tools-menu">
             <form class="navbar-form search-form"  method="GET" action="/threads/search">
-                    <input type="text" class="form-control search-box" placeholder="Search">
+                    <input type="text" class="form-control search-box" name="query" placeholder="Search">
 
             </form>
             <ul class="nav navbar-nav tools-right">
