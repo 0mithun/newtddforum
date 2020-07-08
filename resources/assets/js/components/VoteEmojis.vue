@@ -25,7 +25,7 @@ export default {
         }
     },
     activeClass() {
-      return [this.userEmoji !=null ? "active-emoji" : "inactive-emoji"];
+      return [ this.userEmoji !='' ? "active-emoji" : "inactive-emoji"];
     },
   },
 

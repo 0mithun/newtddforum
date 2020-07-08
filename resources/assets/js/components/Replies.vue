@@ -1,7 +1,7 @@
 <template>
     <div>
-                <new-reply @created="add" v-if="!authorize('isBan')"></new-reply>
         <div class="panel panel-default">
+                <new-reply @created="add" v-if="!authorize('isBan')"></new-reply>
             <div class="panel-">
                 <div v-for="(reply, index) in items" :key="reply.id">
                     <reply :reply="reply" @deleted="remove(index)"></reply>

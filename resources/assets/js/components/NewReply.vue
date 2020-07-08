@@ -70,6 +70,6 @@
         resize: vertical !important;
     }
     .add-new-reply{
-        margin-bottom: 30px;
+        padding: 30px 15px;
     }
 </style>

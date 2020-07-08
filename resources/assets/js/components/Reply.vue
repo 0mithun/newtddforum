@@ -15,10 +15,10 @@
                    <span v-text="ago" class="reply_created_at"></span>
                 </div>
             </div>
-            <div class="col-md-8 reply-edit-delete-btn">
+            <div class="col-md-8 reply-edit-delete-btn" v-if="signedIn">
                 <div class="form-g">                        
-                    <button class="btn btn-xs btn-danger" @click="destroy">Delete</button>
-                    <button class="btn btn-xs btn-primary" @click="editing=true">Edit</button>
+                    <button class="btn btn-xs btn-danger" @click="destroy" v-if="(authorize('owns', reply) || authorize('isAdmin')) && !authorize('isBan') ">Delete</button>
+                    <button class="btn btn-xs btn-primary" @click="editing=true" v-if="(authorize('owns', reply) && !authorize('isBan'))">Edit</button>
                 </div>
             </div>
         </div>
@@ -27,7 +27,10 @@
             <div class="col-md-12">
                 <div v-html="body" class="reply-body"></div>
                 <div class="nested-reply-btn" >
-                    <button class="btn btn-link add-nested-reply-btn" @click="addNested = true; showLoadMore= false">Reply</button>
+
+                    <button class="btn btn-link add-nested-reply-btn" @click="addNested = true; showLoadMore= false" v-if="signedIn">Reply</button>
+                    <a :href="redirectToLogin" class="btn btn-link add-nested-reply-btn" v-else>Reply</a>
+
                     <div class="edit-reply" v-if="editing">
                         <div >
                             <form action="" @submit.prevent="update">
@@ -56,13 +59,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="more-reply" v-if="showLoadMore && reply.reply_count>0">
+                <div class="more-reply" v-if="showLoadMore && replies_count>0">
                     <button class="btn btn-xs btn-link show-nested-replies-btn" @click="toggleNestedReplies">
                         <div v-if="showNested">
                             <span class="glyphicon glyphicon-triangle-top"></span> Hide Reply
                         </div>
                          <div v-else>
-                            <span class="glyphicon glyphicon-triangle-bottom"></span> View Reply
+                            <span class="glyphicon glyphicon-triangle-bottom"></span> {{ `View ${replies_count} Reply` }}
                         </div>
                     </button>
                    
@@ -76,18 +79,15 @@
 
 <script>
     import moment from 'moment';
-    import NestedReplies from './NestedReplies.vue'
 
     import 'jquery.caret';
-    import 'at.js';
-
-    
+    import 'at.js';  
 
     export default {
         props: ['reply'],
 
         components: {
-            NestedReplies
+            NestedReplies: () => import('./NestedReplies.vue')
         },
 
         data() {
@@ -97,11 +97,21 @@
                 body: this.reply.body,
                 editBody: this.reply.body,
                 replies: [],
+                replies_count: this.reply.reply_count,
                 showNested: false,
                 addNested: false,
                 nestedbody: '',
                 showLoadMore: true,
             };
+        },
+        created(){
+            eventBus.$on('nested_delete-'+this.reply.id, id=>{
+               let newReplies = this.replies.filter(item=>{
+                    return item.id != id;
+                })
+                this.replies = newReplies;
+                this.replies_count = this.replies_count - 1
+            });
         },
 
         computed: {
@@ -111,6 +121,9 @@
             signedIn(){
                 return  (window.App.user)? true : false;
             },
+            redirectToLogin(){
+                return '/redirect-to?page='+location.pathname;
+            }
         },
 
         methods: {
@@ -167,9 +180,6 @@
                     this.replies = data
                 });
             },
-            addNestedReply(){
-                this.addNested = true;
-            },
             update() {
                 axios.patch(
                     '/replies/' + this.id, {
@@ -182,18 +192,17 @@
                 this.editing = false;
 
                 flash('Updated!');
-
-
-                this.renderComponent = false;
-                this. $nextTick (() => {
-                    this.renderComponent = true;
-                });
             },
 
             destroy() {
+                if(this.replies_count>0){
+                    flash('Your reply has many replies.','danger');
+                    return;
+                }
                 if(confirm('Are you sure delete this reply')){
                     axios.delete('/replies/' + this.id);
                     this.$emit('deleted', this.id);
+                    flash('Your reply has been deleted.');
                 }
 
             },
@@ -206,6 +215,8 @@
                     .then(({data}) => {
                         this.nestedbody = '';
                         this.replies.push(data)
+                        this.replies_count  =  this.replies_count + 1;
+                        
                         this.addNested = false
                         this.showLoadMore = true
                          flash('Your reply has been posted.');
@@ -275,5 +286,6 @@
     .glyphicon-triangle-top,
     .glyphicon-triangle-bottom{
         margin-right: 5px;
+        font-size: 10px;
     }
 </style>

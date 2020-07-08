@@ -13,6 +13,8 @@
 */
 Auth::routes();
 
+Route::get('redirect-to', 'Auth\LoginController@redirectToPage');
+
 /*
 *
 Sociali Login

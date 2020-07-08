@@ -59665,13 +59665,14 @@ var user = window.App.user;
 module.exports = {
   owns: function owns(model) {
     var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'user_id';
-    return model[prop] === user.id || user.id === 1;
+    return model[prop] === user.id;
   },
   isBan: function isBan() {
     return user.isBanned;
   },
   isAdmin: function isAdmin() {
-    return ['JohnDoe', 'JaneDoe'].includes(user.name);
+    return user.id === 1;
+    ;
   }
 };
 

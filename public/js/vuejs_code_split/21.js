@@ -35,7 +35,7 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     activeClass: function activeClass() {
-      return [this.userEmoji != null ? "active-emoji" : "inactive-emoji"];
+      return [this.userEmoji != '' ? "active-emoji" : "inactive-emoji"];
     }
   },
   created: function created() {
