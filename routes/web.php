@@ -49,14 +49,9 @@ Route::get('/home', 'ThreadsController@index');
 Route::get('threads', 'ThreadsController@index')->name('threads');
 Route::get('threads/create', 'ThreadsController@create');
 
-Route::get('threads/search', 'SearchController@show');
 
-Route::get('search-vue', 'SearchController@search');
+Route::get('threads/search', 'SearchController@search');
 
-
-
-//currently unused
-// Route::get('search-by-top-rated', 'SearchController@searchByTopRated');
 
 
 //Replace threads with anecdotes
@@ -161,12 +156,13 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/anecdotes/{channel}/{thread}/replies', 'RepliesController@store');
     Route::patch('/replies/{reply}', 'RepliesController@update');
     Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.destroy');
+    Route::post('/replies/{reply}/new-reply','RepliesController@newReply');
     
     Route::post('/replies/{reply}/best', 'BestRepliesController@store')->name('best-replies.store');
     Route::post('/reply/check-reply-isbest','BestRepliesController@checkIsBest');
 
 
-    Route::post('/replies/{reply}/new-reply','RepliesController@newReply');
+   
 
     Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
     Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy');
@@ -307,7 +303,6 @@ Route::post('/channel/search', 'ChannelController@search')->name('chanel.search'
 
 Route::post('/anecdotes/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->middleware('auth');
 Route::delete('/anecdotes/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->middleware('auth');
-
 Route::post('/thread/check-thread-subscribe', 'ThreadSubscriptionsController@checkSubscribe')->middleware('auth');
 
 

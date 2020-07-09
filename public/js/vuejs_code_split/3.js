@@ -279,6 +279,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -298,86 +314,22 @@ __webpack_require__.r(__webpack_exports__);
       search: false,
       category: [],
       // famous:[0,1],
-      tags: [],
+      filter_tags: [],
       emojis: ''
     };
   },
   watch: {
     filter_emojis: function filter_emojis(filter) {
-      if (filter.length > 0) {
-        this.filterByEmojis(filter, this.threads.data);
-      } else {
-        this.allThreads = this.threads.data;
-      }
-
-      if (this.filter_rated.length > 0) {
-        this.filterByRated(this.filter_rated, this.allThreads);
-      }
-
-      if (this.famous.length > 0) {
-        this.filterByCategory(this.famous, this.allThreads);
-      }
-
-      if (this.tags.length > 0) {
-        this.filterByTags(this.tags, this.allThreads);
-      }
+      this.filterThreads();
     },
     filter_rated: function filter_rated(filter) {
-      if (filter.length > 0) {
-        this.filterByRated(filter, this.threads.data);
-      } else {
-        this.allThreads = this.threads.data;
-      }
-
-      if (this.filter_emojis.length > 0) {
-        this.filterByEmojis(this.filter_emojis, this.allThreads);
-      }
-
-      if (this.famous.length > 0) {
-        this.filterByCategory(this.famous, this.allThreads);
-      }
-
-      if (this.tags.length > 0) {
-        this.filterByTags(this.tags, this.allThreads);
-      }
+      this.filterThreads();
     },
     category: function category(filter) {
-      if (filter.length > 0) {
-        this.filterByCategory(filter, this.threads.data);
-      } else {
-        this.allThreads = this.threads.data;
-      }
-
-      if (this.filter_rated.length > 0) {
-        this.filterByRated(this.filter_rated, this.allThreads);
-      }
-
-      if (this.filter_emojis.length > 0) {
-        this.filterByRated(this.filter_emojis, this.allThreads);
-      }
-
-      if (this.tags.length > 0) {
-        this.filterByTags(this.tags, this.allThreads);
-      }
+      this.filterThreads();
     },
-    tags: function tags(filter) {
-      if (filter.length > 0) {
-        this.filterByTags(filter, this.threads.data);
-      } else {
-        this.allThreads = this.threads.data;
-      }
-
-      if (this.filter_rated.length > 0) {
-        this.filterByRated(this.filter_rated, this.allThreads);
-      }
-
-      if (this.filter_emojis.length > 0) {
-        this.filterByRated(this.filter_emojis, this.allThreads);
-      }
-
-      if (this.famous.length > 0) {
-        this.filterByCategory(this.famous, this.allThreads);
-      }
+    filter_tags: function filter_tags(filter) {
+      this.filterThreads();
     }
   },
   created: function created() {
@@ -386,6 +338,25 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {},
   methods: {
+    filterThreads: function filterThreads() {
+      var data = this.threads.data; // if(this.filter_emojis.length>0){
+      //     data = this.filterByEmojis(this.filter_emojis, data);
+      // }
+
+      if (this.filter_rated.length > 0) {
+        data = this.filterByRated(this.filter_rated, data);
+      }
+
+      if (this.category.length > 0) {
+        data = this.filterByCategory(this.category, data);
+      }
+
+      if (this.filter_tags.length > 0) {
+        data = this.filterByTags(this.filter_tags, data);
+      }
+
+      this.allThreads = data;
+    },
     filterByEmojis: function filterByEmojis(filter, data) {
       var newThreads = _.filter(data, function (thread) {
         return thread.emojis.length > 0;
@@ -399,7 +370,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
 
-      this.allThreads = filterThreads;
+      return filterThreads;
     },
     filterByRated: function filterByRated(filter, data) {
       var filterThreads = _.filter(data, function (thread) {
@@ -408,7 +379,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
 
-      this.allThreads = filterThreads;
+      return filterThreads;
     },
     filterByCategory: function filterByCategory(filter, data) {
       var category = [];
@@ -430,7 +401,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
 
-      this.allThreads = filterThreads;
+      return filterThreads;
     },
     filterByTags: function filterByTags(filter, data) {
       var newThreads = _.filter(data, function (thread) {
@@ -445,7 +416,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
 
-      this.allThreads = filterThreads;
+      return filterThreads;
     },
     getAllEmojis: function getAllEmojis() {
       var _this = this;
@@ -487,7 +458,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.search = true;
-      axios.get('/search-vue?query=' + this.q + '&sort_by=' + this.sort_by).then(function (res) {
+      axios.get('/threads/search?query=' + this.q + '&sort_by=' + this.sort_by).then(function (res) {
         _this2.allThreads = res.data.data;
         _this2.threads.data = res.data.data;
         var pageUrl = {
@@ -501,7 +472,7 @@ __webpack_require__.r(__webpack_exports__);
     fetch: function fetch(page) {
       var _this3 = this;
 
-      axios.get('/search-vue?query=' + this.q + '&page=' + page).then(function (res) {
+      axios.get('threads/search?query=' + this.q + '&page=' + page).then(function (res) {
         _this3.allThreads = res.data.data;
         var pageUrl = {
           prev_page_url: res.data.prev_page_url,
@@ -1114,7 +1085,7 @@ var render = function() {
                           }
                         }),
                         _vm._v(
-                          "   G-rated  \n                                            "
+                          "   G-rated  \n                                    "
                         )
                       ])
                     ])
@@ -1163,7 +1134,7 @@ var render = function() {
                           }
                         }),
                         _vm._v(
-                          "   PG-rated \n                                            "
+                          "   PG-rated \n                                    "
                         )
                       ])
                     ])
@@ -1212,7 +1183,7 @@ var render = function() {
                           }
                         }),
                         _vm._v(
-                          "    R-rated \n                                            "
+                          "    R-rated \n                                    "
                         )
                       ])
                     ])
@@ -1270,7 +1241,7 @@ var render = function() {
                           }
                         }),
                         _vm._v(
-                          "   Celebrities \n                                            "
+                          "   Celebrities \n                                    "
                         )
                       ])
                     ])
@@ -1322,7 +1293,7 @@ var render = function() {
                           }
                         }),
                         _vm._v(
-                          "   Other notables \n                                            "
+                          "   Other notables \n                                    "
                         )
                       ])
                     ])
@@ -1336,42 +1307,45 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.filter_rated,
-                              expression: "filter_rated"
+                              value: _vm.category,
+                              expression: "category"
                             }
                           ],
-                          attrs: { type: "checkbox", name: "rated", id: "" },
+                          attrs: {
+                            type: "checkbox",
+                            name: "rated",
+                            id: "",
+                            value: "O"
+                          },
                           domProps: {
-                            value: 18,
-                            checked: Array.isArray(_vm.filter_rated)
-                              ? _vm._i(_vm.filter_rated, 18) > -1
-                              : _vm.filter_rated
+                            checked: Array.isArray(_vm.category)
+                              ? _vm._i(_vm.category, "O") > -1
+                              : _vm.category
                           },
                           on: {
                             change: function($event) {
-                              var $$a = _vm.filter_rated,
+                              var $$a = _vm.category,
                                 $$el = $event.target,
                                 $$c = $$el.checked ? true : false
                               if (Array.isArray($$a)) {
-                                var $$v = 18,
+                                var $$v = "O",
                                   $$i = _vm._i($$a, $$v)
                                 if ($$el.checked) {
-                                  $$i < 0 &&
-                                    (_vm.filter_rated = $$a.concat([$$v]))
+                                  $$i < 0 && (_vm.category = $$a.concat([$$v]))
                                 } else {
                                   $$i > -1 &&
-                                    (_vm.filter_rated = $$a
+                                    (_vm.category = $$a
                                       .slice(0, $$i)
                                       .concat($$a.slice($$i + 1)))
                                 }
                               } else {
-                                _vm.filter_rated = $$c
+                                _vm.category = $$c
                               }
                             }
                           }
                         }),
                         _vm._v(
-                          "    R-rated \n                                            "
+                          "    Other People\n                                    "
                         )
                       ])
                     ])
@@ -1443,9 +1417,9 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                                                    " +
+                                "\n                                            " +
                                   _vm._s(emoji.name) +
-                                  "\n                                                "
+                                  "\n                                        "
                               )
                             ]
                           )
@@ -1455,6 +1429,61 @@ var render = function() {
                   }),
                   0
                 )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "btn-group" }, [
+                _vm._m(3),
+                _vm._v(" "),
+                _c("ul", { staticClass: "dropdown-menu search-dropdown" }, [
+                  _c("li", [
+                    _c("div", { staticClass: "checkbox filter-item" }, [
+                      _c("label", [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.filter_rated,
+                              expression: "filter_rated"
+                            }
+                          ],
+                          attrs: { type: "checkbox", name: "rated", id: "" },
+                          domProps: {
+                            value: 0,
+                            checked: Array.isArray(_vm.filter_rated)
+                              ? _vm._i(_vm.filter_rated, 0) > -1
+                              : _vm.filter_rated
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.filter_rated,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = 0,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    (_vm.filter_rated = $$a.concat([$$v]))
+                                } else {
+                                  $$i > -1 &&
+                                    (_vm.filter_rated = $$a
+                                      .slice(0, $$i)
+                                      .concat($$a.slice($$i + 1)))
+                                }
+                              } else {
+                                _vm.filter_rated = $$c
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v(
+                          "   G-rated  \n                                    "
+                        )
+                      ])
+                    ])
+                  ])
+                ])
               ])
             ])
           ])
@@ -1462,17 +1491,11 @@ var render = function() {
       ]),
       _vm._v(" "),
       _vm.search == false && _vm.allThreads.length == 0
-        ? _c("div", { staticClass: "row" }, [
-            _c("h3", { staticClass: "text-center" }, [
-              _vm._v("No Results Found")
-            ])
-          ])
+        ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(4)])
         : _vm._e(),
       _vm._v(" "),
       _vm.search
-        ? _c("div", { staticClass: "row" }, [
-            _c("h3", { staticClass: "text-center" }, [_vm._v("Search.....")])
-          ])
+        ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(5)])
         : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.allThreads, function(thread, index) {
@@ -1506,9 +1529,9 @@ var render = function() {
               _vm._v(" "),
               _c("text-highlight", { attrs: { queries: _vm.q } }, [
                 _vm._v(
-                  "\n                            " +
+                  "\n                    " +
                     _vm._s(thread.excerpt) +
-                    "\n                       "
+                    "\n                "
                 )
               ]),
               _vm._v(" "),
@@ -1530,7 +1553,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("user-online", { attrs: { user: thread.creator } }),
                         _vm._v(
-                          "\n                                anonymous\n                            "
+                          "\n                        anonymous\n                    "
                         )
                       ],
                       1
@@ -1554,9 +1577,9 @@ var render = function() {
                         _vm._v(" "),
                         _c("user-online", { attrs: { user: thread.creator } }),
                         _vm._v(
-                          "\n                                " +
+                          "\n                        " +
                             _vm._s(thread.creator.name) +
-                            "\n                            "
+                            "\n                    "
                         )
                       ],
                       1
@@ -1653,7 +1676,7 @@ var staticRenderFns = [
         }
       },
       [
-        _vm._v("\n                                    Include "),
+        _vm._v("\n                            G/PG "),
         _c("span", { staticClass: "caret" })
       ]
     )
@@ -1674,7 +1697,7 @@ var staticRenderFns = [
         }
       },
       [
-        _vm._v("\n                                    Include anecdotes "),
+        _vm._v("\n                            Include anecdotes "),
         _c("span", { staticClass: "caret" })
       ]
     )
@@ -1695,10 +1718,47 @@ var staticRenderFns = [
         }
       },
       [
-        _vm._v("\n                                    Emojis "),
+        _vm._v("\n                            Emojis "),
         _c("span", { staticClass: "caret" })
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-link btn-xs dropdown-toggle",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _vm._v("\n                            All Tags "),
+        _c("span", { staticClass: "caret" })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-body" }, [
+      _c("h3", { staticClass: "text-center" }, [_vm._v("No Results Found")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-body" }, [
+      _c("h3", { staticClass: "text-center" }, [_vm._v("Search.....")])
+    ])
   }
 ]
 render._withStripped = true

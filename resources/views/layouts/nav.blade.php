@@ -24,12 +24,12 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false" >
-                        <img src="images/emojis/funny.png" class="navbar-icon" alt="">
+                        <img src="/images/emojis/funny.png" class="navbar-icon" alt="">
                     <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         @foreach($emojis as $emoji)
-                            <li class="navigation-emoji-icon"><a href="/threads?emoji={{ $emoji->name }}" class="navigation-emoji " style="background-image: url(images/emojis/{{ $emoji->name }}.png)">{{ $emoji->name }}</a></li>
+                            <li class="navigation-emoji-icon"><a href="/threads?emoji={{ $emoji->name }}" class="navigation-emoji " style="background-image: url(/images/emojis/{{ $emoji->name }}.png)">{{ $emoji->name }}</a></li>
                         @endforeach 
                     </ul>
                 </li>
