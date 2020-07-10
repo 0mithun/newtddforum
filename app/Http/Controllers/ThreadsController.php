@@ -99,7 +99,8 @@ class ThreadsController extends Controller
     public function create()
     {
         $tags = Tags::orderBy('name','ASC')->get();
-        return view('threads.create',compact('tags'));
+        $channel = Channel::select(['id','name'])->orderBy('name', 'ASC')->get();
+        return view('threads.create',compact('tags','channel'));
     }
 
     /**

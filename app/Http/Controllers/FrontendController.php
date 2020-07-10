@@ -55,33 +55,7 @@ class FrontendController extends Controller
         return Tags::all();
     }
 
-
-    public function tagLoad(Request $request){
-
-        $term =  \request('q');
-
-        if(empty($term)){
-            return response()->json([]);
-        }
-        $tags = Tags::search($term)->limit(5)->get();
-
-        $formatted_tags = [];
-
-        foreach ($tags as $tag) {
-            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
-        }
-
-        return \Response::json($formatted_tags);
-
-    }
-
-    public function allTags(){
-        $tags = Tags::all()->map(function($value){
-            return ['id'=>$value->id, 'name'=>strtolower($value->name)];
-
-        });
-        return response()->json($tags);
-    }
+    
 
     public function showTags(){
         $tags = Tags::withCount('threads')->orderBy('threads_count','desc')->take(100)->get();

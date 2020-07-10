@@ -42,12 +42,12 @@
             </form>
             <ul class="nav navbar-nav tools-right">
                 <li>
-                    <a href="/threads?rated=1" class="navbar-menu-icon">
+                    <a href="{{ route('map.show') }}" class="navbar-menu-icon">
                         <img class="navbar-icon marker" src="{{ asset('images/map_marker.png') }}" alt="">
                     </a>
                 </li>    
                 <li>
-                    <a href="/threads?rated=1" class="navbar-menu-icon">
+                    <a href="/threads/create" class="navbar-menu-icon">
                         <img class="navbar-icon pen" src="{{ asset('images/pen_with.png') }}" alt="">
                     </a>
                 </li> 

@@ -65,9 +65,6 @@ Route::get('/anecdotes/{channel}/{thread}/replies', 'RepliesController@index');
 
 
 
-
-
-Route::get('/tags','FrontendController@getTags');
 Route::get("/tags/{tag}/threads",'ThreadsController@loadByTag')->name('tags.threads.list');
 
 Route::get('/tags-show','FrontendController@showTags')->name('show.tags');
@@ -277,12 +274,6 @@ Route::middleware(['auth'])->group(function (){
 
 
 
-
-    Route::post('/tags/load','FrontendController@tagLoad')->name('tags.load');
-
-
-
-
     Route::get('api/users', 'Api\UsersController@index');
     Route::post('api/users/{user}/avatar', 'Api\UserAvatarController@store')->middleware('auth')->name('avatar');
     Route::get('/users/change-password','ProfilesController@editPassword')->name('user.edit.password');
@@ -295,9 +286,7 @@ Route::middleware(['auth'])->group(function (){
 });
 
 
-Route::post('/tags/all-tags','FrontendController@allTags');
-
-Route::post('/channel/search', 'ChannelController@search')->name('chanel.search');
+Route::post('/channel/search', 'ChannelController@search')->name('chanel.search');//Will delete
 
 
 

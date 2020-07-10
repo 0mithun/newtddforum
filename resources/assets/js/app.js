@@ -213,6 +213,8 @@ Vue.component('vote-emoji-list', ()=>import('./components/VoteEmojiList.vue'));
 Vue.component('report-thread', ()=>import('./components/ReportThread.vue'));
 Vue.component('show-source', ()=>import('./components/ShowSource.vue'));
 
+Vue.component('add-new-thread', ()=>import('./components/threads/NewThread.vue'));
+
 
 window.eventBus = new  Vue();
 const app = new Vue({
