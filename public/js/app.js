@@ -59461,10 +59461,10 @@ Vue.component('Flash', function () {
   return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! ./components/Flash */ "./resources/assets/js/components/Flash.vue"));
 });
 Vue.component('Paginator', function () {
-  return __webpack_require__.e(/*! import() */ 29).then(__webpack_require__.bind(null, /*! ./components/Paginator */ "./resources/assets/js/components/Paginator.vue"));
+  return __webpack_require__.e(/*! import() */ 30).then(__webpack_require__.bind(null, /*! ./components/Paginator */ "./resources/assets/js/components/Paginator.vue"));
 });
 Vue.component('UserNotifications', function () {
-  return __webpack_require__.e(/*! import() */ 32).then(__webpack_require__.bind(null, /*! ./components/UserNotifications */ "./resources/assets/js/components/UserNotifications.vue"));
+  return __webpack_require__.e(/*! import() */ 33).then(__webpack_require__.bind(null, /*! ./components/UserNotifications */ "./resources/assets/js/components/UserNotifications.vue"));
 });
 Vue.component('AvatarForm', function () {
   return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ./components/AvatarForm */ "./resources/assets/js/components/AvatarForm.vue"));
@@ -59476,12 +59476,12 @@ Vue.component('AvatarForm', function () {
 // Vue.component('unscribe-button', UnscribeButton);
 
 Vue.component('unscribe-button', function () {
-  return __webpack_require__.e(/*! import() */ 30).then(__webpack_require__.bind(null, /*! ./components/UnscribeButton */ "./resources/assets/js/components/UnscribeButton.vue"));
+  return __webpack_require__.e(/*! import() */ 31).then(__webpack_require__.bind(null, /*! ./components/UnscribeButton */ "./resources/assets/js/components/UnscribeButton.vue"));
 }); // import FavoriteThread from './components/FavoriteThread.vue';
 // Vue.component('favorite-thread',FavoriteThread);
 
 Vue.component('favorite-thread', function () {
-  return __webpack_require__.e(/*! import() */ 26).then(__webpack_require__.bind(null, /*! ./components/FavoriteThread.vue */ "./resources/assets/js/components/FavoriteThread.vue"));
+  return __webpack_require__.e(/*! import() */ 27).then(__webpack_require__.bind(null, /*! ./components/FavoriteThread.vue */ "./resources/assets/js/components/FavoriteThread.vue"));
 }); // import LikeButton from './components/LikeButton.vue';
 // Vue.component('like-button', LikeButton);
 // Vue.component('like-button', ()=>import('./components/LikeButton.vue'));
@@ -59489,12 +59489,12 @@ Vue.component('favorite-thread', function () {
 // Vue.component('new-tag', NewTag);
 
 Vue.component('new-tag', function () {
-  return __webpack_require__.e(/*! import() */ 28).then(__webpack_require__.bind(null, /*! ./components/NewTag.vue */ "./resources/assets/js/components/NewTag.vue"));
+  return __webpack_require__.e(/*! import() */ 29).then(__webpack_require__.bind(null, /*! ./components/NewTag.vue */ "./resources/assets/js/components/NewTag.vue"));
 }); // import vSelect from 'vue-select'
 // Vue.component('v-select', vSelect)
 
 Vue.component('v-select', function () {
-  return __webpack_require__.e(/*! import() */ 41).then(__webpack_require__.t.bind(null, /*! vue-select */ "./node_modules/vue-select/dist/vue-select.js", 7));
+  return __webpack_require__.e(/*! import() */ 42).then(__webpack_require__.t.bind(null, /*! vue-select */ "./node_modules/vue-select/dist/vue-select.js", 7));
 });
  // import * as uiv from 'uiv'
 // Vue.use(uiv)
@@ -59521,7 +59521,7 @@ Vue.component('thread-map', function () {
 // Vue.component('place-search',PlaceSearch);
 
 Vue.component('place-search', function () {
-  return __webpack_require__.e(/*! import() */ 33).then(__webpack_require__.bind(null, /*! ./components/gmap/PlaceSearch.vue */ "./resources/assets/js/components/gmap/PlaceSearch.vue"));
+  return __webpack_require__.e(/*! import() */ 34).then(__webpack_require__.bind(null, /*! ./components/gmap/PlaceSearch.vue */ "./resources/assets/js/components/gmap/PlaceSearch.vue"));
 }); // import MapResults from './components/gmap/MapResults.vue';
 // Vue.component('map-results',MapResults);
 
@@ -59531,18 +59531,18 @@ Vue.component('map-results', function () {
 // Vue.component('simple-map',SimpleMap);
 
 Vue.component('simple-map', function () {
-  return __webpack_require__.e(/*! import() */ 35).then(__webpack_require__.bind(null, /*! ./components/gmap/SimpleMap.vue */ "./resources/assets/js/components/gmap/SimpleMap.vue"));
+  return __webpack_require__.e(/*! import() */ 36).then(__webpack_require__.bind(null, /*! ./components/gmap/SimpleMap.vue */ "./resources/assets/js/components/gmap/SimpleMap.vue"));
 }); // import ProfileMap from './components/gmap/ProfileMap.vue';
 // Vue.component('profile-map',ProfileMap);
 
 Vue.component('profile-map', function () {
-  return __webpack_require__.e(/*! import() */ 34).then(__webpack_require__.bind(null, /*! ./components/gmap/ProfileMap.vue */ "./resources/assets/js/components/gmap/ProfileMap.vue"));
+  return __webpack_require__.e(/*! import() */ 35).then(__webpack_require__.bind(null, /*! ./components/gmap/ProfileMap.vue */ "./resources/assets/js/components/gmap/ProfileMap.vue"));
 });
  // import GmapCluster from 'vue2-google-maps/dist/components/cluster' // replace src with dist if you have Babel issues
 // Vue.component('GmapCluster', GmapCluster)
 
 Vue.component('GmapCluster', function () {
-  return __webpack_require__.e(/*! import() */ 40).then(__webpack_require__.t.bind(null, /*! vue2-google-maps/dist/components/cluster */ "./node_modules/vue2-google-maps/dist/components/cluster.js", 7));
+  return __webpack_require__.e(/*! import() */ 41).then(__webpack_require__.t.bind(null, /*! vue2-google-maps/dist/components/cluster */ "./node_modules/vue2-google-maps/dist/components/cluster.js", 7));
 }); // import UserOnline from './components/chat/UserOnline.vue'
 // Vue.component('user-online',UserOnline);
 
@@ -59585,16 +59585,16 @@ Vue.component('add-friend', function () {
 }); // import TextHighlight from 'vue-text-highlight'; 
 
 Vue.component('text-highlight', function () {
-  return __webpack_require__.e(/*! import() */ 43).then(__webpack_require__.bind(null, /*! vue-text-highlight */ "./node_modules/vue-text-highlight/dist/vue-text-highlight.esm.js"));
+  return __webpack_require__.e(/*! import() */ 44).then(__webpack_require__.bind(null, /*! vue-text-highlight */ "./node_modules/vue-text-highlight/dist/vue-text-highlight.esm.js"));
 });
 Vue.component('star-rating', function () {
   return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! ./components/StarRating.vue */ "./resources/assets/js/components/StarRating.vue"));
 });
 Vue.component('thread-show', function () {
-  return __webpack_require__.e(/*! import() */ 38).then(__webpack_require__.bind(null, /*! ./pages/TheeadShow.vue */ "./resources/assets/js/pages/TheeadShow.vue"));
+  return __webpack_require__.e(/*! import() */ 39).then(__webpack_require__.bind(null, /*! ./pages/TheeadShow.vue */ "./resources/assets/js/pages/TheeadShow.vue"));
 });
 Vue.component('new-thread', function () {
-  return __webpack_require__.e(/*! import() */ 37).then(__webpack_require__.bind(null, /*! ./pages/NewThread.vue */ "./resources/assets/js/pages/NewThread.vue"));
+  return __webpack_require__.e(/*! import() */ 38).then(__webpack_require__.bind(null, /*! ./pages/NewThread.vue */ "./resources/assets/js/pages/NewThread.vue"));
 });
 Vue.component('thread-emojis', function () {
   return __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ./components/ThreadEmojis.vue */ "./resources/assets/js/components/ThreadEmojis.vue"));
@@ -59612,16 +59612,16 @@ Vue.component('comment-counts', function () {
   return __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! ./components/CommentCounts.vue */ "./resources/assets/js/components/CommentCounts.vue"));
 });
 Vue.component('thread-replies', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(39), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ./components/Replies */ "./resources/assets/js/components/Replies.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(40), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ./components/Replies */ "./resources/assets/js/components/Replies.vue"));
 });
 Vue.component('up-votes', function () {
-  return __webpack_require__.e(/*! import() */ 31).then(__webpack_require__.bind(null, /*! ./components/UpVotes.vue */ "./resources/assets/js/components/UpVotes.vue"));
+  return __webpack_require__.e(/*! import() */ 32).then(__webpack_require__.bind(null, /*! ./components/UpVotes.vue */ "./resources/assets/js/components/UpVotes.vue"));
 });
 Vue.component('down-votes', function () {
-  return __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! ./components/DownVotes.vue */ "./resources/assets/js/components/DownVotes.vue"));
+  return __webpack_require__.e(/*! import() */ 26).then(__webpack_require__.bind(null, /*! ./components/DownVotes.vue */ "./resources/assets/js/components/DownVotes.vue"));
 });
 Vue.component('focus-comment', function () {
-  return __webpack_require__.e(/*! import() */ 27).then(__webpack_require__.bind(null, /*! ./components/FocusComment.vue */ "./resources/assets/js/components/FocusComment.vue"));
+  return __webpack_require__.e(/*! import() */ 28).then(__webpack_require__.bind(null, /*! ./components/FocusComment.vue */ "./resources/assets/js/components/FocusComment.vue"));
 });
 Vue.component('vote-emojis', function () {
   return __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! ./components/VoteEmojis.vue */ "./resources/assets/js/components/VoteEmojis.vue"));
@@ -59636,7 +59636,7 @@ Vue.component('show-source', function () {
   return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! ./components/ShowSource.vue */ "./resources/assets/js/components/ShowSource.vue"));
 });
 Vue.component('add-new-thread', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(36), __webpack_require__.e(44)]).then(__webpack_require__.bind(null, /*! ./components/threads/NewThread.vue */ "./resources/assets/js/components/threads/NewThread.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(25), __webpack_require__.e(37)]).then(__webpack_require__.bind(null, /*! ./components/threads/NewThread.vue */ "./resources/assets/js/components/threads/NewThread.vue"));
 });
 window.eventBus = new Vue();
 var app = new Vue({
