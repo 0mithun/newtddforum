@@ -13,7 +13,7 @@
         </div>
 
         <p class="text-center" v-else>
-            Please <a href="/login">sign in</a> to participate in this
+            Please <a :href="redirectToLogin">sign in</a> to participate in this
             discussion.
         </p>
     </div>
@@ -30,7 +30,11 @@
                 completed: false,
             };
         },
-
+        computed:{
+            redirectToLogin(){
+                return  '/redirect-to?page='+location.pathname;
+            },
+        },
         mounted() {
             $('#body').atwho({
                 at: "@",
@@ -59,7 +63,8 @@
 
                         this.$emit('created', data);
                     });
-            }
+            },
+            
         }
     }
 </script>

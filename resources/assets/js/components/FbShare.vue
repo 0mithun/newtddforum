@@ -1,5 +1,5 @@
 <template>
-    <a :href="threadUrl" target="_blank" class="btn btn-xs facebook-share-btn"  @click.prevent="share"    >
+    <a :href="threadUrl" target="_blank" class="btn btn-xs facebook-share-btn"  @click.prevent="share">
         <i class="fa fa-facebook-square" aria-hidden="true" ></i> Share
     </a>
 </template>
@@ -22,10 +22,14 @@
         },
         methods: {
              share(){
-                 if(this.signedIn){
-                    window.open(this.threadUrl, 'Share on Facebook', 'width=600, height=400')
+                 if(!this.signedIn){
+                    this.redirectToLogin();  
                  }
-                 return false;                
+                 
+                window.open(this.threadUrl, 'Share on Facebook', 'width=600, height=400')             
+            },
+            redirectToLogin(){
+                window.location =  '/redirect-to?page='+location.pathname;
             },
         }
     }

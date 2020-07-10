@@ -43,6 +43,11 @@ __webpack_require__.r(__webpack_exports__);
       completed: false
     };
   },
+  computed: {
+    redirectToLogin: function redirectToLogin() {
+      return '/redirect-to?page=' + location.pathname;
+    }
+  },
   mounted: function mounted() {
     $('#body').atwho({
       at: "@",
@@ -909,7 +914,9 @@ var render = function() {
         ])
       : _c("p", { staticClass: "text-center" }, [
           _vm._v("\n        Please "),
-          _c("a", { attrs: { href: "/login" } }, [_vm._v("sign in")]),
+          _c("a", { attrs: { href: _vm.redirectToLogin } }, [
+            _vm._v("sign in")
+          ]),
           _vm._v(" to participate in this\n        discussion.\n    ")
         ])
   ])

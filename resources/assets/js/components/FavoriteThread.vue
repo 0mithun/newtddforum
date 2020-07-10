@@ -44,7 +44,7 @@
                 if(this.signedIn){
                     this.isFavoriteThread ? this.destroy() : this.create();
                 }
-                return;                
+                this.redirectToLogin();               
             },
 
             create() {
@@ -73,7 +73,10 @@
                     }));
                 }
                 return this.isFavoriteThread = false;
-            }
+            },
+            redirectToLogin(){
+                window.location =  '/redirect-to?page='+location.pathname;
+            },
         }
     }
 </script>

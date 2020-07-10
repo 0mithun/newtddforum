@@ -22,11 +22,16 @@
         },
 
         methods: {
-            share(){                
-                if(this.signedIn){
-                    window.open(this.threadUrl, 'Share on Twitter', 'width=600, height=400')
-                }
-                return false;
+            share(){  
+                if(!this.signedIn){
+                    this.redirectToLogin();  
+                 }
+                
+                window.open(this.threadUrl, 'Share on Twitter', 'width=600, height=400')
+
+            },
+            redirectToLogin(){
+                window.location =  '/redirect-to?page='+location.pathname;
             },
         }
     }

@@ -39,7 +39,7 @@ export default {
   methods: {
     toggleDislike() {
       if (!this.signedIn) {
-        return false;
+        this.redirectToLogin()
       }
       axios.post("/thread/" + this.thread.id + "/dislikes").then(res => {
         if (this.isDesliked) {
@@ -49,7 +49,10 @@ export default {
           window.events.$emit('isDesliked', this.thread.id);
         }
       });
-    }
+    },
+    redirectToLogin(){
+        window.location =  '/redirect-to?page='+location.pathname;
+    },
   }
 };
 </script>

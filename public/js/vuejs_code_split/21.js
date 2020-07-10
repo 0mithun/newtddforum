@@ -39,7 +39,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     voteEmoji: function voteEmoji(emoji) {
       if (!this.signedIn) {
-        return false;
+        this.redirectToLogin();
       }
 
       axios.post("/thread/".concat(this.thread.id, "/emojis"), {
@@ -54,6 +54,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/thread/".concat(this.thread.id, "/emojis")).then(function (res) {
         _this.emojis = res.data;
       });
+    },
+    redirectToLogin: function redirectToLogin() {
+      window.location = '/redirect-to?page=' + location.pathname;
     }
   }
 });

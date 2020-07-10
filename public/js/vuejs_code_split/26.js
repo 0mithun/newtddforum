@@ -51,7 +51,7 @@ __webpack_require__.r(__webpack_exports__);
         this.isFavoriteThread ? this.destroy() : this.create();
       }
 
-      return;
+      this.redirectToLogin();
     },
     create: function create() {
       axios.post(this.endpoint).then(function (res) {});
@@ -80,6 +80,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return this.isFavoriteThread = false;
+    },
+    redirectToLogin: function redirectToLogin() {
+      window.location = '/redirect-to?page=' + location.pathname;
     }
   }
 });

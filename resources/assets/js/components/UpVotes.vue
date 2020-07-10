@@ -39,7 +39,7 @@ export default {
   methods: {
     toggleLike() {
       if (!this.signedIn) {
-        return false;
+        this.redirectToLogin()
       }
       axios
         .post("/thread/" + this.thread.id + "/likes")
@@ -51,7 +51,10 @@ export default {
             window.events.$emit('isLiked', this.thread.id);
           }
         });
-    }
+    },
+    redirectToLogin(){
+        window.location =  '/redirect-to?page='+location.pathname;
+    },
   }
 };
 </script>

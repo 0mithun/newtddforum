@@ -1,6 +1,6 @@
 <template>
   <div class="tools-single-item tools-single-item-align-bottoms" >
-    <button class="btn thread-items-show-tools-btn report-btn" type="button" data-toggle="modal" data-target="#showReportModal">
+    <button class="btn thread-items-show-tools-btn report-btn" type="button" data-toggle="modal" data-target="#showReportModal" @click.prevent="signedIn ? true :  redirectToLogin(); ">
       Report
     </button>
     <div class="modal fade" tabindex="-1" role="dialog" id="showReportModal">
@@ -8,7 +8,7 @@
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="gridSystemModalLabel">
+                  <h4 class="modal-title" id="gridSystemModalLabel" >
                     Report Thread
                   </h4>
               </div>
@@ -66,7 +66,7 @@ export default {
   methods: {
     report() {
       if (!this.signedIn) {
-        return false;
+          this.redirectToLogin();
       }
       axios
         .post("/report/thread",{
@@ -76,7 +76,10 @@ export default {
         })
         .then(res => {
         });
-    }
+    },
+    redirectToLogin(){
+        window.location =  '/redirect-to?page='+location.pathname;
+    },
   }
 };
 </script>

@@ -30,7 +30,7 @@ export default {
   methods:{
     voteEmoji(emoji){
       if (!this.signedIn) {
-        return false;
+         this.redirectToLogin()
       }
       axios.post(`/thread/${this.thread.id}/emojis`,{
           type:emoji.id
@@ -43,6 +43,9 @@ export default {
          this.emojis = res.data;
       });
     },
+    redirectToLogin(){
+        window.location =  '/redirect-to?page='+location.pathname;
+    }
   }
 };
 </script>

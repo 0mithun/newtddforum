@@ -1429,61 +1429,6 @@ var render = function() {
                   }),
                   0
                 )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "btn-group" }, [
-                _vm._m(3),
-                _vm._v(" "),
-                _c("ul", { staticClass: "dropdown-menu search-dropdown" }, [
-                  _c("li", [
-                    _c("div", { staticClass: "checkbox filter-item" }, [
-                      _c("label", [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.filter_rated,
-                              expression: "filter_rated"
-                            }
-                          ],
-                          attrs: { type: "checkbox", name: "rated", id: "" },
-                          domProps: {
-                            value: 0,
-                            checked: Array.isArray(_vm.filter_rated)
-                              ? _vm._i(_vm.filter_rated, 0) > -1
-                              : _vm.filter_rated
-                          },
-                          on: {
-                            change: function($event) {
-                              var $$a = _vm.filter_rated,
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = 0,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    (_vm.filter_rated = $$a.concat([$$v]))
-                                } else {
-                                  $$i > -1 &&
-                                    (_vm.filter_rated = $$a
-                                      .slice(0, $$i)
-                                      .concat($$a.slice($$i + 1)))
-                                }
-                              } else {
-                                _vm.filter_rated = $$c
-                              }
-                            }
-                          }
-                        }),
-                        _vm._v(
-                          "   G-rated  \n                                    "
-                        )
-                      ])
-                    ])
-                  ])
-                ])
               ])
             ])
           ])
@@ -1491,11 +1436,11 @@ var render = function() {
       ]),
       _vm._v(" "),
       _vm.search == false && _vm.allThreads.length == 0
-        ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(4)])
+        ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(3)])
         : _vm._e(),
       _vm._v(" "),
       _vm.search
-        ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(5)])
+        ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(4)])
         : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.allThreads, function(thread, index) {
@@ -1719,27 +1664,6 @@ var staticRenderFns = [
       },
       [
         _vm._v("\n                            Emojis "),
-        _c("span", { staticClass: "caret" })
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-link btn-xs dropdown-toggle",
-        attrs: {
-          type: "button",
-          "data-toggle": "dropdown",
-          "aria-haspopup": "true",
-          "aria-expanded": "false"
-        }
-      },
-      [
-        _vm._v("\n                            All Tags "),
         _c("span", { staticClass: "caret" })
       ]
     )

@@ -71,7 +71,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     report: function report() {
       if (!this.signedIn) {
-        return false;
+        this.redirectToLogin();
       }
 
       axios.post("/report/thread", {
@@ -79,6 +79,9 @@ __webpack_require__.r(__webpack_exports__);
         reason: this.reason,
         restrictions: this.restrictions
       }).then(function (res) {});
+    },
+    redirectToLogin: function redirectToLogin() {
+      window.location = '/redirect-to?page=' + location.pathname;
     }
   }
 });
@@ -161,6 +164,12 @@ var render = function() {
             type: "button",
             "data-toggle": "modal",
             "data-target": "#showReportModal"
+          },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              _vm.signedIn ? true : _vm.redirectToLogin()
+            }
           }
         },
         [_vm._v("\n    Report\n  ")]

@@ -179,14 +179,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 thread-show-tags">
-                                Tags:
-                                @foreach ($thread->tags as $tag)
-                                    <a  href="{{ strtolower(route('tags.threads.list', $tag->name))  }}" class="tag-name">{{ $tag->name }}</a>
-                                @endforeach
+                        @if ($thread->tags->count()>0)
+                            <div class="row">
+                                <div class="col-md-12 thread-show-tags">                                                                   
+                                    Tags:
+                                    @foreach ($thread->tags as $tag)
+                                        <a  href="{{ strtolower(route('tags.threads.list', $tag->name))  }}" class="tag-name">{{ $tag->name }}</a>
+                                    @endforeach                               
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

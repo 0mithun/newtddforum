@@ -32,11 +32,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     share: function share() {
-      if (this.signedIn) {
-        window.open(this.threadUrl, 'Share on Facebook', 'width=600, height=400');
+      if (!this.signedIn) {
+        this.redirectToLogin();
       }
 
-      return false;
+      window.open(this.threadUrl, 'Share on Facebook', 'width=600, height=400');
+    },
+    redirectToLogin: function redirectToLogin() {
+      window.location = '/redirect-to?page=' + location.pathname;
     }
   }
 });

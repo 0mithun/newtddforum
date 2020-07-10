@@ -50,7 +50,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       if (!this.signedIn) {
-        return false;
+        this.redirectToLogin();
       }
 
       axios.post("/thread/" + this.thread.id + "/likes").then(function (res) {
@@ -61,6 +61,9 @@ __webpack_require__.r(__webpack_exports__);
           window.events.$emit('isLiked', _this2.thread.id);
         }
       });
+    },
+    redirectToLogin: function redirectToLogin() {
+      window.location = '/redirect-to?page=' + location.pathname;
     }
   }
 });

@@ -34,9 +34,12 @@
             this.totalRatings()
         },
         methods:{
+            redirectToLogin(){
+                window.location =  '/redirect-to?page='+location.pathname;
+            },
             setRating(){
                 if (!this.signedIn) {
-                    return false;
+                    this.redirectToLogin()
                 }
                 axios.post(`/thread/${this.thread.id}/rating`,{
                         rating: this.rating,
@@ -46,6 +49,9 @@
                 });
             },
             isRated(){
+                if (!this.signedIn) {
+                    return ;
+                }
                  axios.get(`/thread/${this.thread.id}/is-rated`).then(res => {
                     if(res.data.success){
                         this.rating = res.data.data.rating;

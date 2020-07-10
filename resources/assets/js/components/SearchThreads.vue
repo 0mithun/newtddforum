@@ -110,7 +110,7 @@
                             </ul>
                         </div>
                         
-                        <div class="btn-group">
+                        <!-- <div class="btn-group">
                             <button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 All Tags <span class="caret"></span>
                             </button>
@@ -124,7 +124,7 @@
                                 </li>
                                 
                             </ul>
-                        </div>
+                        </div> -->
 
                     </div>
                 </div>

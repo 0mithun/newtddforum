@@ -46,9 +46,12 @@ __webpack_require__.r(__webpack_exports__);
     this.totalRatings();
   },
   methods: {
+    redirectToLogin: function redirectToLogin() {
+      window.location = '/redirect-to?page=' + location.pathname;
+    },
     setRating: function setRating() {
       if (!this.signedIn) {
-        return false;
+        this.redirectToLogin();
       }
 
       axios.post("/thread/".concat(this.thread.id, "/rating"), {
@@ -58,6 +61,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     isRated: function isRated() {
       var _this = this;
+
+      if (!this.signedIn) {
+        return;
+      }
 
       axios.get("/thread/".concat(this.thread.id, "/is-rated")).then(function (res) {
         if (res.data.success) {
