@@ -142,9 +142,6 @@ Route::middleware(['auth'])->group(function (){
 
 
 
-
-
-    //Route::patch('threads/{channel}/{thread}', 'ThreadsController@update');
     Route::post('threads/{channel}/{thread}', 'ThreadsController@update');
     Route::delete('threads/{channel}/{thread}', 'ThreadsController@destroy');
 
@@ -155,14 +152,20 @@ Route::middleware(['auth'])->group(function (){
     Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.destroy');
     Route::post('/replies/{reply}/new-reply','RepliesController@newReply');
     
+
+
+
+    /*Should be delete*/
     Route::post('/replies/{reply}/best', 'BestRepliesController@store')->name('best-replies.store');
     Route::post('/reply/check-reply-isbest','BestRepliesController@checkIsBest');
 
 
-   
-
     Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
     Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy');
+
+   
+
+  
 
 
     /*Favorites*/

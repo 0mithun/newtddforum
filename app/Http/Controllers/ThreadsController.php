@@ -15,13 +15,14 @@ use App\Jobs\WikiImageProcess;
 use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Collection;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Pagination\LengthAwarePaginator;
-
 use function GuzzleHttp\Promise\all;
+use Illuminate\Pagination\Paginator;
+
 use App\Notifications\ThreadPostTwitter;
 use App\Notifications\ThreadWasReported;
 use App\Notifications\ThreadPostFacebook;
+use App\Http\Requests\CreateThreadRequest;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ThreadsController extends Controller
 {
@@ -98,7 +99,7 @@ class ThreadsController extends Controller
      */
     public function create()
     {
-        $tags = Tags::orderBy('name','ASC')->get();
+        $tags = Tags::orderBy('name','ASC')->get()->pluck('name');
         $channel = Channel::select(['id','name'])->orderBy('name', 'ASC')->get();
         return view('threads.create',compact('tags','channel'));
     }
@@ -109,51 +110,31 @@ class ThreadsController extends Controller
      * @param  \App\Rules\Recaptcha $recaptcha
      * @return \Illuminate\Http\Response
      */
-    public function store(Recaptcha $recaptcha)
+    public function store(CreateThreadRequest $request)
     {   
-
-        
+        return response()->json($request->all());
 
         $authUser = auth()->user();
-        $rule = request()->hasFile('image_path') ? 'image|max:2048' : '';
-
-        request()->validate([
-            'title' => 'required|spamfree',
-            'body' => 'required|spamfree',
-            'channel_id' => 'required|exists:channels,id',
-             //'g-recaptcha-response' => ['required', $recaptcha],
-            'image_path'    => $rule,
-            'age_restriction'  => 'numeric', Rule::in([0, 13, 18]),
-
-        ],[
-            'channel_id.required'    => 'The channel field is required.',
-            'channel_id.exists'    => 'Invalid channel',
-            'g-recaptcha-response.required' =>  'Please solve the captcha',
-            'image_path.max'    =>  'Thread image may not be greater than 2048 kilobytes'
-        ]);
-        
+ 
                 
         $data = [
-            'user_id' => $authUser->id,
-            'channel_id' => request('channel_id'),
-            'title' => request('title'),
-            'body' => request('body'),
-            'word_count'   => str_word_count(request('body')),
-            'location'  =>  request('location') == null ? '' : request('location'),
-            'source'  =>  request('source') == null ? '' : request('source'),
-            'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
-            // 'is_famous'  =>  request('is_famous',0),
-            'age_restriction'  =>  request('age_restriction',0),
-            // 'allow_image'  =>  request('allow_image',0),
-            'wiki_info_page_url'  =>  request('wiki_info_page_url') == null ? '' : request('wiki_info_page_url'),
+            'user_id'           =>  $authUser->id,
+            'channel_id'        =>  $request->channel_id,
+            'title'             =>  $request->title,
+            'body'              =>  $request->body,
+            'word_count'        =>  str_word_count($request->body),
+            'source'            =>  $request->source == null ? '' : $request->source,
+            'location'          =>  $request->location == null ? '' : $request->location,
+            'main_subject'      =>  $request->main_subject == null ? '' : $request->main_subject,
+            'wiki_info_page_url'=>  $request->age_restriction == null ? '' : $request->age_restriction,
+            'wiki_info_page_url'=>  $request->wiki_image_description == null ? '' : $request->wiki_image_description,
+            'cno'               =>  $request->cno == null ? '' : $request->cno,
+
+            'age_restriction'   =>  $request->age_restriction ? $request->age_restriction : 0,
             'anonymous'  =>  request('anonymous', 0),
         ];
 
-        if(request()->has('category')){
-            $category = request('category');
-            $category = implode("|", $category);
-            $data['category'] = $category;
-        }
+        return response()->json($data);
 
         if(request('location') !=null){
             $location = $this->getGeocodeing(request('location'));
@@ -178,11 +159,39 @@ class ThreadsController extends Controller
         $thread->save();
         $thread = $thread->fresh();
 
+
+
         $main_subject = \request('main_subject');
+
+
         $new_tags = [];
 
-        if(\request()->has('main_subject') && \request('main_subject') !=null){
-            $tag  = Tags::where('name', strtolower($main_subject))->first();
+        // if(\request()->has('main_subject') && \request('main_subject') !=null){
+        //     $tag  = Tags::where('name', strtolower($main_subject))->first();
+        //     if($tag){
+        //         $thread->tags()->sync([$tag->id]);
+        //         $new_tags[] = $tag->id;
+        //     }else{
+        //         $tag = Tags::create(['name'=>strtolower($main_subject)]);
+        //         $thread->tags()->sync([$tag->id]);
+        //         $new_tags[] = $tag->id;
+        //     }
+        // }
+
+
+        $tags = [];
+        if($request>has('tags') && $request->tags !=null){
+            $tags = explode(',', $request->tags);
+        }
+        if($request->has('main_subject') && $request->main_subject !=null){
+            $tags[] = $request->main_subject;
+        }
+        $unique_tags = array_unique($tags);
+
+
+        foreach($unique_tags as $tag){
+            $tag  = Tags::where('name', strtolower($tag))->first();
+            
             if($tag){
                 $thread->tags()->sync([$tag->id]);
                 $new_tags[] = $tag->id;
@@ -191,24 +200,6 @@ class ThreadsController extends Controller
                 $thread->tags()->sync([$tag->id]);
                 $new_tags[] = $tag->id;
             }
-        }
-
-
-
-        if(request()->has('tags')){
-            $tags = \request('tags');          
-            
-            foreach($tags as $tag){
-                $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
-                if($bool){
-                    $new_tags[] = $tag;
-                }
-                else{
-                    $tag = Tags::create(['name'=>strtolower($tag)]);
-                    $new_tags[]= $tag->id;
-                }
-            }
-            $thread->tags()->sync($new_tags);
         }
 
         $this->sendNotification($thread, $authUser);

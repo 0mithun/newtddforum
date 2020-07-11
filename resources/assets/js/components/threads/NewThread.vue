@@ -4,7 +4,7 @@
             Post an Anecdote
         </div>
         <div class="panel-body">
-            <form class="" action="" method="" enctype="multipart/form-data">
+            <form class="" action="" method="post" enctype="multipart/form-data" @submit.prevent="addNewThread">
                 <div class="row">
 
                     <div class="col-md-6">
@@ -29,7 +29,7 @@
                             <label for="tags" class="control-label">
                             Tags
                             </label>
-                            <v-select taggable push-tags  v-model="form.tags" :options="alltags" label="name" multiple @input="tagChange"></v-select>
+                            <v-select taggable push-tags  v-model="form.tags" :options="alltags"  multiple @input="tagChange"></v-select>
                         </div>
                     </div>
                 </div>
@@ -77,14 +77,20 @@
                         </div>
                     </div>
                 </div>
-                    
-
-                <div class="more-fields">
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button tton class="btn btn-default btn-sm" type="button" @click="show_more_fields = !show_more_fields">{{ show_more_fields ? 'Hide More Fields' : 'Show More Fields' }}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="more-fields" v-if="show_more_fields">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group ">
                                 <label for="wiki_info_page_url" class="control-label"> Or Enter Image link </label>
-                                <input type="text" name="wiki_info_page_url" id="wiki_info_page_url" class="form-control" v-model="form.wiki_info_page_url">
+                                <input type="text" id="wiki_info_page_url" class="form-control" v-model="form.wiki_info_page_url">
                             </div>
                             <div class="form-group">
                                 <label for="">
@@ -96,7 +102,7 @@
                         <div class="col-md-6">
                             <div class="form-group ">
                                 <label for="wiki_image_description" class="control-label"> Image description</label>
-                                <input type="text"  class="form-control" id="wiki_image_description">
+                                <input type="text"  class="form-control" id="wiki_image_description" v-model="form.wiki_image_description">
                             </div>
                         </div>
                     </div>
@@ -146,13 +152,13 @@
                                 <label for="category" class="control-label"> This story involves:</label>
 
                                 <div class="checkbox">
-                                    <label><input type="checkbox" value="C" v-model="form.category">Celebrities</label>
+                                    <label><input type="checkbox" value="C" v-model="form.cno">Celebrities</label>
                                 </div>
                                 <div class="checkbox">
-                                    <label><input type="checkbox" value="N" v-model="form.category">Other notables</label>
+                                    <label><input type="checkbox" value="N" v-model="form.cno">Other notables</label>
                                 </div>
                                 <div class="checkbox">
-                                    <label><input type="checkbox" value="O" v-model="form.category">Other people</label>
+                                    <label><input type="checkbox" value="O" v-model="form.cno">Other people</label>
                                 </div>
                             </div>
                         </div>
@@ -168,43 +174,44 @@
                         </div>
                     </div>
                     
-                    
-
-                    
-
-                    
-
-
-                    
                 </div>
 
-                
 
-                
-
-                 
-
-
-
-                
-
-                
-
-                
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label><input type="checkbox" value="1" name="share_on_facebook" v-model="form.share_on_facebook">Share on Facebook</label>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">                               
+                                <button class="btn btn-primary" type="submit">Add Thread</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" value="1" name="share_on_twitter" v-model="form.share_on_twitter">Share on Twitter</label>
-                    </div>
-                </div>
+                
+
+                
+
+
+
+
+                
+
+                
+
+                
+                
 
                 
 
 
 
             </form>
+
+            <div class="form-group">
+                <div class="checkbox">
+                    <label><input type="checkbox" value="1" name="share_on_facebook" v-model="form.share_on_facebook">Share on Facebook</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="1" name="share_on_twitter" v-model="form.share_on_twitter">Share on Twitter</label>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -231,24 +238,28 @@
         },
         data(){
             return {
+                show_more_fields: false,
                 threadThumb: '',
                 selectFile: null,
                 formData: new FormData,
                 form: {
                     channel: '',
-                    tags: null,
+                    tags: '',
                     title: '',
                     body: '',
+                    source: '',
                     location: '',
-                    category: '',
+                    cno: [],
                     main_subject: '',
                     image_path:null,
                     age_restriction: '',
                     wiki_info_page_url: '',
-                    share_on_facebook:false,
-                    share_on_twitter:false, 
+                    wiki_image_description: '',
+                    anonymous: 0
                 },
-
+                
+                share_on_facebook:false,
+                share_on_twitter:false,
                 image_path_error:false,
                 image_path_error_message:'',
 
@@ -263,12 +274,12 @@
                 if(len>0){
                     let lastIndex = this.form.tags[len-1];
                     
-                    let separateItem = lastIndex.name.split(/[\s,]+/);
+                    let separateItem = lastIndex.split(/[\s,]+/);
                     if(separateItem.length>0){
                         this.form.tags.pop()
                         for(let i = 0; i <separateItem.length; i++){
                             if(separateItem[i].length>0){
-                                this.form.tags.push({name:separateItem[i]});
+                                this.form.tags.push(separateItem[i]);
                             }
                             
                         }
@@ -300,6 +311,38 @@
                     this.threadThumb = src
                 };
             },
+            appendData(){
+                let tagId = [];
+
+                if(this.form.channel !=''){
+                    this.formData.append('channel_id', this.form.channel.id);
+                }else{
+                    this.formData.append('channel_id', '');
+                }
+
+
+                this.formData.append('title', this.form.title);
+                this.formData.append('tags', this.form.tags);
+                this.formData.append('body', this.form.body);
+                this.formData.append('source', this.form.source);
+                this.formData.append('location', this.form.location);
+                this.formData.append('main_subject', this.form.main_subject);
+                this.formData.append('age_restriction', this.form.age_restriction);
+                
+                this.formData.append('wiki_info_page_url', this.form.wiki_info_page_url);
+                this.formData.append('wiki_image_description', this.form.wiki_image_description);
+                this.formData.append('cno', this.form.cno);
+
+                this.formData.append('anonymous', this.form.anonymous ? 1 : 0);
+            },
+            addNewThread(){
+                this.appendData();
+                axios.post('/threads', this.formData).then(res=>{
+                    console.log(res.data)
+                }).catch(err=>{
+                    console.log(err)
+                })
+            }
         }
     }
 </script>
