@@ -8,9 +8,10 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="title" class="control-label">Title (required)</label>
+                        <div class="form-group" :class="{'has-error': errors.title }">
+                            <label for="title" class="control-label" >Title (required)</label>
                             <input type="text" id="title" class="form-control" v-model="form.title">
+                            <span class="help-block" v-if="errors.title">{{ errors.title[0] }}</span>
                         </div>
                     </div>
                 </div>
@@ -36,7 +37,7 @@
                 <div class="row">
 
                     <div class="col-md-12">
-                        <div class="form-group">
+                        <div class="form-group" :class="{'has-error': errors.body }">
                             <label for="body" class="control-label">Your Story (required)</label>
                             <editor
                                 v-model="form.body"
@@ -52,27 +53,28 @@
                                         tinycomments_author: 'Author name'
                                 }"
                             />
+                            
+                            <span class="help-block" v-if="errors.body">{{ errors.body[0] }}</span>
+
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3">
-                        
-                        <div class="form-group " :class="image_path_error ? 'has-error' : ''">
+                    <div class="col-md-3">                        
+                        <div class="form-group " :class="{ 'has-error': errors.image_path, 'has-error': image_path_error }">
+                            <!-- image_path_error ? 'has-error' : ''" -->
                             <label for="image_path" class="control-label">Add an image</label>
                             <div class="thread-thumb-placeholder" @click="OpenImgUpload">
                                 <img :src="thumb" width="100%" height="100%">
                             </div>
-
                             <input style="display:none" type="file" name="image_path" accept="image/*" class="form-control" id="image_path" @change="onFileSelected">
-                            
-
 
                             <span class="help-block " v-if="image_path_error">
                                 <strong class="" v-text="image_path_error_message"></strong>
                             </span>
 
+                            <span class="help-block" v-if="errors.body">{{ errors.body[0] }}</span>
 
                         </div>
                     </div>
@@ -184,19 +186,33 @@
                             </div>
                         </div>
                     </div>
-                
-
-
             </form>
-
-            <div class="form-group">
-                <div class="checkbox">
-                    <label><input type="checkbox" value="1" name="share_on_facebook" v-model="form.share_on_facebook">Share on Facebook</label>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" value="1" name="share_on_twitter" v-model="form.share_on_twitter">Share on Twitter</label>
+            <!-- Modal -->
+            <div class="modal fade " id="shreThreadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" v-if="showShareModal">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="1" name="share_on_facebook" v-model="share_on_facebook">Share on Facebook</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="1" name="share_on_twitter" v-model="share_on_twitter">Share on Twitter</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary btn-sm">Share</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            
         </div>
     </div>
 </template>
@@ -215,6 +231,9 @@
                 require: true
             }
         },
+        mounted(){
+            $('#shreThreadModal').modal();
+        },
         components: {Editor,Typeahead, },
         computed:{
             thumb(){
@@ -223,6 +242,8 @@
         },
         data(){
             return {
+                showShareModal: false,
+                errors: [],
                 show_more_fields: false,
                 threadThumb: '',
                 selectFile: null,
@@ -279,7 +300,7 @@
                 this.image_path_error_message = '';
                 let file =  event.target.files[0];
                 
-                if (file.size > 1024 *1024) {
+                if (file.size > 1024 *2048) {
                     event.preventDefault();
                     this.image_path_error = true;
                     this.image_path_error_message = 'Thread image may not be greater than 2048 kilobytes';
@@ -317,12 +338,25 @@
                 this.formData.append('anonymous', this.form.anonymous ? 1 : 0);
             },
             addNewThread(){
+                this.errors = []
                 this.appendData();
                 axios.post('/threads', this.formData).then(res=>{
-                    let thread = res.data.thread;
-                    window.location = thread.path
+                    this.showShareModal = true;
                 }).catch(err=>{
-                    console.log(err)
+                    this.errors = err.response.data.errors
+                })
+            },
+            shareThread(){
+                axios.post('/threads/share', {
+                    thread: 1,
+                     share_on_facebook:this.share_on_facebook,
+                    share_on_twitter:this.share_on_twitter,
+                }).then(res=>{
+                    // let thread = res.data.thread;
+                    // window.location = thread.path
+                    this.showShareModal = false;
+                }).catch(err=>{
+
                 })
             }
         }

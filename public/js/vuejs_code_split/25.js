@@ -229,6 +229,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -242,6 +243,9 @@ __webpack_require__.r(__webpack_exports__);
       require: true
     }
   },
+  mounted: function mounted() {
+    $('#shreThreadModal').modal();
+  },
   components: {
     Editor: _tinymce_tinymce_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     Typeahead: uiv__WEBPACK_IMPORTED_MODULE_1__["Typeahead"]
@@ -253,6 +257,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      showShareModal: false,
+      errors: [],
       show_more_fields: false,
       threadThumb: '',
       selectFile: null,
@@ -308,7 +314,7 @@ __webpack_require__.r(__webpack_exports__);
       this.image_path_error_message = '';
       var file = event.target.files[0];
 
-      if (file.size > 1024 * 1024) {
+      if (file.size > 1024 * 2048) {
         event.preventDefault();
         this.image_path_error = true;
         this.image_path_error_message = 'Thread image may not be greater than 2048 kilobytes';
@@ -345,13 +351,28 @@ __webpack_require__.r(__webpack_exports__);
       this.formData.append('anonymous', this.form.anonymous ? 1 : 0);
     },
     addNewThread: function addNewThread() {
+      var _this2 = this;
+
+      this.errors = [];
       this.appendData();
       axios.post('/threads', this.formData).then(function (res) {
-        var thread = res.data.thread;
-        window.location = thread.path;
+        _this2.showShareModal = true;
       })["catch"](function (err) {
-        console.log(err);
+        _this2.errors = err.response.data.errors;
       });
+    },
+    shareThread: function shareThread() {
+      var _this3 = this;
+
+      axios.post('/threads/share', {
+        thread: 1,
+        share_on_facebook: this.share_on_facebook,
+        share_on_twitter: this.share_on_twitter
+      }).then(function (res) {
+        // let thread = res.data.thread;
+        // window.location = thread.path
+        _this3.showShareModal = false;
+      })["catch"](function (err) {});
     }
   }
 });
@@ -442,35 +463,48 @@ var render = function() {
         [
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-md-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c(
-                  "label",
-                  { staticClass: "control-label", attrs: { for: "title" } },
-                  [_vm._v("Title (required)")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.form.title,
-                      expression: "form.title"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text", id: "title" },
-                  domProps: { value: _vm.form.title },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+              _c(
+                "div",
+                {
+                  staticClass: "form-group",
+                  class: { "has-error": _vm.errors.title }
+                },
+                [
+                  _c(
+                    "label",
+                    { staticClass: "control-label", attrs: { for: "title" } },
+                    [_vm._v("Title (required)")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.title,
+                        expression: "form.title"
                       }
-                      _vm.$set(_vm.form, "title", $event.target.value)
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "title" },
+                    domProps: { value: _vm.form.title },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "title", $event.target.value)
+                      }
                     }
-                  }
-                })
-              ])
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.title
+                    ? _c("span", { staticClass: "help-block" }, [
+                        _vm._v(_vm._s(_vm.errors.title[0]))
+                      ])
+                    : _vm._e()
+                ]
+              )
             ])
           ]),
           _vm._v(" "),
@@ -554,7 +588,10 @@ var render = function() {
             _c("div", { staticClass: "col-md-12" }, [
               _c(
                 "div",
-                { staticClass: "form-group" },
+                {
+                  staticClass: "form-group",
+                  class: { "has-error": _vm.errors.body }
+                },
                 [
                   _c(
                     "label",
@@ -584,7 +621,13 @@ var render = function() {
                       },
                       expression: "form.body"
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.body
+                    ? _c("span", { staticClass: "help-block" }, [
+                        _vm._v(_vm._s(_vm.errors.body[0]))
+                      ])
+                    : _vm._e()
                 ],
                 1
               )
@@ -597,7 +640,10 @@ var render = function() {
                 "div",
                 {
                   staticClass: "form-group ",
-                  class: _vm.image_path_error ? "has-error" : ""
+                  class: {
+                    "has-error": _vm.errors.image_path,
+                    "has-error": _vm.image_path_error
+                  }
                 },
                 [
                   _c(
@@ -641,6 +687,12 @@ var render = function() {
                             textContent: _vm._s(_vm.image_path_error_message)
                           }
                         })
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.errors.body
+                    ? _c("span", { staticClass: "help-block" }, [
+                        _vm._v(_vm._s(_vm.errors.body[0]))
                       ])
                     : _vm._e()
                 ]
@@ -1194,111 +1246,140 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "form-group" }, [
-        _c("div", { staticClass: "checkbox" }, [
-          _c("label", [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.form.share_on_facebook,
-                  expression: "form.share_on_facebook"
-                }
-              ],
+      _vm.showShareModal
+        ? _c(
+            "div",
+            {
+              staticClass: "modal fade ",
               attrs: {
-                type: "checkbox",
-                value: "1",
-                name: "share_on_facebook"
-              },
-              domProps: {
-                checked: Array.isArray(_vm.form.share_on_facebook)
-                  ? _vm._i(_vm.form.share_on_facebook, "1") > -1
-                  : _vm.form.share_on_facebook
-              },
-              on: {
-                change: function($event) {
-                  var $$a = _vm.form.share_on_facebook,
-                    $$el = $event.target,
-                    $$c = $$el.checked ? true : false
-                  if (Array.isArray($$a)) {
-                    var $$v = "1",
-                      $$i = _vm._i($$a, $$v)
-                    if ($$el.checked) {
-                      $$i < 0 &&
-                        _vm.$set(
-                          _vm.form,
-                          "share_on_facebook",
-                          $$a.concat([$$v])
-                        )
-                    } else {
-                      $$i > -1 &&
-                        _vm.$set(
-                          _vm.form,
-                          "share_on_facebook",
-                          $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                        )
-                    }
-                  } else {
-                    _vm.$set(_vm.form, "share_on_facebook", $$c)
-                  }
-                }
+                id: "shreThreadModal",
+                tabindex: "-1",
+                role: "dialog",
+                "aria-labelledby": "myModalLabel"
               }
-            }),
-            _vm._v("Share on Facebook")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "checkbox" }, [
-          _c("label", [
-            _c("input", {
-              directives: [
+            },
+            [
+              _c(
+                "div",
                 {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.form.share_on_twitter,
-                  expression: "form.share_on_twitter"
-                }
-              ],
-              attrs: { type: "checkbox", value: "1", name: "share_on_twitter" },
-              domProps: {
-                checked: Array.isArray(_vm.form.share_on_twitter)
-                  ? _vm._i(_vm.form.share_on_twitter, "1") > -1
-                  : _vm.form.share_on_twitter
-              },
-              on: {
-                change: function($event) {
-                  var $$a = _vm.form.share_on_twitter,
-                    $$el = $event.target,
-                    $$c = $$el.checked ? true : false
-                  if (Array.isArray($$a)) {
-                    var $$v = "1",
-                      $$i = _vm._i($$a, $$v)
-                    if ($$el.checked) {
-                      $$i < 0 &&
-                        _vm.$set(
-                          _vm.form,
-                          "share_on_twitter",
-                          $$a.concat([$$v])
-                        )
-                    } else {
-                      $$i > -1 &&
-                        _vm.$set(
-                          _vm.form,
-                          "share_on_twitter",
-                          $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                        )
-                    }
-                  } else {
-                    _vm.$set(_vm.form, "share_on_twitter", $$c)
-                  }
-                }
-              }
-            }),
-            _vm._v("Share on Twitter")
-          ])
-        ])
-      ])
+                  staticClass: "modal-dialog modal-sm",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-body" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("div", { staticClass: "checkbox" }, [
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.share_on_facebook,
+                                  expression: "share_on_facebook"
+                                }
+                              ],
+                              attrs: {
+                                type: "checkbox",
+                                value: "1",
+                                name: "share_on_facebook"
+                              },
+                              domProps: {
+                                checked: Array.isArray(_vm.share_on_facebook)
+                                  ? _vm._i(_vm.share_on_facebook, "1") > -1
+                                  : _vm.share_on_facebook
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.share_on_facebook,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = "1",
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.share_on_facebook = $$a.concat([
+                                          $$v
+                                        ]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.share_on_facebook = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.share_on_facebook = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _vm._v("Share on Facebook")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "checkbox" }, [
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.share_on_twitter,
+                                  expression: "share_on_twitter"
+                                }
+                              ],
+                              attrs: {
+                                type: "checkbox",
+                                value: "1",
+                                name: "share_on_twitter"
+                              },
+                              domProps: {
+                                checked: Array.isArray(_vm.share_on_twitter)
+                                  ? _vm._i(_vm.share_on_twitter, "1") > -1
+                                  : _vm.share_on_twitter
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.share_on_twitter,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = "1",
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.share_on_twitter = $$a.concat([
+                                          $$v
+                                        ]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.share_on_twitter = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.share_on_twitter = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _vm._v("Share on Twitter")
+                          ])
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(3)
+                  ])
+                ]
+              )
+            ]
+          )
+        : _vm._e()
     ])
   ])
 }
@@ -1330,6 +1411,37 @@ var staticRenderFns = [
           )
         ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      ),
+      _vm._v(" "),
+      _c("h4", { staticClass: "modal-title", attrs: { id: "myModalLabel" } }, [
+        _vm._v("Modal title")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c("button", { staticClass: "btn btn-primary btn-sm" }, [_vm._v("Share")])
     ])
   }
 ]

@@ -144,6 +144,8 @@ class ThreadsController extends Controller
         if($request->has('channel') && $request->channel !=null){
             $channel = json_decode($request->channel);
             $data['channel_id'] = $channel->id;
+        }else{
+            $data['channel_id'] = NULL;
         }
 
         $thread = Thread::create($data);
