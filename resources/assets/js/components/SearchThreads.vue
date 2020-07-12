@@ -146,9 +146,9 @@
 
 
         <div class="panel panel-default" v-for="(thread, index) in allThreads" :key="index">
-            <div class="card-header">
+            <div class="card-header thread_thumb">
                 <a :href="thread.path"> 
-                    <img :src="thread.threadImagePath" class="img-responsive" :alt="thread.title">
+                    <img :src="thread.threadImagePath" class="thread-image" :alt="thread.title">
                 </a>
             </div>
             <div class="panel-body">

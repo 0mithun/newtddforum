@@ -22,6 +22,7 @@ use App\Notifications\ThreadPostTwitter;
 use App\Notifications\ThreadWasReported;
 use App\Notifications\ThreadPostFacebook;
 use App\Http\Requests\CreateThreadRequest;
+use App\Http\Requests\UpdateThreadRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ThreadsController extends Controller
@@ -33,6 +34,8 @@ class ThreadsController extends Controller
     {
         $this->middleware('auth')->except(['index', 'show','loadByTag']);
         $this->middleware('userban')->only(['create', 'update','destroy']);
+        $this->middleware('must-be-confirmed')->only(['create', 'update','destroy']);
+        $this->middleware('throttle:10')->only(['show']);
     }
 
     /**
@@ -92,6 +95,26 @@ class ThreadsController extends Controller
         ]);
     }
 
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  integer      $channel
+     * @param  \App\Thread  $thread
+     * @param \App\Trending $trending
+     * @return \Illuminate\Http\Response
+     */
+    public function show($channel, Thread $thread, Trending $trending)
+    {
+        $this->authorize('show', $thread);
+
+        $trending->push($thread);
+        $thread->increment('visits');       
+
+        $relatedThreads = $this->getRelatedThread($thread);
+        return view('threads.show', compact('thread','relatedThreads'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -126,7 +149,7 @@ class ThreadsController extends Controller
             'location'          =>  $request->location == null ? '' : $request->location,
             'main_subject'      =>  $request->main_subject == null ? '' : $request->main_subject,
             'wiki_info_page_url'=>  $request->wiki_info_page_url == null ? '' : $request->wiki_info_page_url,
-            'wiki_info_page_url'=>  $request->wiki_image_description == null ? '' : $request->wiki_image_description,
+            'wiki_image_description'=>  $request->wiki_image_description == null ? '' : $request->wiki_image_description,
             'cno'               =>  $request->cno == null ? '' : $request->cno,
             'age_restriction'   =>  $request->age_restriction ? $request->age_restriction : 0,
             'anonymous'         =>  request('anonymous', 0),
@@ -166,95 +189,23 @@ class ThreadsController extends Controller
         return redirect($thread->path())
             ->with('flash', 'Your thread has been published!');
     }
-
+    
     /**
-     * Uplod Thread Images
+     * Edit Thread
+     * @param string $slug
      */
 
-     public function uploadThreadImages($request, $thread){
-        $file_path = '';
-        if ($request->hasFile('image_path')) {
-            $extension = $request->file('image_path')->getClientOriginalExtension();
-            $file_name = $thread->id.".".$extension;
-            $file_path = $request->image_path->storeAs('threads', $file_name);
-            $thread->image_path= 'uploads/'. $file_path;
-            $thread->save();
-        }
-     }
+    public function edit(Thread $thread){        
+       
+        $tags = Tags::orderBy('name','ASC')->get()->pluck('name');
+        $tags = $tags->map(function($tag){
+            return \strtolower($tag);
+        });
 
-
-    /**
-     * Attacg & Save Thread Tags
-     */
-
-    public function attachTags($request, $thread){
-        $tags = [];
-        if($request->has('tags') && $request->tags !=null){
-            $tags = explode(',', $request->tags);
-        }
-
-
-        if($request->has('channel') && $request->channel !=null){
-            $channel = json_decode($request->channel);
-            if(!in_array(\strtolower($channel->name), $tags)){
-                $tags[] = \strtolower($channel->name);
-            }
-        }
-
-
-        $main_subject = $request->main_subject;
-        if($request->has('main_subject') && $request->main_subject !=null){
-            if(!in_array(\strtolower($request->main_subject), $tags)){
-                $tags[] = \strtolower($request->main_subject);
-            }
-        }
-
-        $tag_ids = [];
-        foreach($tags as $tag){
-            $searchTag  = Tags::where('name', strtolower($tag))->first();
-            
-            if($searchTag){
-                $tag_ids[] = $searchTag->id;
-            }else{
-                $newTag = Tags::create(['name'=>strtolower($tag)]);
-                $tag_ids[] = $newTag->id;
-            }
-            // $thread->tags()->delete();
-        }
-        
-        $thread->tags()->sync($tag_ids);
-
+        $channel = Channel::select(['id','name'])->orderBy('name', 'ASC')->get();
+        return view('threads.edit',compact('tags','channel','thread'));
     }
 
-    /**
-     * Share Thread
-     */
-
-     public function share(Request $request){
-        $thread = Thread::where('id', $request->thread)->first();
-        $authUser = auth()->user();
-        $this->sendNotification($thread, $authUser);
-     }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  integer      $channel
-     * @param  \App\Thread  $thread
-     * @param \App\Trending $trending
-     * @return \Illuminate\Http\Response
-     */
-    public function show($channel, Thread $thread, Trending $trending)
-    {
-        $this->authorize('show', $thread);
-
-        $trending->push($thread);
-        $thread->increment('visits');       
-
-        $relatedThreads = $this->getRelatedThread($thread);
-        return view('threads.show', compact('thread','relatedThreads'));
-    }
 
     /**
      * Update the given thread.
@@ -262,105 +213,59 @@ class ThreadsController extends Controller
      * @param string $channel
      * @param Thread $thread
      */
-    public function update(Thread $thread)
+    public function update(UpdateThreadRequest $request, Thread $thread)
     {
-        
-
        $this->authorize('update', $thread);
        $authUser = auth()->user();
         
-        $rule = request()->hasFile('image_path') ? 'image|max:2048' : '';
-
-        request()->validate([
-            'title' => 'required',
-            'channel_id' => 'required',
-            'body' => 'required',
-            'image_path'    => $rule,
-        ]);
-        
-        $data = [
-            'title' => request('title'),
-            'body' => request('body'),
-            'word_count'   => str_word_count(request('body')),
-            'location'  =>  request('location') == null ? "" : request('location'),
-            'source'  =>  request('source') == null ? "" : request('source'),
-            'main_subject'  =>  request('main_subject') == null ? '' : request('main_subject'),
-            'wiki_info_page_url'  =>  request('wiki_info_page_url') == null ? '' : request('wiki_info_page_url'),
-            'anonymous'  =>  request('anonymous'),
+       
+       $data = [
+            'title'             =>  $request->title,
+            'body'              =>  $request->body,
+            'word_count'        =>  str_word_count($request->body),
+            'source'            =>  $request->source == null ? '' : $request->source,
+            'location'          =>  $request->location == null ? '' : $request->location,
+            'main_subject'      =>  $request->main_subject == null ? '' : $request->main_subject,
+            'wiki_info_page_url'=>  $request->wiki_info_page_url == null ? '' : $request->wiki_info_page_url,
+            'wiki_image_description'=>  $request->wiki_image_description == null ? '' : $request->wiki_image_description,
+            'cno'               =>  $request->cno == null ? '' : $request->cno,
+            'age_restriction'   =>  $request->age_restriction ? $request->age_restriction : 0,
+            'anonymous'         =>  request('anonymous', 0),
         ];
 
-        if(request()->has('category')){
-            $category = request('category');
-            $category = str_replace(",",'|', $category);
-            $data['category'] = $category;
-        }
-
-        if(request('location') !=null){
-            $location = $this->getGeocodeing(request('location'));
+        if($request->location !=null){
+            $location = $this->getGeocodeing($request->location);
             if($location['accuracy'] != 'result_not_found'){
                 $data['lat'] = $location['lat'];
                 $data['lng'] = $location['lng'];
             }
         }
 
-        if(\request('channel_id') != 'undefined'){
-            $data[ 'channel_id']    = request('channel_id');
+        $channel = '';
+        if($request->has('channel') && $request->channel !=null){
+            $channel = json_decode($request->channel);
+            $data['channel_id'] = $channel->id;
+        }else{
+            $data['channel_id'] = 1;
         }
 
-        if (request()->hasFile('image_path')) {
-            $extension = request()->file('image_path')->getClientOriginalExtension();
-            $file_name = $thread->id.".".$extension;
-            $file_path = request()->image_path->storeAs('threads', $file_name);
-            $data['image_path']  = 'uploads/'. $file_path;
-        }
-        $old_wiki_info_page_url = $thread->wiki_info_page_url;
         $thread->update($data);
 
-        $main_subject = \request('main_subject');
-        $new_tags = [];
-        if(\request()->has('main_subject') && \request('main_subject') !=null){
-            $tag  = Tags::where('name', strtolower($main_subject))->first();
-            if($tag){
-                $thread->tags()->sync([$tag->id]);
-                $new_tags[] = $tag->id;
-            }else{
-                $tag = Tags::create(['name'=>strtolower($main_subject)]);
-                $thread->tags()->sync([$tag->id]);
-                $new_tags[] = $tag->id;
-            }
-        }
-
-
-        if(\request()->has('tags')){
-            $tags = json_decode(\request('tags'));
-            
-            foreach($tags as $tag){
-                $bool = ( !is_int($tag) ? (ctype_digit($tag)) : true );
-                
-                if($bool){
-                    $new_tags[] = $tag;
-                }
-                else{                    
-                    $findTag  = Tags::where('name', strtolower($tag))->first();
-                    if($findTag){
-                        $new_tags[] = $findTag->id;
-                    }else{                        
-                        $createTag = Tags::create(['name'=>strtolower($tag)]);
-                        $new_tags[]= $createTag->id;
-
-                    }
-                }
-            }
-            $thread->tags()->sync($new_tags);
-        }
-
-        $this->sendNotification($thread, $authUser);
+        $this->uploadThreadImages($request, $thread);
+        $this->attachTags($request, $thread);
         
-        if($old_wiki_info_page_url != request('wiki_info_page_url') && request('wiki_info_page_url') != ''){
-            WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, true);
+
+        
+        // if(request('wiki_info_page_url') != ''){
+        //     WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
+        // }
+
+        if($request->expectsJson()){
+            return response()->json(['status'=>'success', 'thread'=>$thread], 200);
         }
 
-        return $thread;
+        return redirect($thread->path())
+            ->with('flash', 'Your thread has been published!');
     }
 
     /**
@@ -495,27 +400,100 @@ class ThreadsController extends Controller
 
 
 
+ 
+
+
+
+
     /**
-     * Send Notification to users
+     * Uplod Thread Images
      */
-    public function sendNotification($thread, $authUser){
-         //Send user Notification
-        if($authUser->userprivacy->thread_create_share_facebook ==1){
-            return response()->json('under default facebook');
-           $thread->notify(new ThreadPostFacebook);
-       }else if(request()->has('share_on_facebook') && request('share_on_facebook') =='true'){
-           $thread ->notify(new ThreadPostFacebook);  
-       }
-       
-        //Send user Notification
-       if($authUser->userprivacy->thread_create_share_twitter ==1){
-           return response()->json('under default twitter');
-           $thread ->notify(new ThreadPostTwitter);
-       }
-       else if(request()->has('share_on_twitter') &&  request('share_on_twitter') =='true'){
-           $thread ->notify(new ThreadPostTwitter);  
-       }
+
+    public function uploadThreadImages($request, $thread){        
+        if ($request->hasFile('image_path')) {
+
+            $thread_thumb = $thread->image_path;
+            if(file_exists($thread_thumb)){
+                unlink($thread_thumb);
+            }
+
+            $extension = $request->file('image_path')->getClientOriginalExtension();
+            $file_name = $thread->id.".".$extension;
+            $file_path = $request->image_path->storeAs('threads', $file_name);
+            $thread->image_path= 'uploads/'. $file_path;
+            $thread->save();
+        }
+     }
+
+
+    /**
+     * Attacg & Save Thread Tags
+     */
+
+    public function attachTags($request, $thread){
+        $tags = [];
+        if($request->has('tags') && $request->tags !=null){
+            $tags = explode(',', $request->tags);
+        }
+
+
+        if($request->has('channel') && $request->channel !=null){
+            $channel = json_decode($request->channel);
+            if(!in_array(\strtolower($channel->name), $tags)){
+                $tags[] = \strtolower($channel->name);
+            }
+        }
+
+
+        $main_subject = $request->main_subject;
+        if($request->has('main_subject') && $request->main_subject !=null){
+            if(!in_array(\strtolower($request->main_subject), $tags)){
+                $tags[] = \strtolower($request->main_subject);
+            }
+        }
+
+        $tag_ids = [];
+        foreach($tags as $tag){
+            $searchTag  = Tags::where('name', strtolower($tag))->first();
+            
+            if($searchTag){
+                $tag_ids[] = $searchTag->id;
+            }else{
+                $newTag = Tags::create(['name'=>strtolower($tag)]);
+                $tag_ids[] = $newTag->id;
+            }
+            // $thread->tags()->delete();
+        }
+        
+        $thread->tags()->sync($tag_ids);
+
     }
+
+    /**
+     * Share Thread
+     */
+
+     public function share(Request $request){
+        $thread = Thread::where('id', $request->thread)->first();
+        $authUser = auth()->user();
+
+        //Send user Notification
+       if($authUser->userprivacy->thread_create_share_facebook ==1){
+           return response()->json('under default facebook');
+          $thread->notify(new ThreadPostFacebook);
+      }else if($request->has('share_on_facebook') && $request->share_on_facebook ==true){
+          $thread ->notify(new ThreadPostFacebook);  
+      }
+      
+       //Send user Notification
+      if($authUser->userprivacy->thread_create_share_twitter ==1){
+          return response()->json('under default twitter');
+          $thread ->notify(new ThreadPostTwitter);
+      }
+      else if($request->has('share_on_twitter') &&  $request->share_on_twitter ==true){
+          $thread ->notify(new ThreadPostTwitter);  
+      }
+   }
 
     
 }

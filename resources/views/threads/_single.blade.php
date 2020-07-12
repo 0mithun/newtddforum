@@ -1,8 +1,9 @@
 
     <div class="panel panel-default">
-        <div class="card-header">
+            </a>
+        <div class="card-header thread_thumb ">
             <a href="{{ $thread->path() }}"> 
-                <img src="{{ $thread->threadImagePath }}" class="img-responsive" alt="Responsive image">
+                <img src="{{ $thread->threadImagePath }}"   alt="Responsive image">
             </a>
         </div>
         <div class="panel-body">

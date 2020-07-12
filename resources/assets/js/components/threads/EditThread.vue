@@ -4,7 +4,7 @@
             Post an Anecdote
         </div>
         <div class="panel-body">
-            <form class="" action="" method="post" enctype="multipart/form-data" @submit.prevent="addNewThread">
+            <form class="" action="" method="post" enctype="multipart/form-data" @submit.prevent="updateThread">
                 <div class="row">
 
                     <div class="col-md-6">
@@ -21,7 +21,7 @@
                     <div class="col-md-4">
                         <div class="form-group " >
                             <label for="input">Category</label>
-                            <input id="input" class="form-control" type="text" placeholder="Enter channel name">
+                            <input id="input" class="form-control" type="text" placeholder="Enter channel name" v-model="defaultChannel">
                             <typeahead v-model="form.channel" target="#input" :data="allchannels" item-key="name" force-select/>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">                               
-                                <button class="btn btn-primary" type="submit" :disabled="form.wiki_info_page_url !='' && form.wiki_image_copyright_free != true">Add Thread</button>
+                                <button class="btn btn-primary" type="submit" :disabled="form.wiki_info_page_url !='' && form.wiki_image_copyright_free != true">Update Thread</button>
                             </div>
                         </div>
                     </div>
@@ -226,40 +226,45 @@
             allchannels:{
                 type: Array,
                 require: true
+            },
+            thread:{
+                type: Object,
+                require: true
             }
         },
         components: {Editor,Typeahead, },
         computed:{
             thumb(){
-                return this.threadThumb == '' ? '/images/default-thread-thumb.jpg' : this.threadThumb
-            }
+                return  (this.threadThumb !='') ? this.threadThumb :  (this.thread.threadImagePath == '' ? '/images/default-thread-thumb.jpg' : this.thread.threadImagePath)
+            },            
         },
+        
         data(){
             return {
-                thread: null,
                 errors: [],
                 show_more_fields: false,
                 threadThumb: '',
                 selectFile: null,
+                defaultChannel: this.thread.channel.name,
                 formData: new FormData,
                 form: {
-                    channel: '',
+                    channel: this.thread.channel,
                     tags: '',
-                    title: '',
-                    body: '',
-                    source: '',
-                    location: '',
+                    title: this.thread.title,
+                    body: this.thread.body,
+                    source: this.thread.source,
+                    location: this.thread.location,
                     cno: {
                         famous: false,
                         celebrity: false
                     },
-                    main_subject: '',
+                    main_subject: this.thread.main_subject,
                     image_path:null,
-                    age_restriction: 0,
-                    wiki_info_page_url: '',
+                    age_restriction: this.thread.age_restriction,
+                    wiki_info_page_url: this.thread.wiki_info_page_url,
                     wiki_image_copyright_free: false,
-                    wiki_image_description: '',
-                    anonymous: 0
+                    wiki_image_description: this.thread.wiki_image_description,
+                    anonymous: this.thread.anonymous
                 },
                 
                 share_on_facebook:false,
@@ -269,7 +274,17 @@
 
             }
         },
+        created(){
+            this.formatedTags();
+        },
         methods:{
+            formatedTags(){
+                const tags = []
+                for (let tag of this.thread.tags){
+                    tags.push(tag.name)
+                }               
+                this.form.tags = tags;;
+            },
             OpenImgUpload(){
                 $('#image_path').trigger('click')
             },
@@ -317,7 +332,12 @@
             },
             appendData(){
                 if(this.form.channel !=''){
-                    this.formData.append('channel',  JSON.stringify(this.form.channel));
+                    let newChannel =  {
+                        id: this.form.channel.id,
+                        name: this.form.channel.name
+                    };
+
+                    this.formData.append('channel',JSON.stringify(newChannel));
                 }else{
                     this.formData.append('channel', '');
                 }
@@ -346,11 +366,11 @@
 
                 
             },
-            addNewThread(){
+            updateThread(){
                 this.errors = []
                 this.appendData();
-                axios.post('/threads', this.formData).then(res=>{
-                    this.thread = res.data.thread;
+                let url = '/threads/'+this.thread.slug;                
+                axios.post(url, this.formData).then(res=>{
                     $('#shareThreadModal').modal('show');
                     flash('Thread Created Successfully')
                 }).catch(err=>{
@@ -363,8 +383,9 @@
                     share_on_facebook:this.share_on_facebook,
                     share_on_twitter:this.share_on_twitter,
                 }).then(res=>{
-                    $('#shareThreadModal').modal('hide');
-                    window.location = this.thread.path
+                    // $('#shareThreadModal').modal('hide');
+                    console.log(res.data)
+                    // window.location = this.thread.path
                 }).catch(err=>{
 
                 })
@@ -372,7 +393,7 @@
             closeShareModal(){
                 $('#shareThreadModal').modal('hide');
                 window.location = this.thread.path
-            }
+            },
         }
     }
 </script>

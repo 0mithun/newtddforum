@@ -33,7 +33,7 @@ class FrontendController extends Controller
         return view('pages.privacypolicy', compact('admin'));
     }
 
-    public  function  contactAdmin(Recaptcha $recaptcha){
+    public function contactAdmin(Recaptcha $recaptcha){
 
         request()->validate([
             'from'      =>  'required',

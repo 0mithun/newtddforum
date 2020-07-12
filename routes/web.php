@@ -38,31 +38,25 @@ Route::post('/map/all-threads','UserlocationController@getAllThread');
 Route::post('/map/thread-details','UserlocationController@threadDetails')->name('thread.details');
 
 
+Route::get('threads/search', 'SearchController@search');
 
 
 Route::get('/','ThreadsController@index');
 Route::get('/home', 'ThreadsController@index');
-Route::get('threads', 'ThreadsController@index')->name('threads');
 
-Route::get('threads/create', 'ThreadsController@create');
+Route::resource('threads','ThreadsController')->except(['show','update']);
+Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show');
+Route::post('threads/{thread}', 'ThreadsController@update');
 
+Route::post('/thread/share','ThreadsController@share');
 
-Route::get('threads/search', 'SearchController@search');
-
-
-
-//Replace threads with anecdotes
-Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show')->middleware(['throttle:10']);
-
-Route::post('threads', 'ThreadsController@store')->middleware('must-be-confirmed');
-Route::post('/threads/share','ThreadsController@share');
+Route::get("/tags/{tag}",'ThreadsController@loadByTag')->name('tags.threads.list');
+Route::get('/threads?by={username}','ThreadsController@index')->name('threadsbyuser');
 
 Route::get('/anecdotes/{channel}/{thread}/replies', 'RepliesController@index');
 
 
 
-
-Route::get("/tags/{tag}",'ThreadsController@loadByTag')->name('tags.threads.list');
 Route::get('/tags-show','FrontendController@showTags')->name('show.tags');
 
 // Route::get("threads/most-likes",'ThreadsController@loadByLikes')->name('likes.threads.list');
@@ -70,7 +64,7 @@ Route::get('/tags-show','FrontendController@showTags')->name('show.tags');
 // Route::get("/threads/most-recents",'ThreadsController@loadByRecents')->name('recents.threads.list');
 // Route::get("/threads/top-rated",'ThreadsController@loadByTopRated')->name('toprated.threads.list');
 // Route::get("/threads/best-of-week",'ThreadsController@loadByBestOfWeek')->name('bestofweek.threads.list');
-Route::get('/threads?by={username}','ThreadsController@index')->name('threadsbyuser');
+
 
 
 Route::get('/user/confirm-new-email','ProfilesController@confirmNewEmail')->name('conform.new.email');
@@ -81,7 +75,7 @@ Route::get('/contact','FrontendController@contact')->name('contact');
 Route::get('/privacy','FrontendController@privacyPolicy')->name('privacypolicy');
 Route::get('/terms','FrontendController@tos')->name('tos');
 Route::get('/faq','FrontendController@faq')->name('faq');
-Route::post('contact','FrontendControl/threads/shareler@contactAdmin')->name('contactadmin');
+Route::post('contact','FrontendController@contactAdmin')->name('contactadmin');
 
 Route::get('/replies/{reply}/load-reply','RepliesController@lodReply');
 
@@ -138,8 +132,7 @@ Route::middleware(['auth'])->group(function (){
 
 
 
-    Route::post('threads/{thread}', 'ThreadsController@update');
-    Route::delete('threads/{thread}', 'ThreadsController@destroy');
+    
 
 
 
@@ -278,8 +271,6 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/users/change-password','ProfilesController@editPassword')->name('user.edit.password');
     Route::post('/user/update-password','ProfilesController@updatePassword')->name('user.update.password');
 
-    Route::get("/threads/my-favorites",'ThreadsController@loadByMyFavorites')->name('myfavorites.threads.list');
-
 
     
 });
@@ -322,16 +313,6 @@ Route::middleware(['admin'])->group(function (){
     Route::post('/admin/privacy-policy','AdminController@privacyPolicyUpdate')->name('admin.privacypolicy.update');
     Route::post('/admin/faq','AdminController@faqUpdate')->name('admin.faq.update');
 
-
-    Route::post('locked-threads/{thread}', 'LockedThreadsController@store')->name('locked-threads.store');
-    Route::delete('locked-threads/{thread}', 'LockedThreadsController@destroy')->name('locked-threads.destroy');
-
-
-//    Route::post('locked-threads/{thread}', 'LockedThreadsController@store')->name('locked-threads.store')->middleware('admin');
-//    Route::delete('locked-threads/{thread}', 'LockedThreadsController@destroy')->name('locked-threads.destroy')->middleware('admin');;
-
-
-   
 
     
 

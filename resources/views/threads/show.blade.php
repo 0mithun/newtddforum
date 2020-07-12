@@ -91,15 +91,25 @@
                 <div class="panel">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-10">
                                 <span class="channel-name"></span>
-                            <span class="created_time">{{ $thread->created_at->diffForHumans() }}</span>
+                                <span class="created_time">{{ $thread->created_at->diffForHumans() }}</span>
+                            </div>
+                            <div class="col-md-2 thread-edit-delete-btn"> 
+                                @if (auth()->check())
+                                    @if (auth()->user()->id == $thread->user_id || auth()->user()->id == 1)
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                        <a href="{{ route('threads.edit', $thread->slug) }}" class="btn btn-sm btn-default">Edit</a>
+                                    @endif                                    
+                                @endif                             
+                                    
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                            <h1 class="thread_title"> {{ $thread->title }}</h1>
+                                <h1 class="thread_title"> {{ $thread->title }}</h1>
                             </div>
+                            
                         </div>
                         <div class="row thread-show-item-counts">
                             <div class="col-md-4 thread_item_counts">
@@ -170,9 +180,9 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="story">
-                                    <figure class="thread_thumb">
+                                    <div class="thread_thumb">
                                         <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image">
-                                    </figure>
+                                    </div>
                                     <div class="story-text">
                                         {!! $thread->body !!}
                                     </div>

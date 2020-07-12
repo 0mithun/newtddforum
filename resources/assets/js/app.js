@@ -214,6 +214,7 @@ Vue.component('report-thread', ()=>import('./components/ReportThread.vue'));
 Vue.component('show-source', ()=>import('./components/ShowSource.vue'));
 
 Vue.component('add-new-thread', ()=>import('./components/threads/NewThread.vue'));
+Vue.component('edit-thread', ()=>import('./components/threads/EditThread.vue'));
 
 
 window.eventBus = new  Vue();
