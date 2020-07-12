@@ -94,9 +94,9 @@
                                 <label for="wiki_info_page_url" class="control-label"> Or Enter Image link </label>
                                 <input type="text" id="wiki_info_page_url" class="form-control" v-model="form.wiki_info_page_url">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" v-if="form.wiki_info_page_url !=''">
                                 <label for="">
-                                    <input type="checkbox"> 
+                                    <input type="checkbox" v-model="form.wiki_image_copyright_free" required> 
                                     This image is copyright-free (or the description includes license information)
                                 </label>
                             </div>
@@ -136,11 +136,11 @@
                   
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                              <div class="form-group">
                                 <label for="age_restriction">Age Restriction</label>
                                 <select name="age_restriction" id="age_restriction" class="form-control " v-model="form.age_restriction">
-                                    <option :value="0">Ok for everyone</option>
+                                    <option :value="0" selected>Ok for everyone</option>
                                     <option :value="13">PG-13</option>
                                     <option :value="18">R-rated (18+)</option>
                                 </select>
@@ -149,18 +149,16 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label for="category" class="control-label"> This story involves:</label>
+                                <label for="category" class="control-label"></label>
 
                                 <div class="checkbox">
-                                    <label><input type="checkbox" value="C" v-model="form.cno">Celebrities</label>
+                                    <label><input type="checkbox" value="1" v-model="form.cno.famous">This story involves a famous person or thing</label>
                                 </div>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" value="N" v-model="form.cno">Other notables</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" value="O" v-model="form.cno">Other people</label>
+                                
+                                <div class="checkbox" v-if="form.cno.famous" style="margin-left:30px">
+                                    <label><input type="checkbox" value="1" v-model="form.cno.celebrity">Is it a celebrity?</label>
                                 </div>
                             </div>
                         </div>
@@ -178,17 +176,16 @@
                     
                 </div>
 
-
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">                               
-                                <button class="btn btn-primary" type="submit">Add Thread</button>
+                                <button class="btn btn-primary" type="submit" :disabled="form.wiki_info_page_url !='' && form.wiki_image_copyright_free != true">Add Thread</button>
                             </div>
                         </div>
                     </div>
             </form>
             <!-- Modal -->
-            <div class="modal fade " id="shreThreadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" v-if="showShareModal">
+            <div class="modal fade " id="shreThreadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -206,7 +203,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-primary btn-sm">Share</button>
+                            <button class="btn btn-primary btn-sm" type="button" @click.prevent="shareThread">Share</button>
                         </div>
                     </div>
                 </div>
@@ -231,9 +228,6 @@
                 require: true
             }
         },
-        mounted(){
-            $('#shreThreadModal').modal();
-        },
         components: {Editor,Typeahead, },
         computed:{
             thumb(){
@@ -242,7 +236,7 @@
         },
         data(){
             return {
-                showShareModal: false,
+                thread: null,
                 errors: [],
                 show_more_fields: false,
                 threadThumb: '',
@@ -255,11 +249,15 @@
                     body: '',
                     source: '',
                     location: '',
-                    cno: [],
+                    cno: {
+                        famous: false,
+                        celebrity: false
+                    },
                     main_subject: '',
                     image_path:null,
-                    age_restriction: '',
+                    age_restriction: 0,
                     wiki_info_page_url: '',
+                    wiki_image_copyright_free: false,
                     wiki_image_description: '',
                     anonymous: 0
                 },
@@ -333,28 +331,40 @@
                 
                 this.formData.append('wiki_info_page_url', this.form.wiki_info_page_url);
                 this.formData.append('wiki_image_description', this.form.wiki_image_description);
-                this.formData.append('cno', this.form.cno);
-
                 this.formData.append('anonymous', this.form.anonymous ? 1 : 0);
+
+                
+
+                if(this.form.cno.famous == false){
+                    this.formData.append('cno', 'O');
+                }else if(this.form.famous == true && this.form.cno.celebrity == true){
+                    this.formData.append('cno', 'C');
+                }
+                else{
+                    this.formData.append('cno', 'N');
+                }
+
+                
             },
             addNewThread(){
                 this.errors = []
                 this.appendData();
                 axios.post('/threads', this.formData).then(res=>{
-                    this.showShareModal = true;
+                    this.thread = res.data.thread;
+                    $('#shreThreadModal').modal('show');
+                    flash('Thread Created Successfully')
                 }).catch(err=>{
                     this.errors = err.response.data.errors
                 })
             },
             shareThread(){
                 axios.post('/threads/share', {
-                    thread: 1,
-                     share_on_facebook:this.share_on_facebook,
+                    thread: this.thread.id,
+                    share_on_facebook:this.share_on_facebook,
                     share_on_twitter:this.share_on_twitter,
                 }).then(res=>{
-                    // let thread = res.data.thread;
-                    // window.location = thread.path
-                    this.showShareModal = false;
+                    $('#shreThreadModal').modal('hide');
+                    window.location = this.thread.path
                 }).catch(err=>{
 
                 })
@@ -368,5 +378,13 @@
         width: 150px;
         height: 150px;
         background-color: #eeeeee;
+    }
+
+     #tinymce iframe {
+            width: 100%!important;
+            height: 350px!important;
+        }
+    .tox-tinymce{
+        min-height:500px!important;
     }
 </style>

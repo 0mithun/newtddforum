@@ -34,7 +34,7 @@ class ModelFactorySeeder extends Seeder
 
 //        factory(App\Channel::class, 10)->create();
         $channels = [
-            'Other','Architecture','Art','Books','Business', 'Celebrities','Death','Dumb','Education','Entertainment','Food','Funny','History','Insults','Life','Love','Mistakes','Money','Movies',
+            'Entertainment','Other','Architecture','Art','Books','Business', 'Celebrities','Death','Dumb','Education','Food','Funny','History','Insults','Life','Love','Mistakes','Money','Movies',
             'Music','Politics','Pranks','Religion','Science','Sex','Sports','Travel','Television','War',
         ];
 

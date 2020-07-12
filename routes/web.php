@@ -41,12 +41,9 @@ Route::post('/map/thread-details','UserlocationController@threadDetails')->name(
 
 
 Route::get('/','ThreadsController@index');
-
-
-
 Route::get('/home', 'ThreadsController@index');
-
 Route::get('threads', 'ThreadsController@index')->name('threads');
+
 Route::get('threads/create', 'ThreadsController@create');
 
 
@@ -58,15 +55,14 @@ Route::get('threads/search', 'SearchController@search');
 Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show')->middleware(['throttle:10']);
 
 Route::post('threads', 'ThreadsController@store')->middleware('must-be-confirmed');
-Route::get('threads/{channel}', 'ThreadsController@index');
+Route::post('/threads/share','ThreadsController@share');
 
 Route::get('/anecdotes/{channel}/{thread}/replies', 'RepliesController@index');
 
 
 
 
-Route::get("/tags/{tag}/threads",'ThreadsController@loadByTag')->name('tags.threads.list');
-
+Route::get("/tags/{tag}",'ThreadsController@loadByTag')->name('tags.threads.list');
 Route::get('/tags-show','FrontendController@showTags')->name('show.tags');
 
 // Route::get("threads/most-likes",'ThreadsController@loadByLikes')->name('likes.threads.list');
@@ -85,7 +81,7 @@ Route::get('/contact','FrontendController@contact')->name('contact');
 Route::get('/privacy','FrontendController@privacyPolicy')->name('privacypolicy');
 Route::get('/terms','FrontendController@tos')->name('tos');
 Route::get('/faq','FrontendController@faq')->name('faq');
-Route::post('contact','FrontendController@contactAdmin')->name('contactadmin');
+Route::post('contact','FrontendControl/threads/shareler@contactAdmin')->name('contactadmin');
 
 Route::get('/replies/{reply}/load-reply','RepliesController@lodReply');
 
@@ -98,7 +94,7 @@ Route::get('/thread/{thread}/dislikes-count','LikeController@getDisikesCount');
     //Emojis
 
 //Not using
-Route::post('/thread/{thread}/like-type', 'LikeController@getUserLikeType');
+Route::post('/thread/{thread}/like-typ/threads/sharee', 'LikeController@getUserLikeType');
 Route::post('/thread/{thread}/all-like-type', 'LikeController@getAllLikeType');
 Route::get('/thread/{thread}/like-type-users/{type}', 'LikeController@getLikeTypeUsers');
 //Not Using
@@ -142,8 +138,8 @@ Route::middleware(['auth'])->group(function (){
 
 
 
-    Route::post('threads/{channel}/{thread}', 'ThreadsController@update');
-    Route::delete('threads/{channel}/{thread}', 'ThreadsController@destroy');
+    Route::post('threads/{thread}', 'ThreadsController@update');
+    Route::delete('threads/{thread}', 'ThreadsController@destroy');
 
 
 

@@ -7,17 +7,17 @@ use App\User;
 use App\Thread;
 use App\Channel;
 use App\Trending;
-use http\Env\Request;
 use App\Rules\Recaptcha;
+use Illuminate\Http\Request;
 use Spatie\Geocoder\Geocoder;
 use App\Filters\ThreadFilters;
 use App\Jobs\WikiImageProcess;
-use Illuminate\Validation\Rule;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Collection;
 use function GuzzleHttp\Promise\all;
-use Illuminate\Pagination\Paginator;
 
+use Illuminate\Pagination\Paginator;
 use App\Notifications\ThreadPostTwitter;
 use App\Notifications\ThreadWasReported;
 use App\Notifications\ThreadPostFacebook;
@@ -145,7 +145,7 @@ class ThreadsController extends Controller
             $channel = json_decode($request->channel);
             $data['channel_id'] = $channel->id;
         }else{
-            $data['channel_id'] = NULL;
+            $data['channel_id'] = 1;
         }
 
         $thread = Thread::create($data);
@@ -154,13 +154,13 @@ class ThreadsController extends Controller
         $this->attachTags($request, $thread);
         
 
-        // $this->sendNotification($thread, $authUser);
+        
         // if(request('wiki_info_page_url') != ''){
         //     WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
         // }
 
         if($request->expectsJson()){
-            return response()->json(['status'=>'success', 'thread'=>$thread], 201);
+            return response()->json(['status'=>'success', 'thread'=>$thread], 200);
         }
 
         return redirect($thread->path())
@@ -226,6 +226,16 @@ class ThreadsController extends Controller
 
     }
 
+    /**
+     * Share Thread
+     */
+
+     public function share(Request $request){
+        $thread = Thread::where('id', $request->thread)->first();
+        $authUser = auth()->user();
+        $this->sendNotification($thread, $authUser);
+     }
+
 
     /**
      * Display the specified resource.
@@ -252,7 +262,7 @@ class ThreadsController extends Controller
      * @param string $channel
      * @param Thread $thread
      */
-    public function update($channel, Thread $thread)
+    public function update(Thread $thread)
     {
         
 
@@ -360,7 +370,7 @@ class ThreadsController extends Controller
      * @param Thread $thread
      * @return mixed
      */
-    public function destroy($channel, Thread $thread)
+    public function destroy(Thread $thread)
     {
         $this->authorize('update', $thread);
 
@@ -403,15 +413,6 @@ class ThreadsController extends Controller
     }
 
 
-
-    public function report(){
-        $id = \request('id');
-        $reason = \request('reason');
-        $thread = Thread::findOrFail($id);
-
-        $thread->notify(new ThreadWasReported($thread, $reason));
-        return $thread;
-    }
 
 
     /**
