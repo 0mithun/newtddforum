@@ -326,12 +326,10 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     appendData: function appendData() {
-      var tagId = [];
-
       if (this.form.channel != '') {
-        this.formData.append('channel_id', this.form.channel.id);
+        this.formData.append('channel', JSON.stringify(this.form.channel));
       } else {
-        this.formData.append('channel_id', '');
+        this.formData.append('channel', '');
       }
 
       this.formData.append('title', this.form.title);
@@ -349,7 +347,8 @@ __webpack_require__.r(__webpack_exports__);
     addNewThread: function addNewThread() {
       this.appendData();
       axios.post('/threads', this.formData).then(function (res) {
-        console.log(res.data);
+        var thread = res.data.thread;
+        window.location = thread.path;
       })["catch"](function (err) {
         console.log(err);
       });
@@ -898,7 +897,66 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(1),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-4" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "age_restriction" } }, [
+                        _vm._v("Age Restriction")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.age_restriction,
+                              expression: "form.age_restriction"
+                            }
+                          ],
+                          staticClass: "form-control ",
+                          attrs: {
+                            name: "age_restriction",
+                            id: "age_restriction"
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.form,
+                                "age_restriction",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { domProps: { value: 0 } }, [
+                            _vm._v("Ok for everyone")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 13 } }, [
+                            _vm._v("PG-13")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: 18 } }, [
+                            _vm._v("R-rated (18+)")
+                          ])
+                        ]
+                      )
+                    ])
+                  ])
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "row" }, [
                   _c("div", { staticClass: "col-md-3" }, [
@@ -1132,7 +1190,7 @@ var render = function() {
               ])
             : _vm._e(),
           _vm._v(" "),
-          _vm._m(2)
+          _vm._m(1)
         ]
       ),
       _vm._v(" "),
@@ -1255,39 +1313,6 @@ var staticRenderFns = [
         _vm._v(
           " \n                                This image is copyright-free (or the description includes license information)\n                            "
         )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-4" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "age_restriction" } }, [
-            _vm._v("Age Restriction")
-          ]),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              staticClass: "form-control ",
-              attrs: { name: "age_restriction", id: "age_restriction" }
-            },
-            [
-              _c("option", { attrs: { value: "0" } }, [
-                _vm._v("Ok for everyone")
-              ]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "13" } }, [_vm._v("PG-13")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "18" } }, [
-                _vm._v("R-rated (18+)")
-              ])
-            ]
-          )
-        ])
       ])
     ])
   },

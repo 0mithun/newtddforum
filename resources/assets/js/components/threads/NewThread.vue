@@ -137,10 +137,10 @@
                         <div class="col-md-4">
                              <div class="form-group">
                                 <label for="age_restriction">Age Restriction</label>
-                                <select name="age_restriction" id="age_restriction" class="form-control ">
-                                    <option value="0">Ok for everyone</option>
-                                    <option value="13">PG-13</option>
-                                    <option value="18">R-rated (18+)</option>
+                                <select name="age_restriction" id="age_restriction" class="form-control " v-model="form.age_restriction">
+                                    <option :value="0">Ok for everyone</option>
+                                    <option :value="13">PG-13</option>
+                                    <option :value="18">R-rated (18+)</option>
                                 </select>
                             </div>
                         </div>  
@@ -185,21 +185,6 @@
                         </div>
                     </div>
                 
-
-                
-
-
-
-
-                
-
-                
-
-                
-                
-
-                
-
 
 
             </form>
@@ -312,15 +297,11 @@
                 };
             },
             appendData(){
-                let tagId = [];
-
                 if(this.form.channel !=''){
-                    this.formData.append('channel_id', this.form.channel.id);
+                    this.formData.append('channel',  JSON.stringify(this.form.channel));
                 }else{
-                    this.formData.append('channel_id', '');
+                    this.formData.append('channel', '');
                 }
-
-
                 this.formData.append('title', this.form.title);
                 this.formData.append('tags', this.form.tags);
                 this.formData.append('body', this.form.body);
@@ -338,7 +319,8 @@
             addNewThread(){
                 this.appendData();
                 axios.post('/threads', this.formData).then(res=>{
-                    console.log(res.data)
+                    let thread = res.data.thread;
+                    window.location = thread.path
                 }).catch(err=>{
                     console.log(err)
                 })

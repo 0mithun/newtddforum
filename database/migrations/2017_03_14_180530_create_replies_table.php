@@ -17,8 +17,9 @@ class CreateRepliesTable extends Migration
             $table->increments('id');
             $table->integer('thread_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->unsignedInteger('parent_id')->nullable();
             $table->text('body');
+            $table->unsignedInteger('parent_id')->nullable();
+            $table->unsignedInteger('replies_count')->default(0);
             $table->timestamps();
         });
     }

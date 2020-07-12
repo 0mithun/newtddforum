@@ -74,7 +74,6 @@ $factory->define(App\Thread::class, function ($faker) {
         'word_count'    =>  str_word_count($body),
         'visits' => 0,
         'slug' => str_slug($title),
-        'locked' => false,
     ];
 });
 

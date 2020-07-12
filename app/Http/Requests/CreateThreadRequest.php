@@ -28,7 +28,6 @@ class CreateThreadRequest extends FormRequest
         return [
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
-            'channel_id' => 'required|exists:channels,id',
              //'g-recaptcha-response' => ['required', $recaptcha],
             'image_path'    => $rule,
             // 'age_restriction'  => 'numeric', Rule::in([0, 13, 18]),
