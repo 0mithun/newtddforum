@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Tags;
 use App\User;
 use App\Thread;
@@ -88,7 +87,7 @@ class ThreadsController extends Controller
         if (request()->wantsJson()) {
             return $threads;
         }
-
+        
         return view('threads.index', [
             'threads' => $threads,
             'trending' => $trending->get()
@@ -280,6 +279,7 @@ class ThreadsController extends Controller
         $this->authorize('update', $thread);
 
         $thread->delete();
+        session()->flash('success','Thread delete Successfully');
 
         if (request()->wantsJson()) {
             return response([], 204);
@@ -324,6 +324,8 @@ class ThreadsController extends Controller
      * Get Threads by tag
      */
     public function loadByTag($tag, Trending $trending){
+        
+
         $tag = Tags::where('name', \request('tag'))->first();
 
         if($tag){

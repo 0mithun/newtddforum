@@ -11,16 +11,29 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Top <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/threads?rated=1">Top</a></li>
+                        <li><a href="/threads?rated=1">Top Rated</a></li>
+                        <li><a href="/threads?viewed=1">Most Viewed</a></li>
+                        <li><a href="/threads?recents=1">Most Recent</a></li>
+                        <li><a href="{{ route('closet.thread') }}">Closest</a></li>
+                        <li><a href="/threads?video=1">Video</a></li>
+                      
+
+
                     </ul>
                 </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">Browse <span class="caret"></span></a>
+                    aria-expanded="false">Categories <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/threads?rated=1">Top</a></li>
+                        {{-- <li><a href="/threads?rated=1">Top</a></li> --}}
+                        @foreach ($channels as $channel)
+                            <li><a href="{{ route('tags.threads.list', strtolower($channel->name)) }}">{{ $channel->name }}</a></li>
+                        @endforeach
+                        <li><a href="{{ route('show.tags') }}">More</a></li>
                     </ul>
                 </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false" >

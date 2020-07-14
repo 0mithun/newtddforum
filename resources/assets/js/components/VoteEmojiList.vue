@@ -1,5 +1,5 @@
 <template>
-    <div class="emoji-list-buttons" >
+    <div class="emoji-list-buttons" v-if="show" @mouseout="hideEmojiList">
       <button data-toggle="tooltip" 
         :title="emoji.name" class="btn emoji-btn" 
         v-bind:style="{'background-image': 'url(/images/emojis/' + emoji.name + '.png)' }" 
@@ -16,6 +16,7 @@ export default {
   data(){
     return{
       emojis:null,
+      show: false
     }
   },
   computed:{
@@ -26,6 +27,9 @@ export default {
 
   created(){
     this.getAllEmojis();
+    window.events.$on('showEmojiList', ()=>{
+      this.show = true;
+    });
   },
   methods:{
     voteEmoji(emoji){
@@ -45,6 +49,11 @@ export default {
     },
     redirectToLogin(){
         window.location =  '/redirect-to?page='+location.pathname;
+    },
+    hideEmojiList(){
+      setTimeout(()=>{
+          this.show = false
+      }, 3000)
     }
   }
 };

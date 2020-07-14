@@ -1,6 +1,6 @@
 <template>
   <div class="tools-single-item" >
-    <button class="btn  thread-items-show-tools-btn emojis-default-btn" :style="emojiStyle" :class="activeClass">
+    <button class="btn  thread-items-show-tools-btn emojis-default-btn" :style="emojiStyle" :class="activeClass" @mouseenter="showEmojiList">
     </button>
   </div>
 </template>
@@ -37,7 +37,9 @@ export default {
     });
   },
   methods:{
-
+    showEmojiList(){
+      window.events.$emit('showEmojiList');
+    },
     getUserEmojiType(){
       if (!this.signedIn) {
         return false;

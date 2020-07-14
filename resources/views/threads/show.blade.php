@@ -98,7 +98,7 @@
                             <div class="col-md-2 thread-edit-delete-btn"> 
                                 @if (auth()->check())
                                     @if (auth()->user()->id == $thread->user_id || auth()->user()->id == 1)
-                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                        <delete-thread-btn :thread="{{ $thread }}"></delete-thread-btn>
                                         <a href="{{ route('threads.edit', $thread->slug) }}" class="btn btn-sm btn-default">Edit</a>
                                     @endif                                    
                                 @endif                             
@@ -121,7 +121,6 @@
                                 <star-rating :thread="{{ $thread }}"></star-rating>
                             </div>
                             <div class="col-md-5 thread_emoji_count_map">
-                                {{-- <thread-emojis :thread="{{ $thread }}"></thread-emojis> --}}
                                 <emoji-counts :thread="{{ $thread }}"></emoji-counts>
             
                                 <div  class="thread-map-icon">

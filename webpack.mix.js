@@ -21,5 +21,5 @@ mix.js('resources/assets/js/app.js', 'public/js').version()
     mix.webpackConfig({
         output:{
             chunkFilename:'js/vuejs_code_split/[name].js',
-        }
+        },
     });

@@ -1,6 +1,8 @@
 
 window._ = require('lodash');
 
+import moment from 'moment';
+window.moment = moment;
 
 
 /**

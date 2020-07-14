@@ -51,12 +51,6 @@ class FrontendController extends Controller
         return  redirect('/');
     }
 
-    public function getTags(){
-        return Tags::all();
-    }
-
-    
-
     public function showTags(){
         $tags = Tags::withCount('threads')->orderBy('threads_count','desc')->take(100)->get();
         //return response()->json($tags);

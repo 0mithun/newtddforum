@@ -383,9 +383,8 @@
                     share_on_facebook:this.share_on_facebook,
                     share_on_twitter:this.share_on_twitter,
                 }).then(res=>{
-                    // $('#shareThreadModal').modal('hide');
-                    console.log(res.data)
-                    // window.location = this.thread.path
+                     $('#shareThreadModal').modal('hide');
+                     window.location = this.thread.path
                 }).catch(err=>{
 
                 })

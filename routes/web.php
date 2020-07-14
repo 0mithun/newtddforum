@@ -50,7 +50,8 @@ Route::post('threads/{thread}', 'ThreadsController@update');
 
 Route::post('/thread/share','ThreadsController@share');
 
-Route::get("/tags/{tag}",'ThreadsController@loadByTag')->name('tags.threads.list');
+Route::get("/threads/{tag}",'ThreadsController@loadByTag')->name('tags.threads.list');
+
 Route::get('/threads?by={username}','ThreadsController@index')->name('threadsbyuser');
 
 Route::get('/anecdotes/{channel}/{thread}/replies', 'RepliesController@index');
