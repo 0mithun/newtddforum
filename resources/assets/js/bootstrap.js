@@ -1,6 +1,8 @@
 
 window._ = require('lodash');
 
+import moment from 'moment';
+window.moment = moment;
 
 
 /**
@@ -65,7 +67,7 @@ window.flash = function (message, level = 'success') {
 };
 
 
-
+window.abbreviate = require('number-abbreviate');
 
 
 import Echo from "laravel-echo"

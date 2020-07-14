@@ -27,7 +27,11 @@ class Trending
             'title' => $thread->title,
             'user_id' => $thread->user_id,
             'age_restriction' => $thread->age_restriction,
-            'path' => $thread->path()
+            'path' => $thread->path(),
+            'threadImagePath' => $thread->threadImagePath,
+            'like_count' => $thread->like_count,
+            'dislike_count' => $thread->dislike_count,
+            'replies_count' => $thread->replies_count,
         ]));
     }
 

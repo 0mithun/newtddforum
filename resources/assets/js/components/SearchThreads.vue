@@ -1,145 +1,212 @@
 <template>
     <div>
-        <div class="col-md-12">
-            <!-- <li v-for="(thread, index) in allThreads" :key="index">
-                <a :href="thread.path">                  
-                
-                  <text-highlight :queries="q">{{ thread.title }}</text-highlight>
-                </a>
-            </li> -->
-            <div class="panel">
-                <div class="panel-body">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
+                            <input type="text" name="query" id="q" v-model="q" class="form-control" placeholder="Search Threads" @keyup="searchThreads">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" @click="searchThread">Search!</button>
+                            </span>
+                        </div><!-- /input-group -->
 
-                        <div class="row">
-                            <div class="col-md-10">
-                                <div class="input-group">
-                                    <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
-                                    <input type="text" name="query" id="q" v-model="q" class="form-control" placeholder="Search Threads" @keyup="searchThreads">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" @click="searchThread">Search!</button>
-                                    </span>
-                                </div><!-- /input-group -->
+                    </div>
 
-                            </div>
+                    <div class="col-md-2">
+                        <select name="" id="" class="form-control" v-model="sort_by" @change="sortBy">
+                            
+                            <option value="created_at">Most Recent</option>
+                            <!-- <option value="top_rated">Top Rated</option> -->
+                            <option value="like_count">Most Liked</option>
+                            <option value="favorite_count">Most Favorited</option>
+                            <option value="visits">Most Visits</option>
 
-                            <div class="col-md-2">
-                                <select name="" id="" class="form-control" v-model="sort_by" @change="sortBy">
-                                    
-                                    <option value="created_at">Most Recent</option>
-                                    <!-- <option value="top_rated">Top Rated</option> -->
-                                    <option value="like_count">Most Liked</option>
-                                    <option value="favorite_count">Most Favorited</option>
-                                    <option value="visits">Most Visits</option>
+                            <!-- <option value="most_favorited">Most Favorited</option> -->
+                            <!-- <option value="top_rated">Top Rated</option> -->
 
-                                    <!-- <option value="most_favorited">Most Favorited</option> -->
-                                    <!-- <option value="top_rated">Top Rated</option> -->
+                        </select>
+                    </div>
+                </div>
+                <div class="row filter-row">
+                    <div class="col-md-12">
 
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row filter-row">
-                            <div class="col-md-12">
-                                <button class="btn btn-default btn-sm mt-10" @click.prevent="filterOpen = !filterOpen">Filter 
-                                    <!-- <span class="glyphicon  glyphicon-chevron-up "></span> -->
-                                    <span class="glyphicon " :class="filterOpen ? 'glyphicon-chevron-up': 'glyphicon-chevron-down'" ></span>
-                                </button>
-                            </div>
-                            <div class="col-md-12" v-if="filterOpen">
-                                <div class="row">
-                                     <div class="col-md-2">
-                                        <h4 class="filter-title">Emoji</h4>
+                        <div class="btn-group">
+                            <button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                G/PG <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu search-dropdown">
+                                <li>
+                                        <div class="checkbox filter-item">
+                                        <label>
+                                            <input type="checkbox" name="rated" id=""  :value="0" v-model="filter_rated">   G-rated  
+                                        </label>
                                     </div>
-                                    <div class="col-md-10">
-                                            <div class=" filter-emoji filter-emoji-like" :class="emoji.name" v-for="(emoji, index) in emojis" :key="index" v-bind:style="{ 'background-image': 'url(/images/emojis/' + emoji.name + '.png)' }" >
-                                                <input type="checkbox" name="like" id="" :value="emoji.name" class="filter-emoji-checkbox" v-model="filter_emojis"> {{emoji.name}}
-                                            </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <h4 class="filter-title">Include</h4>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class=" filter-rated " >
-                                            <input type="checkbox" name="rated" id=""  :value="0" v-model="filter_rated">   G-rated 
-                                        </div>
-                                        <div class=" filter-rated " >
+                                </li>
+                                    <li>
+                                        <div class="checkbox filter-item">
+                                        <label>
                                             <input type="checkbox" name="rated" id=""  :value="13" v-model="filter_rated">   PG-rated 
-                                        </div>
-                                        <div class=" filter-rated " >
-                                            <input type="checkbox" name="rated" id=""  :value="18" v-model="filter_rated">    R-rated
-                                        </div>
+                                        </label>
                                     </div>
-                                </div>
+                                </li>
+                                    <li>
+                                        <div class="checkbox filter-item">
+                                        <label>
+                                            <input type="checkbox" name="rated" id=""  :value="18" v-model="filter_rated">    R-rated 
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
 
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <h4 class="filter-title">Include anecdotes</h4>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class=" filter-rated " >
+
+                        <div class="btn-group">
+                            <button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Include anecdotes <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu search-dropdown">
+                                <li>
+                                        <div class="checkbox filter-item">
+                                        <label>
                                             <input type="checkbox" name="rated" id="" value="C"  v-model="category">   Celebrities 
-                                        </div>
-                                        <div class=" filter-rated " >
-                                            <input type="checkbox" name="rated" id=""  value="N" v-model="category" >   Other notables 
-                                        </div>
-                                        <div class=" filter-rated " >
-                                            <input type="checkbox" name="rated" id=""  value="O" v-model="category" >    Other People
-                                        </div>
+                                        </label>
                                     </div>
-                                </div>
-                               
-                            </div>
+                                </li>
+                                    <li>
+                                        <div class="checkbox filter-item">
+                                        <label>
+                                                <input type="checkbox" name="rated" id=""  value="N" v-model="category" >   Other notables 
+                                        </label>
+                                    </div>
+                                </li>
+                                    <li>
+                                        <div class="checkbox filter-item">
+                                        <label>
+                                            <input type="checkbox" name="rated" id=""  value="O" v-model="category" >    Other People
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
 
+                        <div class="btn-group">
+                            <button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Emojis <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu search-dropdown">
+                                <li v-for="(emoji, index) in emojis" :key="index">
+                                    <div class="checkbox filter-item "  >
+                                        <label>
+                                            <input type="checkbox" name="like" id="" :value="emoji.name" class="filter-emoji-checkbox" v-model="filter_emojis"> 
+                                            <span class="filter-emoji"  :class="emoji.name"  :key="index" v-bind:style="{ 'background-image': 'url(/images/emojis/' + emoji.name + '.png)' }">
+                                                {{emoji.name}}
+                                            </span>
+                                        </label>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                        
+                        <!-- <div class="btn-group">
+                            <button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                All Tags <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu search-dropdown">
+                                <li>
+                                    <div class="checkbox filter-item">
+                                        <label>
+                                            <input type="checkbox" name="rated" id=""  :value="0" v-model="filter_rated">   G-rated  
+                                        </label>
+                                    </div>
+                                </li>
+                                
+                            </ul>
+                        </div> -->
+
+                    </div>
                 </div>
             </div>
-
-            <div class="panel" v-if="search ==false && allThreads.length == 0">
-                    <h3 class="text-center">No Results Found</h3>
-            </div>
-
-            <div class="panel" v-if="search">
-                    <h3 class="text-center">Search.....</h3>
-            </div>
-
-
-            <div class="panel" v-for="(thread, index) in allThreads" :key="index" style="margin-bottom:10px;" v-else>
-                <div class="panel-heading" style="padding-top:5px;">
-                    <h4 style="margin-top:5px;">
-                        <a :href="thread.path">
-                        <text-highlight :queries="q">{{ thread.title }}</text-highlight>
-                    </a> 
-                    </h4>
-                    <div class="media" style="margin-top: 0px;">
-                         <div class="media-left">
-                            <a href="#">
-                                <img :src="thread.threadImagePath"
-                                    alt="thread.title"
-                                    width="25"
-                                    height="25"
-                                    class="mr-1 avatar-photo">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <div class="col-md-9" style="padding:0px;">
-                                <h5 class="media-heading thread-info">
-                                    <a :href="'/threads?by='+thread.creator.username">{{ thread.creator.name }}</a>
-                                    <small> Posted:  <span v-text="ago(thread.created_at)"></span></small>
-                                </h5>
-                            </div>                  
-
-                        </div>
-                    </div>            
-
-                </div>
-            </div>
-
-
-
-            <SearchPagination :dataSet="threads" @changedSearch="fetch" :query="q"></SearchPagination>
-            
         </div>
+
+        <div class="panel panel-default" v-if="search == false && allThreads.length == 0">
+            <div class="panel-body">
+                <h3 class="text-center">No Results Found</h3>
+            </div>
+        </div>
+
+        <div class="panel panel-default" v-if="search">
+            <div class="panel-body">
+                <h3 class="text-center">Search.....</h3>
+            </div>
+        </div>
+        
+
+
+        <div class="panel panel-default" v-for="(thread, index) in allThreads" :key="index">
+            <div class="card-header thread_thumb">
+                <a :href="thread.path"> 
+                    <img :src="thread.threadImagePath" class="thread-image" :alt="thread.title">
+                </a>
+            </div>
+            <div class="panel-body">
+                <div class="thread_title">
+                        <a :href="thread.path"> <strong> <text-highlight :queries="q">{{ thread.title }}</text-highlight></strong></a> 
+                </div>
+                    
+
+                    <text-highlight :queries="q">
+                        {{ thread.excerpt }}
+                    </text-highlight>
+                
+                <div class="thread_creator">
+                        <a href="#" class="creator_name" v-if="thread.anonymous ==1">
+                            <img src="/images/default.png"
+                                alt="anonymous"
+                                width="25"
+                                height="25"
+                                class="avatar-photo">
+                            <user-online :user="thread.creator"></user-online>
+                            anonymous
+                        </a>
+                        <a :href="thread.creator.username" class="creator_name" v-else>
+                            <img :src="thread.creator.profileAvatarPath"
+                                :alt="thread.creator.name"
+                                width="25"
+                                height="25"
+                                class="avatar-photo">
+                            <user-online :user="thread.creator"></user-online>
+                            {{ thread.creator.name }}
+                        </a> 
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-md-3 social-share-btn">
+                        <fb-share :thread="thread"></fb-share>
+                        <twitter-share :thread="thread"></twitter-share>
+                    </div>
+                    <div class="col-md-4 thread_item_counts">
+                        <view-counts :thread="thread"></view-counts>
+                        <comment-counts :comment_counts="thread.replies_count"></comment-counts>
+                        <point-counts :like_count="thread.like_count" :dislike_count="thread.dislike_count"></point-counts>
+                    </div>
+                    <div class="col-md-5 thread_emoji_count_map">
+                        <emoji-counts :thread="thread"></emoji-counts>
+                        <div  class="thread-map-icon">
+                                <img src="/images/png/map-icon-red.png" alt="" v-if="thread.location !=null">                                    
+                                <img src="/images/png/map-icon-black.png" alt="" v-else>                                    
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <SearchPagination :dataSet="threads" @changedSearch="fetch" :query="q"></SearchPagination>
+           
     </div>
 </template>
 
@@ -166,83 +233,23 @@ export default {
             search: false,
             category:[],
             // famous:[0,1],
-            tags:[]
+            filter_tags:[],
+            emojis: ''
         }
     },
     watch:{
         filter_emojis(filter){
-            if(filter.length>0){
-               this.filterByEmojis(filter, this.threads.data);
-            }else{
-                this.allThreads = this.threads.data;
-            }
-            if(this.filter_rated.length>0){
-                this.filterByRated(this.filter_rated, this.allThreads);
-            }
-
-            if(this.famous.length>0){
-                this.filterByCategory(this.famous, this.allThreads);
-            }
-
-            if(this.tags.length>0){
-                this.filterByTags(this.tags, this.allThreads);
-            }
+            this.filterThreads();
         },
         filter_rated(filter){
-            if(filter.length>0){
-                this.filterByRated(filter, this.threads.data);
-            }else{
-                this.allThreads = this.threads.data;
-            }
-
-            if(this.filter_emojis.length>0){
-                this.filterByEmojis(this.filter_emojis, this.allThreads);
-            }
-
-            if(this.famous.length>0){
-                this.filterByCategory(this.famous, this.allThreads);
-            }
-             if(this.tags.length>0){
-                this.filterByTags(this.tags, this.allThreads);
-            }
+            this.filterThreads();
         },
         category(filter){
-            if(filter.length>0){
-               this.filterByCategory(filter, this.threads.data);
-            }else{
-                this.allThreads = this.threads.data;
-            }
-
-            if(this.filter_rated.length>0){
-                this.filterByRated(this.filter_rated, this.allThreads);
-            }
-            if(this.filter_emojis.length>0){
-                this.filterByRated(this.filter_emojis, this.allThreads);
-            }
-
-            if(this.tags.length>0){
-                this.filterByTags(this.tags, this.allThreads);
-            }
+             this.filterThreads();
 
         },
-        tags(filter){
-            if(filter.length>0){
-               this.filterByTags(filter, this.threads.data);
-            }else{
-                this.allThreads = this.threads.data;
-            }
-
-            if(this.filter_rated.length>0){
-                this.filterByRated(this.filter_rated, this.allThreads);
-            }
-            if(this.filter_emojis.length>0){
-                this.filterByRated(this.filter_emojis, this.allThreads);
-            }
-
-            if(this.famous.length>0){
-                this.filterByCategory(this.famous, this.allThreads);
-            }
-            
+        filter_tags(filter){
+            this.filterThreads();
         }
     },
     created(){
@@ -254,6 +261,26 @@ export default {
     },
     
     methods:{
+        filterThreads(){
+            let data = this.threads.data;
+            // if(this.filter_emojis.length>0){
+            //     data = this.filterByEmojis(this.filter_emojis, data);
+            // }
+
+            if(this.filter_rated.length>0){
+                data = this.filterByRated(this.filter_rated, data);
+            }
+
+            if(this.category.length>0){
+                data = this.filterByCategory(this.category, data);
+            }
+
+            if(this.filter_tags.length>0){
+                data = this.filterByTags(this.filter_tags, data);
+            }
+
+            this.allThreads = data;
+        },
         filterByEmojis(filter, data){
              let newThreads = _.filter(data, (thread)=>{
                 return thread.emojis.length>0;
@@ -265,7 +292,7 @@ export default {
                     }
                 }
             })
-            this.allThreads = filterThreads;
+            return filterThreads;
         },
 
         filterByRated(filter, data){
@@ -274,7 +301,7 @@ export default {
                     return true;
                 }
             });
-            this.allThreads = filterThreads;
+            return filterThreads;
         },
         filterByCategory(filter, data){
 
@@ -293,7 +320,7 @@ export default {
                     }
                 }
             })
-            this.allThreads = filterThreads;
+            return filterThreads;
         },
 
         filterByTags(filter, data){
@@ -307,7 +334,7 @@ export default {
                     }
                 }
             })
-            this.allThreads = filterThreads;
+            return filterThreads;
         },
 
         getAllEmojis(){
@@ -353,7 +380,7 @@ export default {
                 return;
             }
             this.search = true;
-            axios.get('/search-vue?query='+this.q+'&sort_by='+this.sort_by).then(res=>{
+            axios.get('/threads/search?query='+this.q+'&sort_by='+this.sort_by).then(res=>{
                 this.allThreads = res.data.data;
                 this.threads.data = res.data.data
                 let pageUrl = {
@@ -365,7 +392,7 @@ export default {
             })
         },
         fetch(page) {
-            axios.get('/search-vue?query='+this.q+'&page='+page)
+            axios.get('threads/search?query='+this.q+'&page='+page)
             .then(res=>{
                 this.allThreads = res.data.data
                 let pageUrl = {
@@ -382,9 +409,7 @@ export default {
 </script>
 
 <style scoped>
-    .panel-body .row {
-        margin-top: 0px;
-    }
+
 
     .row.filter-row{
         margin-top: 10px;
@@ -399,12 +424,12 @@ export default {
         background-color: transparent;
         background-size: 24px;
         background-repeat: no-repeat;
-        padding-left: 30px;
-        display: inline-flex;
+        display: flex;
         margin-right: 20px;
-        padding-top: 3px;
-        margin-top: 10px;
+        padding-left: 30px;
+        align-items: center;
     }
+
     .filter-rated{
         display: inline-flex;
         margin-right: 20px;
@@ -412,27 +437,39 @@ export default {
         margin-top: 10px;
 
     }
-/* 
-    .funny{
-      background-image :url(/images/emojis/funny.png);
-    }
-    .sad{
-      background-image :url(/images/emojis/sad.png);
-    }
-    .strange{
-      background-image :url(/images/emojis/strange.png);
-    }
-    .inspiring{
-      background-image :url(/images/emojis/inspiring.png);
-    }
-    .amazing{
-      background-image :url(/images/emojis/amazing.png);
-    }
-    .dumb{
-      background-image :url(/images/emojis/dumb1.png);
-    }
-    .famous{
-      background-image :url(/images/emojis/famous.png);
-    } */
 
+    .btn-link{
+        color: #636b6f;
+        text-decoration: none;
+    }
+    
+    .btn-link:hover{
+        color: #636b6f;
+        text-decoration: none;
+    }
+
+    .btn-link:focus{
+        outline: none;
+        text-decoration: none;
+    }
+    .dropdown-menu.search-dropdown{
+        font-size: 12px;
+    }
+
+    .dropdown-menu.search-dropdown li a:hover{
+        background-color: #eeeeee;
+    }
+
+    .filter-item{
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: normal;
+        line-height: 1.6;
+        color: #333333;
+        white-space: nowrap;
+    }
+     .filter-item:hover{
+          background-color: #eeeeee;
+     }
 </style>

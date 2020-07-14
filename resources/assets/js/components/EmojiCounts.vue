@@ -1,16 +1,13 @@
 <template>
   <div>
-    <div class="btn-group btn-group-xs emoji-buttons" >
-      <button data-toggle="tooltip" 
-        :title="emoji.name" class="btn btn-xs  emoji-btn" 
+      <span data-toggle="tooltip" 
+        :title="emoji.name" class="emoji-count-btn" 
         :class="[{ 'big-emoji-btn': emoji.id == userEmoji }, emoji.name]" 
         v-bind:style="{ 'background-image': 'url(/images/emojis/' + emoji.name + '.png)' }" 
-        @click="voteEmoji(emoji.id)" v-for="(emoji, index) in emojis" 
+         v-for="(emoji, index) in emojis" 
         :key="index"
-      > 
-        {{ emoji.count }}
-      </button>
-  </div>
+      >{{ formateEmojiCounts(emoji.count) }}</span>
+      
   </div>
 </template>
 
@@ -27,30 +24,19 @@ export default {
     signedIn() {
       return window.App.user ? true : false;
     },
+    
   },
 
   created(){
-    this.getUserEmojiType();
-    this.getAllEmojis();
+    // this.getUserEmojiType();
+    this.getEmojiCount();
   },
   methods:{
-    voteEmoji(type){
-      if (!this.signedIn) {
-        return false;
-      }
-      axios.post(`/thread/${this.thread.id}/emojis`,{
-          type:type
-      }).then(res => {
-          if(this.userEmoji !== type){
-            this.userEmoji = type
-          }else{
-            this.userEmoji = null
-          }
-         this.getAllEmojis();
-      });
+    formateEmojiCounts(value){
+      return abbreviate(value, 1)
     },
-    getAllEmojis(){
-       axios.get(`/thread/${this.thread.id}/emojis`).then(res => {
+    getEmojiCount(){
+       axios.get(`/thread/${this.thread.id}/emoji-counts`).then(res => {
          this.emojis = res.data;
       });
     },
@@ -73,18 +59,19 @@ export default {
   .emoji-buttons{
     margin-top: 5px;
   }
-  button.emoji-btn{
-        height: 40px;
-    background-color: transparent;
-    background-size: 20px;
+  .emoji-count-btn{
+    height: 16px;
+    /* background-color: transparent; */
+    background-size: 16px;
     background-repeat: no-repeat;
     vertical-align: bottom;
     text-align: center;
-    padding-top: 20px;
-    margin-right: 5px;
-    width: 24px;
+    /* padding-top: 20px; */
+    margin-right: 7px;
+    background-position: 0px 0px;
+    padding-left: 17px;
   }
-  button.big-emoji-btn{
+  .big-emoji-btn{
     height: 40px;
     background-color: transparent;
     background-size: 32px;

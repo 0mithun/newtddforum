@@ -1,19 +1,19 @@
 <template>
-    <div>
+    <div class="add-new-reply">
         <div v-if="signedIn" >
-            <h3>Add New Reply</h3>
-            <div class="form-group">
-                <textarea name="body" id="body" cols="30" rows="3" class="form-control" v-model="body"></textarea>
-            </div>
+            <form action="" @submit.prevent="addReply">
+                <div class="input-group">
+                    <input type="text" class="form-control" aria-label="..." name="body" id="body"  v-model="body" placeholder="Add a comment">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Post</button>
+                    </div>
+                </div>
+            </form>
 
-
-            <button type="submit"
-                    class="btn btn-default"
-                    @click="addReply">Post</button>
         </div>
 
         <p class="text-center" v-else>
-            Please <a href="/login">sign in</a> to participate in this
+            Please <a :href="redirectToLogin">sign in</a> to participate in this
             discussion.
         </p>
     </div>
@@ -22,7 +22,6 @@
 <script>
     import 'jquery.caret';
     import 'at.js';
-    import Editor from '@tinymce/tinymce-vue'
 
     export default {
         data() {
@@ -31,7 +30,11 @@
                 completed: false,
             };
         },
-
+        computed:{
+            redirectToLogin(){
+                return  '/redirect-to?page='+location.pathname;
+            },
+        },
         mounted() {
             $('#body').atwho({
                 at: "@",
@@ -60,7 +63,18 @@
 
                         this.$emit('created', data);
                     });
-            }
+            },
+            
         }
     }
 </script>
+
+
+<style  scoped>
+    .comment-body{
+        resize: vertical !important;
+    }
+    .add-new-reply{
+        padding: 30px 15px;
+    }
+</style>

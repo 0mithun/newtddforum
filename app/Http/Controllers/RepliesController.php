@@ -61,13 +61,14 @@ class RepliesController extends Controller
         ]);
 
 
-        Reply::create([
+       $reply = Reply::create([
             'body' => request('body'),
             'user_id' => auth()->id(),
             'thread_id' =>  $reply->thread_id,
             'parent_id' =>  $reply->id
         ]);
-        return 'reply add hoise';
+        
+        return \response()->json($reply);
     }
 
     public function lodReply(Reply $reply){

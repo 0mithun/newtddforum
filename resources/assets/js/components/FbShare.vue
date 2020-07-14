@@ -1,6 +1,6 @@
 <template>
-    <a :href="threadUrl" target="_blank" class="btn btn-xs btn-default" style="padding:0px;"   @click.prevent="share"    >
-        <i class="fa fa-facebook-square" aria-hidden="true" style="font-size:18px"></i>
+    <a :href="threadUrl" target="_blank" class="btn btn-xs facebook-share-btn"  @click.prevent="share">
+        <i class="fa fa-facebook-square" aria-hidden="true" ></i> Share
     </a>
 </template>
 
@@ -12,7 +12,6 @@
             }
         },
         computed: {
-            
             threadUrl(){
                 // return 'https://www.facebook.com/sharer/sharer.php?u='+ this.thread.path + '&quote='+this.thread.title+'&title='+this.thread.title;
                 return 'https://www.facebook.com/sharer/sharer.php?u='+ this.thread.path +'&title='+this.thread.title;
@@ -23,11 +22,23 @@
         },
         methods: {
              share(){
-                 if(this.signedIn){
-                    window.open(this.threadUrl, 'Share on Facebook', 'width=600, height=400')
+                 if(!this.signedIn){
+                    this.redirectToLogin();  
                  }
-                 return false;                
+                 
+                window.open(this.threadUrl, 'Share on Facebook', 'width=600, height=400')             
+            },
+            redirectToLogin(){
+                window.location =  '/redirect-to?page='+location.pathname;
             },
         }
     }
 </script>
+
+
+<style scoped>
+    .facebook-share-btn{
+        color: white;
+        background-color: #1b6ca8;
+    }
+</style>

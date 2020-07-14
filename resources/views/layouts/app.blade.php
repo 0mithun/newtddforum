@@ -28,8 +28,9 @@
 
     <script>
         window.MIX_GOOGLE_MAP_KEY ="AIzaSyCi8raV_JKtL4xUfmHIvHkxA07DBEr9WbA";
+        window.TINY_EDITOR_API_KEY="{{ config('services.tiny.key') }}"
     </script>
-
+    @yield('head')
     <style>
         body { padding-bottom: 100px; }
         .level { display: flex; align-items: center; }
@@ -72,7 +73,6 @@
         .navbar {
             margin-bottom: 5px;
         }
-
         
         .source-button{
             padding: 0px;
@@ -83,19 +83,6 @@
 
         .tag-list{
             padding: 0px
-        }
-
-        i.fa.fa-facebook-square {
-            font-size: 17px;
-            color: blue;
-            padding: 0px 3px;
-            
-        }
-
-        i.fa.fa-twitter-square {
-            font-size: 17px;
-            color: #3097d1;
-            padding: 0px 3px;
         }
 
         .userprivacy hr{
@@ -119,7 +106,7 @@
         }
     </style>
 
-    @yield('head')
+    
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
     <style>
@@ -192,15 +179,6 @@
     @include ('layouts.nav')
 
     @yield('content')
-    {{-- <div class="chat-sidebar">
-        <div class="panel">
-            <div class="panel-body">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam, voluptates? Odio dolores molestiae totam eos numquam saepe non, possimus nulla ipsum quos exercitationem, aut, quam obcaecati fuga aspernatur adipisci distinctio cumque dolor! Officia a libero alias ipsa, molestias eligendi consequatur aperiam quam! Sequi fugiat, ratione vitae voluptatum iste officia distinctio doloremque nobis suscipit enim accusantium dolorem quis minima eum aliquam itaque exercitationem ipsa similique aliquid quo ex ad perferendis ipsam. Ducimus expedita non incidunt sunt, vel illo minima, illum odit qui rem accusamus, tenetur provident inventore? Ea a incidunt ut obcaecati optio debitis numquam, nemo dolor. Iure at odio reprehenderit.
-            </div>
-        </div>
-    
-    </div> --}}
-    
 
     @include('layouts.footer')
     <flash message="{{ session('flash') }}"></flash>
@@ -220,6 +198,16 @@
 
 
 @yield('scripts')
+
+<script>
+    $(document).ready(function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    });
+</script>
 
 @yield('footer_script')
 

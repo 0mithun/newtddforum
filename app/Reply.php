@@ -24,7 +24,7 @@ class Reply extends Model
      *
      * @var array
      */
-    protected $with = ['owner', 'favorites','thread'];
+    protected $with = ['owner',];
 
     /**
      * The accessors to append to the model's array form.
@@ -32,7 +32,7 @@ class Reply extends Model
      * @var array
      */
     // protected $appends = ['favoritesCount', 'isFavorited', 'isBest','isReported','replyCount','ownerThreadUrl'];
-    protected $appends = ['favoritesCount', 'isFavorited', 'ownerThreadUrl'];
+    protected $appends = ['ownerProfileUrl','reply_count'];
 
     /**
      * Boot the reply instance.
@@ -94,7 +94,6 @@ class Reply extends Model
             $name = substr($matches[0],1);
 
             return $name;
-        //dd($matches);
         return $matches[1];
     }
 
@@ -120,11 +119,7 @@ class Reply extends Model
             '/@(?<=@)[a-zA-Z]+\s[a-zA-Z]+/',
 
             function ($matches) {
-                //return strtolower($matches[0]);
-                //return $matches[1];
                 $name = substr($matches[0],1);
-               // return $name;
-
                  $user = User::where( 'name', $name)->first();
                 if($user){
                     return "<a href=\"/profiles/".$user->username."\">".$matches[0]."</a>";
@@ -138,16 +133,6 @@ class Reply extends Model
         );
 
         $this->attributes['body'] = $line;
-
-        //Currently Working
-
-//        $replace =
-//            preg_replace(
-//            '/@([\w\-]+)/',
-//            '<a href="/profiles/$1">$0</a>',
-//            $body
-//        );
-//        $this->attributes['body'] = $replace;
     }
 
     /**
@@ -158,7 +143,6 @@ class Reply extends Model
     public function isBest()
     {
          return $this->thread->best_reply_id == $this->id;
-        // return $this->thread->best_reply_id != '';
         return TRUE;
     }
 
@@ -184,11 +168,6 @@ class Reply extends Model
         return \Purify::clean($body);
     }
 
-//    public function favorites()
-//    {
-//        return $this->morphMany(Favorite::class, 'favorited');
-//    }
-
     public function getIsReportedAttribute()
     {
         $report = DB::table('reports')
@@ -211,12 +190,13 @@ class Reply extends Model
     
     public function replyCount(){
         $reply = DB::table('replies')
-            ->where('parent_id', $this->id)->get()->count()
-            //->get();
+            ->where('parent_id', $this->id)
+            ->count()
         ;
+        return $reply;
     }
 
-    public function getOwnerThreadUrlAttribute(){
-        return url('threads?by='.$this->owner->username);
+    public function getOwnerProfileUrlAttribute(){
+        return url('profiles/'.$this->owner->username);
     }
 }

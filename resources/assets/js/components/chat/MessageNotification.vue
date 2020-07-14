@@ -1,13 +1,15 @@
 <template>
     <li class="dropdown" >
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-             <i class="fa fa-envelope text-default" >  </i> <span style="color:red;font-weight:bold;font-size:14px" >{{ unreadNotifications.length }}</span>
+             <!-- <i class="fa fa-envelope text-default" >  </i> -->
+
+             <img class="navbar-icon pen" src="/images/mail.png" alt="">
+              <span style="color:red;font-weight:bold;font-size:14px" >{{ unreadNotifications.length }}</span>
         </a>
-        <ul class="dropdown-menu list-group"  v-if="messageNotifications.length">
+        <ul class="dropdown-menu dropdown-menu-left list-group"  v-if="messageNotifications.length">
             <li class="list-group-item" v-for="(notification, index) in messageNotifications" :key="index">
                 <a href="/chat" @click="markAsRead(notification)">
-                    <div class="col-md-1 profile">
-                        
+                    <div class="col-md-1 profile">                       
                         <img :src="notification.data.friend.profileAvatarPath" alt="" class="profile-image">
                     </div>
                     <div class="col-md-11 message">
@@ -22,8 +24,8 @@
             </li>
 
         </ul>
-        <ul class="dropdown-menu" v-else>
-            <li class="list-group-item">
+        <ul class="dropdown-menu dropdown-menu-left" v-else>
+            <li class="list-group-item" style="height:30px;width: 175px">
                 <span class="text-center">No Message</span>
             </li>
         </ul>

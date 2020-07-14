@@ -34,4 +34,16 @@ class RatingController extends Controller
         }
         
     }
+
+    public function totalRating($thread){
+        $thread = Thread::where('id', $thread)->first();
+
+        $rating = $thread->ratings()->count();
+
+        if($rating){
+            return response()->json(['success'=>true, 'count'=>$rating]);
+        }else{
+            return response()->json(['success'=>false]);
+        }
+    }
 }

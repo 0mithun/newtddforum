@@ -33,7 +33,7 @@ class FrontendController extends Controller
         return view('pages.privacypolicy', compact('admin'));
     }
 
-    public  function  contactAdmin(Recaptcha $recaptcha){
+    public function contactAdmin(Recaptcha $recaptcha){
 
         request()->validate([
             'from'      =>  'required',
@@ -49,38 +49,6 @@ class FrontendController extends Controller
 
        Mail::to('admin@anecdotage.com')->send(new ContactToAdmin($data));
         return  redirect('/');
-    }
-
-    public function getTags(){
-        return Tags::all();
-    }
-
-
-    public function tagLoad(Request $request){
-
-        $term =  \request('q');
-
-        if(empty($term)){
-            return response()->json([]);
-        }
-        $tags = Tags::search($term)->limit(5)->get();
-
-        $formatted_tags = [];
-
-        foreach ($tags as $tag) {
-            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
-        }
-
-        return \Response::json($formatted_tags);
-
-    }
-
-    public function allTags(){
-        $tags = Tags::all()->map(function($value){
-            return ['id'=>$value->id, 'name'=>strtolower($value->name)];
-
-        });
-        return response()->json($tags);
     }
 
     public function showTags(){

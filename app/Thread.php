@@ -14,8 +14,8 @@ use DB;
 
 class Thread extends Model
 {
-    // use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
-    use RecordsActivity,  Notifiable, Favoritable, Likeable;
+    use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
+    // use RecordsActivity,  Notifiable, Favoritable, Likeable;
 
     protected $indexConfigurator = ThreadsIndexConfigurator::class;
 
@@ -88,11 +88,6 @@ class Thread extends Model
         static::created(function ($thread) {
             $thread->update(['slug' => $thread->title]);
         });
-
-        // static::updated(function($thread){
-        //     $thread->update(['word_count' => str_word_count($thread->body)]);
-        // });
-
 
     }
 
@@ -312,26 +307,6 @@ class Thread extends Model
     }
 
 
-    
-    // public function getIsReportedAttribute()
-    // {
-    //     $report = DB::table('reports')
-    //         ->where('user_id', auth()->id())
-    //         ->where('reported_id', $this->id)
-    //         ->where('reported_type','App\Thread')
-    //         ->first();
-    //     ;
-    //     //$report  = true;
-
-    //     if($report){
-    //         return true;
-    //     }else{
-    //         return false;
-    //     }
-
-    // }
-
-
     public function tags(){
         return $this->belongsToMany(Tags::class,'thread_tag','thread_id','tag_id');
     }
@@ -345,8 +320,6 @@ class Thread extends Model
 //        return substr(strip_tags($this->body),80);
         $body = strip_tags($this->body);
         $body = preg_replace('/\s+/', ' ', $this->body);
-
-//        $body = trim($this->body);
         return substr(strip_tags($body),0,250);
 
     }

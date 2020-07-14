@@ -42,6 +42,16 @@ class LoginController extends Controller
         $this->middleware('guest', ['except' => 'logout']);
     }
 
+    
+    public function redirectToPage(){
+        if(request()->has('page')){
+            $page = request('page');
+            session()->put('url.intended', $page);
+            return redirect('/login');
+        }
+        return redirect('/');
+    }
+
 
      /**
      * Redirect the user to the Facebook authentication page.

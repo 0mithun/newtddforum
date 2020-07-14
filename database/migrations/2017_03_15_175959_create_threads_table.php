@@ -17,41 +17,25 @@ class CreateThreadsTable extends Migration
             $table->increments('id');
             $table->string('slug')->unique()->nullable();
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('channel_id');
-            $table->unsignedInteger('replies_count')->default(0);
-            $table->unsignedInteger('like_count')->default(0);
-            $table->unsignedInteger('dislike_count')->default(0);
-            $table->unsignedInteger('favorite_count')->default(0);
-            $table->unsignedInteger('visits')->default(0);
-            $table->string('title');
+            $table->unsignedInteger('channel_id')->nullable();
+            $table->string('title',255);
             $table->text('body');
-            $table->unsignedInteger('word_count');
             $table->text('summary')->nullable();
             $table->string('source')->nullable();
-            $table->string('location')->nullable();
             $table->string('main_subject')->nullable();
-
-
             $table->string('image_path')->nullable();
-            $table->boolean('image_pending')->default(0);
-            $table->unsignedInteger('best_reply_id')->nullable();
-            $table->boolean('locked')->default(false);
-
+            
+            $table->string('location')->nullable();
             $table->float('lat',10,6)->nullable();
             $table->float('lng',10,6)->nullable();
 
-            $table->string('category')->nullable();//changed
-
+            $table->string('cno')->nullable();
             $table->integer('age_restriction')->default(0);
+            $table->boolean('anonymous')->default(0);
 
-            // - wiki Info Page Url
-            // - wiki Image Page Url (do we need to store this?)
-            // - wiki Image Url (what you called "Image Link" in test.csv)
-            // - amazon product URL
-            // - amazon image URL
-            // - description or caption
-            // - image_saved (bool)
             $table->string('wiki_info_page_url')->nullable();
+            $table->string('wiki_image_description')->nullable();
+
             $table->string('wiki_image_page_url')->nullable();
             $table->string('wiki_image_url')->nullable();
             $table->string('wiki_image_path')->nullable();
@@ -61,12 +45,16 @@ class CreateThreadsTable extends Migration
             $table->boolean('image_saved')->default(0);
 
 
+            $table->unsignedInteger('word_count');
+            $table->unsignedInteger('replies_count')->default(0);
+            $table->unsignedInteger('like_count')->default(0);
+            $table->unsignedInteger('dislike_count')->default(0);
+            $table->unsignedInteger('favorite_count')->default(0);
+            $table->unsignedInteger('visits')->default(0);
+            $table->double('average_rating')->default(0);
+
             $table->timestamps();
 
-            $table->foreign('best_reply_id')
-                ->references('id')
-                ->on('replies')
-                ->onDelete('set null');
         });
     }
 
