@@ -6,15 +6,17 @@
 
         $profileUserPrivacy = $profileUser->userprivacy;
     @endphp
-    <div class="container">
+
+    <profile-page></profile-page>
+    <!-- <div class="container">
         <div class="row top-margin">
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <div class="row">                            
+                        <div class="row">
                             @include('profiles._header')
                             @include('profiles._friendstatus')
-                        </div>                        
+                        </div>
 
                         @if( ($user->id == $profileUser->id) || ($profileUserPrivacy->see_my_profiles == 3) ||  ($profileUserPrivacy->see_my_profiles == 2 && $is_friend))
                             <hr>
@@ -43,7 +45,7 @@
                                             <profile-map lat="{{ $profileUser->lat }}" lng={{ $profileUser->lng}}></profile-map>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         @else
@@ -54,7 +56,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 @endsection
 
 @section('head')
