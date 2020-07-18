@@ -92,6 +92,10 @@ import VueChatScroll from 'vue-chat-scroll'
 Vue.use(VueChatScroll)
 
 
+import Fragment from 'vue-fragment'
+Vue.use(Fragment.Plugin)
+
+
 Vue.component('add-friend', () => import('./components/AddFriend.vue'))
 
 
@@ -119,6 +123,7 @@ Vue.component('add-new-thread', () => import('./components/threads/NewThread.vue
 Vue.component('edit-thread', () => import('./components/threads/EditThread.vue'));
 Vue.component('delete-thread-btn', () => import('./components/threads/DeleteThreadBtn.vue'));
 Vue.component('profile-page', () => import('./components/profile/profile-page.vue'));
+
 
 window.eventBus = new Vue();
 const app = new Vue({
