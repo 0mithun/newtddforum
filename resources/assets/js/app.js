@@ -51,6 +51,7 @@ Vue.component('simple-map', () => import('./components/gmap/SimpleMap.vue'))
 
 
 Vue.component('profile-map', () => import('./components/gmap/ProfileMap.vue'))
+Vue.component('map-location', () => import('./components/gmap/MapLocation.vue'))
 
 
 
