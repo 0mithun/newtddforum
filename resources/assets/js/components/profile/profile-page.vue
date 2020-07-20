@@ -3,28 +3,31 @@
     <div class="top-margin row">
       <div class="col-md-8">
         <div class="row profile-header">
-          <div class="col-md-3">
+          <div class="profile-avatar">
             <img src="/images/default.png" alt class="profile-img" />
           </div>
-          <div class="col-md-9">
+          <div class="profile-details">
             <h2 class="profile-name">{{ profile_user.name}}</h2>
-            <div class="profile-count"></div>
+            <div class="profile-count">
+              <post-counts :post_count="posts.length"></post-counts>
+              <like-counts :like_counts="likes.length"></like-counts>
+              <comment-counts :comment_count="comments.length"></comment-counts>
+              <favorite-counts :favorite_count="favorites.length"></favorite-counts>
+            </div>
             <div class="profile-buttons">
               <button class="btn btn-danger btn-sm follow-btn">Follow</button>
               <add-friend :recipient="profile_user" :isFriend="is_friend"></add-friend>
 
-              <button 
-                class="btn btn-default btn-sm" 
+              <button
+                class="btn btn-default btn-sm"
                 data-toggle="modal"
                 data-target="#messageModal"
                 v-if="showMessageButton"
                 @click="showModal=true"
-                
-                >
+              >
                 <i class="fa fa-envelope"></i>
               </button>
 
-             
               <div class="btn-group">
                 <button
                   class="btn btn-default btn-sm dropdown-toggle"
@@ -43,58 +46,95 @@
                 </ul>
               </div>
             </div>
-            <div class="profile-tags"> <strong>Following:</strong>
-                <a href="#" class="single-tags-name">#<span>Home</span> </a> 
-                <a href="#" class="single-tags-name">#<span>Entertainment</span> </a> 
-                <a href="#" class="single-tags-name">#<span>Television</span> </a> 
+            <div class="profile-tags">
+              <strong>Following:</strong>
+              <a href="#" class="single-tags-name">
+                #
+                <span>Home</span>
+              </a>
+              <a href="#" class="single-tags-name">
+                #
+                <span>Entertainment</span>
+              </a>
+              <a href="#" class="single-tags-name">
+                #
+                <span>Television</span>
+              </a>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="profile-menu">
             <ul class="nav nav-tabs profile-nav-tabs">
-              <li class="active"><a data-toggle="tab"  href="#about">About</a></li>
-              <li><a data-toggle="tab" href="#friends">Friends</a></li>
-              <li><a data-toggle="tab" href="#posts">posts</a></li>
-              <li><a data-toggle="tab" href="#favorites">Favorites</a></li>
-              <li><a data-toggle="tab" href="#likes">likes</a></li>
-              <li><a data-toggle="tab" href="#following">Following</a></li>
-              <li><a data-toggle="tab" href="#comments">Comments</a></li>
+              <li class="active">
+                <a data-toggle="tab" href="#about">About</a>
+              </li>
+              <li>
+                <a data-toggle="tab" href="#friends">Friends</a>
+              </li>
+              <li>
+                <a data-toggle="tab" href="#following">Following</a>
+              </li>
+              <li>
+                <a data-toggle="tab" href="#posts">Posts</a>
+              </li>
+              <li>
+                <a data-toggle="tab" href="#favorites">Favorites</a>
+              </li>
+              <li>
+                <a data-toggle="tab" href="#likes">Likes</a>
+              </li>
+              <li>
+                <a data-toggle="tab" href="#subscriptions">Subscriptions</a>
+              </li>
             </ul>
             <div class="tab-content">
-
-                <div class="tab-pane active about-details" id="about">
-                    <div class="about-header">
-                      <h4 class="about-name" >About {{profile_user.name  }}</h4>
-                      <button class="btn btn-default btn-sm about-edit-btn">
-                        <i class="fa fa-pencil"></i>
-                      </button>
-                    </div>
-                    <div v-html="profile_user.about"></div>
-                    <profile-map :profile_user="profile_user"></profile-map>
-                </div>
-                <div class="tab-pane  friend-details" id="friends"> 
-                    friends
-                </div>
-                <div class="tab-pane  post-details" id="posts"> 
-                    posts
-                </div>
-                <div class="tab-pane  favorite-details" id="favorites"> 
-                    favorites
-                </div>
-                <div class="tab-pane  like-details" id="likes"> 
-                    likes
-                </div>
-                <div class="tab-pane  following-details" id="following"> 
-                    following
-                </div>
-                <div class="tab-pane  comments-details" id="comments"> 
-                    comments
-                </div>
-
+              <div class="tab-pane active about-details" id="about">
+                <About :profile_user="profile_user"></About>
               </div>
+              <div class="tab-pane friend-details" id="friends">
+                <Friends :profile_user="profile_user"></Friends>
+              </div>
+              <div class="tab-pane following-details" id="following">following</div>
+
+              <div class="tab-pane post-details" id="posts">
+                <div class="post-header">
+                  <div class="post-counts">{{ postCounts }} posts</div>
+                </div>
+                <div class="post-body">
+                  <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
+                </div>
+              </div>
+              <div class="tab-pane favorite-details" id="favorites">
+                <div class="post-header">
+                  <div class="post-counts">{{ favoriteCounts }} posts</div>
+                </div>
+                <div class="post-body">
+                  <single-thread v-for="(thread, index) in favorites" :thread="thread" :key="index"></single-thread>
+                </div>
+              </div>
+              <div class="tab-pane like-details" id="likes">
+                <div class="post-header">
+                  <div class="post-counts">{{ likeCounts }} posts</div>
+                </div>
+                <div class="post-body">
+                  <single-thread v-for="(thread, index) in likes" :thread="thread" :key="index"></single-thread>
+                </div>
+              </div>
+              <div class="tab-pane like-details" id="subscriptions">
+                <div class="post-header">
+                  <div class="post-counts">{{ subscriptionCounts }} posts</div>
+                </div>
+                <div class="post-body">
+                  <single-thread
+                    v-for="(thread, index) in subscriptions"
+                    :thread="thread"
+                    :key="index"
+                  ></single-thread>
+                </div>
+              </div>
+            </div>
           </div>
-          
         </div>
       </div>
       <div class="col-md-4">sidebar</div>
@@ -136,6 +176,8 @@
 </template>
 
 <script>
+import About from "./ProfileAbout";
+import Friends from "./ProfileFriends";
 export default {
   props: {
     profile_user: {
@@ -154,11 +196,20 @@ export default {
       required: false
     }
   },
+  components: {
+    About,
+    Friends
+  },
   data() {
     return {
       showModal: false,
       showMessageButton: true,
-      newMessage:''
+      newMessage: "",
+      posts: [],
+      favorites: [],
+      likes: [],
+      subscriptions: [],
+      comments: []
     };
   },
   computed: {
@@ -167,14 +218,29 @@ export default {
     },
     editUrl() {
       return `/profiles/${this.profile_user.username}/edit`;
+    },
+    postCounts() {
+      return abbreviate(this.posts.length, 1);
+    },
+    favoriteCounts() {
+      return abbreviate(this.favorites.length, 1);
+    },
+    likeCounts() {
+      return abbreviate(this.likes.length, 1);
+    },
+    subscriptionCounts() {
+      return abbreviate(this.subscriptions.length, 1);
     }
   },
   created() {
-    console.log("paisi");
-        this.checkPrivacy();
+    this.checkPrivacy();
+    this.getAllPost();
+    this.getAllFavoritePost();
+    this.getAllLikePost();
+    this.getAllSubscriptionPost();
   },
   methods: {
-     checkPrivacy() {
+    checkPrivacy() {
       if (this.is_friend) {
         this.showMessageButton = true;
       } else if (this.profile_user.userprivacy.send_me_message === 2) {
@@ -183,7 +249,34 @@ export default {
         this.showMessageButton = false;
       }
     },
-     sendMessage() {
+    getAllPost() {
+      axios.get(`/profiles/${this.profile_user.username}/threads`).then(res => {
+        this.posts = res.data.threads;
+      });
+    },
+    getAllFavoritePost() {
+      axios
+        .get(`/profiles/${this.profile_user.username}/favorites`)
+        .then(res => {
+          // console.log(res.data);
+          this.favorites = res.data.threads;
+        });
+    },
+    getAllLikePost() {
+      axios.get(`/profiles/${this.profile_user.username}/likes`).then(res => {
+        this.likes = res.data.threads;
+        // console.log(res.data.threads);
+      });
+    },
+    getAllSubscriptionPost() {
+      axios
+        .get(`/profiles/${this.profile_user.username}/subscriptions`)
+        .then(res => {
+          this.subscriptions = res.data.threads;
+          console.log(res.data.threads);
+        });
+    },
+    sendMessage() {
       axios
         .post("/chat-send-message", {
           message: this.newMessage,
@@ -195,64 +288,82 @@ export default {
           this.showModal = false;
           $("#messageModal").modal("hide");
         });
-    },
+    }
   }
 };
 </script>
 
 <style  scoped>
-.profile-header{
+.profile-header {
   margin: 30px auto;
+  display: flex;
+  align-items: center;
 }
-  .profile-buttons {
-    padding: 10px 0px;
-  }
-  .follow-btn {
-    width: 100px;
-  }
-  .nav-tabs > li > a {
-    color: black;
-    border:none;
-    margin-right: 0;
+.profile-name {
+  padding: 0;
+  margin: 0;
+  color: black;
 }
-.nav-tabs > li > a, .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
-    border:none;
+.profile-buttons {
+  padding: 10px 0px;
 }
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-    color: #555555;
-    background-color: #f5f8fa;
-    border-bottom: 3px solid rgb(255, 67, 1);
-    cursor: default;
+.profile-img {
+  width: 120px;
+  height: 120px;
+  padding: 3px;
+  border: 2px solid rgb(255, 67, 1);
+  border-radius: 50%;
 }
-.profile-nav-tabs{
+
+.profile-avatar {
+  margin-right: 30px;
+}
+.profile-count {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.follow-btn {
+  width: 100px;
+  background-color: rgb(255, 67, 1);
+}
+
+.nav-tabs > li > a {
+  color: black;
+  border: none;
+  margin-right: 0;
+}
+.nav-tabs > li > a,
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+  border: none;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: #555555;
+  background-color: #f5f8fa;
+  border-bottom: 3px solid rgb(255, 67, 1);
+  cursor: default;
+}
+.profile-nav-tabs {
   display: flex;
   justify-content: space-between;
 }
-.profile-nav-tabs::before, 
-.profile-nav-tabs::after{
+.profile-nav-tabs::before,
+.profile-nav-tabs::after {
   content: none;
 }
 
-.single-tags-name{
+.single-tags-name {
   color: black;
 }
-.single-tags-name span{
+.single-tags-name span {
   color: rgb(255, 67, 1);
 }
-.about-header{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 30px;
-  padding-bottom: 15px;
-}
-.about-name{
+.post-counts {
   color: black;
+  padding: 15px 0;
   font-weight: bold;
-  padding: 0;
-}
-.about-edit-btn{
-  font-size: 16px;
-  color: black;
 }
 </style>

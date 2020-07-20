@@ -9,7 +9,8 @@
 
 @endphp
 @forelse ($threads as $thread)
-    @include('threads._single')
+    {{-- @include('threads._single') --}}
+    <single-thread :thread="{{ $thread }}"></single-thread>
 @empty
     <p>There are no relevant results at this time.</p>
 @endforelse

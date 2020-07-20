@@ -208,12 +208,6 @@ class ProfilesController extends Controller {
     }
 
     public function avatarChange( $user ) {
-        // $user =  request('user');
-        // $auth_user = auth()->user();
-        // if($user != $auth_user->username){
-        //     return redirect('/');
-        // }
-
         request()->validate( [
             'avatar' => 'required|image',
         ] );
@@ -226,7 +220,6 @@ class ProfilesController extends Controller {
                 if ( !$avatar_path == 'images/avatars/default.png' ) {
                     unlink( $avatar_path );
                 }
-
                 auth()->user()->update( [
                     'avatar_path' => $path,
                 ] );
@@ -235,37 +228,37 @@ class ProfilesController extends Controller {
                     'avatar_path' => $path,
                 ] );
             }
-
         }
-
         return response()->json( ['status' => 'success', 'message' => 'Avatar Change Successfully', 'avatar_path' => asset( $path )] );
-
     }
+
+
+    /**
+     * Get all subscriptions
+     */
 
     public function mySubscriptionsShow() {
         $user = request( 'user' );
-        $auth_user = auth()->user();
-        if ( $user != $auth_user->username ) {
-            return redirect( '/' );
-        }
+        $getUserInfo = User::where( 'username', $user )->first();
 
-        $subscriptions = DB::table( 'thread_subscriptions' )
-            ->where( 'user_id', $auth_user->id )
-            ->get();
-        $profileUser = $auth_user;
+        $subscriptionsId = DB::table( 'thread_subscriptions' )
+            ->where( 'user_id', $getUserInfo->id )
+            ->get()
+            ->pluck('thread_id')
+            ->all();
 
-        return view( 'profiles.subscriptions', compact( 'subscriptions', 'profileUser' ) );
+        $threads = Thread::whereIn( 'id', $subscriptionsId )->get();
+        return response()->json(['threads' => $threads]);
     }
+
+
+    /**
+     * Get all Favoreite Threads
+     */
 
     public function myFavoritesShow() {
         $user = request( 'user' );
         $getUserInfo = User::where( 'username', $user )->first();
-        $this->authorize( 'show', $getUserInfo );
-
-        if ( !$this->checkFriend( $getUserInfo, 'see_my_favorites' ) ) {
-            return redirect( '/' );
-        }
-
         $favoritesId = DB::table( 'favorites' )
             ->where( 'user_id', $getUserInfo->id )
             ->where( 'favorited_type', 'App\Thread' )
@@ -286,28 +279,21 @@ class ProfilesController extends Controller {
         } else {
             $favorites = Thread::whereIn( 'id', $favoritesId )->where( 'age_restriction', 0 )->get();
         }
-
-        $profileUser = $getUserInfo;
-        $is_friend = $auth_user->isFriendWith( $getUserInfo );
-
-        return view( 'profiles.favorites', compact( 'favorites', 'profileUser', 'is_friend' ) );
+        return response()->json(['threads' => $favorites]);
     }
+
+
+
+    /***
+     *  
+     * Get all Thread where current profile
+     
+     */ 
 
     public function myThreadsShow() {
         $user = request( 'user' );
         $auth_user = auth()->user();
-
         $getUserInfo = User::with( 'userprivacy' )->where( 'username', $user )->first();
-
-        $profileUser = $getUserInfo;
-        $friend = User::where( 'username', $user )->first();
-        $is_friend = $auth_user->isFriendWith( $friend );
-
-        $this->authorize( 'show', $getUserInfo );
-
-        if ( !$this->checkFriend( $getUserInfo, 'see_my_threads' ) ) {
-            return redirect( '/' );
-        }
 
         if ( $auth_user->username == $user ) {
             $threads = Thread::where( 'user_id', $getUserInfo->id )->get();
@@ -326,44 +312,44 @@ class ProfilesController extends Controller {
                 ->where( 'anonymous', '=', 0 )
                 ->get();
         }
-
-        return view( 'profiles.threads', compact( 'threads', 'profileUser', 'is_friend' ) );
+        return response()->json(['threads' => $threads]);
     }
 
+    /**
+     * Get all like Threads
+     */
     public function myLikesShow() {
-        $user = request( 'user' );
-        $auth_user = auth()->user();
-        if ( $user != $auth_user->username ) {
-            return redirect( '/' );
-        }
+         $user = request( 'user' );
+         $getUserInfo = User::where( 'username', $user )->first();
 
-        $likes = DB::table( 'likes' )
-            ->where( 'user_id', $auth_user->id )
+        $likesId = DB::table( 'likes' )
+            ->where( 'user_id', $getUserInfo->id )
             ->where( 'likeable_type', 'App\Thread' )
-            ->get();
-
-        $profileUser = $auth_user;
-
-        return view( 'profiles.likes', compact( 'likes', 'profileUser' ) );
+            ->get()
+            ->pluck( 'likeable_id' )
+            ->all();
+        $threads = Thread::whereIn( 'id', $likesId )->get();
+        return response()->json(['threads' => $threads]);
     }
+
+    /**
+     * Get all friend lists
+     */
 
     public function friendList() {
         $user = request( 'user' );
         $userInfo = User::where( 'username', $user )->first();
+        
+        $friendLists = $userInfo->getFriends();
 
         $this->authorize( 'show', $userInfo );
-
-        if ( !$this->checkFriend( $userInfo, 'see_my_friends' ) ) {
-            return redirect( '/' );
-        }
-
-        $friendLists = $userInfo->getFriends();
-        $profileUser = $userInfo;
-        $is_friend = auth()->user()->isFriendWith( $userInfo );
-
-        return view( 'profiles.friendlist', compact( 'friendLists', 'userInfo', 'profileUser', 'is_friend' ) );
+        return \response()->json(['friends'=> $friendLists]);
     }
 
+
+    /**
+     * Check is friend with authenticated users
+     */
     public function checkFriend( $friend, $privacy ) {
         $auth_user = auth()->user();
 
@@ -379,6 +365,10 @@ class ProfilesController extends Controller {
         return true;
     }
 
+
+    /**
+     * Get lat/lng information with string
+     */
     public function getGeocodeing( $address ) {
         $client = new \GuzzleHttp\Client();
 
