@@ -92,7 +92,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "counts-item" }, [
-    _c("i", { staticClass: "fa fa-heart" }),
+    _c("i", { staticClass: "fa fa-star" }),
     _vm._v(" "),
     _c("strong", [_vm._v(_vm._s(_vm.favoriteCounts))]),
     _vm._v(" favorite\n")

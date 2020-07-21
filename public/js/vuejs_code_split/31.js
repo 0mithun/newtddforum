@@ -33,10 +33,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     classes: function classes() {
-      return [this.isFavoriteThread ? 'active-favorite' : 'inactive-favorite'];
+      return [this.isFavoriteThread ? "active-favorite" : "inactive-favorite"];
     },
     endpoint: function endpoint() {
-      return '/thread/' + this.thread.id + '/favorites';
+      return "/thread/" + this.thread.id + "/favorites";
     },
     signedIn: function signedIn() {
       return window.App.user ? true : false;
@@ -47,27 +47,27 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     toggle: function toggle() {
-      if (this.signedIn) {
-        this.isFavoriteThread ? this.destroy() : this.create();
+      if (!this.signedIn) {
+        this.redirectToLogin();
       }
 
-      this.redirectToLogin();
+      this.isFavoriteThread ? this.destroy() : this.create();
     },
     create: function create() {
       axios.post(this.endpoint).then(function (res) {});
       this.isFavoriteThread = true;
-      flash('You are successfully favorite this thread', 'success');
+      flash("You are successfully favorite this thread", "success");
     },
     destroy: function destroy() {
       axios["delete"](this.endpoint);
       this.isFavoriteThread = false;
-      flash('You are successfully un favorite this thread', 'success');
+      flash("You are successfully un favorite this thread", "success");
     },
     checkIsFavoriteThread: function checkIsFavoriteThread() {
       var _this = this;
 
       if (this.signedIn) {
-        axios.post('/thread/check-thread-favorite', {
+        axios.post("/thread/check-thread-favorite", {
           thread: this.thread.id,
           user: window.App.user.id
         }).then(function (res) {
@@ -82,7 +82,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.isFavoriteThread = false;
     },
     redirectToLogin: function redirectToLogin() {
-      window.location = '/redirect-to?page=' + location.pathname;
+      window.location = "/redirect-to?page=" + location.pathname;
     }
   }
 });
@@ -108,11 +108,16 @@ var render = function() {
     _c(
       "button",
       {
-        staticClass: "btn  thread-items-show-tools-btn",
+        staticClass: "btn thread-items-show-tools-btn",
         class: _vm.classes,
-        on: { click: _vm.toggle }
+        on: {
+          click: function($event) {
+            $event.preventDefault()
+            return _vm.toggle($event)
+          }
+        }
       },
-      [_c("i", { staticClass: "fa fa-heart" })]
+      [_c("i", { staticClass: "fa fa-star" })]
     )
   ])
 }

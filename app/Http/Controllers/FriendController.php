@@ -5,19 +5,24 @@ namespace App\Http\Controllers;
 use App\Chat;
 use App\User;
 use Illuminate\Http\Request;
-
+use DB;
 class FriendController extends Controller
 {
 
     public function sentRequest(Request $request){
-        
-       
         $user = auth()->user();
         $receipentuser = User::find($request->recipient);
-        
         $friend = $user->befriend($receipentuser);
+    }
 
-       
+    public function cancelRequest(Request $request){
+        $auth_user = auth()->user();
+        $friend = DB::table('friendships')
+            ->where('sender_id', $auth_user->id)
+            ->where('recipient_id', $request->friend)
+            ->delete();
+            
+        return response()->json(['success'=>'Cancel request successfully']);
     }
 
 
@@ -149,11 +154,6 @@ class FriendController extends Controller
         if(\Request::ajax()){
             return response()->json(['success'=>'Friend unfriend successfully']);
         }
-        
-        session()->flash('succes','Friend unfriend successfully');
-        return redirect()->route('profile.friendlist', $authUser->username);
-
-        return 'Friend unfriend successfully';
     }
 
 
@@ -164,11 +164,11 @@ class FriendController extends Controller
         $authUser->blockFriend($friend);
 
         $this->unsetFriendMessage();
+        return \response()->json(['success'=>true,'message' => 'User block successfully']);
+        // session()->flash('succes','Friend Block successfully');
+        // return redirect()->route('profile.friendlist', $authUser->username);
 
-        session()->flash('succes','Friend Block successfully');
-        return redirect()->route('profile.friendlist', $authUser->username);
-
-        return 'Friend unfriend successfully ';
+        // return 'Friend unfriend successfully ';
     }
 
 

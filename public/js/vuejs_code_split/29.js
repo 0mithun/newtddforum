@@ -25,6 +25,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["recipient", "isFriend"],
   data: function data() {
@@ -67,6 +120,24 @@ __webpack_require__.r(__webpack_exports__);
         _this3.isFriend = false;
         _this3.sentRequst = false;
       });
+    },
+    blockFriend: function blockFriend() {
+      axios.post("/profiles/block-friend", {
+        friend: this.recipient.id
+      }).then(function (res) {
+        flash(res.data.message);
+        window.location = "/";
+      });
+    },
+    cancelRequest: function cancelRequest() {
+      var _this4 = this;
+
+      axios.post("/profiles/cancel-friend-request", {
+        friend: this.recipient.id
+      }).then(function (res) {
+        _this4.sentRequst = false;
+        flash(res.data.message);
+      });
     }
   }
 });
@@ -89,48 +160,156 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "fragement",
+    "div",
+    { staticClass: "btn-group" },
     [
       _vm.isFriend
         ? [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-danger btn-sm",
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.unFriend($event)
-                  }
-                }
-              },
-              [_c("i", { staticClass: "fa fa-times" })]
-            )
-          ]
-        : [
-            _vm.sentRequst
-              ? _c("button", { staticClass: "btn btn-success btn-sm" }, [
-                  _vm._v("Request Sent")
-                ])
-              : _c(
-                  "button",
+            _vm._m(0),
+            _vm._v(" "),
+            _c("ul", { staticClass: "dropdown-menu" }, [
+              _c("li", [
+                _c(
+                  "a",
                   {
-                    staticClass: "btn btn-default btn-sm",
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        return _vm.addFriend($event)
+                        return _vm.unFriend($event)
                       }
                     }
                   },
-                  [_c("i", { staticClass: "fa fa-user-plus" })]
+                  [_vm._v("Unfriend")]
                 )
+              ]),
+              _vm._v(" "),
+              _vm._m(1),
+              _vm._v(" "),
+              _c("li", [
+                _c(
+                  "a",
+                  {
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.blockFriend($event)
+                      }
+                    }
+                  },
+                  [_vm._v("Block")]
+                )
+              ])
+            ])
+          ]
+        : [
+            _vm.sentRequst
+              ? [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c("ul", { staticClass: "dropdown-menu" }, [
+                    _c("li", [
+                      _c(
+                        "a",
+                        {
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.cancelRequest($event)
+                            }
+                          }
+                        },
+                        [_vm._v("Cancel Request")]
+                      )
+                    ])
+                  ])
+                ]
+              : [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-sm",
+                      attrs: {
+                        type: "button",
+                        "data-toggle": "dropdown",
+                        "aria-haspopup": "true",
+                        "aria-expanded": "false"
+                      },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.addFriend($event)
+                        }
+                      }
+                    },
+                    [
+                      _c("i", {
+                        staticClass: "fa fa-ellipsis-h",
+                        attrs: { "aria-hidden": "true" }
+                      }),
+                      _vm._v(" Add Friend\n      ")
+                    ]
+                  )
+                ]
           ]
     ],
     2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-default btn-sm dropdown-toggle",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _c("i", {
+          staticClass: "fa fa-ellipsis-h",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [_c("a", [_vm._v("Unfollow")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-success btn-sm dropdown-toggle",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _c("i", {
+          staticClass: "fa fa-ellipsis-h",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" Request sent\n      ")
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 

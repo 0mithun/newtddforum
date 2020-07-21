@@ -169,6 +169,8 @@ Route::middleware( ['auth'] )->group( function () {
     //Friend System
 
     Route::post( '/friend/sent-request', 'FriendController@sentRequest' )->name( 'friendrequest.sent' );
+    Route::post( '/profiles/cancel-friend-request', 'FriendController@cancelRequest' );
+
 
     Route::post( '/friend/check-friend', 'FriendController@checkFriend' ); //should delete
     Route::post( '/friend/check-request-sent', 'FriendController@checkFriendRequestSent' );
@@ -184,7 +186,7 @@ Route::middleware( ['auth'] )->group( function () {
     // Route::post('profiles/{user}/unfriend','FriendController@unfriend')->name('profile.unfriend');
 
     Route::post( '/friend/unfriend', 'FriendController@unfriend' )->name( 'friend.unfriend' );
-    Route::post( 'profiles/{user}/block-friend', 'FriendController@blockFriend' )->name( 'profile.friend.block' );
+    Route::post( '/profiles/block-friend', 'FriendController@blockFriend' )->name( 'profile.friend.block' );
     Route::get( 'profiles/{user}/block-friends', 'FriendController@getBlockFriends' )->name( 'profile.blockfriends' );
     Route::post( 'profiles/{user}/unblock-friends', 'FriendController@unBlockFriends' )->name( 'profile.unblockfriends' );
 

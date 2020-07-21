@@ -1,6 +1,6 @@
 <template>
   <div class="counts-item">
-    <i class="fa fa-heart"></i>
+    <i class="fa fa-star"></i>
     <strong>{{ favoriteCounts }}</strong> favorite
   </div>
 </template>
