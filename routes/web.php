@@ -171,24 +171,22 @@ Route::middleware( ['auth'] )->group( function () {
     Route::post( '/friend/sent-request', 'FriendController@sentRequest' )->name( 'friendrequest.sent' );
     Route::post( '/profiles/cancel-friend-request', 'FriendController@cancelRequest' );
 
-
     Route::post( '/friend/check-friend', 'FriendController@checkFriend' ); //should delete
     Route::post( '/friend/check-request-sent', 'FriendController@checkFriendRequestSent' );
 
     //Route::get('profiles/{user}/friend-list','FriendController@friendList')->name('profile.friendlist');
 
     Route::get( '/profiles/{user}/friend-list', 'ProfilesController@friendList' )->name( 'profile.friendlist' );
-    
 
-    Route::get( 'profiles/{user}/friend-request', 'FriendController@getFriendRequest' )->name( 'profile.friendrequest' );
-    Route::post( 'profiles/{user}/accept-friend-request', 'FriendController@acceptFriendRequest' )->name( 'profile.acceptfriendrequest' );
+    Route::get( '/profiles/{user}/friend-request', 'FriendController@getAllFriendRequest' )->name( 'profile.friendrequest' );
+    Route::post( '/profiles/accept-friend', 'FriendController@acceptFriendRequest' )->name( 'profile.acceptfriendrequest' );
 
     // Route::post('profiles/{user}/unfriend','FriendController@unfriend')->name('profile.unfriend');
 
     Route::post( '/friend/unfriend', 'FriendController@unfriend' )->name( 'friend.unfriend' );
     Route::post( '/profiles/block-friend', 'FriendController@blockFriend' )->name( 'profile.friend.block' );
-    Route::get( 'profiles/{user}/block-friends', 'FriendController@getBlockFriends' )->name( 'profile.blockfriends' );
-    Route::post( 'profiles/{user}/unblock-friends', 'FriendController@unBlockFriends' )->name( 'profile.unblockfriends' );
+    Route::get( '/profiles/{user}/block-friends', 'FriendController@getBlockFriends' )->name( 'profile.blockfriends' );
+    Route::post( 'profiles/unblock-friends', 'FriendController@unBlockFriends' )->name( 'profile.unblockfriends' );
 
     //User Settings Notifications
     Route::get( '/profiles/{user}/settings', 'UserSettingsController@index' )->name( 'user.settnigs' );

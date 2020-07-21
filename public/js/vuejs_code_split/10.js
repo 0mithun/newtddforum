@@ -39,7 +39,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.counts-item[data-v-3f1611b0] {\n}\n", ""]);
+exports.push([module.i, "\n.counts-item[data-v-3f1611b0] {\n}\r\n", ""]);
 
 // exports
 

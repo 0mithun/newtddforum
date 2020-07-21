@@ -25,7 +25,7 @@
           />
           <user-online :user="thread.creator"></user-online>anonymous
         </a>
-        <a :href="thread.creator.username" class="creator_name" v-else>
+        <a :href="'/profiles/'+thread.creator.username" class="creator_name" v-else>
           <img
             :src="thread.creator.profileAvatarPath"
             :alt="thread.creator.name"

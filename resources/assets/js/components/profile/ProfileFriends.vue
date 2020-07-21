@@ -6,6 +6,12 @@
           <li class="active">
             <a data-toggle="tab" href="#friend-friends">Friends</a>
           </li>
+          <li class>
+            <a data-toggle="tab" href="#friend-request">Friend Requests</a>
+          </li>
+          <li class>
+            <a data-toggle="tab" href="#friend-blocking">Blockng</a>
+          </li>
           <li>
             <a data-toggle="tab" href="#friend-following">Following</a>
           </li>
@@ -38,6 +44,44 @@
           </div>
         </div>
       </div>
+      <div class="tab-pane" id="friend-request">
+        <div class="row">
+          <div class="col-md-4" v-for="(friend, index) in friendRequests" :key="index">
+            <div class="profile-single-item">
+              <a :href="`/profiles/${friend.username}`">
+                <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
+              </a>
+              <a :href="`/profiles/${friend.username}`" class="friends-name">{{ friend.name }}</a>
+
+              <button
+                class="btn btn-primary btnn-sm unfriend-btn"
+                @click.prevent="accept(friend.id)"
+              >
+                <i class="fa fa-user"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="friend-blocking">
+        <div class="row">
+          <div class="col-md-4" v-for="(friend, index) in blockLists" :key="index">
+            <div class="profile-single-item">
+              <a>
+                <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
+              </a>
+              <a class="friends-name">{{ friend.name }}</a>
+
+              <button
+                class="btn btn-primary btnn-sm unfriend-btn"
+                @click.prevent="unblock(friend.id)"
+              >
+                <i class="fa fa-user"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="tab-pane" id="friend-following">Following</div>
       <div class="tab-pane" id="friend-followers">Followers</div>
     </div>
@@ -49,12 +93,16 @@ export default {
   props: ["profile_user"],
   data() {
     return {
-      friendsList: []
+      friendsList: [],
+      friendRequests: [],
+      blockLists: []
     };
   },
 
   created() {
     this.getAllFriends();
+    this.getAllFriendRequests();
+    this.getAllBlockList();
   },
   methods: {
     unFriend(id) {
@@ -63,11 +111,40 @@ export default {
           friend: id
         })
         .then(res => {
-          console.log("unfriend");
           const filterFriend = this.friendsLis.filter(friend => {
             return friend.id != id;
           });
           this.friendsList = filterFriend;
+        });
+    },
+    accept(id) {
+      axios
+        .post("/profiles/accept-friend", {
+          friend: id
+        })
+        .then(res => {
+          const newFriendRequests = this.friendRequests.filter(friend => {
+            return friend.id != id;
+          });
+          this.friendRequests = newFriendRequests;
+        });
+      const newFriend = this.friendRequests.filter(friend => {
+        return friend.id === id;
+      });
+      this.friendsList.push(newFriend);
+    },
+    unblock(id) {
+      axios
+        .post("/profiles/unblock-friends", {
+          friend: id
+        })
+        .then(res => {
+          console.log(res.data);
+          const newBlockList = this.blockList.filter(friend => {
+            return friend.id != id;
+          });
+          this.blockList = newBlockList;
+          flash("Unblock successfully");
         });
     },
     getAllFriends() {
@@ -75,6 +152,20 @@ export default {
         .get(`/profiles/${this.profile_user.username}/friend-list`)
         .then(res => {
           this.friendsList = res.data.friends;
+        });
+    },
+    getAllFriendRequests() {
+      axios
+        .get(`/profiles/${this.profile_user.username}/friend-request`)
+        .then(res => {
+          this.friendRequests = res.data.friendRequests;
+        });
+    },
+    getAllBlockList() {
+      axios
+        .get(`/profiles/${this.profile_user.username}/block-friends`)
+        .then(res => {
+          this.blockLists = res.data.blockList;
         });
     }
   }

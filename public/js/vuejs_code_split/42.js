@@ -137,7 +137,7 @@ var render = function() {
               "a",
               {
                 staticClass: "creator_name",
-                attrs: { href: _vm.thread.creator.username }
+                attrs: { href: "/profiles/" + _vm.thread.creator.username }
               },
               [
                 _c("img", {

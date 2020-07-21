@@ -39,7 +39,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.fa-heart[data-v-c21211b8] {\n  color: red;\n}\n", ""]);
+exports.push([module.i, "\n.fa-heart[data-v-c21211b8] {\r\n  color: red;\n}\r\n", ""]);
 
 // exports
 
