@@ -6,10 +6,10 @@
           <li class="active">
             <a data-toggle="tab" href="#friend-friends">Friends</a>
           </li>
-          <li class>
+          <li class v-if="is_owner">
             <a data-toggle="tab" href="#friend-request">Friend Requests</a>
           </li>
-          <li class>
+          <li v-if="is_owner">
             <a data-toggle="tab" href="#friend-blocking">Blockng</a>
           </li>
           <li>
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane" id="friend-request">
+      <div class="tab-pane" id="friend-request" v-if="is_owner">
         <div class="row">
           <div class="col-md-4" v-for="(friend, index) in friendRequests" :key="index">
             <div class="profile-single-item">
@@ -63,7 +63,7 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane" id="friend-blocking">
+      <div class="tab-pane" id="friend-blocking" v-if="is_owner">
         <div class="row">
           <div class="col-md-4" v-for="(friend, index) in blockLists" :key="index">
             <div class="profile-single-item">
@@ -90,7 +90,7 @@
 
 <script>
 export default {
-  props: ["profile_user"],
+  props: ["profile_user", "is_owner", "is_friend", "profileUserPrivacy"],
   data() {
     return {
       friendsList: [],
@@ -98,11 +98,14 @@ export default {
       blockLists: []
     };
   },
-
+  computed: {},
   created() {
     this.getAllFriends();
-    this.getAllFriendRequests();
-    this.getAllBlockList();
+
+    if (this.is_owner == true) {
+      this.getAllFriendRequests();
+      this.getAllBlockList();
+    }
   },
   methods: {
     unFriend(id) {
@@ -139,7 +142,6 @@ export default {
           friend: id
         })
         .then(res => {
-          console.log(res.data);
           const newBlockList = this.blockList.filter(friend => {
             return friend.id != id;
           });

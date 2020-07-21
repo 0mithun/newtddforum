@@ -128,7 +128,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["profile_user"],
+  props: ["profile_user", "is_owner", "is_friend", "profileUserPrivacy"],
   data: function data() {
     return {
       friendsList: [],
@@ -136,10 +136,14 @@ __webpack_require__.r(__webpack_exports__);
       blockLists: []
     };
   },
+  computed: {},
   created: function created() {
     this.getAllFriends();
-    this.getAllFriendRequests();
-    this.getAllBlockList();
+
+    if (this.is_owner == true) {
+      this.getAllFriendRequests();
+      this.getAllBlockList();
+    }
   },
   methods: {
     unFriend: function unFriend(id) {
@@ -178,8 +182,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/profiles/unblock-friends", {
         friend: id
       }).then(function (res) {
-        console.log(res.data);
-
         var newBlockList = _this3.blockList.filter(function (friend) {
           return friend.id != id;
         });
@@ -402,6 +404,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -439,6 +447,50 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    isShowProfile: function isShowProfile() {
+      if (this.is_owner == true) {
+        return true;
+      } else if (this.profile_user.id == 1) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_profiles == 3) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_profiles == 2 && this.is_friend == true) {
+        return true;
+      }
+    },
+    isShowFriends: function isShowFriends() {
+      if (this.is_owner == true) {
+        return true;
+      } else if (this.profile_user.id == 1) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_friends == 3) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_friends == 2 && this.is_friend == true) {
+        return true;
+      }
+    },
+    isShowPosts: function isShowPosts() {
+      if (this.is_owner == true) {
+        return true;
+      } else if (this.profile_user.id == 1) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_threads == 3) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_threads == 2 && this.is_friend == true) {
+        return true;
+      }
+    },
+    isShowFavorites: function isShowFavorites() {
+      if (this.is_owner == true) {
+        return true;
+      } else if (this.profile_user.id == 1) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_favorites == 3) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_favorites == 2 && this.is_friend == true) {
+        return true;
+      }
+    },
     settingsUrl: function settingsUrl() {
       return "/profiles/".concat(this.profile_user.username, "/settings");
     },
@@ -460,10 +512,19 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.checkPrivacy();
-    this.getAllPost();
-    this.getAllFavoritePost();
-    this.getAllLikePost();
-    this.getAllSubscriptionPost();
+
+    if (this.isShowPosts) {
+      this.getAllPost();
+    }
+
+    if (this.isShowFavorites) {
+      this.getAllFavoritePost();
+    }
+
+    if (this.is_owner) {
+      this.getAllLikePost();
+      this.getAllSubscriptionPost();
+    }
   },
   methods: {
     checkPrivacy: function checkPrivacy() {
@@ -502,7 +563,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/profiles/".concat(this.profile_user.username, "/subscriptions")).then(function (res) {
         _this4.subscriptions = res.data.threads;
-        console.log(res.data.threads);
       });
     },
     sendMessage: function sendMessage() {
@@ -737,7 +797,39 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
+    _c("div", { staticClass: "friends-header" }, [
+      _c("div", { staticClass: "friends-menu" }, [
+        _c("ul", { staticClass: "nav nav-tabs friend-nav-tabs" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm.is_owner
+            ? _c("li", {}, [
+                _c(
+                  "a",
+                  { attrs: { "data-toggle": "tab", href: "#friend-request" } },
+                  [_vm._v("Friend Requests")]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.is_owner
+            ? _c("li", [
+                _c(
+                  "a",
+                  { attrs: { "data-toggle": "tab", href: "#friend-blocking" } },
+                  [_vm._v("Blockng")]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _vm._m(2)
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(3)
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "tab-content" }, [
       _c(
@@ -787,86 +879,108 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "tab-pane", attrs: { id: "friend-request" } }, [
-        _c(
-          "div",
-          { staticClass: "row" },
-          _vm._l(_vm.friendRequests, function(friend, index) {
-            return _c("div", { key: index, staticClass: "col-md-4" }, [
-              _c("div", { staticClass: "profile-single-item" }, [
-                _c("a", { attrs: { href: "/profiles/" + friend.username } }, [
-                  _c("img", {
-                    staticClass: "friends-avatar",
-                    attrs: { src: friend.profileAvatarPath, alt: friend.name }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "friends-name",
-                    attrs: { href: "/profiles/" + friend.username }
-                  },
-                  [_vm._v(_vm._s(friend.name))]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary btnn-sm unfriend-btn",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.accept(friend.id)
-                      }
-                    }
-                  },
-                  [_c("i", { staticClass: "fa fa-user" })]
-                )
-              ])
-            ])
-          }),
-          0
-        )
-      ]),
+      _vm.is_owner
+        ? _c(
+            "div",
+            { staticClass: "tab-pane", attrs: { id: "friend-request" } },
+            [
+              _c(
+                "div",
+                { staticClass: "row" },
+                _vm._l(_vm.friendRequests, function(friend, index) {
+                  return _c("div", { key: index, staticClass: "col-md-4" }, [
+                    _c("div", { staticClass: "profile-single-item" }, [
+                      _c(
+                        "a",
+                        { attrs: { href: "/profiles/" + friend.username } },
+                        [
+                          _c("img", {
+                            staticClass: "friends-avatar",
+                            attrs: {
+                              src: friend.profileAvatarPath,
+                              alt: friend.name
+                            }
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "friends-name",
+                          attrs: { href: "/profiles/" + friend.username }
+                        },
+                        [_vm._v(_vm._s(friend.name))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btnn-sm unfriend-btn",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.accept(friend.id)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fa fa-user" })]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
-      _c("div", { staticClass: "tab-pane", attrs: { id: "friend-blocking" } }, [
-        _c(
-          "div",
-          { staticClass: "row" },
-          _vm._l(_vm.blockLists, function(friend, index) {
-            return _c("div", { key: index, staticClass: "col-md-4" }, [
-              _c("div", { staticClass: "profile-single-item" }, [
-                _c("a", [
-                  _c("img", {
-                    staticClass: "friends-avatar",
-                    attrs: { src: friend.profileAvatarPath, alt: friend.name }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("a", { staticClass: "friends-name" }, [
-                  _vm._v(_vm._s(friend.name))
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary btnn-sm unfriend-btn",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.unblock(friend.id)
-                      }
-                    }
-                  },
-                  [_c("i", { staticClass: "fa fa-user" })]
-                )
-              ])
-            ])
-          }),
-          0
-        )
-      ]),
+      _vm.is_owner
+        ? _c(
+            "div",
+            { staticClass: "tab-pane", attrs: { id: "friend-blocking" } },
+            [
+              _c(
+                "div",
+                { staticClass: "row" },
+                _vm._l(_vm.blockLists, function(friend, index) {
+                  return _c("div", { key: index, staticClass: "col-md-4" }, [
+                    _c("div", { staticClass: "profile-single-item" }, [
+                      _c("a", [
+                        _c("img", {
+                          staticClass: "friends-avatar",
+                          attrs: {
+                            src: friend.profileAvatarPath,
+                            alt: friend.name
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("a", { staticClass: "friends-name" }, [
+                        _vm._v(_vm._s(friend.name))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btnn-sm unfriend-btn",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.unblock(friend.id)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fa fa-user" })]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
@@ -887,57 +1001,41 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "friends-header" }, [
-      _c("div", { staticClass: "friends-menu" }, [
-        _c("ul", { staticClass: "nav nav-tabs friend-nav-tabs" }, [
-          _c("li", { staticClass: "active" }, [
-            _c(
-              "a",
-              { attrs: { "data-toggle": "tab", href: "#friend-friends" } },
-              [_vm._v("Friends")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", {}, [
-            _c(
-              "a",
-              { attrs: { "data-toggle": "tab", href: "#friend-request" } },
-              [_vm._v("Friend Requests")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", {}, [
-            _c(
-              "a",
-              { attrs: { "data-toggle": "tab", href: "#friend-blocking" } },
-              [_vm._v("Blockng")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c(
-              "a",
-              { attrs: { "data-toggle": "tab", href: "#friend-following" } },
-              [_vm._v("Following")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c(
-              "a",
-              { attrs: { "data-toggle": "tab", href: "#friend-followers" } },
-              [_vm._v("Followers")]
-            )
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "friends-search" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Search" }
-        })
+    return _c("li", { staticClass: "active" }, [
+      _c("a", { attrs: { "data-toggle": "tab", href: "#friend-friends" } }, [
+        _vm._v("Friends")
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { attrs: { "data-toggle": "tab", href: "#friend-following" } }, [
+        _vm._v("Following")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { attrs: { "data-toggle": "tab", href: "#friend-followers" } }, [
+        _vm._v("Followers")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "friends-search" }, [
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { type: "text", placeholder: "Search" }
+      })
     ])
   }
 ]
@@ -1051,150 +1149,226 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "profile-menu" }, [
-            _vm._m(3),
-            _vm._v(" "),
-            _c("div", { staticClass: "tab-content" }, [
-              _c(
-                "div",
-                {
-                  staticClass: "tab-pane active about-details",
-                  attrs: { id: "about" }
-                },
-                [_c("About", { attrs: { profile_user: _vm.profile_user } })],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "tab-pane friend-details",
-                  attrs: { id: "friends" }
-                },
-                [_c("Friends", { attrs: { profile_user: _vm.profile_user } })],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "tab-pane following-details",
-                  attrs: { id: "following" }
-                },
-                [_vm._v("following")]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "tab-pane post-details",
-                  attrs: { id: "posts" }
-                },
-                [
-                  _c("div", { staticClass: "post-header" }, [
-                    _c("div", { staticClass: "post-counts" }, [
-                      _vm._v(_vm._s(_vm.postCounts) + " posts")
-                    ])
+        _vm.isShowProfile
+          ? _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "profile-menu" }, [
+                _c("ul", { staticClass: "nav nav-tabs profile-nav-tabs" }, [
+                  _vm._m(3),
+                  _vm._v(" "),
+                  _c("li", [
+                    _vm.isShowFriends
+                      ? _c(
+                          "a",
+                          { attrs: { "data-toggle": "tab", href: "#friends" } },
+                          [_vm._v("Friends")]
+                        )
+                      : _vm._e()
                   ]),
+                  _vm._v(" "),
+                  _vm._m(4),
+                  _vm._v(" "),
+                  _c("li", [
+                    _vm.isShowPosts
+                      ? _c(
+                          "a",
+                          { attrs: { "data-toggle": "tab", href: "#posts" } },
+                          [_vm._v("Posts")]
+                        )
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _vm.isShowFavorites
+                      ? _c(
+                          "a",
+                          {
+                            attrs: { "data-toggle": "tab", href: "#favorites" }
+                          },
+                          [_vm._v("Favorites")]
+                        )
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _vm.is_owner
+                      ? _c(
+                          "a",
+                          { attrs: { "data-toggle": "tab", href: "#likes" } },
+                          [_vm._v("Likes")]
+                        )
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _vm.is_owner
+                      ? _c(
+                          "a",
+                          {
+                            attrs: {
+                              "data-toggle": "tab",
+                              href: "#subscriptions"
+                            }
+                          },
+                          [_vm._v("Subscriptions")]
+                        )
+                      : _vm._e()
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "tab-content" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane active about-details",
+                      attrs: { id: "about" }
+                    },
+                    [
+                      _c("About", { attrs: { profile_user: _vm.profile_user } })
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "post-body" },
-                    _vm._l(_vm.posts, function(thread, index) {
-                      return _c("single-thread", {
-                        key: index,
-                        attrs: { thread: thread }
-                      })
-                    }),
+                    {
+                      staticClass: "tab-pane friend-details",
+                      attrs: { id: "friends" }
+                    },
+                    [
+                      _vm.isShowFriends
+                        ? _c("Friends", {
+                            attrs: {
+                              profile_user: _vm.profile_user,
+                              is_owner: _vm.is_owner,
+                              is_friend: _vm.is_friend,
+                              profileUserPrivacy: _vm.profile_user_privacy
+                            }
+                          })
+                        : _vm._e()
+                    ],
                     1
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "tab-pane favorite-details",
-                  attrs: { id: "favorites" }
-                },
-                [
-                  _c("div", { staticClass: "post-header" }, [
-                    _c("div", { staticClass: "post-counts" }, [
-                      _vm._v(_vm._s(_vm.favoriteCounts) + " posts")
-                    ])
-                  ]),
+                  ),
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "post-body" },
-                    _vm._l(_vm.favorites, function(thread, index) {
-                      return _c("single-thread", {
-                        key: index,
-                        attrs: { thread: thread }
-                      })
-                    }),
-                    1
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "tab-pane like-details",
-                  attrs: { id: "likes" }
-                },
-                [
-                  _c("div", { staticClass: "post-header" }, [
-                    _c("div", { staticClass: "post-counts" }, [
-                      _vm._v(_vm._s(_vm.likeCounts) + " posts")
-                    ])
-                  ]),
+                    {
+                      staticClass: "tab-pane following-details",
+                      attrs: { id: "following" }
+                    },
+                    [_vm._v("following")]
+                  ),
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "post-body" },
-                    _vm._l(_vm.likes, function(thread, index) {
-                      return _c("single-thread", {
-                        key: index,
-                        attrs: { thread: thread }
-                      })
-                    }),
-                    1
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "tab-pane like-details",
-                  attrs: { id: "subscriptions" }
-                },
-                [
-                  _c("div", { staticClass: "post-header" }, [
-                    _c("div", { staticClass: "post-counts" }, [
-                      _vm._v(_vm._s(_vm.subscriptionCounts) + " posts")
-                    ])
-                  ]),
+                    {
+                      staticClass: "tab-pane post-details",
+                      attrs: { id: "posts" }
+                    },
+                    [
+                      _c("div", { staticClass: "post-header" }, [
+                        _c("div", { staticClass: "post-counts" }, [
+                          _vm._v(_vm._s(_vm.postCounts) + " posts")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "post-body" },
+                        _vm._l(_vm.posts, function(thread, index) {
+                          return _c("single-thread", {
+                            key: index,
+                            attrs: { thread: thread }
+                          })
+                        }),
+                        1
+                      )
+                    ]
+                  ),
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "post-body" },
-                    _vm._l(_vm.subscriptions, function(thread, index) {
-                      return _c("single-thread", {
-                        key: index,
-                        attrs: { thread: thread }
-                      })
-                    }),
-                    1
+                    {
+                      staticClass: "tab-pane favorite-details",
+                      attrs: { id: "favorites" }
+                    },
+                    [
+                      _c("div", { staticClass: "post-header" }, [
+                        _c("div", { staticClass: "post-counts" }, [
+                          _vm._v(_vm._s(_vm.favoriteCounts) + " posts")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "post-body" },
+                        _vm._l(_vm.favorites, function(thread, index) {
+                          return _c("single-thread", {
+                            key: index,
+                            attrs: { thread: thread }
+                          })
+                        }),
+                        1
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane like-details",
+                      attrs: { id: "likes" }
+                    },
+                    [
+                      _c("div", { staticClass: "post-header" }, [
+                        _c("div", { staticClass: "post-counts" }, [
+                          _vm._v(_vm._s(_vm.likeCounts) + " posts")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "post-body" },
+                        _vm._l(_vm.likes, function(thread, index) {
+                          return _c("single-thread", {
+                            key: index,
+                            attrs: { thread: thread }
+                          })
+                        }),
+                        1
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane like-details",
+                      attrs: { id: "subscriptions" }
+                    },
+                    [
+                      _c("div", { staticClass: "post-header" }, [
+                        _c("div", { staticClass: "post-counts" }, [
+                          _vm._v(_vm._s(_vm.subscriptionCounts) + " posts")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "post-body" },
+                        _vm._l(_vm.subscriptions, function(thread, index) {
+                          return _c("single-thread", {
+                            key: index,
+                            attrs: { thread: thread }
+                          })
+                        }),
+                        1
+                      )
+                    ]
                   )
-                ]
-              )
+                ])
+              ])
             ])
-          ])
-        ])
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-4" }, [_vm._v("sidebar")])
@@ -1218,7 +1392,7 @@ var render = function() {
               { staticClass: "modal-dialog", attrs: { role: "document" } },
               [
                 _c("div", { staticClass: "modal-content" }, [
-                  _vm._m(4),
+                  _vm._m(5),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
                     _c("div", { staticClass: "form-group" }, [
@@ -1335,47 +1509,19 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "nav nav-tabs profile-nav-tabs" }, [
-      _c("li", { staticClass: "active" }, [
-        _c("a", { attrs: { "data-toggle": "tab", href: "#about" } }, [
-          _vm._v("About")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { attrs: { "data-toggle": "tab", href: "#friends" } }, [
-          _vm._v("Friends")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { attrs: { "data-toggle": "tab", href: "#following" } }, [
-          _vm._v("Following")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { attrs: { "data-toggle": "tab", href: "#posts" } }, [
-          _vm._v("Posts")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { attrs: { "data-toggle": "tab", href: "#favorites" } }, [
-          _vm._v("Favorites")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { attrs: { "data-toggle": "tab", href: "#likes" } }, [
-          _vm._v("Likes")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { attrs: { "data-toggle": "tab", href: "#subscriptions" } }, [
-          _vm._v("Subscriptions")
-        ])
+    return _c("li", { staticClass: "active" }, [
+      _c("a", { attrs: { "data-toggle": "tab", href: "#about" } }, [
+        _vm._v("About")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { attrs: { "data-toggle": "tab", href: "#following" } }, [
+        _vm._v("Following")
       ])
     ])
   },

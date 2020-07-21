@@ -1,9 +1,6 @@
 <div class="panel">
     <div class="card-header thread_thumb">
         <a href="{{ $thread->path }}">  <img src="{{ $thread->threadImagePath }}" class="img-responsive" alt="Responsive image"></a>
-        {{-- @php 
-            dd($thread);
-        @endphp --}}
     </div>
     <div class="panel-body">
         <div class="trendig_thread_title">

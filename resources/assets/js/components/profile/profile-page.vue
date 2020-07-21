@@ -63,29 +63,29 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="isShowProfile">
           <div class="profile-menu">
             <ul class="nav nav-tabs profile-nav-tabs">
               <li class="active">
                 <a data-toggle="tab" href="#about">About</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#friends">Friends</a>
+                <a data-toggle="tab" href="#friends" v-if="isShowFriends">Friends</a>
               </li>
               <li>
                 <a data-toggle="tab" href="#following">Following</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#posts">Posts</a>
+                <a data-toggle="tab" href="#posts" v-if="isShowPosts">Posts</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#favorites">Favorites</a>
+                <a data-toggle="tab" href="#favorites" v-if="isShowFavorites">Favorites</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#likes">Likes</a>
+                <a data-toggle="tab" href="#likes" v-if="is_owner">Likes</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#subscriptions">Subscriptions</a>
+                <a data-toggle="tab" href="#subscriptions" v-if="is_owner">Subscriptions</a>
               </li>
             </ul>
             <div class="tab-content">
@@ -93,7 +93,13 @@
                 <About :profile_user="profile_user"></About>
               </div>
               <div class="tab-pane friend-details" id="friends">
-                <Friends :profile_user="profile_user"></Friends>
+                <Friends
+                  :profile_user="profile_user"
+                  :is_owner="is_owner"
+                  :is_friend="is_friend"
+                  :profileUserPrivacy="profile_user_privacy"
+                  v-if="isShowFriends"
+                ></Friends>
               </div>
               <div class="tab-pane following-details" id="following">following</div>
 
@@ -213,6 +219,63 @@ export default {
     };
   },
   computed: {
+    isShowProfile() {
+      if (this.is_owner == true) {
+        return true;
+      } else if (this.profile_user.id == 1) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_profiles == 3) {
+        return true;
+      } else if (
+        this.profile_user_privacy.see_my_profiles == 2 &&
+        this.is_friend == true
+      ) {
+        return true;
+      }
+    },
+    isShowFriends() {
+      if (this.is_owner == true) {
+        return true;
+      } else if (this.profile_user.id == 1) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_friends == 3) {
+        return true;
+      } else if (
+        this.profile_user_privacy.see_my_friends == 2 &&
+        this.is_friend == true
+      ) {
+        return true;
+      }
+    },
+    isShowPosts() {
+      if (this.is_owner == true) {
+        return true;
+      } else if (this.profile_user.id == 1) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_threads == 3) {
+        return true;
+      } else if (
+        this.profile_user_privacy.see_my_threads == 2 &&
+        this.is_friend == true
+      ) {
+        return true;
+      }
+    },
+    isShowFavorites() {
+      if (this.is_owner == true) {
+        return true;
+      } else if (this.profile_user.id == 1) {
+        return true;
+      } else if (this.profile_user_privacy.see_my_favorites == 3) {
+        return true;
+      } else if (
+        this.profile_user_privacy.see_my_favorites == 2 &&
+        this.is_friend == true
+      ) {
+        return true;
+      }
+    },
+
     settingsUrl() {
       return `/profiles/${this.profile_user.username}/settings`;
     },
@@ -234,10 +297,16 @@ export default {
   },
   created() {
     this.checkPrivacy();
-    this.getAllPost();
-    this.getAllFavoritePost();
-    this.getAllLikePost();
-    this.getAllSubscriptionPost();
+    if (this.isShowPosts) {
+      this.getAllPost();
+    }
+    if (this.isShowFavorites) {
+      this.getAllFavoritePost();
+    }
+    if (this.is_owner) {
+      this.getAllLikePost();
+      this.getAllSubscriptionPost();
+    }
   },
   methods: {
     checkPrivacy() {
@@ -273,7 +342,6 @@ export default {
         .get(`/profiles/${this.profile_user.username}/subscriptions`)
         .then(res => {
           this.subscriptions = res.data.threads;
-          console.log(res.data.threads);
         });
     },
     sendMessage() {
