@@ -328,6 +328,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1173,150 +1174,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.allThreads, function(thread, index) {
-        return _c("div", { key: index, staticClass: "panel panel-default" }, [
-          _c("div", { staticClass: "card-header thread_thumb" }, [
-            _c("a", { attrs: { href: thread.path } }, [
-              _c("img", {
-                staticClass: "thread-image",
-                attrs: { src: thread.threadImagePath, alt: thread.title }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "panel-body" },
-            [
-              _c("div", { staticClass: "thread_title" }, [
-                _c("a", { attrs: { href: thread.path } }, [
-                  _c(
-                    "strong",
-                    [
-                      _c("text-highlight", { attrs: { queries: _vm.q } }, [
-                        _vm._v(_vm._s(thread.title))
-                      ])
-                    ],
-                    1
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("text-highlight", { attrs: { queries: _vm.q } }, [
-                _vm._v(_vm._s(thread.excerpt))
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "thread_creator" }, [
-                thread.anonymous == 1
-                  ? _c(
-                      "a",
-                      { staticClass: "creator_name", attrs: { href: "#" } },
-                      [
-                        _c("img", {
-                          staticClass: "avatar-photo",
-                          attrs: {
-                            src: "/images/default.png",
-                            alt: "anonymous",
-                            width: "25",
-                            height: "25"
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("user-online", { attrs: { user: thread.creator } }),
-                        _vm._v("anonymous\n        ")
-                      ],
-                      1
-                    )
-                  : _c(
-                      "a",
-                      {
-                        staticClass: "creator_name",
-                        attrs: { href: thread.creator.username }
-                      },
-                      [
-                        _c("img", {
-                          staticClass: "avatar-photo",
-                          attrs: {
-                            src: thread.creator.profileAvatarPath,
-                            alt: thread.creator.name,
-                            width: "25",
-                            height: "25"
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("user-online", { attrs: { user: thread.creator } }),
-                        _vm._v(
-                          "\n          " +
-                            _vm._s(thread.creator.name) +
-                            "\n        "
-                        )
-                      ],
-                      1
-                    )
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "panel-footer" }, [
-            _c("div", { staticClass: "row" }, [
-              _c(
-                "div",
-                { staticClass: "col-md-3 social-share-btn" },
-                [
-                  _c("fb-share", { attrs: { thread: thread } }),
-                  _vm._v(" "),
-                  _c("twitter-share", { attrs: { thread: thread } })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-md-4 thread_item_counts" },
-                [
-                  _c("view-counts", { attrs: { thread: thread } }),
-                  _vm._v(" "),
-                  _c("comment-counts", {
-                    attrs: { comment_counts: thread.replies_count }
-                  }),
-                  _vm._v(" "),
-                  _c("point-counts", {
-                    attrs: {
-                      like_count: thread.like_count,
-                      dislike_count: thread.dislike_count
-                    }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-md-5 thread_emoji_count_map" },
-                [
-                  _c("emoji-counts", { attrs: { thread: thread } }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "thread-map-icon" }, [
-                    thread.location != null
-                      ? _c("img", {
-                          attrs: {
-                            src: "/images/png/map-icon-red.png",
-                            alt: ""
-                          }
-                        })
-                      : _c("img", {
-                          attrs: {
-                            src: "/images/png/map-icon-black.png",
-                            alt: ""
-                          }
-                        })
-                  ])
-                ],
-                1
-              )
-            ])
-          ])
-        ])
+        return _c("single-thread", { key: index, attrs: { thread: thread } })
       }),
       _vm._v(" "),
       _c("SearchPagination", {

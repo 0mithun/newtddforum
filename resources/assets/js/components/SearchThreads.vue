@@ -175,8 +175,9 @@
         <h3 class="text-center">Search.....</h3>
       </div>
     </div>
+    <single-thread v-for="(thread, index) in allThreads" :thread="thread" :key="index"></single-thread>
 
-    <div class="panel panel-default" v-for="(thread, index) in allThreads" :key="index">
+    <!-- <div class="panel panel-default" v-for="(thread, index) in allThreads" :key="index">
       <div class="card-header thread_thumb">
         <a :href="thread.path">
           <img :src="thread.threadImagePath" class="thread-image" :alt="thread.title" />
@@ -237,7 +238,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
 
     <SearchPagination :dataSet="threads" @changedSearch="fetch" :query="q"></SearchPagination>
   </div>

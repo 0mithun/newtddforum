@@ -1,14 +1,41 @@
 <template>
   <div class="panel panel-default">
-    <div class="card-header thread_thumb">
-      <a :href="thread.path">
-        <img :src="thread.threadImagePath" class="thread-image" :alt="thread.title" />
-      </a>
-    </div>
     <div class="panel-body">
+      <div class="thread-tags">
+        <a
+          :href="'/threads/'+tag.name.toLowerCase()"
+          class="tag-name"
+          v-for="(tag, index) in thread.tags"
+          :key="index"
+        >#{{ tag.name }}</a>
+      </div>
       <div class="thread_title">
         <a :href="thread.path">
           <strong>{{ thread.title }}</strong>
+        </a>
+      </div>
+      <div class="card-header threads-counts">
+        <view-counts :thread="thread"></view-counts>
+        <comment-counts :comment_count="thread.replies_count"></comment-counts>
+        <point-counts :like_count="thread.like_count" :dislike_count="thread.dislike_count"></point-counts>
+        <favorite-counts :favorite_count="thread.favorite_count"></favorite-counts>
+
+        <emoji-counts :thread="thread"></emoji-counts>
+        <div class="thread-map-icon">
+          <template v-if="thread.location !=null">
+            <img src="/images/png/map-icon-red.png" alt />
+            <span class="full-location">{{ thread.location }}</span>
+          </template>
+
+          <template v-else>
+            <img src="/images/png/map-icon-black.png" alt />
+          </template>
+        </div>
+      </div>
+
+      <div class="card-header thread_thumb">
+        <a :href="thread.path">
+          <img :src="thread.threadImagePath" class="thread-image" :alt="thread.title" />
         </a>
       </div>
 
@@ -44,18 +71,8 @@
           <fb-share :thread="thread"></fb-share>
           <twitter-share :thread="thread"></twitter-share>
         </div>
-        <div class="col-md-4 thread_item_counts">
-          <view-counts :thread="thread"></view-counts>
-          <comment-counts :comment_count="thread.replies_count"></comment-counts>
-          <point-counts :like_count="thread.like_count" :dislike_count="thread.dislike_count"></point-counts>
-        </div>
-        <div class="col-md-5 thread_emoji_count_map">
-          <emoji-counts :thread="thread"></emoji-counts>
-          <div class="thread-map-icon">
-            <img src="/images/png/map-icon-red.png" alt v-if="thread.location !=null" />
-            <img src="/images/png/map-icon-black.png" alt v-else />
-          </div>
-        </div>
+        <div class="col-md-4 thread_item_counts"></div>
+        <div class="col-md-5 thread_emoji_count_map"></div>
       </div>
     </div>
   </div>
@@ -68,4 +85,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.threads-counts {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+.full-location {
+  font-size: 12px;
+}
 </style>

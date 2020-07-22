@@ -371,8 +371,6 @@ li.list-group-item {
 */
 
 .thread_title {
-  margin-top: 5px;
-  margin-bottom: 5px;
   color: black;
   font-weight: bold;
 }
@@ -421,9 +419,7 @@ li.list-group-item {
 .tag-name:active {
   text-decoration: none;
 }
-.tag-name:not(:last-child) {
-  border-right: 1px solid grey;
-}
+
 
 .thread-show-tools {
   display: flex;
@@ -467,24 +463,6 @@ li.list-group-item {
 .inactive-icon:hover {
   color: black;
   border: 2px solid black;
-}
-
-.active-favorite {
-  color: red;
-  border: 2px solid red;
-}
-.active-favorite:hover {
-  color: #92959e;
-  border: 2px solid #92959e;
-}
-
-.inactive-favorite {
-  color: #92959e;
-  border: 2px solid #92959e;
-}
-.inactive-favorite:hover {
-  color: red;
-  border: 2px solid red;
 }
 
 .focus-comment-btn:hover {

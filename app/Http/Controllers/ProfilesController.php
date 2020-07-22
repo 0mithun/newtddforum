@@ -81,10 +81,7 @@ class ProfilesController extends Controller {
             }
         }
 
-        // dd($data);
-
         $user->update( $data );
-        // auth()->user()->update($request->only(['first_name','last_name','date_of_birth','city','country','about']));
 
         if ( $user->email != $request->email ) {
             $token = md5( uniqid() . str_random() );

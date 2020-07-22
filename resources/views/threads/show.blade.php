@@ -107,31 +107,28 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <h1 class="thread_title"> {{ $thread->title }}</h1>
+                                <h1 class="thread_title" style="margin-top: 5px;margin-bottom:5px"> {{ $thread->title }}</h1>
                             </div>
                             
                         </div>
                         <div class="row thread-show-item-counts">
-                            <div class="col-md-4 thread_item_counts">
+                            <div class="col-md-12 thread_item_counts">
                                 <view-counts :thread="{{ $thread }}"></view-counts>
                                 <point-counts :like_count="{{ $thread->like_count }}" :dislike_count="{{ $thread->dislike_count }}"></point-counts>
-                                <comment-counts :comment_counts="{{ $thread->replies_count }}"></comment-counts>
-                            </div>
-                            <div class="col-md-3">
-                                <star-rating :thread="{{ $thread }}"></star-rating>
-                            </div>
-                            <div class="col-md-5 thread_emoji_count_map">
+                                <comment-counts :comment_count="{{ $thread->replies_count }}"></comment-counts>
+                                <favorite-counts :favorite_count="{{ $thread->favorite_count }}"></favorite-counts>
                                 <emoji-counts :thread="{{ $thread }}"></emoji-counts>
             
                                 <div  class="thread-map-icon">
                                     @if($thread->location != NULL)
                                         <img src="{{ asset('images/png/map-icon-red.png') }}" alt="">
+                                        <span class="full-location">{{ $thread->location }}</span>
+
                                     @else
                                         <img src="{{ asset('images/png/map-icon-black.png') }}" alt="">
                                     @endif
                                 </div>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-md-12">

@@ -77,3 +77,23 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.active-favorite {
+  color: #f6d743;
+  border: 2px solid #f6d743;
+}
+.active-favorite:hover {
+  color: #92959e;
+  border: 2px solid #92959e;
+}
+
+.inactive-favorite {
+  color: #92959e;
+  border: 2px solid #92959e;
+}
+.inactive-favorite:hover {
+  color: #f6d743;
+  border: 2px solid #f6d743;
+}
+</style>
