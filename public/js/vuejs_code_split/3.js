@@ -22,8 +22,66 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['profile_user']
+  props: ["profile_user", "is_owner"],
+  data: function data() {
+    return {
+      aboutBody: this.profile_user.about,
+      showModal: false
+    };
+  },
+  methods: {
+    saveAbout: function saveAbout() {
+      var _this = this;
+
+      axios.post("/profiles/".concat(this.profile_user.username, "/update-about"), {
+        about: this.aboutBody
+      }).then(function (res) {
+        flash("About update successfully");
+        _this.showModal = false;
+        $("#aboutEditModal").modal("hide");
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -37,9 +95,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
 //
 //
 //
@@ -595,7 +650,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".about-header[data-v-2835887e] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding-top: 30px;\n  padding-bottom: 15px;\n}\n.about-name[data-v-2835887e] {\n  color: black;\n  font-weight: bold;\n  padding: 0;\n}\n.about-edit-btn[data-v-2835887e] {\n  font-size: 16px;\n  color: black;\n}", ""]);
+exports.push([module.i, ".about-header[data-v-2835887e] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding-top: 30px;\n  padding-bottom: 15px;\n}\n.about-name[data-v-2835887e] {\n  color: black;\n  font-weight: bold;\n  padding: 0;\n}\n.about-edit-btn[data-v-2835887e] {\n  font-size: 16px;\n  color: black;\n}\n#about-edit-body[data-v-2835887e] {\n  resize: vertical;\n}", ""]);
 
 // exports
 
@@ -753,12 +808,102 @@ var render = function() {
           _vm._v("About " + _vm._s(_vm.profile_user.name))
         ]),
         _vm._v(" "),
-        _vm._m(0)
+        _vm.is_owner
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-default btn-sm about-edit-btn",
+                attrs: {
+                  "data-toggle": "modal",
+                  "data-target": "#aboutEditModal"
+                },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.showModal = true
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fa fa-pencil" })]
+            )
+          : _vm._e()
       ]),
       _vm._v(" "),
-      _c("div", { domProps: { innerHTML: _vm._s(_vm.profile_user.about) } }),
+      _c("div", { domProps: { innerHTML: _vm._s(_vm.aboutBody) } }),
       _vm._v(" "),
-      _c("profile-map", { attrs: { profile_user: _vm.profile_user } })
+      _c("profile-map", { attrs: { profile_user: _vm.profile_user } }),
+      _vm._v(" "),
+      _vm.showModal
+        ? _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: {
+                id: "aboutEditModal",
+                tabindex: "-1",
+                role: "dialog",
+                "aria-labelledby": "exampleModalLabel"
+              }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "modal-dialog", attrs: { role: "document" } },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-body" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.aboutBody,
+                              expression: "aboutBody"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { id: "about-edit-body", rows: "5" },
+                          domProps: { value: _vm.aboutBody },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.aboutBody = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: {
+                            type: "button",
+                            disabled: _vm.aboutBody == ""
+                          },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.saveAbout($event)
+                            }
+                          }
+                        },
+                        [_vm._v("Update")]
+                      )
+                    ])
+                  ])
+                ]
+              )
+            ]
+          )
+        : _vm._e()
     ],
     1
   )
@@ -768,11 +913,26 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      { staticClass: "btn btn-default btn-sm about-edit-btn" },
-      [_c("i", { staticClass: "fa fa-pencil" })]
-    )
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      ),
+      _vm._v(" "),
+      _c(
+        "h4",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Edit about")]
+      )
+    ])
   }
 ]
 render._withStripped = true
@@ -916,7 +1076,7 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass: "btn btn-primary btnn-sm unfriend-btn",
+                          staticClass: "btn btn-primary btn-sm",
                           on: {
                             click: function($event) {
                               $event.preventDefault()
@@ -963,7 +1123,7 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass: "btn btn-primary btnn-sm unfriend-btn",
+                          staticClass: "btn btn-primary btn-sm unfriend-btn",
                           on: {
                             click: function($event) {
                               $event.preventDefault()
@@ -1126,21 +1286,23 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _c("div", { staticClass: "btn-group" }, [
-                  _vm._m(1),
-                  _vm._v(" "),
-                  _c("ul", { staticClass: "dropdown-menu" }, [
-                    _c("li", [
-                      _c("a", { attrs: { href: _vm.editUrl } }, [
-                        _vm._v("Edit my information")
-                      ]),
+                _vm.is_owner
+                  ? _c("div", { staticClass: "btn-group" }, [
+                      _vm._m(1),
                       _vm._v(" "),
-                      _c("a", { attrs: { href: _vm.settingsUrl } }, [
-                        _vm._v("Settings")
+                      _c("ul", { staticClass: "dropdown-menu" }, [
+                        _c("li", [
+                          _c("a", { attrs: { href: _vm.editUrl } }, [
+                            _vm._v("Edit my information")
+                          ]),
+                          _vm._v(" "),
+                          _c("a", { attrs: { href: _vm.settingsUrl } }, [
+                            _vm._v("Settings")
+                          ])
+                        ])
                       ])
                     ])
-                  ])
-                ])
+                  : _vm._e()
               ],
               1
             ),
@@ -1223,7 +1385,12 @@ var render = function() {
                       attrs: { id: "about" }
                     },
                     [
-                      _c("About", { attrs: { profile_user: _vm.profile_user } })
+                      _c("About", {
+                        attrs: {
+                          profile_user: _vm.profile_user,
+                          is_owner: _vm.is_owner
+                        }
+                      })
                     ],
                     1
                   ),

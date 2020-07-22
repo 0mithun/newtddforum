@@ -53,10 +53,7 @@
               </a>
               <a :href="`/profiles/${friend.username}`" class="friends-name">{{ friend.name }}</a>
 
-              <button
-                class="btn btn-primary btnn-sm unfriend-btn"
-                @click.prevent="accept(friend.id)"
-              >
+              <button class="btn btn-primary btn-sm" @click.prevent="accept(friend.id)">
                 <i class="fa fa-user"></i>
               </button>
             </div>
@@ -73,7 +70,7 @@
               <a class="friends-name">{{ friend.name }}</a>
 
               <button
-                class="btn btn-primary btnn-sm unfriend-btn"
+                class="btn btn-primary btn-sm unfriend-btn"
                 @click.prevent="unblock(friend.id)"
               >
                 <i class="fa fa-user"></i>

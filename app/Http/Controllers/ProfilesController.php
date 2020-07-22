@@ -70,7 +70,7 @@ class ProfilesController extends Controller {
             'date_of_birth' => $request->date_of_birth,
             'city'          => $request->city,
             'country'       => $request->country,
-            'about'         => $request->about,
+            // 'about'         => $request->about,
         ];
 
         if ( request( 'city' ) != null && $user->city != $request->city ) {
@@ -107,6 +107,15 @@ class ProfilesController extends Controller {
         session()->flash( 'message', 'Your profile information update successfully' );
 
         return redirect()->route( 'profile', $user->username );
+    }
+
+    public function updateAbout( Request $request ) {
+        $user = auth()->user();
+        $user->update( [
+            'about' => $request->about,
+        ] );
+
+        return response()->json( ['success' => true, 'message', 'About update successfully'] );
     }
 
     public function confirmNewEmail() {
@@ -229,9 +238,9 @@ class ProfilesController extends Controller {
                 ] );
             }
         }
+
         return response()->json( ['status' => 'success', 'message' => 'Avatar Change Successfully', 'avatar_path' => asset( $path )] );
     }
-
 
     /**
      * Get all subscriptions
@@ -244,13 +253,13 @@ class ProfilesController extends Controller {
         $subscriptionsId = DB::table( 'thread_subscriptions' )
             ->where( 'user_id', $getUserInfo->id )
             ->get()
-            ->pluck('thread_id')
+            ->pluck( 'thread_id' )
             ->all();
 
         $threads = Thread::whereIn( 'id', $subscriptionsId )->get();
-        return response()->json(['threads' => $threads]);
-    }
 
+        return response()->json( ['threads' => $threads] );
+    }
 
     /**
      * Get all Favoreite Threads
@@ -279,16 +288,15 @@ class ProfilesController extends Controller {
         } else {
             $favorites = Thread::whereIn( 'id', $favoritesId )->where( 'age_restriction', 0 )->get();
         }
-        return response()->json(['threads' => $favorites]);
+
+        return response()->json( ['threads' => $favorites] );
     }
 
-
-
     /***
-     *  
+     *
      * Get all Thread where current profile
-     
-     */ 
+
+     */
 
     public function myThreadsShow() {
         $user = request( 'user' );
@@ -312,15 +320,16 @@ class ProfilesController extends Controller {
                 ->where( 'anonymous', '=', 0 )
                 ->get();
         }
-        return response()->json(['threads' => $threads]);
+
+        return response()->json( ['threads' => $threads] );
     }
 
     /**
      * Get all like Threads
      */
     public function myLikesShow() {
-         $user = request( 'user' );
-         $getUserInfo = User::where( 'username', $user )->first();
+        $user = request( 'user' );
+        $getUserInfo = User::where( 'username', $user )->first();
 
         $likesId = DB::table( 'likes' )
             ->where( 'user_id', $getUserInfo->id )
@@ -329,7 +338,8 @@ class ProfilesController extends Controller {
             ->pluck( 'likeable_id' )
             ->all();
         $threads = Thread::whereIn( 'id', $likesId )->get();
-        return response()->json(['threads' => $threads]);
+
+        return response()->json( ['threads' => $threads] );
     }
 
     /**
@@ -339,13 +349,13 @@ class ProfilesController extends Controller {
     public function friendList() {
         $user = request( 'user' );
         $userInfo = User::where( 'username', $user )->first();
-        
+
         $friendLists = $userInfo->getFriends();
 
         $this->authorize( 'show', $userInfo );
-        return \response()->json(['friends'=> $friendLists]);
-    }
 
+        return \response()->json( ['friends' => $friendLists] );
+    }
 
     /**
      * Check is friend with authenticated users
@@ -364,7 +374,6 @@ class ProfilesController extends Controller {
 
         return true;
     }
-
 
     /**
      * Get lat/lng information with string

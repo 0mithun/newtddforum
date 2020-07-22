@@ -20,7 +20,7 @@
         aria-haspopup="true"
         aria-expanded="false"
       >
-        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        <i class="fa fa-user" aria-hidden="true"></i>
       </button>
       <ul class="dropdown-menu">
         <li>
@@ -60,7 +60,7 @@
           aria-expanded="false"
           @click.prevent="addFriend"
         >
-          <i class="fa fa-ellipsis-h" aria-hidden="true"></i> Add Friend
+          <i class="fa fa-user-plus" aria-hidden="true"></i>
         </button>
       </template>
     </template>

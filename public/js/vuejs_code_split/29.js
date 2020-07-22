@@ -243,10 +243,9 @@ var render = function() {
                     },
                     [
                       _c("i", {
-                        staticClass: "fa fa-ellipsis-h",
+                        staticClass: "fa fa-user-plus",
                         attrs: { "aria-hidden": "true" }
-                      }),
-                      _vm._v(" Add Friend\n      ")
+                      })
                     ]
                   )
                 ]
@@ -271,12 +270,7 @@ var staticRenderFns = [
           "aria-expanded": "false"
         }
       },
-      [
-        _c("i", {
-          staticClass: "fa fa-ellipsis-h",
-          attrs: { "aria-hidden": "true" }
-        })
-      ]
+      [_c("i", { staticClass: "fa fa-user", attrs: { "aria-hidden": "true" } })]
     )
   },
   function() {

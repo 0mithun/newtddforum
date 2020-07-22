@@ -158,6 +158,7 @@ Route::middleware( ['auth'] )->group( function () {
 
     Route::get( '/profiles/{user}/edit', 'ProfilesController@edit' )->name( 'profile.user.edit' );
     Route::post( '/profiles/{user}/update', 'ProfilesController@update' )->name( 'profile.user.update' );
+    Route::post( '/profiles/{user}/update-about', 'ProfilesController@updateAbout' );
 
     Route::get( '/profiles/{user}/subscriptions', 'ProfilesController@mySubscriptionsShow' )->name( 'profile.subscriptions' );
     Route::get( '/profiles/{user}/favorites', 'ProfilesController@myFavoritesShow' )->name( 'profile.favorites' );

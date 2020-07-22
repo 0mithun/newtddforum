@@ -28,7 +28,7 @@
                 <i class="fa fa-envelope"></i>
               </button>
 
-              <div class="btn-group">
+              <div class="btn-group" v-if="is_owner">
                 <button
                   class="btn btn-default btn-sm dropdown-toggle"
                   type="button"
@@ -90,7 +90,7 @@
             </ul>
             <div class="tab-content">
               <div class="tab-pane active about-details" id="about">
-                <About :profile_user="profile_user"></About>
+                <About :profile_user="profile_user" :is_owner="is_owner"></About>
               </div>
               <div class="tab-pane friend-details" id="friends">
                 <Friends

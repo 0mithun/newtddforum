@@ -19,7 +19,7 @@ export default {
 
 
 <style  scoped>
-.fa-heart {
-  color: red;
+.fa-star {
+  color: #f6d743;
 }
 </style>
