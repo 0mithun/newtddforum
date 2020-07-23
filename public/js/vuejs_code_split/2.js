@@ -34,22 +34,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      body: '',
+      body: "",
       completed: false
     };
   },
   computed: {
     redirectToLogin: function redirectToLogin() {
-      return '/redirect-to?page=' + location.pathname;
+      return "/redirect-to?page=" + location.pathname;
     }
   },
   mounted: function mounted() {
-    $('#body').atwho({
+    $("#body").atwho({
       at: "@",
       delay: 750,
       callbacks: {
@@ -67,17 +75,17 @@ __webpack_require__.r(__webpack_exports__);
     addReply: function addReply() {
       var _this = this;
 
-      axios.post(location.pathname + '/replies', {
+      axios.post(location.pathname + "/replies", {
         body: this.body
       })["catch"](function (error) {
-        flash(error.response.data, 'danger');
+        flash(error.response.data, "danger");
       }).then(function (_ref) {
         var data = _ref.data;
-        _this.body = '';
+        _this.body = "";
         _this.completed = true;
-        flash('Your reply has been posted.');
+        flash("Your reply has been posted.");
 
-        _this.$emit('created', data);
+        _this.$emit("created", data);
       });
     }
   }
@@ -473,7 +481,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.comment-body[data-v-3c5f5d3e]{\n    resize: vertical !important;\n}\n.add-new-reply[data-v-3c5f5d3e]{\n    padding: 30px 15px;\n}\n", ""]);
+exports.push([module.i, "\n.comment-body[data-v-3c5f5d3e] {\n  resize: vertical !important;\n}\n.add-new-reply[data-v-3c5f5d3e] {\n  padding: 30px 15px;\n}\n", ""]);
 
 // exports
 
@@ -624,11 +632,11 @@ var render = function() {
           )
         ])
       : _c("p", { staticClass: "text-center" }, [
-          _vm._v("\n        Please "),
+          _vm._v("\n    Please\n    "),
           _c("a", { attrs: { href: _vm.redirectToLogin } }, [
             _vm._v("sign in")
           ]),
-          _vm._v(" to participate in this\n        discussion.\n    ")
+          _vm._v(" to participate in this\n    discussion.\n  ")
         ])
   ])
 }

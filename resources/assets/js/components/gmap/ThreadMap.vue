@@ -92,8 +92,6 @@ export default {
     toggleInfoWindow(marker, idx) {
       this.infoWindowPos = marker.position;
 
-      // this.infoContent = marker.name;
-      //   this.getThreadDetails(marker.thread_id);
       this.infoContent = this.results[idx];
 
       //check if its the same marker that was selected if yes toggle

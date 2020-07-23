@@ -116,6 +116,9 @@ Vue.component("post-counts", () =>
 Vue.component("point-counts", () =>
   import("./components/Counts/PointCounts.vue")
 );
+Vue.component("following-counts", () =>
+  import("./components/Counts/FollowingCounts.vue")
+);
 
 Vue.component("thread-replies", () => import("./components/Replies"));
 Vue.component("up-votes", () => import("./components/UpVotes.vue"));
@@ -141,9 +144,16 @@ Vue.component("delete-thread-btn", () =>
 Vue.component("single-thread", () =>
   import("./components/threads/SingleThread.vue")
 );
+Vue.component("trending-thread", () =>
+  import("./components/threads/TrendingThread.vue")
+);
+
 
 Vue.component("profile-page", () =>
   import("./components/profile/profile-page.vue")
+);
+Vue.component("tag-page", () =>
+  import("./components/tag/TagPage.vue")
 );
 
 window.eventBus = new Vue();

@@ -81,9 +81,6 @@ export default {
       };
       this.center = center;
       this.fetchNearestLocations();
-    },
-    onRadiusChange() {
-      //console.log(this.radius);
     }
   }
 };

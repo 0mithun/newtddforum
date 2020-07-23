@@ -4,21 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
 use App\Notifications\ReplywasReported;
-use App\Notifications\ThreadWasUpdated;
-use App\Notifications\YouWereMentioned;
 use App\Reply;
 use App\Thread;
 use App\User;
 use Illuminate\Support\Facades\App;
 
-class RepliesController extends Controller
-{
+class RepliesController extends Controller {
     /**
      * Create a new RepliesController instance.
      */
-    public function __construct()
-    {
-        $this->middleware('auth', ['except' => ['index','lodReply']]);
+    public function __construct() {
+        $this->middleware( 'auth', ['except' => ['index', 'lodReply']] );
     }
 
     /**
@@ -27,9 +23,8 @@ class RepliesController extends Controller
      * @param int    $channelId
      * @param Thread $thread
      */
-    public function index($channelId, Thread $thread)
-    {
-        return $thread->replies()->where('parent_id', NULL)->paginate(20);
+    public function index( $channelId, Thread $thread ) {
+        return $thread->replies()->where( 'parent_id', NULL )->paginate( 20 );
     }
 
     /**
@@ -40,41 +35,49 @@ class RepliesController extends Controller
      * @param  CreatePostRequest $form
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function store($channelId, Thread $thread, CreatePostRequest $form)
-    {
-
-        if ($thread->locked) {
-            return response('Thread is locked', 422);
+    public function store( $channelId, Thread $thread, CreatePostRequest $form ) {
+        if ( $thread->locked ) {
+            return response( 'Thread is locked', 422 );
         }
 
-        return  $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ])->load('owner');
-
-
-    }
-
-    public  function newReply(Reply $reply){
-        request()->validate([
-            'body'  =>  'required',
-        ]);
-
-
-       $reply = Reply::create([
-            'body' => request('body'),
+        $reply = $thread->addReply( [
+            'body'    => request( 'body' ),
             'user_id' => auth()->id(),
-            'thread_id' =>  $reply->thread_id,
-            'parent_id' =>  $reply->id
-        ]);
-        
-        return \response()->json($reply);
+        ] )->load( 'owner' );
+
+        if ( !$thread->isSubscribedTo ) {
+            $thread->subscribe();
+        }
+
+        return $reply;
+
     }
 
-    public function lodReply(Reply $reply){
-        $nestedReply = Reply::where('parent_id', $reply->id)->get();
+    public function newReply( Reply $reply ) {
+        request()->validate( [
+            'body' => 'required',
+        ] );
 
-       return response()->json($nestedReply);
+        $reply = Reply::create( [
+            'body'      => request( 'body' ),
+            'user_id'   => auth()->id(),
+            'thread_id' => $reply->thread_id,
+            'parent_id' => $reply->id,
+        ] );
+
+        $thread = Thread::where( 'id', $reply->thread_id )->first();
+
+        if ( !$thread->isSubscribedTo ) {
+            $thread->subscribe();
+        }
+
+        return \response()->json( $reply );
+    }
+
+    public function lodReply( Reply $reply ) {
+        $nestedReply = Reply::where( 'parent_id', $reply->id )->get();
+
+        return response()->json( $nestedReply );
 
     }
 
@@ -83,11 +86,10 @@ class RepliesController extends Controller
      *
      * @param Reply $reply
      */
-    public function update(Reply $reply)
-    {
-        $this->authorize('update', $reply);
+    public function update( Reply $reply ) {
+        $this->authorize( 'update', $reply );
 
-        $reply->update(request()->validate(['body' => 'required|spamfree']));
+        $reply->update( request()->validate( ['body' => 'required|spamfree'] ) );
     }
 
     /**
@@ -96,24 +98,23 @@ class RepliesController extends Controller
      * @param  Reply $reply
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Reply $reply)
-    {
-        $this->authorize('update', $reply);
+    public function destroy( Reply $reply ) {
+        $this->authorize( 'update', $reply );
 
         $reply->delete();
 
-        if (request()->expectsJson()) {
-            return response(['status' => 'Reply deleted']);
+        if ( request()->expectsJson() ) {
+            return response( ['status' => 'Reply deleted'] );
         }
 
         return back();
     }
 
-    public function report(Reply $reply){
+    public function report( Reply $reply ) {
 //        return $reply->body;
-        $user = User::find(5);
-        $reason = request('reason');
-        $user->notify(new ReplywasReported($reply, $reason));
+        $user = User::find( 5 );
+        $reason = request( 'reason' );
+        $user->notify( new ReplywasReported( $reply, $reason ) );
 
         return 'Thread Succssfully reported';
     }
