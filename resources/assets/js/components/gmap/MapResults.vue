@@ -14,15 +14,22 @@
         <button class="btn-default btn btn-sm" @click="viewThread(item.thread_id)">View</button>
       </a>
     </div>-->
-    <div class="panel" v-for="(thread, index) in results" :key="index" @click="focusMarker(index)">
+    <div
+      class="panel"
+      v-for="(thread, index) in results"
+      :key="index"
+      @click="focusMarker(index)"
+      @mouseenter="focusMarker(index)"
+      :class="isActive(index)"
+    >
       <div class="panel-header">
         <h5 class="thread-title">{{ thread.title }}</h5>
       </div>
-      <div class="panel-body">
-        <div class="col-md-6">
+      <div class="panel-body thread-info">
+        <div class="thread-thumb-side">
           <img :src="thread.threadImagePath" class="thread-thumb" alt />
         </div>
-        <div class="col-md-6 thread-counts">
+        <div class="thread-counts">
           <view-counts :thread="thread"></view-counts>
           <point-counts :like_count="thread.like_count" :dislike_count="thread.dislike_count"></point-counts>
           <emoji-counts :thread="thread"></emoji-counts>
@@ -41,10 +48,10 @@ export default {
       activeIndex: null
     };
   },
+
   methods: {
     isActive(index) {
-      //return this.activeIndex == index ? 'active' : '';
-      //return 'active';
+      return this.activeIndex == index ? "panel-primary" : "";
     },
     focusMarker(index) {
       this.activeIndex = index;
@@ -76,6 +83,13 @@ export default {
   height: 100vh;
   overflow-y: scroll;
 }
+.thread-info {
+  display: flex;
+}
+.thread-thumb-side {
+  width: 50%;
+  margin-right: 5%;
+}
 .thread-thumb {
   max-width: 100%;
   height: auto;
@@ -84,8 +98,7 @@ export default {
 .thread-counts {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: space-evenly;
   height: auto;
 }
 .thread-title {
@@ -94,8 +107,9 @@ export default {
 .panel {
   margin-bottom: 5px;
   cursor: pointer;
+  padding: 5px;
 }
 .panel-body {
-  padding: 5px;
+  padding: 0px;
 }
 </style>

@@ -44,22 +44,19 @@ export default {
       if (this.center.lat == NaN || this.center.lng == NaN) {
         alert("You must provide your location first");
       }
-      let url = "";
-      if (this.nearest == true) {
-        url = "/map/nearest-threads";
-      } else {
-        url = "/map/all-threads";
-      }
+      let url = "/map/all-threads";
 
       axios
         .post(url, {
           center: this.center,
-          radius: this.radius
+          radius: this.radius,
+          nearest: this.nearest
         })
         .then(res => {
           let data = res.data;
           let center = this.center;
           let zoom = 6;
+
           eventBus.$emit("markers_fetched", data);
           eventBus.$emit("change_center", center);
           if (this.radius == 0) {

@@ -22,8 +22,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['thread'],
+  props: ["thread"],
   data: function data() {
     return {
       emojis: null,
@@ -78,7 +79,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.emoji-buttons[data-v-11d93fc3]{\n  margin-top: 5px;\n}\n.emoji-count-btn[data-v-11d93fc3]{\n  height: 16px;\n  /* background-color: transparent; */\n  background-size: 16px;\n  background-repeat: no-repeat;\n  vertical-align: bottom;\n  text-align: center;\n  /* padding-top: 20px; */\n  margin-right: 7px;\n  background-position: 0px 0px;\n  padding-left: 17px;\n}\n.big-emoji-btn[data-v-11d93fc3]{\n  height: 40px;\n  background-color: transparent;\n  background-size: 32px;\n  background-repeat: no-repeat;\n  vertical-align: bottom;\n  text-align: center;\n  padding-top: 28px;\n  margin-right: 5px;\n  width: 32px;\n}\n\n", ""]);
+exports.push([module.i, "\n.emoji-lists[data-v-11d93fc3] {\n  display: flex;\n  justify-content: space-between;\n}\n.emoji-buttons[data-v-11d93fc3] {\n  margin-top: 5px;\n}\n.emoji-count-btn[data-v-11d93fc3] {\n  height: 16px;\n  /* background-color: transparent; */\n  background-size: 16px;\n  background-repeat: no-repeat;\n  vertical-align: bottom;\n  text-align: center;\n  /* padding-top: 20px; */\n  margin-right: 7px;\n  background-position: 0px 0px;\n  padding-left: 17px;\n}\n.big-emoji-btn[data-v-11d93fc3] {\n  height: 40px;\n  background-color: transparent;\n  background-size: 32px;\n  background-repeat: no-repeat;\n  vertical-align: bottom;\n  text-align: center;\n  padding-top: 28px;\n  margin-right: 5px;\n  width: 32px;\n}\n", ""]);
 
 // exports
 
@@ -132,6 +133,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "emoji-lists" },
     _vm._l(_vm.emojis, function(emoji, index) {
       return _c(
         "span",

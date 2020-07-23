@@ -23,8 +23,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['infoContent'],
+  props: ["thread"],
   data: function data() {
     return {
       drawer: null,
@@ -33,17 +47,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     focusMarker: function focusMarker(index) {
-      eventBus.$emit('markers_result_clicked', index);
+      eventBus.$emit("markers_result_clicked", index);
     },
     openThread: function openThread() {
-      window.open(this.infoContent.path, '_blank' // <- This is what makes it open in a new window.
+      window.open(this.thread.path, "_blank" // <- This is what makes it open in a new window.
       );
     }
   },
   created: function created() {
     var _this = this;
 
-    eventBus.$on('markers_fetched', function (data) {
+    eventBus.$on("markers_fetched", function (data) {
       _this.results = data.results;
     });
   }
@@ -99,27 +113,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  //@click="center=m.position"
-  props: ['userlat', 'userlng', 'nearest'],
+  props: ["userlat", "userlng", "nearest"],
   components: {
     InfoContent: _InfoContent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
-      //center:{lat: 42.363211, lng:-105.071875},
       center: {
         lat: parseFloat(this.userlat),
         lng: parseFloat(this.userlng)
@@ -129,6 +130,7 @@ __webpack_require__.r(__webpack_exports__);
         lng: parseFloat(this.userlng)
       },
       markers: [],
+      results: [],
       zoom: 2,
       infoContent: null,
       infoWindowPos: {
@@ -148,33 +150,27 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     fetchLocations: function fetchLocations() {
       if (this.center.lat == NaN || this.center.lng == NaN) {
-        alert('You must provide your location first');
+        alert("You must provide your location first");
       }
 
-      var url = '';
-
-      if (this.nearest == true) {
-        url = '/map/nearest-threads';
-      } else {
-        url = '/map/all-threads';
-      }
-
+      var url = "/map/all-threads";
       axios.post(url, {
         center: this.center
       }).then(function (res) {
         var data = res.data;
 
-        if (res.data.status == 'failed') {
-          alert('You must provide your location first');
+        if (res.data.status == "failed") {
+          alert("You must provide your location first");
         } else {
-          eventBus.$emit('markers_fetched', data);
+          eventBus.$emit("markers_fetched", data);
         }
       });
     },
     toggleInfoWindow: function toggleInfoWindow(marker, idx) {
       this.infoWindowPos = marker.position; // this.infoContent = marker.name;
+      //   this.getThreadDetails(marker.thread_id);
 
-      this.getThreadDetails(marker.thread_id); //check if its the same marker that was selected if yes toggle
+      this.infoContent = this.results[idx]; //check if its the same marker that was selected if yes toggle
 
       if (this.currentMidx == idx) {
         this.infoWinOpen = !this.infoWinOpen;
@@ -183,41 +179,32 @@ __webpack_require__.r(__webpack_exports__);
           this.infoWinOpen = true;
           this.currentMidx = idx;
         }
-    },
-    getThreadDetails: function getThreadDetails(thread_id) {
-      var _this = this;
-
-      axios.post('/map/thread-details', {
-        thread_id: thread_id
-      }).then(function (res) {
-        _this.infoContent = res.data;
-      });
     }
   },
   created: function created() {
-    var _this2 = this;
+    var _this = this;
 
     this.fetchLocations();
-    eventBus.$on('markers_fetched', function (data) {
-      _this2.markers = null;
-      _this2.markers = data.markers;
+    eventBus.$on("markers_fetched", function (data) {
+      _this.markers = data.markers;
+      _this.results = data.results;
 
-      if (_this2.markers.length > 0) {
-        var center = Math.floor(Math.random() * Math.floor(_this2.markers.length));
-        _this2.mapCenter = data.markers[center].position;
+      if (_this.markers.length > 0) {
+        var center = Math.floor(Math.random() * Math.floor(_this.markers.length));
+        _this.mapCenter = data.markers[center].position;
       }
     });
-    eventBus.$on('markers_result_clicked', function (index) {
-      var targetMarkers = _this2.markers[index];
-      _this2.mapCenter = targetMarkers.position;
+    eventBus.$on("markers_result_clicked", function (index) {
+      var targetMarkers = _this.markers[index];
+      _this.mapCenter = targetMarkers.position;
 
-      _this2.toggleInfoWindow(targetMarkers, index);
+      _this.toggleInfoWindow(targetMarkers, index);
     });
-    eventBus.$on('zoom_decreased', function (zoom) {
-      _this2.zoom = zoom;
+    eventBus.$on("zoom_decreased", function (zoom) {
+      _this.zoom = zoom;
     });
-    eventBus.$on('change_center', function (center) {
-      _this2.mapCenter = center;
+    eventBus.$on("change_center", function (center) {
+      _this.mapCenter = center;
     });
   }
 });
@@ -236,7 +223,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.info-content[data-v-71185c30]{\n    cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\n.info-content[data-v-71185c30] {\n  cursor: pointer;\n  max-width: 10vw;\n}\n.info-content-body[data-v-71185c30] {\n  display: flex;\n  justify-content: space-between;\n}\n.info-content-thread-thumb[data-v-71185c30] {\n  margin-right: 5%;\n  width: 50%;\n}\n.thread-thumb[data-v-71185c30] {\n  max-width: 100%;\n  height: auto;\n  display: inline-block;\n}\n.thread-counts[data-v-71185c30] {\n  width: 45%;\n  width: 45%;\n  display: flex;\n  justify-content: space-evenly;\n  flex-direction: column;\n}\n.thread-title[data-v-71185c30] {\n  color: black;\n}\n", ""]);
 
 // exports
 
@@ -292,31 +279,36 @@ var render = function() {
     "div",
     { staticClass: "info-content", on: { click: _vm.openThread } },
     [
-      _c("div", {}, [
-        _vm._v("\n        " + _vm._s(this.infoContent.title) + "\n    ")
+      _c("h5", { staticClass: "thread-title" }, [
+        _vm._v(_vm._s(_vm.thread.title))
       ]),
       _vm._v(" "),
-      _vm.infoContent.anonymous == 0
-        ? _c("div", { staticStyle: { "margin-top": "10px" } }, [
-            _c("img", {
+      _c("div", { staticClass: "info-content-body" }, [
+        _c("div", { staticClass: "info-content-thread-thumb" }, [
+          _c("img", {
+            staticClass: "thread-thumb",
+            attrs: { src: _vm.thread.threadImagePath, alt: "" }
+          })
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "thread-counts" },
+          [
+            _c("view-counts", { attrs: { thread: _vm.thread } }),
+            _vm._v(" "),
+            _c("point-counts", {
               attrs: {
-                src: _vm.infoContent.creator.profileAvatarPath,
-                alt: "",
-                width: "25"
+                like_count: _vm.thread.like_count,
+                dislike_count: _vm.thread.dislike_count
               }
             }),
-            _vm._v(
-              " Posted By: " +
-                _vm._s(this.infoContent.creator.name) +
-                "   \n    "
-            )
-          ])
-        : _c("div", { staticStyle: { "margin-top": "10px" } }, [
-            _c("img", {
-              attrs: { src: "/images/default.png", alt: "", width: "25" }
-            }),
-            _vm._v(" Posted By: Anonymous\n    ")
-          ])
+            _vm._v(" "),
+            _c("emoji-counts", { attrs: { thread: _vm.thread } })
+          ],
+          1
+        )
+      ])
     ]
   )
 }
@@ -381,7 +373,7 @@ var render = function() {
         },
         [
           this.infoContent != null
-            ? _c("info-content", { attrs: { infoContent: _vm.infoContent } })
+            ? _c("info-content", { attrs: { thread: _vm.infoContent } })
             : _vm._e()
         ],
         1
@@ -401,14 +393,15 @@ render._withStripped = true
 /*!*************************************************************!*\
   !*** ./resources/assets/js/components/gmap/InfoContent.vue ***!
   \*************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _InfoContent_vue_vue_type_template_id_71185c30_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InfoContent.vue?vue&type=template&id=71185c30&scoped=true& */ "./resources/assets/js/components/gmap/InfoContent.vue?vue&type=template&id=71185c30&scoped=true&");
 /* harmony import */ var _InfoContent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./InfoContent.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/gmap/InfoContent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _InfoContent_vue_vue_type_style_index_0_id_71185c30_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./InfoContent.vue?vue&type=style&index=0&id=71185c30&scoped=true&lang=css& */ "./resources/assets/js/components/gmap/InfoContent.vue?vue&type=style&index=0&id=71185c30&scoped=true&lang=css&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _InfoContent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _InfoContent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _InfoContent_vue_vue_type_style_index_0_id_71185c30_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./InfoContent.vue?vue&type=style&index=0&id=71185c30&scoped=true&lang=css& */ "./resources/assets/js/components/gmap/InfoContent.vue?vue&type=style&index=0&id=71185c30&scoped=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -440,7 +433,7 @@ component.options.__file = "resources/assets/js/components/gmap/InfoContent.vue"
 /*!**************************************************************************************!*\
   !*** ./resources/assets/js/components/gmap/InfoContent.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

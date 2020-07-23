@@ -28,10 +28,7 @@ Route::get( 'login/instagram', 'Auth\LoginController@redirectToInstagramProvider
 Route::get( 'login/instagram/callback', 'Auth\LoginController@handleInstagramProviderCallback' );
 
 Route::get( '/map/show', 'UserlocationController@show' )->name( 'map.show' );
-Route::post( '/map/nearest-threads', 'UserlocationController@getNearestThread' )->name( 'map.nearest' );
 Route::post( '/map/all-threads', 'UserlocationController@getAllThread' );
-
-Route::post( '/map/thread-details', 'UserlocationController@threadDetails' )->name( 'thread.details' );
 
 Route::get( 'threads/search', 'SearchController@search' );
 

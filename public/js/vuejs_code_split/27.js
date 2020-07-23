@@ -43,6 +43,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -52,8 +59,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    isActive: function isActive(index) {//return this.activeIndex == index ? 'active' : '';
-      //return 'active';
+    isActive: function isActive(index) {
+      return this.activeIndex == index ? "panel-primary" : "";
     },
     focusMarker: function focusMarker(index) {
       this.activeIndex = index;
@@ -93,7 +100,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.map_thraed_list[data-v-cb8801e6] {\n  height: 100vh;\n  overflow-y: scroll;\n}\n.thread-thumb[data-v-cb8801e6] {\n  max-width: 100%;\n  height: auto;\n  display: inline-block;\n}\n.thread-counts[data-v-cb8801e6] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: center;\n  height: auto;\n}\n.thread-title[data-v-cb8801e6] {\n  color: black;\n}\n.panel[data-v-cb8801e6] {\n  margin-bottom: 5px;\n  cursor: pointer;\n}\n.panel-body[data-v-cb8801e6] {\n  padding: 5px;\n}\n", ""]);
+exports.push([module.i, "\n.map_thraed_list[data-v-cb8801e6] {\n  height: 100vh;\n  overflow-y: scroll;\n}\n.thread-info[data-v-cb8801e6] {\n  display: flex;\n}\n.thread-thumb-side[data-v-cb8801e6] {\n  width: 50%;\n  margin-right: 5%;\n}\n.thread-thumb[data-v-cb8801e6] {\n  max-width: 100%;\n  height: auto;\n  display: inline-block;\n}\n.thread-counts[data-v-cb8801e6] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-evenly;\n  height: auto;\n}\n.thread-title[data-v-cb8801e6] {\n  color: black;\n}\n.panel[data-v-cb8801e6] {\n  margin-bottom: 5px;\n  cursor: pointer;\n  padding: 5px;\n}\n.panel-body[data-v-cb8801e6] {\n  padding: 0px;\n}\n", ""]);
 
 // exports
 
@@ -154,8 +161,12 @@ var render = function() {
         {
           key: index,
           staticClass: "panel",
+          class: _vm.isActive(index),
           on: {
             click: function($event) {
+              return _vm.focusMarker(index)
+            },
+            mouseenter: function($event) {
               return _vm.focusMarker(index)
             }
           }
@@ -167,8 +178,8 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "panel-body" }, [
-            _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "panel-body thread-info" }, [
+            _c("div", { staticClass: "thread-thumb-side" }, [
               _c("img", {
                 staticClass: "thread-thumb",
                 attrs: { src: thread.threadImagePath, alt: "" }
@@ -177,7 +188,7 @@ var render = function() {
             _vm._v(" "),
             _c(
               "div",
-              { staticClass: "col-md-6 thread-counts" },
+              { staticClass: "thread-counts" },
               [
                 _c("view-counts", { attrs: { thread: thread } }),
                 _vm._v(" "),

@@ -60,17 +60,11 @@ __webpack_require__.r(__webpack_exports__);
         alert("You must provide your location first");
       }
 
-      var url = "";
-
-      if (this.nearest == true) {
-        url = "/map/nearest-threads";
-      } else {
-        url = "/map/all-threads";
-      }
-
+      var url = "/map/all-threads";
       axios.post(url, {
         center: this.center,
-        radius: this.radius
+        radius: this.radius,
+        nearest: this.nearest
       }).then(function (res) {
         var data = res.data;
         var center = _this.center;
