@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Tags;
 use App\User;
+use DB;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Integer;
 
 class FollowController extends Controller {
     /**
@@ -58,6 +60,45 @@ class FollowController extends Controller {
      */
     public function isFollowUser( Request $request, User $user ) {
         return response()->json( $user->isFollow() );
+    }
+
+    /**
+     * get all followers
+     * @param string $user
+     * @return App\User
+     */
+
+    public function followers( Request $request, User $user ) {
+        $followersId = $user->follows()->where( 'followable_type', 'App\User' )->get()->pluck( 'user_id' );
+        $followers = User::whereIn( 'id', $followersId )->get();
+
+        return response()->json( ['success' => true, 'followers' => $followers] );
+    }
+
+    /**
+     * get all following
+     * @param string $user
+     * @return App\User
+     */
+
+    public function followings( Request $request, User $user ) {
+        $followingId = DB::table( 'follows' )->where( 'user_id', auth()->id() )->where( 'followable_type', 'App\User' )->get()->pluck( 'followable_id' );
+        $followings = User::whereIn( 'id', $followingId )->get();
+
+        return response()->json( ['success' => true, 'followings' => $followings] );
+    }
+
+    /**
+     * get all following
+     * @param Integer $id
+     * @return App\User
+     */
+
+    public function tagFollowings( Request $request, Tags $tag ) {
+        $followingId = $tag->follows()->pluck( 'user_id' );
+        $followings = User::whereIn( 'id', $followingId )->get();
+
+        return response()->json( ['success' => true, 'followings' => $followings] );
     }
 
 }

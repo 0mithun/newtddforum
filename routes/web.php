@@ -201,9 +201,13 @@ Route::middleware( ['auth'] )->group( function () {
 
     Route::post( '/tag/{tag}/follow', 'FollowController@followTag' );
     Route::get( '/tag/{tag}/is-follow', 'FollowController@isFollowTag' );
+    Route::get( '/tag/{tag}/followings', 'FollowController@tagFollowings' );
 
     Route::post( '/user/{user}/follow', 'FollowController@followUser' );
     Route::get( '/user/{user}/is-follow', 'FollowController@isFollowUser' );
+
+    Route::get( '/user/{user}/followers', 'FollowController@followers' );
+    Route::get( '/user/{user}/followings', 'FollowController@followings' );
 
 } );
 

@@ -87,6 +87,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.checkIsFollow();
+    this.getAllFollowings();
   },
   methods: {
     toggleFollow: function toggleFollow() {
@@ -102,6 +103,13 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/tag/".concat(this.tag.id, "/is-follow")).then(function (res) {
         _this2.isFollow = res.data;
+      });
+    },
+    getAllFollowings: function getAllFollowings() {
+      var _this3 = this;
+
+      axios.get("/tag/".concat(this.tag.id, "/followings")).then(function (res) {
+        _this3.followings = res.data.followings;
       });
     }
   }
@@ -188,7 +196,13 @@ var render = function() {
             _c(
               "div",
               { staticClass: "profile-count" },
-              [_c("post-counts", { attrs: { post_count: _vm.posts.length } })],
+              [
+                _c("post-counts", { attrs: { post_count: _vm.posts.length } }),
+                _vm._v(" "),
+                _c("following-counts", {
+                  attrs: { following_count: _vm.followings.length }
+                })
+              ],
               1
             ),
             _vm._v(" "),
@@ -220,9 +234,7 @@ var render = function() {
                     },
                     [_vm._v("Follow")]
                   )
-            ]),
-            _vm._v(" "),
-            _vm._m(1)
+            ])
           ])
         ]),
         _vm._v(" "),
@@ -261,29 +273,6 @@ var staticRenderFns = [
         staticClass: "profile-img",
         attrs: { src: "/images/default.png", alt: "" }
       })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "profile-tags" }, [
-      _c("strong", [_vm._v("Following:")]),
-      _vm._v(" "),
-      _c("a", { staticClass: "single-tags-name", attrs: { href: "#" } }, [
-        _vm._v("\n              #\n              "),
-        _c("span", [_vm._v("Home")])
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "single-tags-name", attrs: { href: "#" } }, [
-        _vm._v("\n              #\n              "),
-        _c("span", [_vm._v("Entertainment")])
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "single-tags-name", attrs: { href: "#" } }, [
-        _vm._v("\n              #\n              "),
-        _c("span", [_vm._v("Television")])
-      ])
     ])
   }
 ]

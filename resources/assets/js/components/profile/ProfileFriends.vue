@@ -29,10 +29,10 @@
         <div class="row">
           <div class="col-md-4" v-for="(friend, index) in friendsList" :key="index">
             <div class="profile-single-item">
-              <a :href="`/profiles/${friend.username}`">
+              <a :href="profilePath(friend)">
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
               </a>
-              <a :href="`/profiles/${friend.username}`" class="friends-name">{{ friend.name }}</a>
+              <a :href="profilePath(friend)" class="friends-name">{{ friend.name }}</a>
 
               <button
                 class="btn btn-danger btn-sm unfriend-btn"
@@ -48,10 +48,10 @@
         <div class="row">
           <div class="col-md-4" v-for="(friend, index) in friendRequests" :key="index">
             <div class="profile-single-item">
-              <a :href="`/profiles/${friend.username}`">
+              <a :href="profilePath(friend)">
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
               </a>
-              <a :href="`/profiles/${friend.username}`" class="friends-name">{{ friend.name }}</a>
+              <a :href="profilePath(friend)" class="friends-name">{{ friend.name }}</a>
 
               <button class="btn btn-primary btn-sm" @click.prevent="accept(friend.id)">
                 <i class="fa fa-user"></i>
@@ -64,10 +64,10 @@
         <div class="row">
           <div class="col-md-4" v-for="(friend, index) in blockLists" :key="index">
             <div class="profile-single-item">
-              <a>
+              <a :href="profilePath(friend)">
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
               </a>
-              <a class="friends-name">{{ friend.name }}</a>
+              <a :href="profilePath(friend)" class="friends-name">{{ friend.name }}</a>
 
               <button
                 class="btn btn-primary btn-sm unfriend-btn"
@@ -79,8 +79,44 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane" id="friend-following">Following</div>
-      <div class="tab-pane" id="friend-followers">Followers</div>
+      <div class="tab-pane" id="friend-following">
+        <div class="row">
+          <div class="col-md-4" v-for="(friend, index) in followings" :key="index">
+            <div class="profile-single-item">
+              <a :href="profilePath(friend)">
+                <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
+              </a>
+              <a :href="profilePath(friend)" class="friends-name">{{ friend.name }}</a>
+
+              <button
+                class="btn btn-primary btn-sm unfriend-btn"
+                @click.prevent="unblock(friend.id)"
+              >
+                <i class="fa fa-user"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="friend-followers">
+        <div class="row">
+          <div class="col-md-4" v-for="(friend, index) in followers" :key="index">
+            <div class="profile-single-item">
+              <a :href="profilePath(friend)">
+                <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
+              </a>
+              <a :href="profilePath(friend)" class="friends-name">{{ friend.name }}</a>
+
+              <button
+                class="btn btn-primary btn-sm unfriend-btn"
+                @click.prevent="unblock(friend.id)"
+              >
+                <i class="fa fa-user"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -92,12 +128,16 @@ export default {
     return {
       friendsList: [],
       friendRequests: [],
-      blockLists: []
+      blockLists: [],
+      followers: [],
+      followings: []
     };
   },
   computed: {},
   created() {
     this.getAllFriends();
+    this.getAllFollowers();
+    this.getAllFollowings();
 
     if (this.is_owner == true) {
       this.getAllFriendRequests();
@@ -105,6 +145,19 @@ export default {
     }
   },
   methods: {
+    profilePath(user) {
+      return `/profiles/${user.username}`;
+    },
+    getAllFollowers() {
+      axios.get(`/user/${this.profile_user.username}/followers`).then(res => {
+        this.followers = res.data.followers;
+      });
+    },
+    getAllFollowings() {
+      axios.get(`/user/${this.profile_user.username}/followings`).then(res => {
+        this.followings = res.data.followings;
+      });
+    },
     unFriend(id) {
       axios
         .post("/friend/unfriend", {

@@ -13,7 +13,7 @@
             </h2>
             <div class="profile-count">
               <post-counts :post_count="posts.length"></post-counts>
-              <!-- <following-counts :following_count="followings.length"></following-counts> -->
+              <following-counts :following_count="followings.length"></following-counts>
             </div>
             <div class="profile-buttons">
               <button
@@ -23,7 +23,7 @@
               >Unfllow</button>
               <button class="btn btn-sm follow-btn" @click.prevent="toggleFollow" v-else>Follow</button>
             </div>
-            <div class="profile-tags">
+            <!-- <div class="profile-tags">
               <strong>Following:</strong>
               <a href="#" class="single-tags-name">
                 #
@@ -37,7 +37,7 @@
                 #
                 <span>Television</span>
               </a>
-            </div>
+            </div>-->
           </div>
         </div>
         <div class="row">
@@ -77,6 +77,7 @@ export default {
   },
   created() {
     this.checkIsFollow();
+    this.getAllFollowings();
   },
   methods: {
     toggleFollow() {
@@ -88,6 +89,11 @@ export default {
     checkIsFollow() {
       axios.get(`/tag/${this.tag.id}/is-follow`).then(res => {
         this.isFollow = res.data;
+      });
+    },
+    getAllFollowings() {
+      axios.get(`/tag/${this.tag.id}/followings`).then(res => {
+        this.followings = res.data.followings;
       });
     }
   }

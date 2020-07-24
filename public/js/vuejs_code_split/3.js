@@ -182,18 +182,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["profile_user", "is_owner", "is_friend", "profileUserPrivacy"],
   data: function data() {
     return {
       friendsList: [],
       friendRequests: [],
-      blockLists: []
+      blockLists: [],
+      followers: [],
+      followings: []
     };
   },
   computed: {},
   created: function created() {
     this.getAllFriends();
+    this.getAllFollowers();
+    this.getAllFollowings();
 
     if (this.is_owner == true) {
       this.getAllFriendRequests();
@@ -201,30 +241,47 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    unFriend: function unFriend(id) {
+    profilePath: function profilePath(user) {
+      return "/profiles/".concat(user.username);
+    },
+    getAllFollowers: function getAllFollowers() {
       var _this = this;
+
+      axios.get("/user/".concat(this.profile_user.username, "/followers")).then(function (res) {
+        _this.followers = res.data.followers;
+      });
+    },
+    getAllFollowings: function getAllFollowings() {
+      var _this2 = this;
+
+      axios.get("/user/".concat(this.profile_user.username, "/followings")).then(function (res) {
+        _this2.followings = res.data.followings;
+      });
+    },
+    unFriend: function unFriend(id) {
+      var _this3 = this;
 
       axios.post("/friend/unfriend", {
         friend: id
       }).then(function (res) {
-        var filterFriend = _this.friendsLis.filter(function (friend) {
+        var filterFriend = _this3.friendsLis.filter(function (friend) {
           return friend.id != id;
         });
 
-        _this.friendsList = filterFriend;
+        _this3.friendsList = filterFriend;
       });
     },
     accept: function accept(id) {
-      var _this2 = this;
+      var _this4 = this;
 
       axios.post("/profiles/accept-friend", {
         friend: id
       }).then(function (res) {
-        var newFriendRequests = _this2.friendRequests.filter(function (friend) {
+        var newFriendRequests = _this4.friendRequests.filter(function (friend) {
           return friend.id != id;
         });
 
-        _this2.friendRequests = newFriendRequests;
+        _this4.friendRequests = newFriendRequests;
       });
       var newFriend = this.friendRequests.filter(function (friend) {
         return friend.id === id;
@@ -232,38 +289,38 @@ __webpack_require__.r(__webpack_exports__);
       this.friendsList.push(newFriend);
     },
     unblock: function unblock(id) {
-      var _this3 = this;
+      var _this5 = this;
 
       axios.post("/profiles/unblock-friends", {
         friend: id
       }).then(function (res) {
-        var newBlockList = _this3.blockList.filter(function (friend) {
+        var newBlockList = _this5.blockList.filter(function (friend) {
           return friend.id != id;
         });
 
-        _this3.blockList = newBlockList;
+        _this5.blockList = newBlockList;
         flash("Unblock successfully");
       });
     },
     getAllFriends: function getAllFriends() {
-      var _this4 = this;
+      var _this6 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/friend-list")).then(function (res) {
-        _this4.friendsList = res.data.friends;
+        _this6.friendsList = res.data.friends;
       });
     },
     getAllFriendRequests: function getAllFriendRequests() {
-      var _this5 = this;
+      var _this7 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/friend-request")).then(function (res) {
-        _this5.friendRequests = res.data.friendRequests;
+        _this7.friendRequests = res.data.friendRequests;
       });
     },
     getAllBlockList: function getAllBlockList() {
-      var _this6 = this;
+      var _this8 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/block-friends")).then(function (res) {
-        _this6.blockLists = res.data.blockList;
+        _this8.blockLists = res.data.blockList;
       });
     }
   }
@@ -1030,7 +1087,7 @@ var render = function() {
             _vm._l(_vm.friendsList, function(friend, index) {
               return _c("div", { key: index, staticClass: "col-md-4" }, [
                 _c("div", { staticClass: "profile-single-item" }, [
-                  _c("a", { attrs: { href: "/profiles/" + friend.username } }, [
+                  _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
                     _c("img", {
                       staticClass: "friends-avatar",
                       attrs: { src: friend.profileAvatarPath, alt: friend.name }
@@ -1041,7 +1098,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "friends-name",
-                      attrs: { href: "/profiles/" + friend.username }
+                      attrs: { href: _vm.profilePath(friend) }
                     },
                     [_vm._v(_vm._s(friend.name))]
                   ),
@@ -1078,25 +1135,21 @@ var render = function() {
                 _vm._l(_vm.friendRequests, function(friend, index) {
                   return _c("div", { key: index, staticClass: "col-md-4" }, [
                     _c("div", { staticClass: "profile-single-item" }, [
-                      _c(
-                        "a",
-                        { attrs: { href: "/profiles/" + friend.username } },
-                        [
-                          _c("img", {
-                            staticClass: "friends-avatar",
-                            attrs: {
-                              src: friend.profileAvatarPath,
-                              alt: friend.name
-                            }
-                          })
-                        ]
-                      ),
+                      _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
+                        _c("img", {
+                          staticClass: "friends-avatar",
+                          attrs: {
+                            src: friend.profileAvatarPath,
+                            alt: friend.name
+                          }
+                        })
+                      ]),
                       _vm._v(" "),
                       _c(
                         "a",
                         {
                           staticClass: "friends-name",
-                          attrs: { href: "/profiles/" + friend.username }
+                          attrs: { href: _vm.profilePath(friend) }
                         },
                         [_vm._v(_vm._s(friend.name))]
                       ),
@@ -1134,7 +1187,7 @@ var render = function() {
                 _vm._l(_vm.blockLists, function(friend, index) {
                   return _c("div", { key: index, staticClass: "col-md-4" }, [
                     _c("div", { staticClass: "profile-single-item" }, [
-                      _c("a", [
+                      _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
                         _c("img", {
                           staticClass: "friends-avatar",
                           attrs: {
@@ -1144,9 +1197,14 @@ var render = function() {
                         })
                       ]),
                       _vm._v(" "),
-                      _c("a", { staticClass: "friends-name" }, [
-                        _vm._v(_vm._s(friend.name))
-                      ]),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "friends-name",
+                          attrs: { href: _vm.profilePath(friend) }
+                        },
+                        [_vm._v(_vm._s(friend.name))]
+                      ),
                       _vm._v(" "),
                       _c(
                         "button",
@@ -1173,13 +1231,95 @@ var render = function() {
       _c(
         "div",
         { staticClass: "tab-pane", attrs: { id: "friend-following" } },
-        [_vm._v("Following")]
+        [
+          _c(
+            "div",
+            { staticClass: "row" },
+            _vm._l(_vm.followings, function(friend, index) {
+              return _c("div", { key: index, staticClass: "col-md-4" }, [
+                _c("div", { staticClass: "profile-single-item" }, [
+                  _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
+                    _c("img", {
+                      staticClass: "friends-avatar",
+                      attrs: { src: friend.profileAvatarPath, alt: friend.name }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "friends-name",
+                      attrs: { href: _vm.profilePath(friend) }
+                    },
+                    [_vm._v(_vm._s(friend.name))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-sm unfriend-btn",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.unblock(friend.id)
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fa fa-user" })]
+                  )
+                ])
+              ])
+            }),
+            0
+          )
+        ]
       ),
       _vm._v(" "),
       _c(
         "div",
         { staticClass: "tab-pane", attrs: { id: "friend-followers" } },
-        [_vm._v("Followers")]
+        [
+          _c(
+            "div",
+            { staticClass: "row" },
+            _vm._l(_vm.followers, function(friend, index) {
+              return _c("div", { key: index, staticClass: "col-md-4" }, [
+                _c("div", { staticClass: "profile-single-item" }, [
+                  _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
+                    _c("img", {
+                      staticClass: "friends-avatar",
+                      attrs: { src: friend.profileAvatarPath, alt: friend.name }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "friends-name",
+                      attrs: { href: _vm.profilePath(friend) }
+                    },
+                    [_vm._v(_vm._s(friend.name))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-sm unfriend-btn",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.unblock(friend.id)
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fa fa-user" })]
+                  )
+                ])
+              ])
+            }),
+            0
+          )
+        ]
       )
     ])
   ])
