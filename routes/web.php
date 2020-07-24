@@ -199,6 +199,12 @@ Route::middleware( ['auth'] )->group( function () {
     Route::get( '/users/change-password', 'ProfilesController@editPassword' )->name( 'user.edit.password' );
     Route::post( '/user/update-password', 'ProfilesController@updatePassword' )->name( 'user.update.password' );
 
+    Route::post( '/tag/{tag}/follow', 'FollowController@followTag' );
+    Route::get( '/tag/{tag}/is-follow', 'FollowController@isFollowTag' );
+
+    Route::post( '/user/{user}/follow', 'FollowController@followUser' );
+    Route::get( '/user/{user}/is-follow', 'FollowController@isFollowUser' );
+
 } );
 
 Route::post( '/channel/search', 'ChannelController@search' )->name( 'chanel.search' ); //Will delete

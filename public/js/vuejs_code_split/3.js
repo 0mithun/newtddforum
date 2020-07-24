@@ -465,6 +465,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -498,7 +505,8 @@ __webpack_require__.r(__webpack_exports__);
       favorites: [],
       likes: [],
       subscriptions: [],
-      comments: []
+      comments: [],
+      isFollow: false
     };
   },
   computed: {
@@ -580,8 +588,28 @@ __webpack_require__.r(__webpack_exports__);
       this.getAllLikePost();
       this.getAllSubscriptionPost();
     }
+
+    if (!this.is_owner) {
+      this.checkIsFollow();
+    }
   },
   methods: {
+    toggleFollow: function toggleFollow() {
+      var _this = this;
+
+      axios.post("/user/".concat(this.profile_user.username, "/follow")).then(function (res) {
+        // console.log(res.data);
+        _this.isFollow = !_this.isFollow;
+        flash(res.data.message);
+      });
+    },
+    checkIsFollow: function checkIsFollow() {
+      var _this2 = this;
+
+      axios.get("/user/".concat(this.profile_user.username, "/is-follow")).then(function (res) {
+        _this2.isFollow = res.data;
+      });
+    },
     checkPrivacy: function checkPrivacy() {
       if (this.is_friend) {
         this.showMessageButton = true;
@@ -592,44 +620,44 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getAllPost: function getAllPost() {
-      var _this = this;
+      var _this3 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/threads")).then(function (res) {
-        _this.posts = res.data.threads;
+        _this3.posts = res.data.threads;
       });
     },
     getAllFavoritePost: function getAllFavoritePost() {
-      var _this2 = this;
+      var _this4 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/favorites")).then(function (res) {
         // console.log(res.data);
-        _this2.favorites = res.data.threads;
+        _this4.favorites = res.data.threads;
       });
     },
     getAllLikePost: function getAllLikePost() {
-      var _this3 = this;
+      var _this5 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/likes")).then(function (res) {
-        _this3.likes = res.data.threads; // console.log(res.data.threads);
+        _this5.likes = res.data.threads; // console.log(res.data.threads);
       });
     },
     getAllSubscriptionPost: function getAllSubscriptionPost() {
-      var _this4 = this;
+      var _this6 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/subscriptions")).then(function (res) {
-        _this4.subscriptions = res.data.threads;
+        _this6.subscriptions = res.data.threads;
       });
     },
     sendMessage: function sendMessage() {
-      var _this5 = this;
+      var _this7 = this;
 
       axios.post("/chat-send-message", {
         message: this.newMessage,
         friend: this.profile_user.id,
         friend_message: this.is_friend
       }).then(function (res) {
-        _this5.newMessage = "";
-        _this5.showModal = false;
+        _this7.newMessage = "";
+        _this7.showModal = false;
         $("#messageModal").modal("hide");
       });
     }
@@ -688,7 +716,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.profile-header[data-v-39ca48f0] {\r\n  margin: 30px auto;\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-name[data-v-39ca48f0] {\r\n  padding: 0;\r\n  margin: 0;\r\n  color: black;\n}\n.profile-buttons[data-v-39ca48f0] {\r\n  padding: 10px 0px;\n}\n.profile-img[data-v-39ca48f0] {\r\n  width: 120px;\r\n  height: 120px;\r\n  padding: 3px;\r\n  border: 2px solid rgb(255, 67, 1);\r\n  border-radius: 50%;\n}\n.profile-avatar[data-v-39ca48f0] {\r\n  margin-right: 30px;\n}\n.profile-count[data-v-39ca48f0] {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\n}\n.follow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: rgb(255, 67, 1);\n}\n.nav-tabs > li > a[data-v-39ca48f0] {\r\n  color: black;\r\n  border: none;\r\n  margin-right: 0;\n}\n.nav-tabs > li > a[data-v-39ca48f0],\r\n.nav-tabs > li > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li > a[data-v-39ca48f0]:focus {\r\n  border: none;\n}\n.nav-tabs > li.active > a[data-v-39ca48f0],\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:focus {\r\n  color: #555555;\r\n  background-color: #f5f8fa;\r\n  border-bottom: 3px solid rgb(255, 67, 1);\r\n  cursor: default;\n}\n.profile-nav-tabs[data-v-39ca48f0] {\r\n  display: flex;\r\n  justify-content: space-between;\n}\n.profile-nav-tabs[data-v-39ca48f0]::before,\r\n.profile-nav-tabs[data-v-39ca48f0]::after {\r\n  content: none;\n}\n.single-tags-name[data-v-39ca48f0] {\r\n  color: black;\n}\n.single-tags-name span[data-v-39ca48f0] {\r\n  color: rgb(255, 67, 1);\n}\n.post-counts[data-v-39ca48f0] {\r\n  color: black;\r\n  padding: 15px 0;\r\n  font-weight: bold;\n}\r\n", ""]);
+exports.push([module.i, "\n.profile-header[data-v-39ca48f0] {\r\n  margin: 30px auto;\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-name[data-v-39ca48f0] {\r\n  padding: 0;\r\n  margin: 0;\r\n  color: black;\n}\n.profile-buttons[data-v-39ca48f0] {\r\n  padding: 10px 0px;\n}\n.profile-img[data-v-39ca48f0] {\r\n  width: 120px;\r\n  height: 120px;\r\n  padding: 3px;\r\n  border: 2px solid rgb(255, 67, 1);\r\n  border-radius: 50%;\n}\n.profile-avatar[data-v-39ca48f0] {\r\n  margin-right: 30px;\n}\n.profile-count[data-v-39ca48f0] {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\n}\n.follow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: rgb(255, 67, 1);\r\n  color: white;\n}\n.unfollow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: red;\r\n  color: white;\n}\n.nav-tabs > li > a[data-v-39ca48f0] {\r\n  color: black;\r\n  border: none;\r\n  margin-right: 0;\n}\n.nav-tabs > li > a[data-v-39ca48f0],\r\n.nav-tabs > li > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li > a[data-v-39ca48f0]:focus {\r\n  border: none;\n}\n.nav-tabs > li.active > a[data-v-39ca48f0],\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:focus {\r\n  color: #555555;\r\n  background-color: #f5f8fa;\r\n  border-bottom: 3px solid rgb(255, 67, 1);\r\n  cursor: default;\n}\n.profile-nav-tabs[data-v-39ca48f0] {\r\n  display: flex;\r\n  justify-content: space-between;\n}\n.profile-nav-tabs[data-v-39ca48f0]::before,\r\n.profile-nav-tabs[data-v-39ca48f0]::after {\r\n  content: none;\n}\n.single-tags-name[data-v-39ca48f0] {\r\n  color: black;\n}\n.single-tags-name span[data-v-39ca48f0] {\r\n  color: rgb(255, 67, 1);\n}\n.post-counts[data-v-39ca48f0] {\r\n  color: black;\r\n  padding: 15px 0;\r\n  font-weight: bold;\n}\r\n", ""]);
 
 // exports
 
@@ -1254,18 +1282,46 @@ var render = function() {
               "div",
               { staticClass: "profile-buttons" },
               [
-                _c(
-                  "button",
-                  { staticClass: "btn btn-danger btn-sm follow-btn" },
-                  [_vm._v("Follow")]
-                ),
+                !_vm.is_owner
+                  ? [
+                      _vm.isFollow
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm unfollow-btn",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.toggleFollow($event)
+                                }
+                              }
+                            },
+                            [_vm._v("Unfllow")]
+                          )
+                        : _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm follow-btn",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.toggleFollow($event)
+                                }
+                              }
+                            },
+                            [_vm._v("Follow")]
+                          )
+                    ]
+                  : _vm._e(),
                 _vm._v(" "),
-                _c("add-friend", {
-                  attrs: {
-                    recipient: _vm.profile_user,
-                    isFriend: _vm.is_friend
-                  }
-                }),
+                !_vm.is_owner
+                  ? _c("add-friend", {
+                      attrs: {
+                        recipient: _vm.profile_user,
+                        isFriend: _vm.is_friend
+                      }
+                    })
+                  : _vm._e(),
                 _vm._v(" "),
                 _vm.showMessageButton
                   ? _c(
@@ -1304,7 +1360,7 @@ var render = function() {
                     ])
                   : _vm._e()
               ],
-              1
+              2
             ),
             _vm._v(" "),
             _vm._m(2)

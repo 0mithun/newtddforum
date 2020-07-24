@@ -13,10 +13,15 @@
             </h2>
             <div class="profile-count">
               <post-counts :post_count="posts.length"></post-counts>
-              <following-counts :following_count="followings.length"></following-counts>
+              <!-- <following-counts :following_count="followings.length"></following-counts> -->
             </div>
             <div class="profile-buttons">
-              <button class="btn btn-danger btn-sm follow-btn">Follow</button>
+              <button
+                class="btn btn-sm unfollow-btn"
+                @click.prevent="toggleFollow"
+                v-if="isFollow"
+              >Unfllow</button>
+              <button class="btn btn-sm follow-btn" @click.prevent="toggleFollow" v-else>Follow</button>
             </div>
             <div class="profile-tags">
               <strong>Following:</strong>
@@ -61,7 +66,8 @@ export default {
   data() {
     return {
       posts: this.tag.threads,
-      followings: []
+      followings: [],
+      isFollow: false
     };
   },
   computed: {
@@ -69,13 +75,21 @@ export default {
       return abbreviate(this.posts.length, 1);
     }
   },
-  created() {},
+  created() {
+    this.checkIsFollow();
+  },
   methods: {
-    // getAllPost() {
-    //   axios.get(`/profiles/${this.profile_user.username}/threads`).then(res => {
-    //     this.posts = res.data.threads;
-    //   });
-    // }
+    toggleFollow() {
+      axios.post(`/tag/${this.tag.id}/follow`).then(res => {
+        this.isFollow = !this.isFollow;
+        flash(res.data.message);
+      });
+    },
+    checkIsFollow() {
+      axios.get(`/tag/${this.tag.id}/is-follow`).then(res => {
+        this.isFollow = res.data;
+      });
+    }
   }
 };
 </script>
@@ -120,6 +134,13 @@ export default {
 .follow-btn {
   width: 100px;
   background-color: rgb(255, 67, 1);
+  color: white;
+}
+
+.unfollow-btn {
+  width: 100px;
+  background-color: red;
+  color: white;
 }
 
 .single-tags-name {

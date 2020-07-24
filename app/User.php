@@ -2,16 +2,14 @@
 
 namespace App;
 
-use DB;
+use App\Traits\Followed;
 use Carbon\Carbon;
-use Illuminate\Notifications\Notifiable;
-
 use Hootlex\Friendships\Traits\Friendable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
-{
-    use Notifiable, Friendable;
+class User extends Authenticatable {
+    use Notifiable, Friendable, Followed;
 
     /**
      * The attributes that are mass assignable.
@@ -32,7 +30,7 @@ class User extends Authenticatable
         'about',
         'lat',
         'lng',
-        'auth_type'
+        'auth_type',
     ];
 
     /**
@@ -52,10 +50,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'confirmed' => 'boolean'
+        'confirmed' => 'boolean',
     ];
 
-    protected $appends = ['profileAvatarPath','isBanned'];
+    protected $appends = ['profileAvatarPath', 'isBanned'];
 
     // protected $with  = ['userban'];
 
@@ -64,59 +62,54 @@ class User extends Authenticatable
      *
      * @return string
      */
-    public function getRouteKeyName()
-    {
+    public function getRouteKeyName() {
         return 'username';
     }
 
-    protected static function boot()
-    {
+    protected static function boot() {
         parent::boot();
 
 //        static::deleting(function ($thread) {
-//            $thread->replies->each->delete();
-//        });
+        //            $thread->replies->each->delete();
+        //        });
 
-        static::created(function ($user) {
-            $user->usersetting()->create([
-                'mention_notify_anecdotage'                     =>  1,
-                'mention_notify_email'                          =>  0,
-                'mention_notify_facebook'                       =>  0,
-                'new_thread_posted_notify_anecdotage'           =>  1,
-                'new_thread_posted_notify_email'                =>  0,
-                'new_thread_posted_notify_facebook'             =>  0,
-                'receive_daily_random_thread_notify_anecdotage' =>  1,
-                'receive_daily_random_thread_notify_email'      =>  0,
-                'receive_daily_random_thread_notify_email'      =>  0,
-            ]);
+        static::created( function ( $user ) {
+            $user->usersetting()->create( [
+                'mention_notify_anecdotage'                     => 1,
+                'mention_notify_email'                          => 0,
+                'mention_notify_facebook'                       => 0,
+                'new_thread_posted_notify_anecdotage'           => 1,
+                'new_thread_posted_notify_email'                => 0,
+                'new_thread_posted_notify_facebook'             => 0,
+                'receive_daily_random_thread_notify_anecdotage' => 1,
+                'receive_daily_random_thread_notify_email'      => 0,
+                'receive_daily_random_thread_notify_email'      => 0,
+            ] );
 
-            $user->userprivacy()->create([
-                'see_my_threads'                      =>  3,
-                'see_my_favorites'                    =>  3,
-                'see_my_friends'                      =>  3,
+            $user->userprivacy()->create( [
+                'see_my_threads'                  => 3,
+                'see_my_favorites'                => 3,
+                'see_my_friends'                  => 3,
 
-                'send_me_message'                     =>  2,
+                'send_me_message'                 => 2,
 
-                'thread_create_share_facebook'        =>  0,
-                'thread_create_share_twitter'         =>  0,
+                'thread_create_share_facebook'    => 0,
+                'thread_create_share_twitter'     => 0,
 
+                'anyone_share_my_thread_facebook' => 1,
+                'anyone_share_my_thread_twitter'  => 1,
+            ] );
 
-                'anyone_share_my_thread_facebook'     =>  1,
-                'anyone_share_my_thread_twitter'      =>  1,
-            ]);
-
-        });
+        } );
     }
-
 
     /**
      * Fetch all threads that were created by the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function threads()
-    {
-        return $this->hasMany(Thread::class)->latest();
+    public function threads() {
+        return $this->hasMany( Thread::class )->latest();
     }
 
     /**
@@ -124,9 +117,8 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function lastReply()
-    {
-        return $this->hasOne(Reply::class)->latest();
+    public function lastReply() {
+        return $this->hasOne( Reply::class )->latest();
     }
 
     /**
@@ -134,16 +126,14 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function activity()
-    {
-        return $this->hasMany(Activity::class);
+    public function activity() {
+        return $this->hasMany( Activity::class );
     }
 
     /**
      * Mark the user's account as confirmed.
      */
-    public function confirm()
-    {
+    public function confirm() {
         $this->confirmed = true;
         $this->confirmation_token = null;
 
@@ -155,29 +145,26 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isAdmin()
-    {
+    public function isAdmin() {
         return auth()->id() == 1;
     }
 
-    public function getIsAdminAttribute(){
+    public function getIsAdminAttribute() {
         return $this->isAdmin();
     }
 
-    public function getNameAttribute(){
-        return ucfirst($this->first_name) ." ".ucfirst($this->last_name);
+    public function getNameAttribute() {
+        return ucfirst( $this->first_name ) . " " . ucfirst( $this->last_name );
     }
-
 
     /**
      * Record that the user has read the given thread.
      *
      * @param Thread $thread
      */
-    public function read($thread)
-    {
+    public function read( $thread ) {
         cache()->forever(
-            $this->visitedThreadCacheKey($thread),
+            $this->visitedThreadCacheKey( $thread ),
             Carbon::now()
         );
     }
@@ -188,19 +175,17 @@ class User extends Authenticatable
      * @param  string $avatar
      * @return string
      */
-     public function getAvatarPathAttribute($avatar)
-     {
-         return $avatar ?: 'images/avatars/default.png';
-     }
+    public function getAvatarPathAttribute( $avatar ) {
+        return $avatar ?: 'images/avatars/default.png';
+    }
 
-    public function getProfileAvatarPathAttribute($avatar){
-         $test =   $this->avatar_path == '' ? 'default': $this->avatar_path;
+    public function getProfileAvatarPathAttribute( $avatar ) {
+        $test = $this->avatar_path == '' ? 'default' : $this->avatar_path;
         //$avatar  = $avatar == '' ?  'images/avatars/default.png' : $avatar;
 
-        return asset($test);
-       
+        return asset( $test );
+
     }
-    
 
     /**
      * Get the cache key for when a user reads a thread.
@@ -208,11 +193,9 @@ class User extends Authenticatable
      * @param  Thread $thread
      * @return string
      */
-    public function visitedThreadCacheKey($thread)
-    {
-        return sprintf("users.%s.visits.%s", $this->id, $thread->id);
+    public function visitedThreadCacheKey( $thread ) {
+        return sprintf( "users.%s.visits.%s", $this->id, $thread->id );
     }
-
 
     // public function getIsReportedAttribute()
     // {
@@ -231,52 +214,52 @@ class User extends Authenticatable
 
     // }
 
-    public function getFullNameAttribute(){
-        return $this->first_name. ' '. $this->last_name;
+    public function getFullNameAttribute() {
+        return $this->first_name . ' ' . $this->last_name;
     }
 
-    public function usersetting(){
-        return $this->hasOne(Usersetting::class);
+    public function usersetting() {
+        return $this->hasOne( Usersetting::class );
     }
 
-    public function userprivacy(){
-        return $this->hasOne(Userprivacy::class);
+    public function userprivacy() {
+        return $this->hasOne( Userprivacy::class );
     }
 
-
-
-    public function chat(){
-        return $this->hasMany(Chat::class,'from');
+    public function chat() {
+        return $this->hasMany( Chat::class, 'from' );
     }
 
-    public function userban(){
-        return $this->hasOne(Userban::class);
+    public function userban() {
+        return $this->hasOne( Userban::class );
     }
-    
-    public function isBanned(){
 
+    public function isBanned() {
         $userBan = $this->userban;
-        if($userBan){
-            if($userBan->ban_type ==1){
+        if ( $userBan ) {
+            if ( $userBan->ban_type == 1 ) {
                 return true;
             }
 
             $ban_expire_on = $userBan->ban_expire_on;
             $now = Carbon::now();
-            if($ban_expire_on->lte($now)){
+            if ( $ban_expire_on->lte( $now ) ) {
                 // $this->userban->delete();
-               return false;
-            }else{
+                return false;
+            } else {
                 return true;
             }
 
-
         }
+
         return false;
     }
 
-    public function getIsBannedAttribute(){
+    public function getIsBannedAttribute() {
         return $this->isBanned();
     }
 
+    public function follows() {
+        return $this->morphMany( 'App\Follows', 'followable' );
+    }
 }

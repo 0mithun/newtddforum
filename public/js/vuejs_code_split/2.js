@@ -321,7 +321,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['reply'],
   components: {
     NestedReplies: function NestedReplies() {
-      return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! ./NestedReplies.vue */ "./resources/assets/js/components/NestedReplies.vue"));
+      return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! ./NestedReplies.vue */ "./resources/assets/js/components/NestedReplies.vue"));
     }
   },
   data: function data() {

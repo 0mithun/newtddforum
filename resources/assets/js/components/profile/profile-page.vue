@@ -15,8 +15,15 @@
               <favorite-counts :favorite_count="favorites.length"></favorite-counts>
             </div>
             <div class="profile-buttons">
-              <button class="btn btn-danger btn-sm follow-btn">Follow</button>
-              <add-friend :recipient="profile_user" :isFriend="is_friend"></add-friend>
+              <template v-if="!is_owner">
+                <button
+                  class="btn btn-sm unfollow-btn"
+                  @click.prevent="toggleFollow"
+                  v-if="isFollow"
+                >Unfllow</button>
+                <button class="btn btn-sm follow-btn" @click.prevent="toggleFollow" v-else>Follow</button>
+              </template>
+              <add-friend :recipient="profile_user" :isFriend="is_friend" v-if="!is_owner"></add-friend>
 
               <button
                 class="btn btn-default btn-sm"
@@ -215,7 +222,8 @@ export default {
       favorites: [],
       likes: [],
       subscriptions: [],
-      comments: []
+      comments: [],
+      isFollow: false
     };
   },
   computed: {
@@ -307,8 +315,24 @@ export default {
       this.getAllLikePost();
       this.getAllSubscriptionPost();
     }
+
+    if (!this.is_owner) {
+      this.checkIsFollow();
+    }
   },
   methods: {
+    toggleFollow() {
+      axios.post(`/user/${this.profile_user.username}/follow`).then(res => {
+        // console.log(res.data);
+        this.isFollow = !this.isFollow;
+        flash(res.data.message);
+      });
+    },
+    checkIsFollow() {
+      axios.get(`/user/${this.profile_user.username}/is-follow`).then(res => {
+        this.isFollow = res.data;
+      });
+    },
     checkPrivacy() {
       if (this.is_friend) {
         this.showMessageButton = true;
@@ -394,6 +418,13 @@ export default {
 .follow-btn {
   width: 100px;
   background-color: rgb(255, 67, 1);
+  color: white;
+}
+
+.unfollow-btn {
+  width: 100px;
+  background-color: red;
+  color: white;
 }
 
 .nav-tabs > li > a {
