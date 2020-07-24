@@ -323,8 +323,13 @@ export default {
   methods: {
     toggleFollow() {
       axios.post(`/user/${this.profile_user.username}/follow`).then(res => {
-        // console.log(res.data);
+        if (this.isFollow) {
+          this.$store.dispatch("removeFollowers", this.profile_user.id);
+        } else {
+          this.$store.dispatch("addFollowers", this.profile_user);
+        }
         this.isFollow = !this.isFollow;
+
         flash(res.data.message);
       });
     },
@@ -351,14 +356,12 @@ export default {
       axios
         .get(`/profiles/${this.profile_user.username}/favorites`)
         .then(res => {
-          // console.log(res.data);
           this.favorites = res.data.threads;
         });
     },
     getAllLikePost() {
       axios.get(`/profiles/${this.profile_user.username}/likes`).then(res => {
         this.likes = res.data.threads;
-        // console.log(res.data.threads);
       });
     },
     getAllSubscriptionPost() {

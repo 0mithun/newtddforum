@@ -126,14 +126,28 @@ export default {
   props: ["profile_user", "is_owner", "is_friend", "profileUserPrivacy"],
   data() {
     return {
-      friendsList: [],
-      friendRequests: [],
-      blockLists: [],
-      followers: [],
-      followings: []
+      // blockLists: [],
+      // followers: []
+      // followings: []
     };
   },
-  computed: {},
+  computed: {
+    friendsList() {
+      return this.$store.getters.friends;
+    },
+    friendRequests() {
+      return this.$store.getters.friendRequests;
+    },
+    blockLists() {
+      return this.$store.getters.blockLists;
+    },
+    followings() {
+      return this.$store.getters.followings;
+    },
+    followers() {
+      return this.$store.getters.followers;
+    }
+  },
   created() {
     this.getAllFriends();
     this.getAllFollowers();
@@ -150,12 +164,14 @@ export default {
     },
     getAllFollowers() {
       axios.get(`/user/${this.profile_user.username}/followers`).then(res => {
-        this.followers = res.data.followers;
+        // this.followers = res.data.followers;
+        this.$store.dispatch("followers", res.data.followers);
       });
     },
     getAllFollowings() {
       axios.get(`/user/${this.profile_user.username}/followings`).then(res => {
-        this.followings = res.data.followings;
+        // this.followings = res.data.followings;
+        this.$store.dispatch("followings", res.data.followings);
       });
     },
     unFriend(id) {
@@ -164,10 +180,7 @@ export default {
           friend: id
         })
         .then(res => {
-          const filterFriend = this.friendsLis.filter(friend => {
-            return friend.id != id;
-          });
-          this.friendsList = filterFriend;
+          this.$store.dispatch("removeFriend", id);
         });
     },
     accept(id) {
@@ -176,15 +189,12 @@ export default {
           friend: id
         })
         .then(res => {
-          const newFriendRequests = this.friendRequests.filter(friend => {
-            return friend.id != id;
+          const newFriend = this.friendRequests.filter(friend => {
+            return friend.id === id;
           });
-          this.friendRequests = newFriendRequests;
+          this.$store.dispatch("removeFriendRequest", id);
+          this.$store.dispatch("addFriend", ...newFriend);
         });
-      const newFriend = this.friendRequests.filter(friend => {
-        return friend.id === id;
-      });
-      this.friendsList.push(newFriend);
     },
     unblock(id) {
       axios
@@ -192,10 +202,12 @@ export default {
           friend: id
         })
         .then(res => {
-          const newBlockList = this.blockList.filter(friend => {
-            return friend.id != id;
-          });
-          this.blockList = newBlockList;
+          // const newBlockList = this.blockList.filter(friend => {
+          //   return friend.id != id;
+          // });
+          // this.blockList = newBlockList;
+          this.$store.dispatch("unblock", id);
+
           flash("Unblock successfully");
         });
     },
@@ -203,21 +215,22 @@ export default {
       axios
         .get(`/profiles/${this.profile_user.username}/friend-list`)
         .then(res => {
-          this.friendsList = res.data.friends;
+          this.$store.dispatch("friends", res.data.friends);
         });
     },
     getAllFriendRequests() {
       axios
         .get(`/profiles/${this.profile_user.username}/friend-request`)
         .then(res => {
-          this.friendRequests = res.data.friendRequests;
+          this.$store.dispatch("friendRequests", res.data.friendRequests);
         });
     },
     getAllBlockList() {
       axios
         .get(`/profiles/${this.profile_user.username}/block-friends`)
         .then(res => {
-          this.blockLists = res.data.blockList;
+          // this.blockLists = res.data.blockList;
+          this.$store.dispatch("blockLists", res.data.blockLists);
         });
     }
   }

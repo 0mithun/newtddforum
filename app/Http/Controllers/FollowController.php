@@ -82,7 +82,7 @@ class FollowController extends Controller {
      */
 
     public function followings( Request $request, User $user ) {
-        $followingId = DB::table( 'follows' )->where( 'user_id', auth()->id() )->where( 'followable_type', 'App\User' )->get()->pluck( 'followable_id' );
+        $followingId = DB::table( 'follows' )->where( 'user_id', $user->id )->where( 'followable_type', 'App\User' )->get()->pluck( 'followable_id' );
         $followings = User::whereIn( 'id', $followingId )->get();
 
         return response()->json( ['success' => true, 'followings' => $followings] );

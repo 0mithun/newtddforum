@@ -77372,12 +77372,25 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_1__["default"]({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   state: {
     friendList: [],
     friendMessage: [],
-    onlineUsers: []
+    onlineUsers: [],
+    friends: [],
+    friendRequests: [],
+    blockLists: [],
+    followers: [],
+    followings: []
   },
   mutations: {
     friendList: function friendList(state, payload) {
@@ -77405,13 +77418,80 @@ __webpack_require__.r(__webpack_exports__);
       });
 
       state.onlineUsers = onlineUsers;
-    } // otherMessageUserList(state, payload){
-    //      const newUsers = state.friendList.concat(payload)
-    //      return state.friendList = newUsers;
-    //      //let old_friend_lists = state.friendList;
-    //      //console.log(old_friend_lists)
-    // }
+    },
+    friends: function friends(state, payload) {
+      state.friends = payload;
+    },
+    removeFriend: function removeFriend(state, payload) {
+      var newFriends = _.remove(state.friends, function (n) {
+        return n.id != payload;
+      });
 
+      state.friends = newFriends;
+    },
+    addFriend: function addFriend(state, payload) {
+      var newFriends = [].concat(_toConsumableArray(state.friends), [payload]);
+      state.friends = newFriends;
+    },
+    friendRequests: function friendRequests(state, payload) {
+      state.friendRequests = payload;
+    },
+    removeFriendRequest: function removeFriendRequest(state, payload) {
+      var newFriendsRequest = _.remove(state.friendRequests, function (n) {
+        return n.id != payload;
+      });
+
+      state.friendRequests = newFriendsRequest;
+    },
+    addFriendRequest: function addFriendRequest(state, payload) {
+      var newFriendsRequest = [].concat(_toConsumableArray(state.friendRequests), [payload]);
+      state.friendRequests = newFriendsRequest;
+    },
+    //Followers
+    followers: function followers(state, payload) {
+      state.followers = payload;
+    },
+    removeFollowers: function removeFollowers(state, payload) {
+      var newFollowers = _.remove(state.followers, function (n) {
+        return n.id != payload;
+      });
+
+      state.followers = newFollowers;
+    },
+    addFollowers: function addFollowers(state, payload) {
+      var newFollowers = [].concat(_toConsumableArray(state.followers), [payload]);
+      state.followers = newFollowers;
+    },
+    //Followings
+    followings: function followings(state, payload) {
+      state.followings = payload;
+    },
+    removeFollowings: function removeFollowings(state, payload) {
+      var newFollowings = _.remove(state.followings, function (n) {
+        return n.id != payload;
+      });
+
+      state.followings = newFollowings;
+    },
+    addFollowings: function addFollowings(state, payload) {
+      var newFollowings = [].concat(_toConsumableArray(state.followings), [payload]);
+      state.followings = newFollowings;
+    },
+    //Block Lists
+    blockLists: function blockLists(state, payload) {
+      state.blockLists = payload;
+    },
+    removeBlockLists: function removeBlockLists(state, payload) {
+      var newBlockLists = _.remove(state.blockLists, function (n) {
+        return n.id != payload;
+      });
+
+      state.blockLists = newBlockLists;
+    },
+    addBlockLists: function addBlockLists(state, payload) {
+      var newBlockLists = [].concat(_toConsumableArray(state.blockLists), [payload]);
+      state.blockLists = newBlockLists;
+    }
   },
   actions: {
     friendList: function friendList(context, id) {
@@ -77435,14 +77515,57 @@ __webpack_require__.r(__webpack_exports__);
     },
     removeUserOnline: function removeUserOnline(context, payload) {
       context.commit('removeUserOnline', payload);
-    } // otherMessageUserList(context){
-    //     Axios.get('/chat-others').then(res=>{
-    //         //context.commit('friendList', res.data)
-    //         //console.log(res)
-    //         context.commit('otherMessageUserList',res.data);
-    //     })
-    // }
-
+    },
+    //Friends
+    friends: function friends(context, payload) {
+      context.commit('friends', payload);
+    },
+    removeFriend: function removeFriend(context, payload) {
+      context.commit('removeFriend', payload);
+    },
+    addFriend: function addFriend(context, payload) {
+      context.commit('addFriend', payload);
+    },
+    //Friend Requests
+    friendRequests: function friendRequests(context, payload) {
+      context.commit('friendRequests', payload);
+    },
+    removeFriendRequest: function removeFriendRequest(context, payload) {
+      context.commit('removeFriendRequest', payload);
+    },
+    addFriendRequest: function addFriendRequest(context, payload) {
+      context.commit('addFriendRequest', payload);
+    },
+    //Followers
+    followers: function followers(context, payload) {
+      context.commit('followers', payload);
+    },
+    removeFollowers: function removeFollowers(context, payload) {
+      context.commit('removeFollowers', payload);
+    },
+    addFollowers: function addFollowers(context, payload) {
+      context.commit('addFollowers', payload);
+    },
+    ///Followings
+    followings: function followings(context, payload) {
+      context.commit('followings', payload);
+    },
+    removeFollowings: function removeFollowings(context, payload) {
+      context.commit('removeFollowings', payload);
+    },
+    addFollowings: function addFollowings(context, payload) {
+      context.commit('addFollowings', payload);
+    },
+    //Block Lists
+    blockLists: function blockLists(context, payload) {
+      context.commit('blockLists', payload);
+    },
+    removeBlockLists: function removeBlockLists(context, payload) {
+      context.commit('removeBlockLists', payload);
+    },
+    addBlockLists: function addBlockLists(context, payload) {
+      context.commit('addBlockLists', payload);
+    }
   },
   getters: {
     friendLists: function friendLists(state) {
@@ -77453,6 +77576,21 @@ __webpack_require__.r(__webpack_exports__);
     },
     onlineUsers: function onlineUsers(state) {
       return state.onlineUsers;
+    },
+    friends: function friends(state) {
+      return state.friends;
+    },
+    friendRequests: function friendRequests(state) {
+      return state.friendRequests;
+    },
+    blockLists: function blockLists(state) {
+      return state.blockLists;
+    },
+    followers: function followers(state) {
+      return state.followers;
+    },
+    followings: function followings(state) {
+      return state.followings;
     }
   }
 });

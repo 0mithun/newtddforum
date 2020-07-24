@@ -1,18 +1,6 @@
 <template>
-  <!-- <template v-if="isFriend">
-    <button class="btn btn-danger btn-sm" @click.prevent="unFriend">
-      <i class="fa fa-times"></i>
-    </button>
-  </template>
-  <template v-else>
-    <button class="btn btn-success btn-sm" v-if="sentRequst">Request Sent</button>
-    <button class="btn btn-default btn-sm" @click.prevent="addFriend" v-else>
-      <i class="fa fa-user-plus"></i>
-    </button>
-  </template>-->
-
   <div class="btn-group">
-    <template v-if="isFriend">
+    <template v-if="isMyFriend">
       <button
         class="btn btn-default btn-sm dropdown-toggle"
         type="button"
@@ -72,11 +60,12 @@ export default {
   props: ["recipient", "isFriend"],
   data() {
     return {
-      sentRequst: false
+      sentRequst: false,
+      isMyFriend: this.isFriend
     };
   },
   created() {
-    if (!this.isFriend) {
+    if (!this.isMyFriend) {
       this.checkSentRequest();
     }
   },
@@ -109,8 +98,9 @@ export default {
           friend: this.recipient.id
         })
         .then(res => {
-          this.isFriend = false;
+          this.isMyFriend = false;
           this.sentRequst = false;
+          this.$store.dispatch("removeFriend", window.App.user.id);
         });
     },
     blockFriend() {
@@ -119,6 +109,8 @@ export default {
           friend: this.recipient.id
         })
         .then(res => {
+          this.$store.dispatch("addBlockLists", this.recipient);
+
           flash(res.data.message);
           window.location = "/";
         });
@@ -130,6 +122,8 @@ export default {
         })
         .then(res => {
           this.sentRequst = false;
+          this.$store.dispatch("removeFriendRequest", this.recipient.id);
+
           flash(res.data.message);
         });
     }

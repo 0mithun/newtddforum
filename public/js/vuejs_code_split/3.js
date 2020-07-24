@@ -95,6 +95,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 //
 //
 //
@@ -221,15 +229,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["profile_user", "is_owner", "is_friend", "profileUserPrivacy"],
   data: function data() {
-    return {
-      friendsList: [],
-      friendRequests: [],
-      blockLists: [],
-      followers: [],
-      followings: []
+    return {// blockLists: [],
+      // followers: []
+      // followings: []
     };
   },
-  computed: {},
+  computed: {
+    friendsList: function friendsList() {
+      return this.$store.getters.friends;
+    },
+    friendRequests: function friendRequests() {
+      return this.$store.getters.friendRequests;
+    },
+    blockLists: function blockLists() {
+      return this.$store.getters.blockLists;
+    },
+    followings: function followings() {
+      return this.$store.getters.followings;
+    },
+    followers: function followers() {
+      return this.$store.getters.followers;
+    }
+  },
   created: function created() {
     this.getAllFriends();
     this.getAllFollowers();
@@ -248,14 +269,16 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/user/".concat(this.profile_user.username, "/followers")).then(function (res) {
-        _this.followers = res.data.followers;
+        // this.followers = res.data.followers;
+        _this.$store.dispatch("followers", res.data.followers);
       });
     },
     getAllFollowings: function getAllFollowings() {
       var _this2 = this;
 
       axios.get("/user/".concat(this.profile_user.username, "/followings")).then(function (res) {
-        _this2.followings = res.data.followings;
+        // this.followings = res.data.followings;
+        _this2.$store.dispatch("followings", res.data.followings);
       });
     },
     unFriend: function unFriend(id) {
@@ -264,11 +287,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/friend/unfriend", {
         friend: id
       }).then(function (res) {
-        var filterFriend = _this3.friendsLis.filter(function (friend) {
-          return friend.id != id;
-        });
-
-        _this3.friendsList = filterFriend;
+        _this3.$store.dispatch("removeFriend", id);
       });
     },
     accept: function accept(id) {
@@ -277,16 +296,16 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/profiles/accept-friend", {
         friend: id
       }).then(function (res) {
-        var newFriendRequests = _this4.friendRequests.filter(function (friend) {
-          return friend.id != id;
+        var _this4$$store;
+
+        var newFriend = _this4.friendRequests.filter(function (friend) {
+          return friend.id === id;
         });
 
-        _this4.friendRequests = newFriendRequests;
+        _this4.$store.dispatch("removeFriendRequest", id);
+
+        (_this4$$store = _this4.$store).dispatch.apply(_this4$$store, ["addFriend"].concat(_toConsumableArray(newFriend)));
       });
-      var newFriend = this.friendRequests.filter(function (friend) {
-        return friend.id === id;
-      });
-      this.friendsList.push(newFriend);
     },
     unblock: function unblock(id) {
       var _this5 = this;
@@ -294,11 +313,12 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/profiles/unblock-friends", {
         friend: id
       }).then(function (res) {
-        var newBlockList = _this5.blockList.filter(function (friend) {
-          return friend.id != id;
-        });
+        // const newBlockList = this.blockList.filter(friend => {
+        //   return friend.id != id;
+        // });
+        // this.blockList = newBlockList;
+        _this5.$store.dispatch("unblock", id);
 
-        _this5.blockList = newBlockList;
         flash("Unblock successfully");
       });
     },
@@ -306,21 +326,22 @@ __webpack_require__.r(__webpack_exports__);
       var _this6 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/friend-list")).then(function (res) {
-        _this6.friendsList = res.data.friends;
+        _this6.$store.dispatch("friends", res.data.friends);
       });
     },
     getAllFriendRequests: function getAllFriendRequests() {
       var _this7 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/friend-request")).then(function (res) {
-        _this7.friendRequests = res.data.friendRequests;
+        _this7.$store.dispatch("friendRequests", res.data.friendRequests);
       });
     },
     getAllBlockList: function getAllBlockList() {
       var _this8 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/block-friends")).then(function (res) {
-        _this8.blockLists = res.data.blockList;
+        // this.blockLists = res.data.blockList;
+        _this8.$store.dispatch("blockLists", res.data.blockLists);
       });
     }
   }
@@ -655,7 +676,12 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.post("/user/".concat(this.profile_user.username, "/follow")).then(function (res) {
-        // console.log(res.data);
+        if (_this.isFollow) {
+          _this.$store.dispatch("removeFollowers", _this.profile_user.id);
+        } else {
+          _this.$store.dispatch("addFollowers", _this.profile_user);
+        }
+
         _this.isFollow = !_this.isFollow;
         flash(res.data.message);
       });
@@ -687,7 +713,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/favorites")).then(function (res) {
-        // console.log(res.data);
         _this4.favorites = res.data.threads;
       });
     },
@@ -695,7 +720,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/likes")).then(function (res) {
-        _this5.likes = res.data.threads; // console.log(res.data.threads);
+        _this5.likes = res.data.threads;
       });
     },
     getAllSubscriptionPost: function getAllSubscriptionPost() {

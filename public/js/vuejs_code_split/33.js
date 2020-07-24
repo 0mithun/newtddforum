@@ -66,27 +66,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["recipient", "isFriend"],
   data: function data() {
     return {
-      sentRequst: false
+      sentRequst: false,
+      isMyFriend: this.isFriend
     };
   },
   created: function created() {
-    if (!this.isFriend) {
+    if (!this.isMyFriend) {
       this.checkSentRequest();
     }
   },
@@ -117,25 +106,34 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/friend/unfriend", {
         friend: this.recipient.id
       }).then(function (res) {
-        _this3.isFriend = false;
+        _this3.isMyFriend = false;
         _this3.sentRequst = false;
+
+        _this3.$store.dispatch("removeFriend", window.App.user.id);
       });
     },
     blockFriend: function blockFriend() {
+      var _this4 = this;
+
       axios.post("/profiles/block-friend", {
         friend: this.recipient.id
       }).then(function (res) {
+        _this4.$store.dispatch("addBlockLists", _this4.recipient);
+
         flash(res.data.message);
         window.location = "/";
       });
     },
     cancelRequest: function cancelRequest() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post("/profiles/cancel-friend-request", {
         friend: this.recipient.id
       }).then(function (res) {
-        _this4.sentRequst = false;
+        _this5.sentRequst = false;
+
+        _this5.$store.dispatch("removeFriendRequest", _this5.recipient.id);
+
         flash(res.data.message);
       });
     }
@@ -163,7 +161,7 @@ var render = function() {
     "div",
     { staticClass: "btn-group" },
     [
-      _vm.isFriend
+      _vm.isMyFriend
         ? [
             _vm._m(0),
             _vm._v(" "),
