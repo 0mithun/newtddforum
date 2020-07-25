@@ -87,12 +87,8 @@
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
               </a>
               <a :href="profilePath(friend)" class="friends-name">{{ friend.name }}</a>
-
-              <button
-                class="btn btn-primary btn-sm unfriend-btn"
-                @click.prevent="unblock(friend.id)"
-              >
-                <i class="fa fa-user"></i>
+              <button class="btn btn-primary btn-sm unfriend-btn" @click.prevent="unfollow(friend)">
+                <i class="fa fa-user-times"></i>
               </button>
             </div>
           </div>
@@ -107,12 +103,12 @@
               </a>
               <a :href="profilePath(friend)" class="friends-name">{{ friend.name }}</a>
 
-              <button
+              <!-- <button
                 class="btn btn-primary btn-sm unfriend-btn"
                 @click.prevent="unblock(friend.id)"
               >
                 <i class="fa fa-user"></i>
-              </button>
+              </button>-->
             </div>
           </div>
         </div>
@@ -159,8 +155,26 @@ export default {
     }
   },
   methods: {
-    profilePath(user) {
-      return `/profiles/${user.username}`;
+    unfollow(friend) {
+      let url = "";
+      if (friend.followType == "tag") {
+        url = `/tag/${friend.id}/follow`;
+      } else if (friend.followType == "user") {
+        url = `/user/${friend.username}/follow`;
+      }
+      axios.post(url).then(res => {
+        this.$store.dispatch("removeFollowings", friend);
+
+        flash(res.data.message);
+      });
+    },
+    profilePath(item) {
+      // return `/profiles/${user.username}`;
+      if (item.followType == "user") {
+        return `/profiles/${item.username}`;
+      } else if (item.followType === "tag") {
+        return `/threads/${item.name.toLowerCase()}`;
+      }
     },
     getAllFollowers() {
       axios.get(`/user/${this.profile_user.username}/followers`).then(res => {
@@ -202,10 +216,6 @@ export default {
           friend: id
         })
         .then(res => {
-          // const newBlockList = this.blockList.filter(friend => {
-          //   return friend.id != id;
-          // });
-          // this.blockList = newBlockList;
           this.$store.dispatch("unblock", id);
 
           flash("Unblock successfully");

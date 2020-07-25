@@ -28,6 +28,7 @@ class Tags extends Model {
     protected $fillable = [
         'name',
     ];
+    protected $appends = ['profileAvatarPath', 'followType'];
 
     public $timestamps = false;
 
@@ -48,5 +49,16 @@ class Tags extends Model {
         return [
             'name' => $this->name,
         ];
+    }
+
+    public function getProfileAvatarPathAttribute( $avatar ) {
+        // $avatar = $this->avatar_path == '' ? 'default' : $this->avatar_path;
+        $avatar = 'images/avatars/default.png';
+
+        return asset( $avatar );
+    }
+
+    public function getFollowTypeAttribute( $type ) {
+        return 'tag';
     }
 }

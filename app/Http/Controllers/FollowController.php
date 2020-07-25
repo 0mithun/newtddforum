@@ -69,7 +69,8 @@ class FollowController extends Controller {
      */
 
     public function followers( Request $request, User $user ) {
-        $followersId = $user->follows()->where( 'followable_type', 'App\User' )->get()->pluck( 'user_id' );
+        $followersId = DB::table( 'follows' )->where( 'followable_id', $user->id )->where( 'followable_type', 'App\User' )->get()->pluck( 'user_id' );
+
         $followers = User::whereIn( 'id', $followersId )->get();
 
         return response()->json( ['success' => true, 'followers' => $followers] );
@@ -82,10 +83,17 @@ class FollowController extends Controller {
      */
 
     public function followings( Request $request, User $user ) {
-        $followingId = DB::table( 'follows' )->where( 'user_id', $user->id )->where( 'followable_type', 'App\User' )->get()->pluck( 'followable_id' );
-        $followings = User::whereIn( 'id', $followingId )->get();
+        $userFollowingId = DB::table( 'follows' )->where( 'user_id', $user->id )->where( 'followable_type', 'App\User' )->get()->pluck( 'followable_id' );
+        $userFollowings = User::whereIn( 'id', $userFollowingId )->get();
 
-        return response()->json( ['success' => true, 'followings' => $followings] );
+        $tagFollowingId = DB::table( 'follows' )->where( 'user_id', $user->id )->where( 'followable_type', 'App\Tags' )->get()->pluck( 'followable_id' );
+        $tagFollowings = Tags::whereIn( 'id', $tagFollowingId )->get();
+
+        $data = collect( $userFollowings );
+        $followings = $data->merge( $tagFollowings );
+
+        return response()->json( ['success' => true, 'followings' => $followings->all()] );
+
     }
 
     /**

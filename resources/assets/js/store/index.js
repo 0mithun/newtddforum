@@ -93,7 +93,12 @@ export default {
         },
         removeFollowings(state, payload) {
             let newFollowings = _.remove(state.followings, (n) => {
-                return n.id != payload
+                if (n.followType == payload.followType && n.id == payload.id) {
+                    return false
+                }
+                else return true
+
+                // return n.id != payload
             })
             state.followings = newFollowings;
         },

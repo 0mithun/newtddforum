@@ -53,7 +53,7 @@ class User extends Authenticatable {
         'confirmed' => 'boolean',
     ];
 
-    protected $appends = ['profileAvatarPath', 'isBanned'];
+    protected $appends = ['profileAvatarPath', 'isBanned', 'followType'];
 
     // protected $with  = ['userban'];
 
@@ -181,7 +181,6 @@ class User extends Authenticatable {
 
     public function getProfileAvatarPathAttribute( $avatar ) {
         $test = $this->avatar_path == '' ? 'default' : $this->avatar_path;
-        //$avatar  = $avatar == '' ?  'images/avatars/default.png' : $avatar;
 
         return asset( $test );
 
@@ -261,5 +260,9 @@ class User extends Authenticatable {
 
     public function follows() {
         return $this->morphMany( 'App\Follows', 'followable' );
+    }
+
+    public function getFollowTypeAttribute( $type ) {
+        return 'user';
     }
 }

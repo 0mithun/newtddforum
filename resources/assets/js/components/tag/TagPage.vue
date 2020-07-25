@@ -82,7 +82,18 @@ export default {
   methods: {
     toggleFollow() {
       axios.post(`/tag/${this.tag.id}/follow`).then(res => {
-        this.isFollow = !this.isFollow;
+        // this.isFollow = !this.isFollow;
+        if (this.isFollow) {
+          let newFollowings = this.followings.filter(item => {
+            return item.id != window.App.user.id;
+          });
+          this.followings = newFollowings;
+          this.isFollow = false;
+        } else {
+          let newFollowings = [...this.followings, window.App.user];
+          this.followings = newFollowings;
+          this.isFollow = true;
+        }
         flash(res.data.message);
       });
     },

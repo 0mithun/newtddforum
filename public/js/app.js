@@ -77468,7 +77468,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
     removeFollowings: function removeFollowings(state, payload) {
       var newFollowings = _.remove(state.followings, function (n) {
-        return n.id != payload;
+        if (n.followType == payload.followType && n.id == payload.id) {
+          return false;
+        } else return true; // return n.id != payload
+
       });
 
       state.followings = newFollowings;

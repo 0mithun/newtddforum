@@ -108,7 +108,33 @@
                   v-if="isShowFriends"
                 ></Friends>
               </div>
-              <div class="tab-pane following-details" id="following">following</div>
+              <div class="tab-pane following-details" id="following">
+                <div class="post-header">
+                  <!-- <div class="post-counts">{{ postCounts }} posts</div> -->
+                </div>
+                <div class="post-body">
+                  <div class="row">
+                    <div class="col-md-4" v-for="(friend, index) in followings" :key="index">
+                      <div class="profile-single-item">
+                        <a :href="profilePath(friend)">
+                          <img
+                            :src="friend.profileAvatarPath"
+                            :alt="friend.name"
+                            class="friends-avatar"
+                          />
+                        </a>
+                        <a :href="profilePath(friend)" class="friends-name">{{ friend.name }}</a>
+                        <button
+                          class="btn btn-primary btn-sm unfriend-btn"
+                          @click.prevent="unfollow(friend)"
+                        >
+                          <i class="fa fa-user-times"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <div class="tab-pane post-details" id="posts">
                 <div class="post-header">
@@ -227,6 +253,9 @@ export default {
     };
   },
   computed: {
+    followings() {
+      return this.$store.getters.followings;
+    },
     isShowProfile() {
       if (this.is_owner == true) {
         return true;
@@ -321,17 +350,26 @@ export default {
     }
   },
   methods: {
-    toggleFollow() {
-      axios.post(`/user/${this.profile_user.username}/follow`).then(res => {
-        if (this.isFollow) {
-          this.$store.dispatch("removeFollowers", this.profile_user.id);
-        } else {
-          this.$store.dispatch("addFollowers", this.profile_user);
-        }
-        this.isFollow = !this.isFollow;
+    unfollow(friend) {
+      let url = "";
+      if (friend.followType == "tag") {
+        url = `/tag/${friend.id}/follow`;
+      } else if (friend.followType == "user") {
+        url = `/user/${friend.username}/follow`;
+      }
+      axios.post(url).then(res => {
+        this.$store.dispatch("removeFollowings", friend);
 
         flash(res.data.message);
       });
+    },
+    profilePath(item) {
+      // return `/profiles/${user.username}`;
+      if (item.followType == "user") {
+        return `/profiles/${item.username}`;
+      } else if (item.followType === "tag") {
+        return `/threads/${item.name.toLowerCase()}`;
+      }
     },
     checkIsFollow() {
       axios.get(`/user/${this.profile_user.username}/is-follow`).then(res => {
@@ -467,5 +505,20 @@ export default {
   color: black;
   padding: 15px 0;
   font-weight: bold;
+}
+.friends-avatar {
+  width: 80px;
+  height: 80px;
+  padding: 10px;
+  border-radius: 15px;
+}
+.friends-name {
+  font-size: 14px;
+  color: black;
+  font-weight: bold;
+  padding: 0;
+}
+.unfriend-btn {
+  margin-left: auto;
 }
 </style>

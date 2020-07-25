@@ -222,10 +222,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["profile_user", "is_owner", "is_friend", "profileUserPrivacy"],
   data: function data() {
@@ -262,86 +258,104 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   },
   methods: {
-    profilePath: function profilePath(user) {
-      return "/profiles/".concat(user.username);
+    unfollow: function unfollow(friend) {
+      var _this = this;
+
+      var url = "";
+
+      if (friend.followType == "tag") {
+        url = "/tag/".concat(friend.id, "/follow");
+      } else if (friend.followType == "user") {
+        url = "/user/".concat(friend.username, "/follow");
+      }
+
+      axios.post(url).then(function (res) {
+        _this.$store.dispatch("removeFollowings", friend);
+
+        flash(res.data.message);
+      });
+    },
+    profilePath: function profilePath(item) {
+      // return `/profiles/${user.username}`;
+      if (item.followType == "user") {
+        return "/profiles/".concat(item.username);
+      } else if (item.followType === "tag") {
+        return "/threads/".concat(item.name.toLowerCase());
+      }
     },
     getAllFollowers: function getAllFollowers() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get("/user/".concat(this.profile_user.username, "/followers")).then(function (res) {
         // this.followers = res.data.followers;
-        _this.$store.dispatch("followers", res.data.followers);
+        _this2.$store.dispatch("followers", res.data.followers);
       });
     },
     getAllFollowings: function getAllFollowings() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/user/".concat(this.profile_user.username, "/followings")).then(function (res) {
         // this.followings = res.data.followings;
-        _this2.$store.dispatch("followings", res.data.followings);
+        _this3.$store.dispatch("followings", res.data.followings);
       });
     },
     unFriend: function unFriend(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post("/friend/unfriend", {
         friend: id
       }).then(function (res) {
-        _this3.$store.dispatch("removeFriend", id);
+        _this4.$store.dispatch("removeFriend", id);
       });
     },
     accept: function accept(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post("/profiles/accept-friend", {
         friend: id
       }).then(function (res) {
-        var _this4$$store;
+        var _this5$$store;
 
-        var newFriend = _this4.friendRequests.filter(function (friend) {
+        var newFriend = _this5.friendRequests.filter(function (friend) {
           return friend.id === id;
         });
 
-        _this4.$store.dispatch("removeFriendRequest", id);
+        _this5.$store.dispatch("removeFriendRequest", id);
 
-        (_this4$$store = _this4.$store).dispatch.apply(_this4$$store, ["addFriend"].concat(_toConsumableArray(newFriend)));
+        (_this5$$store = _this5.$store).dispatch.apply(_this5$$store, ["addFriend"].concat(_toConsumableArray(newFriend)));
       });
     },
     unblock: function unblock(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.post("/profiles/unblock-friends", {
         friend: id
       }).then(function (res) {
-        // const newBlockList = this.blockList.filter(friend => {
-        //   return friend.id != id;
-        // });
-        // this.blockList = newBlockList;
-        _this5.$store.dispatch("unblock", id);
+        _this6.$store.dispatch("unblock", id);
 
         flash("Unblock successfully");
       });
     },
     getAllFriends: function getAllFriends() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/friend-list")).then(function (res) {
-        _this6.$store.dispatch("friends", res.data.friends);
+        _this7.$store.dispatch("friends", res.data.friends);
       });
     },
     getAllFriendRequests: function getAllFriendRequests() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/friend-request")).then(function (res) {
-        _this7.$store.dispatch("friendRequests", res.data.friendRequests);
+        _this8.$store.dispatch("friendRequests", res.data.friendRequests);
       });
     },
     getAllBlockList: function getAllBlockList() {
-      var _this8 = this;
+      var _this9 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/block-friends")).then(function (res) {
         // this.blockLists = res.data.blockList;
-        _this8.$store.dispatch("blockLists", res.data.blockLists);
+        _this9.$store.dispatch("blockLists", res.data.blockLists);
       });
     }
   }
@@ -360,6 +374,32 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ProfileAbout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProfileAbout */ "./resources/assets/js/components/profile/ProfileAbout.vue");
 /* harmony import */ var _ProfileFriends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProfileFriends */ "./resources/assets/js/components/profile/ProfileFriends.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -588,6 +628,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    followings: function followings() {
+      return this.$store.getters.followings;
+    },
     isShowProfile: function isShowProfile() {
       if (this.is_owner == true) {
         return true;
@@ -672,19 +715,30 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    toggleFollow: function toggleFollow() {
+    unfollow: function unfollow(friend) {
       var _this = this;
 
-      axios.post("/user/".concat(this.profile_user.username, "/follow")).then(function (res) {
-        if (_this.isFollow) {
-          _this.$store.dispatch("removeFollowers", _this.profile_user.id);
-        } else {
-          _this.$store.dispatch("addFollowers", _this.profile_user);
-        }
+      var url = "";
 
-        _this.isFollow = !_this.isFollow;
+      if (friend.followType == "tag") {
+        url = "/tag/".concat(friend.id, "/follow");
+      } else if (friend.followType == "user") {
+        url = "/user/".concat(friend.username, "/follow");
+      }
+
+      axios.post(url).then(function (res) {
+        _this.$store.dispatch("removeFollowings", friend);
+
         flash(res.data.message);
       });
+    },
+    profilePath: function profilePath(item) {
+      // return `/profiles/${user.username}`;
+      if (item.followType == "user") {
+        return "/profiles/".concat(item.username);
+      } else if (item.followType === "tag") {
+        return "/threads/".concat(item.name.toLowerCase());
+      }
     },
     checkIsFollow: function checkIsFollow() {
       var _this2 = this;
@@ -798,7 +852,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.profile-header[data-v-39ca48f0] {\r\n  margin: 30px auto;\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-name[data-v-39ca48f0] {\r\n  padding: 0;\r\n  margin: 0;\r\n  color: black;\n}\n.profile-buttons[data-v-39ca48f0] {\r\n  padding: 10px 0px;\n}\n.profile-img[data-v-39ca48f0] {\r\n  width: 120px;\r\n  height: 120px;\r\n  padding: 3px;\r\n  border: 2px solid rgb(255, 67, 1);\r\n  border-radius: 50%;\n}\n.profile-avatar[data-v-39ca48f0] {\r\n  margin-right: 30px;\n}\n.profile-count[data-v-39ca48f0] {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\n}\n.follow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: rgb(255, 67, 1);\r\n  color: white;\n}\n.unfollow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: red;\r\n  color: white;\n}\n.nav-tabs > li > a[data-v-39ca48f0] {\r\n  color: black;\r\n  border: none;\r\n  margin-right: 0;\n}\n.nav-tabs > li > a[data-v-39ca48f0],\r\n.nav-tabs > li > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li > a[data-v-39ca48f0]:focus {\r\n  border: none;\n}\n.nav-tabs > li.active > a[data-v-39ca48f0],\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:focus {\r\n  color: #555555;\r\n  background-color: #f5f8fa;\r\n  border-bottom: 3px solid rgb(255, 67, 1);\r\n  cursor: default;\n}\n.profile-nav-tabs[data-v-39ca48f0] {\r\n  display: flex;\r\n  justify-content: space-between;\n}\n.profile-nav-tabs[data-v-39ca48f0]::before,\r\n.profile-nav-tabs[data-v-39ca48f0]::after {\r\n  content: none;\n}\n.single-tags-name[data-v-39ca48f0] {\r\n  color: black;\n}\n.single-tags-name span[data-v-39ca48f0] {\r\n  color: rgb(255, 67, 1);\n}\n.post-counts[data-v-39ca48f0] {\r\n  color: black;\r\n  padding: 15px 0;\r\n  font-weight: bold;\n}\r\n", ""]);
+exports.push([module.i, "\n.profile-header[data-v-39ca48f0] {\r\n  margin: 30px auto;\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-name[data-v-39ca48f0] {\r\n  padding: 0;\r\n  margin: 0;\r\n  color: black;\n}\n.profile-buttons[data-v-39ca48f0] {\r\n  padding: 10px 0px;\n}\n.profile-img[data-v-39ca48f0] {\r\n  width: 120px;\r\n  height: 120px;\r\n  padding: 3px;\r\n  border: 2px solid rgb(255, 67, 1);\r\n  border-radius: 50%;\n}\n.profile-avatar[data-v-39ca48f0] {\r\n  margin-right: 30px;\n}\n.profile-count[data-v-39ca48f0] {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\n}\n.follow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: rgb(255, 67, 1);\r\n  color: white;\n}\n.unfollow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: red;\r\n  color: white;\n}\n.nav-tabs > li > a[data-v-39ca48f0] {\r\n  color: black;\r\n  border: none;\r\n  margin-right: 0;\n}\n.nav-tabs > li > a[data-v-39ca48f0],\r\n.nav-tabs > li > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li > a[data-v-39ca48f0]:focus {\r\n  border: none;\n}\n.nav-tabs > li.active > a[data-v-39ca48f0],\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:focus {\r\n  color: #555555;\r\n  background-color: #f5f8fa;\r\n  border-bottom: 3px solid rgb(255, 67, 1);\r\n  cursor: default;\n}\n.profile-nav-tabs[data-v-39ca48f0] {\r\n  display: flex;\r\n  justify-content: space-between;\n}\n.profile-nav-tabs[data-v-39ca48f0]::before,\r\n.profile-nav-tabs[data-v-39ca48f0]::after {\r\n  content: none;\n}\n.single-tags-name[data-v-39ca48f0] {\r\n  color: black;\n}\n.single-tags-name span[data-v-39ca48f0] {\r\n  color: rgb(255, 67, 1);\n}\n.post-counts[data-v-39ca48f0] {\r\n  color: black;\r\n  padding: 15px 0;\r\n  font-weight: bold;\n}\n.friends-avatar[data-v-39ca48f0] {\r\n  width: 80px;\r\n  height: 80px;\r\n  padding: 10px;\r\n  border-radius: 15px;\n}\n.friends-name[data-v-39ca48f0] {\r\n  font-size: 14px;\r\n  color: black;\r\n  font-weight: bold;\r\n  padding: 0;\n}\n.unfriend-btn[data-v-39ca48f0] {\r\n  margin-left: auto;\n}\r\n", ""]);
 
 // exports
 
@@ -1286,11 +1340,11 @@ var render = function() {
                       on: {
                         click: function($event) {
                           $event.preventDefault()
-                          return _vm.unblock(friend.id)
+                          return _vm.unfollow(friend)
                         }
                       }
                     },
-                    [_c("i", { staticClass: "fa fa-user" })]
+                    [_c("i", { staticClass: "fa fa-user-times" })]
                   )
                 ])
               ])
@@ -1324,20 +1378,6 @@ var render = function() {
                       attrs: { href: _vm.profilePath(friend) }
                     },
                     [_vm._v(_vm._s(friend.name))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary btn-sm unfriend-btn",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.unblock(friend.id)
-                        }
-                      }
-                    },
-                    [_c("i", { staticClass: "fa fa-user" })]
                   )
                 ])
               ])
@@ -1643,7 +1683,74 @@ var render = function() {
                       staticClass: "tab-pane following-details",
                       attrs: { id: "following" }
                     },
-                    [_vm._v("following")]
+                    [
+                      _c("div", { staticClass: "post-header" }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "post-body" }, [
+                        _c(
+                          "div",
+                          { staticClass: "row" },
+                          _vm._l(_vm.followings, function(friend, index) {
+                            return _c(
+                              "div",
+                              { key: index, staticClass: "col-md-4" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "profile-single-item" },
+                                  [
+                                    _c(
+                                      "a",
+                                      {
+                                        attrs: { href: _vm.profilePath(friend) }
+                                      },
+                                      [
+                                        _c("img", {
+                                          staticClass: "friends-avatar",
+                                          attrs: {
+                                            src: friend.profileAvatarPath,
+                                            alt: friend.name
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass: "friends-name",
+                                        attrs: { href: _vm.profilePath(friend) }
+                                      },
+                                      [_vm._v(_vm._s(friend.name))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "btn btn-primary btn-sm unfriend-btn",
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.unfollow(friend)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fa fa-user-times"
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                )
+                              ]
+                            )
+                          }),
+                          0
+                        )
+                      ])
+                    ]
                   ),
                   _vm._v(" "),
                   _c(

@@ -15,9 +15,6 @@
           <a @click.prevent="unFriend">Unfriend</a>
         </li>
         <li>
-          <a>Unfollow</a>
-        </li>
-        <li>
           <a @click.prevent="blockFriend">Block</a>
         </li>
       </ul>

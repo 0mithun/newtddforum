@@ -63,9 +63,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["recipient", "isFriend"],
   data: function data() {
@@ -181,8 +178,6 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(1),
-              _vm._v(" "),
               _c("li", [
                 _c(
                   "a",
@@ -202,7 +197,7 @@ var render = function() {
         : [
             _vm.sentRequst
               ? [
-                  _vm._m(2),
+                  _vm._m(1),
                   _vm._v(" "),
                   _c("ul", { staticClass: "dropdown-menu" }, [
                     _c("li", [
@@ -270,12 +265,6 @@ var staticRenderFns = [
       },
       [_c("i", { staticClass: "fa fa-user", attrs: { "aria-hidden": "true" } })]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [_c("a", [_vm._v("Unfollow")])])
   },
   function() {
     var _vm = this
