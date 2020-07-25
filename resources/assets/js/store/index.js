@@ -8,6 +8,7 @@ export default {
         friends: [],
         friendRequests: [],
         blockLists: [],
+
         followers: [],
         followings: [],
     },

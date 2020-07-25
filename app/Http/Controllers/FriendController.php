@@ -161,7 +161,7 @@ class FriendController extends Controller {
 
         $blockFriendLists = User::whereIn( 'id', $blockFriendLists )->get();
 
-        return \response()->json( ['blockList' => $blockFriendLists] );
+        return \response()->json( ['blockLists' => $blockFriendLists] );
 
     }
 

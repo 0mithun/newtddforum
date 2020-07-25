@@ -347,6 +347,20 @@ export default {
     }
   },
   methods: {
+    toggleFollow() {
+      let url = `/user/${this.profile_user.username}/follow`;
+
+      axios.post(url).then(res => {
+        if (this.isFollow) {
+          this.$store.dispatch("removeFollowers", window.App.user.id);
+        } else {
+          this.$store.dispatch("addFollowers", window.App.user);
+        }
+        this.isFollow = !this.isFollow;
+
+        flash(res.data.message);
+      });
+    },
     unfollow(friend) {
       let url = "";
       if (friend.followType == "tag") {

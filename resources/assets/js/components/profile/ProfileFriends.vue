@@ -3,31 +3,31 @@
     <div class="friends-header">
       <div class="friends-menu">
         <ul class="nav nav-tabs friend-nav-tabs">
-          <li class="active">
+          <li class="active" @click="searchItem=''">
             <a data-toggle="tab" href="#friend-friends">Friends</a>
           </li>
-          <li class v-if="is_owner">
+          <li class v-if="is_owner" @click="searchItem=''">
             <a data-toggle="tab" href="#friend-request">Friend Requests</a>
           </li>
-          <li v-if="is_owner">
+          <li v-if="is_owner" @click="searchItem=''">
             <a data-toggle="tab" href="#friend-blocking">Blockng</a>
           </li>
-          <li>
+          <li @click="searchItem=''">
             <a data-toggle="tab" href="#friend-following">Following</a>
           </li>
-          <li>
+          <li @click="searchItem=''">
             <a data-toggle="tab" href="#friend-followers">Followers</a>
           </li>
         </ul>
       </div>
       <div class="friends-search">
-        <input type="text" class="form-control" placeholder="Search" />
+        <input type="text" class="form-control" placeholder="Search" v-model="searchItem" />
       </div>
     </div>
     <div class="tab-content">
       <div class="tab-pane active" id="friend-friends">
         <div class="row">
-          <div class="col-md-4" v-for="(friend, index) in friendsList" :key="index">
+          <div class="col-md-4" v-for="(friend, index) in filterFriendLists" :key="index">
             <div class="profile-single-item">
               <a :href="profilePath(friend)">
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
@@ -46,7 +46,7 @@
       </div>
       <div class="tab-pane" id="friend-request" v-if="is_owner">
         <div class="row">
-          <div class="col-md-4" v-for="(friend, index) in friendRequests" :key="index">
+          <div class="col-md-4" v-for="(friend, index) in filterFriendRequests" :key="index">
             <div class="profile-single-item">
               <a :href="profilePath(friend)">
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
@@ -62,7 +62,7 @@
       </div>
       <div class="tab-pane" id="friend-blocking" v-if="is_owner">
         <div class="row">
-          <div class="col-md-4" v-for="(friend, index) in blockLists" :key="index">
+          <div class="col-md-4" v-for="(friend, index) in filterBlockLists" :key="index">
             <div class="profile-single-item">
               <a :href="profilePath(friend)">
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
@@ -81,7 +81,7 @@
       </div>
       <div class="tab-pane" id="friend-following">
         <div class="row">
-          <div class="col-md-4" v-for="(friend, index) in followings" :key="index">
+          <div class="col-md-4" v-for="(friend, index) in filterFollowings" :key="index">
             <div class="profile-single-item">
               <a :href="profilePath(friend)">
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
@@ -100,7 +100,7 @@
       </div>
       <div class="tab-pane" id="friend-followers">
         <div class="row">
-          <div class="col-md-4" v-for="(friend, index) in followers" :key="index">
+          <div class="col-md-4" v-for="(friend, index) in filterFollowers" :key="index">
             <div class="profile-single-item">
               <a :href="profilePath(friend)">
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
@@ -129,23 +129,50 @@ export default {
       // blockLists: [],
       // followers: []
       // followings: []
+      searchItem: ""
     };
   },
   computed: {
-    friendsList() {
+    friendLists() {
       return this.$store.getters.friends;
+    },
+    filterFriendLists() {
+      return this.friendLists.filter(item => {
+        return item.name.toLowerCase().includes(this.searchItem.toLowerCase());
+      });
     },
     friendRequests() {
       return this.$store.getters.friendRequests;
     },
+    filterFriendRequests() {
+      return this.friendRequests.filter(item => {
+        return item.name.toLowerCase().includes(this.searchItem.toLowerCase());
+      });
+    },
     blockLists() {
       return this.$store.getters.blockLists;
+    },
+    filterBlockLists() {
+      return this.blockLists.filter(item => {
+        return item.name.toLowerCase().includes(this.searchItem.toLowerCase());
+      });
     },
     followings() {
       return this.$store.getters.followings;
     },
+    filterFollowings() {
+      return this.followings.filter(item => {
+        return item.name.toLowerCase().includes(this.searchItem.toLowerCase());
+      });
+    },
+
     followers() {
       return this.$store.getters.followers;
+    },
+    filterFollowers() {
+      return this.followers.filter(item => {
+        return item.name.toLowerCase().includes(this.searchItem.toLowerCase());
+      });
     }
   },
   created() {
@@ -243,7 +270,6 @@ export default {
       axios
         .get(`/profiles/${this.profile_user.username}/block-friends`)
         .then(res => {
-          // this.blockLists = res.data.blockList;
           this.$store.dispatch("blockLists", res.data.blockLists);
         });
     }

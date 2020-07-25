@@ -229,26 +229,63 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["profile_user", "is_owner", "is_friend", "profileUserPrivacy"],
   data: function data() {
-    return {// blockLists: [],
+    return {
+      // blockLists: [],
       // followers: []
       // followings: []
+      searchItem: ""
     };
   },
   computed: {
-    friendsList: function friendsList() {
+    friendLists: function friendLists() {
       return this.$store.getters.friends;
+    },
+    filterFriendLists: function filterFriendLists() {
+      var _this = this;
+
+      return this.friendLists.filter(function (item) {
+        return item.name.toLowerCase().includes(_this.searchItem.toLowerCase());
+      });
     },
     friendRequests: function friendRequests() {
       return this.$store.getters.friendRequests;
     },
+    filterFriendRequests: function filterFriendRequests() {
+      var _this2 = this;
+
+      return this.friendRequests.filter(function (item) {
+        return item.name.toLowerCase().includes(_this2.searchItem.toLowerCase());
+      });
+    },
     blockLists: function blockLists() {
       return this.$store.getters.blockLists;
+    },
+    filterBlockLists: function filterBlockLists() {
+      var _this3 = this;
+
+      return this.blockLists.filter(function (item) {
+        return item.name.toLowerCase().includes(_this3.searchItem.toLowerCase());
+      });
     },
     followings: function followings() {
       return this.$store.getters.followings;
     },
+    filterFollowings: function filterFollowings() {
+      var _this4 = this;
+
+      return this.followings.filter(function (item) {
+        return item.name.toLowerCase().includes(_this4.searchItem.toLowerCase());
+      });
+    },
     followers: function followers() {
       return this.$store.getters.followers;
+    },
+    filterFollowers: function filterFollowers() {
+      var _this5 = this;
+
+      return this.followers.filter(function (item) {
+        return item.name.toLowerCase().includes(_this5.searchItem.toLowerCase());
+      });
     }
   },
   created: function created() {
@@ -263,7 +300,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   },
   methods: {
     unfollow: function unfollow(friend) {
-      var _this = this;
+      var _this6 = this;
 
       var url = "";
 
@@ -274,7 +311,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       axios.post(url).then(function (res) {
-        _this.$store.dispatch("removeFollowings", friend);
+        _this6.$store.dispatch("removeFollowings", friend);
 
         flash(res.data.message);
       });
@@ -288,78 +325,77 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
     },
     getAllFollowers: function getAllFollowers() {
-      var _this2 = this;
+      var _this7 = this;
 
       axios.get("/user/".concat(this.profile_user.username, "/followers")).then(function (res) {
         // this.followers = res.data.followers;
-        _this2.$store.dispatch("followers", res.data.followers);
+        _this7.$store.dispatch("followers", res.data.followers);
       });
     },
     getAllFollowings: function getAllFollowings() {
-      var _this3 = this;
+      var _this8 = this;
 
       axios.get("/user/".concat(this.profile_user.username, "/followings")).then(function (res) {
         // this.followings = res.data.followings;
-        _this3.$store.dispatch("followings", res.data.followings);
+        _this8.$store.dispatch("followings", res.data.followings);
       });
     },
     unFriend: function unFriend(id) {
-      var _this4 = this;
+      var _this9 = this;
 
       axios.post("/friend/unfriend", {
         friend: id
       }).then(function (res) {
-        _this4.$store.dispatch("removeFriend", id);
+        _this9.$store.dispatch("removeFriend", id);
       });
     },
     accept: function accept(id) {
-      var _this5 = this;
+      var _this10 = this;
 
       axios.post("/profiles/accept-friend", {
         friend: id
       }).then(function (res) {
-        var _this5$$store;
+        var _this10$$store;
 
-        var newFriend = _this5.friendRequests.filter(function (friend) {
+        var newFriend = _this10.friendRequests.filter(function (friend) {
           return friend.id === id;
         });
 
-        _this5.$store.dispatch("removeFriendRequest", id);
+        _this10.$store.dispatch("removeFriendRequest", id);
 
-        (_this5$$store = _this5.$store).dispatch.apply(_this5$$store, ["addFriend"].concat(_toConsumableArray(newFriend)));
+        (_this10$$store = _this10.$store).dispatch.apply(_this10$$store, ["addFriend"].concat(_toConsumableArray(newFriend)));
       });
     },
     unblock: function unblock(id) {
-      var _this6 = this;
+      var _this11 = this;
 
       axios.post("/profiles/unblock-friends", {
         friend: id
       }).then(function (res) {
-        _this6.$store.dispatch("unblock", id);
+        _this11.$store.dispatch("unblock", id);
 
         flash("Unblock successfully");
       });
     },
     getAllFriends: function getAllFriends() {
-      var _this7 = this;
+      var _this12 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/friend-list")).then(function (res) {
-        _this7.$store.dispatch("friends", res.data.friends);
+        _this12.$store.dispatch("friends", res.data.friends);
       });
     },
     getAllFriendRequests: function getAllFriendRequests() {
-      var _this8 = this;
+      var _this13 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/friend-request")).then(function (res) {
-        _this8.$store.dispatch("friendRequests", res.data.friendRequests);
+        _this13.$store.dispatch("friendRequests", res.data.friendRequests);
       });
     },
     getAllBlockList: function getAllBlockList() {
-      var _this9 = this;
+      var _this14 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/block-friends")).then(function (res) {
-        // this.blockLists = res.data.blockList;
-        _this9.$store.dispatch("blockLists", res.data.blockLists);
+        _this14.$store.dispatch("blockLists", res.data.blockLists);
       });
     }
   }
@@ -716,8 +752,23 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    unfollow: function unfollow(friend) {
+    toggleFollow: function toggleFollow() {
       var _this = this;
+
+      var url = "/user/".concat(this.profile_user.username, "/follow");
+      axios.post(url).then(function (res) {
+        if (_this.isFollow) {
+          _this.$store.dispatch("removeFollowers", window.App.user.id);
+        } else {
+          _this.$store.dispatch("addFollowers", window.App.user);
+        }
+
+        _this.isFollow = !_this.isFollow;
+        flash(res.data.message);
+      });
+    },
+    unfollow: function unfollow(friend) {
+      var _this2 = this;
 
       var url = "";
 
@@ -728,7 +779,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post(url).then(function (res) {
-        _this.$store.dispatch("removeFollowings", friend);
+        _this2.$store.dispatch("removeFollowings", friend);
 
         flash(res.data.message);
       });
@@ -742,10 +793,10 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     checkIsFollow: function checkIsFollow() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/user/".concat(this.profile_user.username, "/is-follow")).then(function (res) {
-        _this2.isFollow = res.data;
+        _this3.isFollow = res.data;
       });
     },
     checkPrivacy: function checkPrivacy() {
@@ -758,43 +809,43 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getAllPost: function getAllPost() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/threads")).then(function (res) {
-        _this3.posts = res.data.threads;
+        _this4.posts = res.data.threads;
       });
     },
     getAllFavoritePost: function getAllFavoritePost() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/favorites")).then(function (res) {
-        _this4.favorites = res.data.threads;
+        _this5.favorites = res.data.threads;
       });
     },
     getAllLikePost: function getAllLikePost() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/likes")).then(function (res) {
-        _this5.likes = res.data.threads;
+        _this6.likes = res.data.threads;
       });
     },
     getAllSubscriptionPost: function getAllSubscriptionPost() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/subscriptions")).then(function (res) {
-        _this6.subscriptions = res.data.threads;
+        _this7.subscriptions = res.data.threads;
       });
     },
     sendMessage: function sendMessage() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.post("/chat-send-message", {
         message: this.newMessage,
         friend: this.profile_user.id,
         friend_message: this.is_friend
       }).then(function (res) {
-        _this7.newMessage = "";
-        _this7.showModal = false;
+        _this8.newMessage = "";
+        _this8.showModal = false;
         $("#messageModal").modal("hide");
       });
     }
@@ -1125,35 +1176,130 @@ var render = function() {
     _c("div", { staticClass: "friends-header" }, [
       _c("div", { staticClass: "friends-menu" }, [
         _c("ul", { staticClass: "nav nav-tabs friend-nav-tabs" }, [
-          _vm._m(0),
+          _c(
+            "li",
+            {
+              staticClass: "active",
+              on: {
+                click: function($event) {
+                  _vm.searchItem = ""
+                }
+              }
+            },
+            [
+              _c(
+                "a",
+                { attrs: { "data-toggle": "tab", href: "#friend-friends" } },
+                [_vm._v("Friends")]
+              )
+            ]
+          ),
           _vm._v(" "),
           _vm.is_owner
-            ? _c("li", {}, [
-                _c(
-                  "a",
-                  { attrs: { "data-toggle": "tab", href: "#friend-request" } },
-                  [_vm._v("Friend Requests")]
-                )
-              ])
+            ? _c(
+                "li",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.searchItem = ""
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      attrs: { "data-toggle": "tab", href: "#friend-request" }
+                    },
+                    [_vm._v("Friend Requests")]
+                  )
+                ]
+              )
             : _vm._e(),
           _vm._v(" "),
           _vm.is_owner
-            ? _c("li", [
-                _c(
-                  "a",
-                  { attrs: { "data-toggle": "tab", href: "#friend-blocking" } },
-                  [_vm._v("Blockng")]
-                )
-              ])
+            ? _c(
+                "li",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.searchItem = ""
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      attrs: { "data-toggle": "tab", href: "#friend-blocking" }
+                    },
+                    [_vm._v("Blockng")]
+                  )
+                ]
+              )
             : _vm._e(),
           _vm._v(" "),
-          _vm._m(1),
+          _c(
+            "li",
+            {
+              on: {
+                click: function($event) {
+                  _vm.searchItem = ""
+                }
+              }
+            },
+            [
+              _c(
+                "a",
+                { attrs: { "data-toggle": "tab", href: "#friend-following" } },
+                [_vm._v("Following")]
+              )
+            ]
+          ),
           _vm._v(" "),
-          _vm._m(2)
+          _c(
+            "li",
+            {
+              on: {
+                click: function($event) {
+                  _vm.searchItem = ""
+                }
+              }
+            },
+            [
+              _c(
+                "a",
+                { attrs: { "data-toggle": "tab", href: "#friend-followers" } },
+                [_vm._v("Followers")]
+              )
+            ]
+          )
         ])
       ]),
       _vm._v(" "),
-      _vm._m(3)
+      _c("div", { staticClass: "friends-search" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.searchItem,
+              expression: "searchItem"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { type: "text", placeholder: "Search" },
+          domProps: { value: _vm.searchItem },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchItem = $event.target.value
+            }
+          }
+        })
+      ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "tab-content" }, [
@@ -1164,7 +1310,7 @@ var render = function() {
           _c(
             "div",
             { staticClass: "row" },
-            _vm._l(_vm.friendsList, function(friend, index) {
+            _vm._l(_vm.filterFriendLists, function(friend, index) {
               return _c("div", { key: index, staticClass: "col-md-4" }, [
                 _c("div", { staticClass: "profile-single-item" }, [
                   _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
@@ -1212,7 +1358,7 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "row" },
-                _vm._l(_vm.friendRequests, function(friend, index) {
+                _vm._l(_vm.filterFriendRequests, function(friend, index) {
                   return _c("div", { key: index, staticClass: "col-md-4" }, [
                     _c("div", { staticClass: "profile-single-item" }, [
                       _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
@@ -1264,7 +1410,7 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "row" },
-                _vm._l(_vm.blockLists, function(friend, index) {
+                _vm._l(_vm.filterBlockLists, function(friend, index) {
                   return _c("div", { key: index, staticClass: "col-md-4" }, [
                     _c("div", { staticClass: "profile-single-item" }, [
                       _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
@@ -1315,7 +1461,7 @@ var render = function() {
           _c(
             "div",
             { staticClass: "row" },
-            _vm._l(_vm.followings, function(friend, index) {
+            _vm._l(_vm.filterFollowings, function(friend, index) {
               return _c("div", { key: index, staticClass: "col-md-4" }, [
                 _c("div", { staticClass: "profile-single-item" }, [
                   _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
@@ -1364,7 +1510,7 @@ var render = function() {
           _c(
             "div",
             { staticClass: "row" },
-            _vm._l(_vm.followers, function(friend, index) {
+            _vm._l(_vm.filterFollowers, function(friend, index) {
               return _c("div", { key: index, staticClass: "col-md-4" }, [
                 _c("div", { staticClass: "profile-single-item" }, [
                   _c("a", { attrs: { href: _vm.profilePath(friend) } }, [
@@ -1392,49 +1538,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "active" }, [
-      _c("a", { attrs: { "data-toggle": "tab", href: "#friend-friends" } }, [
-        _vm._v("Friends")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("a", { attrs: { "data-toggle": "tab", href: "#friend-following" } }, [
-        _vm._v("Following")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("a", { attrs: { "data-toggle": "tab", href: "#friend-followers" } }, [
-        _vm._v("Followers")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "friends-search" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "text", placeholder: "Search" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
