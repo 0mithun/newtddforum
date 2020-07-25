@@ -53,19 +53,16 @@
                 </ul>
               </div>
             </div>
-            <div class="profile-tags">
+            <div class="profile-tags" v-if="followings.length> 0">
               <strong>Following:</strong>
-              <a href="#" class="single-tags-name">
+              <a
+                :href="profilePath(following)"
+                class="single-tags-name"
+                v-for="(following,index) in followings"
+                :key="index"
+              >
                 #
-                <span>Home</span>
-              </a>
-              <a href="#" class="single-tags-name">
-                #
-                <span>Entertainment</span>
-              </a>
-              <a href="#" class="single-tags-name">
-                #
-                <span>Television</span>
+                <span>{{ following.name.toLowerCase() }}</span>
               </a>
             </div>
           </div>

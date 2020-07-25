@@ -87,7 +87,11 @@
                 <img :src="friend.profileAvatarPath" :alt="friend.name" class="friends-avatar" />
               </a>
               <a :href="profilePath(friend)" class="friends-name">{{ friend.name }}</a>
-              <button class="btn btn-primary btn-sm unfriend-btn" @click.prevent="unfollow(friend)">
+              <button
+                class="btn btn-primary btn-sm unfriend-btn"
+                @click.prevent="unfollow(friend)"
+                v-if="is_owner"
+              >
                 <i class="fa fa-user-times"></i>
               </button>
             </div>

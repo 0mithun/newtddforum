@@ -222,6 +222,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["profile_user", "is_owner", "is_friend", "profileUserPrivacy"],
   data: function data() {
@@ -374,9 +378,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ProfileAbout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProfileAbout */ "./resources/assets/js/components/profile/ProfileAbout.vue");
 /* harmony import */ var _ProfileFriends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProfileFriends */ "./resources/assets/js/components/profile/ProfileFriends.vue");
-//
-//
-//
 //
 //
 //
@@ -1333,19 +1334,21 @@ var render = function() {
                     [_vm._v(_vm._s(friend.name))]
                   ),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary btn-sm unfriend-btn",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.unfollow(friend)
-                        }
-                      }
-                    },
-                    [_c("i", { staticClass: "fa fa-user-times" })]
-                  )
+                  _vm.is_owner
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btn-sm unfriend-btn",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.unfollow(friend)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fa fa-user-times" })]
+                      )
+                    : _vm._e()
                 ])
               ])
             }),
@@ -1568,7 +1571,33 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _vm._m(2)
+            _vm.followings.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "profile-tags" },
+                  [
+                    _c("strong", [_vm._v("Following:")]),
+                    _vm._v(" "),
+                    _vm._l(_vm.followings, function(following, index) {
+                      return _c(
+                        "a",
+                        {
+                          key: index,
+                          staticClass: "single-tags-name",
+                          attrs: { href: _vm.profilePath(following) }
+                        },
+                        [
+                          _vm._v("\n              #\n              "),
+                          _c("span", [
+                            _vm._v(_vm._s(following.name.toLowerCase()))
+                          ])
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
@@ -1576,7 +1605,7 @@ var render = function() {
           ? _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "profile-menu" }, [
                 _c("ul", { staticClass: "nav nav-tabs profile-nav-tabs" }, [
-                  _vm._m(3),
+                  _vm._m(2),
                   _vm._v(" "),
                   _c("li", [
                     _vm.isShowFriends
@@ -1588,7 +1617,7 @@ var render = function() {
                       : _vm._e()
                   ]),
                   _vm._v(" "),
-                  _vm._m(4),
+                  _vm._m(3),
                   _vm._v(" "),
                   _c("li", [
                     _vm.isShowPosts
@@ -1887,7 +1916,7 @@ var render = function() {
               { staticClass: "modal-dialog", attrs: { role: "document" } },
               [
                 _c("div", { staticClass: "modal-content" }, [
-                  _vm._m(5),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
                     _c("div", { staticClass: "form-group" }, [
@@ -1976,29 +2005,6 @@ var staticRenderFns = [
         })
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "profile-tags" }, [
-      _c("strong", [_vm._v("Following:")]),
-      _vm._v(" "),
-      _c("a", { staticClass: "single-tags-name", attrs: { href: "#" } }, [
-        _vm._v("\n              #\n              "),
-        _c("span", [_vm._v("Home")])
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "single-tags-name", attrs: { href: "#" } }, [
-        _vm._v("\n              #\n              "),
-        _c("span", [_vm._v("Entertainment")])
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "single-tags-name", attrs: { href: "#" } }, [
-        _vm._v("\n              #\n              "),
-        _c("span", [_vm._v("Television")])
-      ])
-    ])
   },
   function() {
     var _vm = this
