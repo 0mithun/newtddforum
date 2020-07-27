@@ -34,6 +34,7 @@ Route::get( 'threads/search', 'SearchController@search' );
 
 Route::get( '/', 'ThreadsController@index' );
 Route::get( '/home', 'ThreadsController@index' );
+Route::get( '/trending', 'ThreadsController@getTrending' );
 
 Route::resource( 'threads', 'ThreadsController' )->except( ['show', 'update'] );
 Route::get( 'anecdotes/{channel}/{thread}', 'ThreadsController@show' );

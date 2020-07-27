@@ -17,12 +17,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["following_count"],
-  computed: {
-    followingCounts: function followingCounts() {
-      return abbreviate(this.following_count, 1);
-    }
-  }
+  props: ["following_count"]
 });
 
 /***/ }),
@@ -94,7 +89,7 @@ var render = function() {
   return _c("div", { staticClass: "counts-item" }, [
     _c("i", { staticClass: "fa fa-user" }),
     _vm._v(" "),
-    _c("strong", [_vm._v(_vm._s(_vm.followingCounts))]),
+    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.following_counts)))]),
     _vm._v(" following\n")
   ])
 }

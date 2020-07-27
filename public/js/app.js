@@ -77246,6 +77246,9 @@ var app = new Vue({
     });
   }
 });
+Vue.filter('formatCount', function (value) {
+  return abbreviate(value, 1).toString().toUpperCase();
+});
 
 /***/ }),
 

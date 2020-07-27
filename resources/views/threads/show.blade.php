@@ -203,6 +203,7 @@
         @if($thread->location != NULL)
             <div class="row">
                 <div class="col-md-12">
+                    <h3 style="color:black;">Story Location</h3>
                     <simple-map :thread="{{ $thread }}"></simple-map>                    
                 </div>
             </div>

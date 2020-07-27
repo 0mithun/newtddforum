@@ -15,6 +15,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     thread: {
@@ -23,7 +24,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     viewCounts: function viewCounts() {
-      return abbreviate(this.thread.visits, 1);
+      //   return abbreviate(this.thread.visits, 1);
+      return this.thread.visits;
     }
   }
 });
@@ -42,7 +44,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.counts-item[data-v-30e6d226]{\n}\n", ""]);
+exports.push([module.i, "\n.counts-item[data-v-30e6d226] {\n}\r\n", ""]);
 
 // exports
 
@@ -96,7 +98,8 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "counts-item" }, [
     _c("i", { staticClass: "fa fa-eye" }),
-    _c("strong", [_vm._v(_vm._s(_vm.viewCounts))]),
+    _vm._v(" "),
+    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.viewCounts)))]),
     _vm._v(" views\n")
   ])
 }

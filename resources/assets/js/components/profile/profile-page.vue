@@ -74,7 +74,12 @@
                 <a data-toggle="tab" href="#about">About</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#friends" v-if="isShowFriends">Friends</a>
+                <a data-toggle="tab" href="#friends" v-if="isShowFriends">
+                  Friends
+                  <span
+                    style="color:black; font-weight:bold"
+                  >{{ friendsCount | formatCount }}</span>
+                </a>
               </li>
               <li>
                 <a data-toggle="tab" href="#following">Following</a>
@@ -135,7 +140,7 @@
 
               <div class="tab-pane post-details" id="posts">
                 <div class="post-header">
-                  <div class="post-counts">{{ postCounts }} posts</div>
+                  <div class="post-counts">{{ postCounts | formatCount }} posts</div>
                 </div>
                 <div class="post-body">
                   <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
@@ -143,7 +148,7 @@
               </div>
               <div class="tab-pane favorite-details" id="favorites">
                 <div class="post-header">
-                  <div class="post-counts">{{ favoriteCounts }} posts</div>
+                  <div class="post-counts">{{ favoriteCounts | formatCount }} posts</div>
                 </div>
                 <div class="post-body">
                   <single-thread v-for="(thread, index) in favorites" :thread="thread" :key="index"></single-thread>
@@ -151,7 +156,7 @@
               </div>
               <div class="tab-pane like-details" id="likes">
                 <div class="post-header">
-                  <div class="post-counts">{{ likeCounts }} posts</div>
+                  <div class="post-counts">{{ likeCounts | formatCount }} posts</div>
                 </div>
                 <div class="post-body">
                   <single-thread v-for="(thread, index) in likes" :thread="thread" :key="index"></single-thread>
@@ -159,7 +164,7 @@
               </div>
               <div class="tab-pane like-details" id="subscriptions">
                 <div class="post-header">
-                  <div class="post-counts">{{ subscriptionCounts }} posts</div>
+                  <div class="post-counts">{{ subscriptionCounts | formatCount }} posts</div>
                 </div>
                 <div class="post-body">
                   <single-thread
@@ -173,7 +178,9 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">sidebar</div>
+      <div class="col-md-4 sidebar">
+        <trending-thread></trending-thread>
+      </div>
     </div>
 
     <div
@@ -217,24 +224,24 @@ import Friends from "./ProfileFriends";
 export default {
   props: {
     profile_user: {
-      required: true
+      required: true,
     },
     profile_user_privacy: {
       type: Object,
-      required: true
+      required: true,
     },
     is_friend: {
       type: Boolean,
-      required: true
+      required: true,
     },
     is_owner: {
       type: Boolean,
-      required: false
-    }
+      required: false,
+    },
   },
   components: {
     About,
-    Friends
+    Friends,
   },
   data() {
     return {
@@ -246,12 +253,15 @@ export default {
       likes: [],
       subscriptions: [],
       comments: [],
-      isFollow: false
+      isFollow: false,
     };
   },
   computed: {
     followings() {
       return this.$store.getters.followings;
+    },
+    friendsCount() {
+      return this.$store.getters.friends.length;
     },
     isShowProfile() {
       if (this.is_owner == true) {
@@ -317,17 +327,21 @@ export default {
       return `/profiles/${this.profile_user.username}/edit`;
     },
     postCounts() {
-      return abbreviate(this.posts.length, 1);
+      // return abbreviate(this.posts.length, 1);
+      return this.posts.length;
     },
     favoriteCounts() {
-      return abbreviate(this.favorites.length, 1);
+      // return abbreviate(this.favorites.length, 1);
+      return this.favorites.length;
     },
     likeCounts() {
-      return abbreviate(this.likes.length, 1);
+      // return abbreviate(this.likes.length, 1);
+      return this.likes.length;
     },
     subscriptionCounts() {
-      return abbreviate(this.subscriptions.length, 1);
-    }
+      // return abbreviate(this.subscriptions.length, 1);
+      return this.subscriptions.length;
+    },
   },
   created() {
     this.checkPrivacy();
@@ -350,7 +364,7 @@ export default {
     toggleFollow() {
       let url = `/user/${this.profile_user.username}/follow`;
 
-      axios.post(url).then(res => {
+      axios.post(url).then((res) => {
         if (this.isFollow) {
           this.$store.dispatch("removeFollowers", window.App.user.id);
         } else {
@@ -368,7 +382,7 @@ export default {
       } else if (friend.followType == "user") {
         url = `/user/${friend.username}/follow`;
       }
-      axios.post(url).then(res => {
+      axios.post(url).then((res) => {
         this.$store.dispatch("removeFollowings", friend);
 
         flash(res.data.message);
@@ -383,7 +397,7 @@ export default {
       }
     },
     checkIsFollow() {
-      axios.get(`/user/${this.profile_user.username}/is-follow`).then(res => {
+      axios.get(`/user/${this.profile_user.username}/is-follow`).then((res) => {
         this.isFollow = res.data;
       });
     },
@@ -397,26 +411,28 @@ export default {
       }
     },
     getAllPost() {
-      axios.get(`/profiles/${this.profile_user.username}/threads`).then(res => {
-        this.posts = res.data.threads;
-      });
+      axios
+        .get(`/profiles/${this.profile_user.username}/threads`)
+        .then((res) => {
+          this.posts = res.data.threads;
+        });
     },
     getAllFavoritePost() {
       axios
         .get(`/profiles/${this.profile_user.username}/favorites`)
-        .then(res => {
+        .then((res) => {
           this.favorites = res.data.threads;
         });
     },
     getAllLikePost() {
-      axios.get(`/profiles/${this.profile_user.username}/likes`).then(res => {
+      axios.get(`/profiles/${this.profile_user.username}/likes`).then((res) => {
         this.likes = res.data.threads;
       });
     },
     getAllSubscriptionPost() {
       axios
         .get(`/profiles/${this.profile_user.username}/subscriptions`)
-        .then(res => {
+        .then((res) => {
           this.subscriptions = res.data.threads;
         });
     },
@@ -425,15 +441,15 @@ export default {
         .post("/chat-send-message", {
           message: this.newMessage,
           friend: this.profile_user.id,
-          friend_message: this.is_friend
+          friend_message: this.is_friend,
         })
-        .then(res => {
+        .then((res) => {
           this.newMessage = "";
           this.showModal = false;
           $("#messageModal").modal("hide");
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -531,5 +547,8 @@ export default {
 }
 .unfriend-btn {
   margin-left: auto;
+}
+.sidebar {
+  margin: 30px auto;
 }
 </style>

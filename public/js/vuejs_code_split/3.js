@@ -627,6 +627,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -667,6 +674,9 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     followings: function followings() {
       return this.$store.getters.followings;
+    },
+    friendsCount: function friendsCount() {
+      return this.$store.getters.friends.length;
     },
     isShowProfile: function isShowProfile() {
       if (this.is_owner == true) {
@@ -719,16 +729,20 @@ __webpack_require__.r(__webpack_exports__);
       return "/profiles/".concat(this.profile_user.username, "/edit");
     },
     postCounts: function postCounts() {
-      return abbreviate(this.posts.length, 1);
+      // return abbreviate(this.posts.length, 1);
+      return this.posts.length;
     },
     favoriteCounts: function favoriteCounts() {
-      return abbreviate(this.favorites.length, 1);
+      // return abbreviate(this.favorites.length, 1);
+      return this.favorites.length;
     },
     likeCounts: function likeCounts() {
-      return abbreviate(this.likes.length, 1);
+      // return abbreviate(this.likes.length, 1);
+      return this.likes.length;
     },
     subscriptionCounts: function subscriptionCounts() {
-      return abbreviate(this.subscriptions.length, 1);
+      // return abbreviate(this.subscriptions.length, 1);
+      return this.subscriptions.length;
     }
   },
   created: function created() {
@@ -904,7 +918,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.profile-header[data-v-39ca48f0] {\r\n  margin: 30px auto;\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-name[data-v-39ca48f0] {\r\n  padding: 0;\r\n  margin: 0;\r\n  color: black;\n}\n.profile-buttons[data-v-39ca48f0] {\r\n  padding: 10px 0px;\n}\n.profile-img[data-v-39ca48f0] {\r\n  width: 120px;\r\n  height: 120px;\r\n  padding: 3px;\r\n  border: 2px solid rgb(255, 67, 1);\r\n  border-radius: 50%;\n}\n.profile-avatar[data-v-39ca48f0] {\r\n  margin-right: 30px;\n}\n.profile-count[data-v-39ca48f0] {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\n}\n.follow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: rgb(255, 67, 1);\r\n  color: white;\n}\n.unfollow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: red;\r\n  color: white;\n}\n.nav-tabs > li > a[data-v-39ca48f0] {\r\n  color: black;\r\n  border: none;\r\n  margin-right: 0;\n}\n.nav-tabs > li > a[data-v-39ca48f0],\r\n.nav-tabs > li > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li > a[data-v-39ca48f0]:focus {\r\n  border: none;\n}\n.nav-tabs > li.active > a[data-v-39ca48f0],\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:focus {\r\n  color: #555555;\r\n  background-color: #f5f8fa;\r\n  border-bottom: 3px solid rgb(255, 67, 1);\r\n  cursor: default;\n}\n.profile-nav-tabs[data-v-39ca48f0] {\r\n  display: flex;\r\n  justify-content: space-between;\n}\n.profile-nav-tabs[data-v-39ca48f0]::before,\r\n.profile-nav-tabs[data-v-39ca48f0]::after {\r\n  content: none;\n}\n.single-tags-name[data-v-39ca48f0] {\r\n  color: black;\n}\n.single-tags-name span[data-v-39ca48f0] {\r\n  color: rgb(255, 67, 1);\n}\n.post-counts[data-v-39ca48f0] {\r\n  color: black;\r\n  padding: 15px 0;\r\n  font-weight: bold;\n}\n.friends-avatar[data-v-39ca48f0] {\r\n  width: 80px;\r\n  height: 80px;\r\n  padding: 10px;\r\n  border-radius: 15px;\n}\n.friends-name[data-v-39ca48f0] {\r\n  font-size: 14px;\r\n  color: black;\r\n  font-weight: bold;\r\n  padding: 0;\n}\n.unfriend-btn[data-v-39ca48f0] {\r\n  margin-left: auto;\n}\r\n", ""]);
+exports.push([module.i, "\n.profile-header[data-v-39ca48f0] {\r\n  margin: 30px auto;\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-name[data-v-39ca48f0] {\r\n  padding: 0;\r\n  margin: 0;\r\n  color: black;\n}\n.profile-buttons[data-v-39ca48f0] {\r\n  padding: 10px 0px;\n}\n.profile-img[data-v-39ca48f0] {\r\n  width: 120px;\r\n  height: 120px;\r\n  padding: 3px;\r\n  border: 2px solid rgb(255, 67, 1);\r\n  border-radius: 50%;\n}\n.profile-avatar[data-v-39ca48f0] {\r\n  margin-right: 30px;\n}\n.profile-count[data-v-39ca48f0] {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\n}\n.follow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: rgb(255, 67, 1);\r\n  color: white;\n}\n.unfollow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: red;\r\n  color: white;\n}\n.nav-tabs > li > a[data-v-39ca48f0] {\r\n  color: black;\r\n  border: none;\r\n  margin-right: 0;\n}\n.nav-tabs > li > a[data-v-39ca48f0],\r\n.nav-tabs > li > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li > a[data-v-39ca48f0]:focus {\r\n  border: none;\n}\n.nav-tabs > li.active > a[data-v-39ca48f0],\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:focus {\r\n  color: #555555;\r\n  background-color: #f5f8fa;\r\n  border-bottom: 3px solid rgb(255, 67, 1);\r\n  cursor: default;\n}\n.profile-nav-tabs[data-v-39ca48f0] {\r\n  display: flex;\r\n  justify-content: space-between;\n}\n.profile-nav-tabs[data-v-39ca48f0]::before,\r\n.profile-nav-tabs[data-v-39ca48f0]::after {\r\n  content: none;\n}\n.single-tags-name[data-v-39ca48f0] {\r\n  color: black;\n}\n.single-tags-name span[data-v-39ca48f0] {\r\n  color: rgb(255, 67, 1);\n}\n.post-counts[data-v-39ca48f0] {\r\n  color: black;\r\n  padding: 15px 0;\r\n  font-weight: bold;\n}\n.friends-avatar[data-v-39ca48f0] {\r\n  width: 80px;\r\n  height: 80px;\r\n  padding: 10px;\r\n  border-radius: 15px;\n}\n.friends-name[data-v-39ca48f0] {\r\n  font-size: 14px;\r\n  color: black;\r\n  font-weight: bold;\r\n  padding: 0;\n}\n.unfriend-btn[data-v-39ca48f0] {\r\n  margin-left: auto;\n}\n.sidebar[data-v-39ca48f0] {\r\n  margin: 30px auto;\n}\r\n", ""]);
 
 // exports
 
@@ -1716,7 +1730,27 @@ var render = function() {
                       ? _c(
                           "a",
                           { attrs: { "data-toggle": "tab", href: "#friends" } },
-                          [_vm._v("Friends")]
+                          [
+                            _vm._v(
+                              "\n                Friends\n                "
+                            ),
+                            _c(
+                              "span",
+                              {
+                                staticStyle: {
+                                  color: "black",
+                                  "font-weight": "bold"
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("formatCount")(_vm.friendsCount)
+                                  )
+                                )
+                              ]
+                            )
+                          ]
                         )
                       : _vm._e()
                   ]),
@@ -1895,7 +1929,10 @@ var render = function() {
                     [
                       _c("div", { staticClass: "post-header" }, [
                         _c("div", { staticClass: "post-counts" }, [
-                          _vm._v(_vm._s(_vm.postCounts) + " posts")
+                          _vm._v(
+                            _vm._s(_vm._f("formatCount")(_vm.postCounts)) +
+                              " posts"
+                          )
                         ])
                       ]),
                       _vm._v(" "),
@@ -1922,7 +1959,10 @@ var render = function() {
                     [
                       _c("div", { staticClass: "post-header" }, [
                         _c("div", { staticClass: "post-counts" }, [
-                          _vm._v(_vm._s(_vm.favoriteCounts) + " posts")
+                          _vm._v(
+                            _vm._s(_vm._f("formatCount")(_vm.favoriteCounts)) +
+                              " posts"
+                          )
                         ])
                       ]),
                       _vm._v(" "),
@@ -1949,7 +1989,10 @@ var render = function() {
                     [
                       _c("div", { staticClass: "post-header" }, [
                         _c("div", { staticClass: "post-counts" }, [
-                          _vm._v(_vm._s(_vm.likeCounts) + " posts")
+                          _vm._v(
+                            _vm._s(_vm._f("formatCount")(_vm.likeCounts)) +
+                              " posts"
+                          )
                         ])
                       ]),
                       _vm._v(" "),
@@ -1976,7 +2019,11 @@ var render = function() {
                     [
                       _c("div", { staticClass: "post-header" }, [
                         _c("div", { staticClass: "post-counts" }, [
-                          _vm._v(_vm._s(_vm.subscriptionCounts) + " posts")
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("formatCount")(_vm.subscriptionCounts)
+                            ) + " posts"
+                          )
                         ])
                       ]),
                       _vm._v(" "),
@@ -1999,7 +2046,7 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-4" }, [_vm._v("sidebar")])
+      _c("div", { staticClass: "col-md-4 sidebar" }, [_c("trending-thread")], 1)
     ]),
     _vm._v(" "),
     _vm.showModal

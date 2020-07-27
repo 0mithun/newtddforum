@@ -19,9 +19,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["comment_count", "color"],
   computed: {
-    commentCounts: function commentCounts() {
-      return abbreviate(this.comment_count, 1);
-    },
     commentStyle: function commentStyle() {
       return {
         color: this.color ? this.color : "#636b6f"
@@ -99,7 +96,7 @@ var render = function() {
   return _c("div", { staticClass: "counts-item", style: _vm.commentStyle }, [
     _c("i", { staticClass: "fa fa-comment" }),
     _vm._v(" "),
-    _c("strong", [_vm._v(_vm._s(_vm.commentCounts))]),
+    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.comment_count)))]),
     _vm._v(" comment\n")
   ])
 }

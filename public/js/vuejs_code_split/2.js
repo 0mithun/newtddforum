@@ -42,6 +42,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -481,7 +482,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.comment-body[data-v-3c5f5d3e] {\n  resize: vertical !important;\n}\n.add-new-reply[data-v-3c5f5d3e] {\n  padding: 30px 15px;\n}\n", ""]);
+exports.push([module.i, "\n.comment-body[data-v-3c5f5d3e] {\n  resize: vertical !important;\n}\n.add-new-reply[data-v-3c5f5d3e] {\n  padding: 30px 15px;\n}\n.comment-heading[data-v-3c5f5d3e] {\n  color: black;\n  margin-top: 0;\n  margin-bottom: 20px;\n}\n", ""]);
 
 // exports
 
@@ -583,6 +584,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "add-new-reply" }, [
+    _c("h3", { staticClass: "comment-heading" }, [
+      _vm._v("What did you think?")
+    ]),
+    _vm._v(" "),
     _vm.signedIn
       ? _c("div", [
           _c(

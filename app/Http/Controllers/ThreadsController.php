@@ -461,4 +461,35 @@ class ThreadsController extends Controller {
         }
     }
 
+    /***
+     * Get all trending item
+     */
+
+    public function getTrending( Trending $trending ) {
+        $trendingThreads = $trending->get();
+        if ( auth()->check() ) {
+            $auth_user = auth()->user();
+            $threads = collect( $trendingThreads )->filter( function ( $thread ) use ( $auth_user ) {
+                if ( $thread->age_restriction == 0 ) {
+                    return true;
+                } elseif ( $auth_user->id == 1 ) {
+                    return true;
+                } elseif ( $thread->user_id == $auth_user->id ) {
+                    return true;
+                } elseif ( $auth_user->userprivacy->restricted_18 == 1 ) {
+                    return true;
+                } elseif ( $auth_user->userprivacy->restricted_13 == 1 && $thread->age_restriction == 13 ) {
+                    return true;
+                }
+            } )->values();
+
+        } else {
+            $threads = collect( $trendingThreads )->filter( function ( $thread ) {
+                return $thread->age_restriction == 0;
+            } )->values();
+        }
+
+        return response()->json( $threads );
+    }
+
 }

@@ -15,11 +15,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['like_count', 'dislike_count'],
+  props: ["like_count", "dislike_count"],
   computed: {
     pointCounts: function pointCounts() {
-      return abbreviate(this.like_count - this.dislike_count, 1);
+      return this.like_count - this.dislike_count; // return abbreviate((this.like_count - this.dislike_count), 1)
     }
   }
 });
@@ -38,7 +39,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.counts-item[data-v-57914880]{\n}\n", ""]);
+exports.push([module.i, "\n.counts-item[data-v-57914880] {\n}\r\n", ""]);
 
 // exports
 
@@ -92,8 +93,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "counts-item" }, [
     _c("i", { staticClass: "fa fa-arrow-up" }),
-    _c("strong", [_vm._v(_vm._s(_vm.pointCounts))]),
-    _vm._v("  points\n")
+    _vm._v(" "),
+    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.pointCounts)))]),
+    _vm._v(" points\n")
   ])
 }
 var staticRenderFns = []

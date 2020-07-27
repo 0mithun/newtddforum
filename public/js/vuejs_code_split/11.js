@@ -17,12 +17,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["post_count"],
-  computed: {
-    postCounts: function postCounts() {
-      return abbreviate(this.post_count, 1);
-    }
-  }
+  props: ["post_count"]
 });
 
 /***/ }),
@@ -94,7 +89,7 @@ var render = function() {
   return _c("div", { staticClass: "counts-item" }, [
     _c("i", { staticClass: "fa fa-pencil-square" }),
     _vm._v(" "),
-    _c("strong", [_vm._v(_vm._s(_vm.postCounts))]),
+    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.post_count)))]),
     _vm._v(" posts\n")
   ])
 }

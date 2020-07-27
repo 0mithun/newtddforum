@@ -30,10 +30,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["thread"],
+  data: function data() {
+    return {
+      threads: []
+    };
+  },
   created: function created() {
-    console.log("trending item here");
+    this.getTrending();
+  },
+  methods: {
+    getTrending: function getTrending() {
+      var _this = this;
+
+      axios.get("/trending").then(function (res) {
+        _this.threads = res.data;
+      });
+    }
   }
 });
 
@@ -54,42 +69,48 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "panel" }, [
-    _c("div", { staticClass: "card-header thread_thumb" }, [
-      _c("a", { attrs: { href: _vm.thread.path } }, [
-        _c("img", {
-          staticClass: "img-responsive",
-          attrs: { src: _vm.thread.threadImagePath, alt: "Responsive image" }
-        })
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "panel-body" }, [
-      _c("div", { staticClass: "trendig_thread_title" }, [
-        _c("a", { attrs: { href: _vm.thread.path } }, [
-          _c("strong", [_vm._v(_vm._s(_vm.thread.title))])
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "trendong_footer" },
-        [
-          _c("comment-counts", {
-            attrs: { color: "#ff4301", comment_count: _vm.thread.replies_count }
-          }),
+  return _c(
+    "div",
+    _vm._l(_vm.threads, function(thread, index) {
+      return _c("div", { key: index, staticClass: "panel" }, [
+        _c("div", { staticClass: "card-header thread_thumb" }, [
+          _c("a", { attrs: { href: thread.path } }, [
+            _c("img", {
+              staticClass: "img-responsive",
+              attrs: { src: thread.threadImagePath, alt: thread.title }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "panel-body" }, [
+          _c("div", { staticClass: "trendig_thread_title" }, [
+            _c("a", { attrs: { href: thread.path } }, [
+              _c("strong", [_vm._v(_vm._s(thread.title))])
+            ])
+          ]),
           _vm._v(" "),
-          _c("point-counts", {
-            attrs: {
-              like_count: _vm.thread.like_count,
-              dislike_count: _vm.thread.dislike_count
-            }
-          })
-        ],
-        1
-      )
-    ])
-  ])
+          _c(
+            "div",
+            { staticClass: "trendong_footer" },
+            [
+              _c("comment-counts", {
+                attrs: { color: "#ff4301", comment_count: thread.replies_count }
+              }),
+              _vm._v(" "),
+              _c("point-counts", {
+                attrs: {
+                  like_count: thread.like_count,
+                  dislike_count: thread.dislike_count
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ])
+    }),
+    0
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

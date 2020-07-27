@@ -1,7 +1,7 @@
 <template>
   <div class="counts-item" :style="commentStyle">
     <i class="fa fa-comment"></i>
-    <strong>{{ commentCounts }}</strong> comment
+    <strong>{{ comment_count | formatCount }}</strong> comment
   </div>
 </template>
 
@@ -10,15 +10,12 @@ export default {
   props: ["comment_count", "color"],
 
   computed: {
-    commentCounts() {
-      return abbreviate(this.comment_count, 1);
-    },
     commentStyle() {
       return {
-        color: this.color ? this.color : "#636b6f"
+        color: this.color ? this.color : "#636b6f",
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

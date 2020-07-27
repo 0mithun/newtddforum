@@ -1,22 +1,24 @@
 <template>
-    <div  class="counts-item">
-        <i class="fa fa-arrow-up"></i><strong>{{ pointCounts }}</strong>  points
-    </div>
+  <div class="counts-item">
+    <i class="fa fa-arrow-up"></i>
+    <strong>{{ pointCounts | formatCount }}</strong> points
+  </div>
 </template>
 
 <script>
-    export default {
-        props: ['like_count','dislike_count'],
+export default {
+  props: ["like_count", "dislike_count"],
 
-        computed: {
-            pointCounts(){
-                return abbreviate((this.like_count - this.dislike_count), 1) 
-            }
-        },
-    }
+  computed: {
+    pointCounts() {
+      return this.like_count - this.dislike_count;
+      // return abbreviate((this.like_count - this.dislike_count), 1)
+    },
+  },
+};
 </script>
 
 <style  scoped>
-    .counts-item{
-    }
+.counts-item {
+}
 </style>

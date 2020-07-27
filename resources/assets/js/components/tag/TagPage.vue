@@ -2,28 +2,30 @@
   <div class="container">
     <div class="top-margin row">
       <div class="col-md-8">
-        <div class="row profile-header">
-          <div class="profile-avatar">
-            <img src="/images/default.png" alt class="profile-img" />
-          </div>
-          <div class="profile-details">
-            <h2 class="profile-name">
-              #
-              <span>{{ tag.name.toLowerCase() }}</span>
-            </h2>
-            <div class="profile-count">
-              <post-counts :post_count="posts.length"></post-counts>
-              <following-counts :following_count="followings.length"></following-counts>
-            </div>
-            <div class="profile-buttons">
-              <button
-                class="btn btn-sm unfollow-btn"
-                @click.prevent="toggleFollow"
-                v-if="isFollow"
-              >Unfllow</button>
-              <button class="btn btn-sm follow-btn" @click.prevent="toggleFollow" v-else>Follow</button>
-            </div>
-            <!-- <div class="profile-tags">
+        <div class="panel">
+          <div class="panel-body">
+            <div class="row profile-header">
+              <div class="profile-avatar">
+                <img src="/images/default.png" alt class="profile-img" />
+              </div>
+              <div class="profile-details">
+                <h2 class="profile-name">
+                  #
+                  <span>{{ tag.name.toLowerCase() }}</span>
+                </h2>
+                <div class="profile-count">
+                  <post-counts :post_count="posts.length"></post-counts>
+                  <following-counts :following_count="followings.length"></following-counts>
+                </div>
+                <div class="profile-buttons">
+                  <button
+                    class="btn btn-sm unfollow-btn"
+                    @click.prevent="toggleFollow"
+                    v-if="isFollow"
+                  >Unfllow</button>
+                  <button class="btn btn-sm follow-btn" @click.prevent="toggleFollow" v-else>Follow</button>
+                </div>
+                <!-- <div class="profile-tags">
               <strong>Following:</strong>
               <a href="#" class="single-tags-name">
                 #
@@ -37,19 +39,25 @@
                 #
                 <span>Television</span>
               </a>
-            </div>-->
-          </div>
-        </div>
-        <div class="row">
-          <div class="post-header">
-            <div class="post-counts">{{ postCounts }} posts</div>
-          </div>
-          <div class="post-body">
-            <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
+                </div>-->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="post-header">
+                  <div class="post-counts">{{ postCounts }} posts</div>
+                </div>
+                <div class="post-body">
+                  <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-4">sidebar</div>
+      <div class="col-md-4 sidebar">
+        <trending-thread></trending-thread>
+      </div>
     </div>
   </div>
 </template>
@@ -59,21 +67,21 @@ export default {
   props: {
     tag: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {},
   data() {
     return {
       posts: this.tag.threads,
       followings: [],
-      isFollow: false
+      isFollow: false,
     };
   },
   computed: {
     postCounts() {
       return abbreviate(this.posts.length, 1);
-    }
+    },
   },
   created() {
     this.checkIsFollow();
@@ -81,10 +89,10 @@ export default {
   },
   methods: {
     toggleFollow() {
-      axios.post(`/tag/${this.tag.id}/follow`).then(res => {
+      axios.post(`/tag/${this.tag.id}/follow`).then((res) => {
         // this.isFollow = !this.isFollow;
         if (this.isFollow) {
-          let newFollowings = this.followings.filter(item => {
+          let newFollowings = this.followings.filter((item) => {
             return item.id != window.App.user.id;
           });
           this.followings = newFollowings;
@@ -98,16 +106,16 @@ export default {
       });
     },
     checkIsFollow() {
-      axios.get(`/tag/${this.tag.id}/is-follow`).then(res => {
+      axios.get(`/tag/${this.tag.id}/is-follow`).then((res) => {
         this.isFollow = res.data;
       });
     },
     getAllFollowings() {
-      axios.get(`/tag/${this.tag.id}/followings`).then(res => {
+      axios.get(`/tag/${this.tag.id}/followings`).then((res) => {
         this.followings = res.data.followings;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -170,5 +178,8 @@ export default {
   color: black;
   padding: 15px 0;
   font-weight: bold;
+}
+.sidebar {
+  margin: 30px auto;
 }
 </style>

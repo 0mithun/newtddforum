@@ -17,12 +17,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["favorite_count"],
-  computed: {
-    favoriteCounts: function favoriteCounts() {
-      return abbreviate(this.favorite_count, 1);
-    }
-  }
+  props: ["favorite_count"]
 });
 
 /***/ }),
@@ -94,7 +89,7 @@ var render = function() {
   return _c("div", { staticClass: "counts-item" }, [
     _c("i", { staticClass: "fa fa-star" }),
     _vm._v(" "),
-    _c("strong", [_vm._v(_vm._s(_vm.favoriteCounts))]),
+    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.favorite_count)))]),
     _vm._v(" favorite\n")
   ])
 }

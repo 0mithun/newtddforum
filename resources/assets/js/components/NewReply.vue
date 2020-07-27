@@ -1,5 +1,6 @@
 <template>
   <div class="add-new-reply">
+    <h3 class="comment-heading">What did you think?</h3>
     <div v-if="signedIn">
       <form action @submit.prevent="addReply">
         <div class="input-group">
@@ -35,25 +36,25 @@ export default {
   data() {
     return {
       body: "",
-      completed: false
+      completed: false,
     };
   },
   computed: {
     redirectToLogin() {
       return "/redirect-to?page=" + location.pathname;
-    }
+    },
   },
   mounted() {
     $("#body").atwho({
       at: "@",
       delay: 750,
       callbacks: {
-        remoteFilter: function(query, callback) {
-          $.getJSON("/api/users", { name: query }, function(usernames) {
+        remoteFilter: function (query, callback) {
+          $.getJSON("/api/users", { name: query }, function (usernames) {
             callback(usernames);
           });
-        }
-      }
+        },
+      },
     });
   },
 
@@ -61,7 +62,7 @@ export default {
     addReply() {
       axios
         .post(location.pathname + "/replies", { body: this.body })
-        .catch(error => {
+        .catch((error) => {
           flash(error.response.data, "danger");
         })
         .then(({ data }) => {
@@ -72,8 +73,8 @@ export default {
 
           this.$emit("created", data);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -84,5 +85,10 @@ export default {
 }
 .add-new-reply {
   padding: 30px 15px;
+}
+.comment-heading {
+  color: black;
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 </style>

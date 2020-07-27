@@ -17,12 +17,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["like_counts"],
-  computed: {
-    likeCounts: function likeCounts() {
-      return abbreviate(this.like_counts, 1);
-    }
-  }
+  props: ["like_counts"]
 });
 
 /***/ }),
@@ -94,7 +89,7 @@ var render = function() {
   return _c("div", { staticClass: "counts-item" }, [
     _c("i", { staticClass: "fa fa-arrow-up" }),
     _vm._v(" "),
-    _c("strong", [_vm._v(_vm._s(_vm.likeCounts))]),
+    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.like_counts)))]),
     _vm._v(" likes\n")
   ])
 }

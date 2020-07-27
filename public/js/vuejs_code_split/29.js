@@ -73,6 +73,14 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     tag: {
@@ -151,7 +159,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.profile-header[data-v-83915526] {\r\n  margin: 30px auto;\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-name[data-v-83915526] {\r\n  padding: 0;\r\n  margin: 0;\n}\n.profile-name span[data-v-83915526] {\r\n  color: rgb(255, 67, 1);\n}\n.profile-buttons[data-v-83915526] {\r\n  padding: 10px 0px;\n}\n.profile-img[data-v-83915526] {\r\n  width: 120px;\r\n  height: 120px;\r\n  padding: 3px;\r\n  border: 2px solid rgb(255, 67, 1);\r\n  border-radius: 50%;\n}\n.profile-avatar[data-v-83915526] {\r\n  margin-right: 30px;\n}\n.profile-count[data-v-83915526] {\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-count > *[data-v-83915526] {\r\n  margin-left: 5px;\r\n  margin-right: 5px;\n}\n.follow-btn[data-v-83915526] {\r\n  width: 100px;\r\n  background-color: rgb(255, 67, 1);\r\n  color: white;\n}\n.unfollow-btn[data-v-83915526] {\r\n  width: 100px;\r\n  background-color: red;\r\n  color: white;\n}\n.single-tags-name[data-v-83915526] {\r\n  color: black;\n}\n.single-tags-name span[data-v-83915526] {\r\n  color: rgb(255, 67, 1);\n}\n.post-counts[data-v-83915526] {\r\n  color: black;\r\n  padding: 15px 0;\r\n  font-weight: bold;\n}\r\n", ""]);
+exports.push([module.i, "\n.profile-header[data-v-83915526] {\r\n  margin: 30px auto;\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-name[data-v-83915526] {\r\n  padding: 0;\r\n  margin: 0;\n}\n.profile-name span[data-v-83915526] {\r\n  color: rgb(255, 67, 1);\n}\n.profile-buttons[data-v-83915526] {\r\n  padding: 10px 0px;\n}\n.profile-img[data-v-83915526] {\r\n  width: 120px;\r\n  height: 120px;\r\n  padding: 3px;\r\n  border: 2px solid rgb(255, 67, 1);\r\n  border-radius: 50%;\n}\n.profile-avatar[data-v-83915526] {\r\n  margin-right: 30px;\n}\n.profile-count[data-v-83915526] {\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-count > *[data-v-83915526] {\r\n  margin-left: 5px;\r\n  margin-right: 5px;\n}\n.follow-btn[data-v-83915526] {\r\n  width: 100px;\r\n  background-color: rgb(255, 67, 1);\r\n  color: white;\n}\n.unfollow-btn[data-v-83915526] {\r\n  width: 100px;\r\n  background-color: red;\r\n  color: white;\n}\n.single-tags-name[data-v-83915526] {\r\n  color: black;\n}\n.single-tags-name span[data-v-83915526] {\r\n  color: rgb(255, 67, 1);\n}\n.post-counts[data-v-83915526] {\r\n  color: black;\r\n  padding: 15px 0;\r\n  font-weight: bold;\n}\n.sidebar[data-v-83915526] {\r\n  margin: 30px auto;\n}\r\n", ""]);
 
 // exports
 
@@ -206,82 +214,90 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "top-margin row" }, [
       _c("div", { staticClass: "col-md-8" }, [
-        _c("div", { staticClass: "row profile-header" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "profile-details" }, [
-            _c("h2", { staticClass: "profile-name" }, [
-              _vm._v("\n            #\n            "),
-              _c("span", [_vm._v(_vm._s(_vm.tag.name.toLowerCase()))])
+        _c("div", { staticClass: "panel" }, [
+          _c("div", { staticClass: "panel-body" }, [
+            _c("div", { staticClass: "row profile-header" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "profile-details" }, [
+                _c("h2", { staticClass: "profile-name" }, [
+                  _vm._v("\n                #\n                "),
+                  _c("span", [_vm._v(_vm._s(_vm.tag.name.toLowerCase()))])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "profile-count" },
+                  [
+                    _c("post-counts", {
+                      attrs: { post_count: _vm.posts.length }
+                    }),
+                    _vm._v(" "),
+                    _c("following-counts", {
+                      attrs: { following_count: _vm.followings.length }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "profile-buttons" }, [
+                  _vm.isFollow
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm unfollow-btn",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.toggleFollow($event)
+                            }
+                          }
+                        },
+                        [_vm._v("Unfllow")]
+                      )
+                    : _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm follow-btn",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.toggleFollow($event)
+                            }
+                          }
+                        },
+                        [_vm._v("Follow")]
+                      )
+                ])
+              ])
             ]),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "profile-count" },
-              [
-                _c("post-counts", { attrs: { post_count: _vm.posts.length } }),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-md-12" }, [
+                _c("div", { staticClass: "post-header" }, [
+                  _c("div", { staticClass: "post-counts" }, [
+                    _vm._v(_vm._s(_vm.postCounts) + " posts")
+                  ])
+                ]),
                 _vm._v(" "),
-                _c("following-counts", {
-                  attrs: { following_count: _vm.followings.length }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "profile-buttons" }, [
-              _vm.isFollow
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-sm unfollow-btn",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.toggleFollow($event)
-                        }
-                      }
-                    },
-                    [_vm._v("Unfllow")]
-                  )
-                : _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-sm follow-btn",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.toggleFollow($event)
-                        }
-                      }
-                    },
-                    [_vm._v("Follow")]
-                  )
+                _c(
+                  "div",
+                  { staticClass: "post-body" },
+                  _vm._l(_vm.posts, function(thread, index) {
+                    return _c("single-thread", {
+                      key: index,
+                      attrs: { thread: thread }
+                    })
+                  }),
+                  1
+                )
+              ])
             ])
           ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "post-header" }, [
-            _c("div", { staticClass: "post-counts" }, [
-              _vm._v(_vm._s(_vm.postCounts) + " posts")
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "post-body" },
-            _vm._l(_vm.posts, function(thread, index) {
-              return _c("single-thread", {
-                key: index,
-                attrs: { thread: thread }
-              })
-            }),
-            1
-          )
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-4" }, [_vm._v("sidebar")])
+      _c("div", { staticClass: "col-md-4 sidebar" }, [_c("trending-thread")], 1)
     ])
   ])
 }
