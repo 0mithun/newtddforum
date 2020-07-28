@@ -11,6 +11,9 @@ export default {
 
         followers: [],
         followings: [],
+        profilePosts: [],
+        profileFavoritePosts: [],
+        profileLikePosts: []
     },
     mutations: {
         friendList(state, payload) {
@@ -127,7 +130,17 @@ export default {
 
         },
 
+        profilePosts(state, payload) {
+            state.profilePosts = payload
+        },
 
+        profileFavoritePosts(state, payload) {
+            state.profileFavoritePosts = payload
+        },
+
+        profileLikePosts(state, payload) {
+            state.profileLikePosts = payload
+        }
 
 
 
@@ -209,6 +222,22 @@ export default {
             context.commit('addBlockLists', payload)
         },
 
+
+        //Profile Posts
+        profilePosts(context, payload) {
+            context.commit('profilePosts', payload)
+        },
+
+        //Profile Favorite Posts
+        profileFavoritePosts(context, payload) {
+            context.commit('profileFavoritePosts', payload)
+        },
+
+        //Profile Favorite Posts
+        profileLikePosts(context, payload) {
+            context.commit('profileLikePosts', payload)
+        }
+
     },
     getters: {
         friendLists(state) {
@@ -234,6 +263,30 @@ export default {
         },
         followings(state) {
             return state.followings
-        }
+        },
+        profilePosts(state) {
+            return state.profilePosts
+        },
+        profilePostcount(state) {
+            return state.profilePosts.length
+        },
+        profileFavoritePosts(state) {
+            return state.profilePosts
+        },
+
+
+
+        profileFavoritecount(state) {
+            return state.profileFavoritePosts.length
+        },
+
+
+        profileLikePosts(state) {
+            return state.profileLikePosts
+        },
+        profileLikeCount(state) {
+            return state.profileLikePosts.length
+        },
+
     }
 }

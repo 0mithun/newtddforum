@@ -9,10 +9,10 @@
           <div class="profile-details">
             <h2 class="profile-name">{{ profile_user.name}}</h2>
             <div class="profile-count">
-              <post-counts :post_count="posts.length"></post-counts>
-              <like-counts :like_counts="likes.length"></like-counts>
-              <comment-counts :comment_count="comments.length"></comment-counts>
-              <favorite-counts :favorite_count="favorites.length"></favorite-counts>
+              <post-counts :post_count="profilePostCount"></post-counts>
+              <like-counts :like_counts="profileLikeCount"></like-counts>
+              <comment-counts :comment_count="comments"></comment-counts>
+              <favorite-counts :favorite_count="profileFavoriteCount"></favorite-counts>
             </div>
             <div class="profile-buttons">
               <template v-if="!is_owner">
@@ -139,40 +139,16 @@
               </div>
 
               <div class="tab-pane post-details" id="posts">
-                <div class="post-header">
-                  <div class="post-counts">{{ postCounts | formatCount }} posts</div>
-                </div>
-                <div class="post-body">
-                  <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
-                </div>
+                <PostTab :profile_user="profile_user" />
               </div>
               <div class="tab-pane favorite-details" id="favorites">
-                <div class="post-header">
-                  <div class="post-counts">{{ favoriteCounts | formatCount }} posts</div>
-                </div>
-                <div class="post-body">
-                  <single-thread v-for="(thread, index) in favorites" :thread="thread" :key="index"></single-thread>
-                </div>
+                <FavoriteTab :profile_user="profile_user" />
               </div>
               <div class="tab-pane like-details" id="likes">
-                <div class="post-header">
-                  <div class="post-counts">{{ likeCounts | formatCount }} posts</div>
-                </div>
-                <div class="post-body">
-                  <single-thread v-for="(thread, index) in likes" :thread="thread" :key="index"></single-thread>
-                </div>
+                <LikeTab :profile_user="profile_user" />
               </div>
               <div class="tab-pane like-details" id="subscriptions">
-                <div class="post-header">
-                  <div class="post-counts">{{ subscriptionCounts | formatCount }} posts</div>
-                </div>
-                <div class="post-body">
-                  <single-thread
-                    v-for="(thread, index) in subscriptions"
-                    :thread="thread"
-                    :key="index"
-                  ></single-thread>
-                </div>
+                <SubscribeTab :profile_user="profile_user" />
               </div>
             </div>
           </div>
@@ -221,6 +197,10 @@
 <script>
 import About from "./ProfileAbout";
 import Friends from "./ProfileFriends";
+import PostTab from "./PostsTab";
+import LikeTab from "./LikeTab";
+import FavoriteTab from "./LikeTab";
+import SubscribeTab from "./SubscribeTab";
 export default {
   props: {
     profile_user: {
@@ -242,21 +222,33 @@ export default {
   components: {
     About,
     Friends,
+    PostTab,
+    LikeTab,
+    FavoriteTab,
+    SubscribeTab,
   },
   data() {
     return {
       showModal: false,
       showMessageButton: true,
       newMessage: "",
-      posts: [],
+
       favorites: [],
       likes: [],
-      subscriptions: [],
       comments: [],
       isFollow: false,
     };
   },
   computed: {
+    profilePostCount() {
+      return this.$store.getters.profilePostcount;
+    },
+    profileLikeCount() {
+      return this.$store.getters.profileLikeCount;
+    },
+    profileFavoriteCount() {
+      return this.$store.getters.profileFavoritecount;
+    },
     followings() {
       return this.$store.getters.followings;
     },
@@ -326,22 +318,6 @@ export default {
     editUrl() {
       return `/profiles/${this.profile_user.username}/edit`;
     },
-    postCounts() {
-      // return abbreviate(this.posts.length, 1);
-      return this.posts.length;
-    },
-    favoriteCounts() {
-      // return abbreviate(this.favorites.length, 1);
-      return this.favorites.length;
-    },
-    likeCounts() {
-      // return abbreviate(this.likes.length, 1);
-      return this.likes.length;
-    },
-    subscriptionCounts() {
-      // return abbreviate(this.subscriptions.length, 1);
-      return this.subscriptions.length;
-    },
   },
   created() {
     this.checkPrivacy();
@@ -349,11 +325,11 @@ export default {
       this.getAllPost();
     }
     if (this.isShowFavorites) {
-      this.getAllFavoritePost();
+      // this.getAllFavoritePost();
     }
     if (this.is_owner) {
       this.getAllLikePost();
-      this.getAllSubscriptionPost();
+      // this.getAllSubscriptionPost();
     }
 
     if (!this.is_owner) {
@@ -361,6 +337,28 @@ export default {
     }
   },
   methods: {
+    getAllPost() {
+      axios
+        .get(`/profiles/${this.profile_user.username}/threads`)
+        .then((res) => {
+          // this.posts = res.data.threads;
+          this.$store.dispatch("profilePosts", res.data.threads);
+        });
+    },
+    getAllLikePost() {
+      axios.get(`/profiles/${this.profile_user.username}/likes`).then((res) => {
+        // this.posts = res.data.threads;
+        this.$store.dispatch("profileLikePosts", res.data.threads);
+      });
+    },
+    getAllFavoritePost() {
+      axios
+        .get(`/profiles/${this.profile_user.username}/favorites`)
+        .then((res) => {
+          // this.posts = res.data.threads;
+          this.$store.dispatch("profileFavoritePosts", res.data.threads);
+        });
+    },
     toggleFollow() {
       let url = `/user/${this.profile_user.username}/follow`;
 
@@ -389,7 +387,6 @@ export default {
       });
     },
     profilePath(item) {
-      // return `/profiles/${user.username}`;
       if (item.followType == "user") {
         return `/profiles/${item.username}`;
       } else if (item.followType === "tag") {
@@ -410,32 +407,7 @@ export default {
         this.showMessageButton = false;
       }
     },
-    getAllPost() {
-      axios
-        .get(`/profiles/${this.profile_user.username}/threads`)
-        .then((res) => {
-          this.posts = res.data.threads;
-        });
-    },
-    getAllFavoritePost() {
-      axios
-        .get(`/profiles/${this.profile_user.username}/favorites`)
-        .then((res) => {
-          this.favorites = res.data.threads;
-        });
-    },
-    getAllLikePost() {
-      axios.get(`/profiles/${this.profile_user.username}/likes`).then((res) => {
-        this.likes = res.data.threads;
-      });
-    },
-    getAllSubscriptionPost() {
-      axios
-        .get(`/profiles/${this.profile_user.username}/subscriptions`)
-        .then((res) => {
-          this.subscriptions = res.data.threads;
-        });
-    },
+
     sendMessage() {
       axios
         .post("/chat-send-message", {
@@ -528,11 +500,7 @@ export default {
 .single-tags-name span {
   color: rgb(255, 67, 1);
 }
-.post-counts {
-  color: black;
-  padding: 15px 0;
-  font-weight: bold;
-}
+
 .friends-avatar {
   width: 80px;
   height: 80px;
@@ -550,5 +518,8 @@ export default {
 }
 .sidebar {
   margin: 30px auto;
+}
+.counts-item {
+  margin: 0 5px;
 }
 </style>
