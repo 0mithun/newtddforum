@@ -33,9 +33,13 @@
         </div>
       </div>
 
-      <div class="card-header thread_thumb">
+      <div class="card-header thread_thumb" :style="threadThumbStyle">
         <a :href="thread.path">
-          <img :src="thread.threadImagePath" class="thread-image" :alt="thread.title" />
+          <img
+            :src="thread.threadImagePath"
+            class="thread-image thread_thumb_image"
+            :alt="thread.title"
+          />
         </a>
       </div>
 
@@ -80,7 +84,12 @@
 
 <script>
 export default {
-  props: ["thread"]
+  props: ["thread"],
+  computed: {
+    threadThumbStyle() {
+      return `background: rgba(${this.thread.imageColor})`;
+    },
+  },
 };
 </script>
 
@@ -93,5 +102,15 @@ export default {
 }
 .full-location {
   font-size: 12px;
+}
+.thread_thumb {
+  display: block;
+  max-width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.thread_thumb_image {
+  max-width: 100%;
 }
 </style>

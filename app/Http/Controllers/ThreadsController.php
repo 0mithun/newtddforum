@@ -25,7 +25,7 @@ class ThreadsController extends Controller {
      * Create a new ThreadsController instance.
      */
     public function __construct() {
-        $this->middleware( 'auth' )->except( ['index', 'show', 'loadByTag'] );
+        $this->middleware( 'auth' )->except( ['index', 'show', 'loadByTag', 'getTrending'] );
         $this->middleware( 'userban' )->only( ['create', 'update', 'destroy'] );
         $this->middleware( 'must-be-confirmed' )->only( ['create', 'update', 'destroy'] );
         $this->middleware( 'throttle:10' )->only( ['show'] );
@@ -260,6 +260,10 @@ class ThreadsController extends Controller {
         $this->authorize( 'update', $thread );
 
         $thread->delete();
+        $thread_thumb = $thread->image_path;
+        if ( file_exists( $thread_thumb ) ) {
+            unlink( $thread_thumb );
+        }
         session()->flash( 'success', 'Thread delete Successfully' );
 
         if ( request()->wantsJson() ) {

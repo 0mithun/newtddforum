@@ -28,7 +28,7 @@
             position: fixed;
             left: 0;
             top: 0;
-            width: 100%;
+            width: 100%;    
             height: 100%;
             background: #000;
             opacity: .8;
@@ -84,6 +84,7 @@
 @endsection
 
 @section('content')
+
     <div class="container">
         <div class="row top-margin" >
             <div class="col-md-12">
@@ -176,8 +177,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="story">
-                                    <div class="thread_thumb">
-                                        <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image">
+                                    <div class="thread_thumb" style="background: rgba({{ $thread->imageColor }})">
+                                        <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image thread_thumb_image">
                                     </div>
                                     <div class="story-text">
                                         {!! $thread->body !!}

@@ -89,8 +89,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["thread"]
+  props: ["thread"],
+  computed: {
+    threadThumbStyle: function threadThumbStyle() {
+      return "background: rgba(".concat(this.thread.imageColor, ")");
+    }
+  }
 });
 
 /***/ }),
@@ -107,7 +116,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".threads-counts[data-v-70ba1062] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 10px 0;\n}\n.full-location[data-v-70ba1062] {\n  font-size: 12px;\n}", ""]);
+exports.push([module.i, ".threads-counts[data-v-70ba1062] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 10px 0;\n}\n.full-location[data-v-70ba1062] {\n  font-size: 12px;\n}\n.thread_thumb[data-v-70ba1062] {\n  display: block;\n  max-width: 100%;\n  text-align: center;\n  margin-bottom: 20px;\n  overflow: hidden;\n}\n.thread_thumb_image[data-v-70ba1062] {\n  max-width: 100%;\n}", ""]);
 
 // exports
 
@@ -233,14 +242,21 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "card-header thread_thumb" }, [
-        _c("a", { attrs: { href: _vm.thread.path } }, [
-          _c("img", {
-            staticClass: "thread-image",
-            attrs: { src: _vm.thread.threadImagePath, alt: _vm.thread.title }
-          })
-        ])
-      ]),
+      _c(
+        "div",
+        {
+          staticClass: "card-header thread_thumb",
+          style: _vm.threadThumbStyle
+        },
+        [
+          _c("a", { attrs: { href: _vm.thread.path } }, [
+            _c("img", {
+              staticClass: "thread-image thread_thumb_image",
+              attrs: { src: _vm.thread.threadImagePath, alt: _vm.thread.title }
+            })
+          ])
+        ]
+      ),
       _vm._v(" "),
       _c("div", { domProps: { innerHTML: _vm._s(_vm.thread.excerpt) } }),
       _vm._v(" "),

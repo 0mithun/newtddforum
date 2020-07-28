@@ -58,7 +58,7 @@ class Thread extends Model {
      * @var array
      */
     // protected $appends = ['isSubscribedTo','isReported','isFavorited','excerpt','threadImagePath','path'];
-    protected $appends = ['excerpt', 'threadImagePath', 'path', 'isLiked', 'isDesliked', 'splitCategory'];
+    protected $appends = ['excerpt', 'threadImagePath', 'imageColor', 'path', 'isLiked', 'isDesliked', 'splitCategory'];
 
     /**
      * The attributes that should be cast to native types.
@@ -319,6 +319,39 @@ class Thread extends Model {
 
     public function getSplitCategoryAttribute() {
         return $this->splitCategory();
+    }
+
+    /**
+     * Get rgb color value from image
+     */
+
+    public function getImageColorAttribute() {
+        if ( $this->image_path != NULL ) {
+            $splitName = explode( '.', $this->image_path );
+            $extension = array_pop( $splitName );
+
+            if ( $extension == 'jpg' ) {
+                $im = imagecreatefromjpeg( $this->image_path );
+
+            }
+            if ( $extension == 'jpeg' ) {
+                $im = imagecreatefromjpeg( $this->image_path );
+
+            } else if ( $extension == 'png' ) {
+                $im = imagecreatefrompng( $this->image_path );
+
+            }
+            $rgb = imagecolorat( $im, 0, 0 );
+            $colors = imagecolorsforindex( $im, $rgb );
+            array_pop( $colors );
+            array_push( $colors, 1 );
+        } else {
+            $colors = ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 1];
+        }
+        $rgbaString = join( ', ', $colors );
+
+        return $rgbaString;
+
     }
 
     /**

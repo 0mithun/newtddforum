@@ -390,7 +390,7 @@ li.list-group-item {
   display: block;
   max-width: 100%;
   text-align: center;
-  background: linear-gradient(to bottom, #dfd3c3, #f0ece3);
+  overflow: hidden;
   margin-bottom: 20px;
 }
 .thread-image {
