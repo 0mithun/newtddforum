@@ -346,7 +346,7 @@ class Thread extends Model {
             array_pop( $colors );
             array_push( $colors, 1 );
         } else {
-            $colors = ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 1];
+            $colors = ['red' => 128, 'green' => 128, 'blue' => 128, 'alpha' => 1];
         }
         $rgbaString = join( ', ', $colors );
 

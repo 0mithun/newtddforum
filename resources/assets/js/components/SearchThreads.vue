@@ -35,70 +35,80 @@
           <div class="row filter-row">
             <div class="col-md-12">
               <!-- <div class="btn-group">
-              <button
-                class="btn btn-link btn-xs dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                All Tags
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu search-dropdown">
-                <li>
-                  <div class="checkbox filter-item">
-                    <label>
-                      <input type="checkbox" name="rated" id :value="0" v-model="filter_rated" /> G-rated
-                    </label>
-                  </div>
-                </li>
-              </ul>
-              </div>-->
-              <!-- 
-            <div class="btn-group">
-              <button
-                class="btn btn-link btn-xs dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                All Moods
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu search-dropdown">
-                <li>
-                  <div class="checkbox filter-item">
-                    <label>
-                      <input type="checkbox" name="rated" id :value="0" v-model="filter_rated" /> G-rated
-                    </label>
-                  </div>
-                </li>
-              </ul>
+                <button
+                  class="btn btn-link btn-xs dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  All Tags
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu search-dropdown">
+                  <li>
+                    <div class="checkbox filter-item">
+                      <label>
+                        <input type="checkbox" name="rated" id :value="0" v-model="filter_rated" /> G-rated
+                      </label>
+                    </div>
+                  </li>
+                </ul>
               </div>-->
 
-              <!-- <div class="btn-group">
-              <button
-                class="btn btn-link btn-xs dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                All Length
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu search-dropdown">
-                <li>
-                  <div class="checkbox filter-item">
-                    <label>
-                      <input type="checkbox" name="rated" id :value="0" v-model="filter_rated" /> G-rated
-                    </label>
-                  </div>
-                </li>
-              </ul>
-              </div>-->
+              <div class="btn-group">
+                <button
+                  class="btn btn-link btn-xs dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  All Length
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu search-dropdown">
+                  <li>
+                    <div class="checkbox filter-item">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="length"
+                          id
+                          value="sort"
+                          v-model="filter_length"
+                        /> Sort
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="checkbox filter-item">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="length"
+                          id
+                          value="medium"
+                          v-model="filter_length"
+                        /> Medium
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="checkbox filter-item">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="length"
+                          id
+                          value="long"
+                          v-model="filter_length"
+                        /> Long
+                      </label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
 
               <div class="btn-group">
                 <button
@@ -144,7 +154,7 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  Include anecdotes
+                  All People
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu search-dropdown">
@@ -180,7 +190,7 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  Emojis
+                  All Mood
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu search-dropdown">
@@ -213,7 +223,7 @@
             <div class="col-md-12 search-results-sorting">
               <div class="count-column">{{ postsCount | formatCount}} Results</div>
               <div class="sort-column">
-                <select name id class="form-control sortBy" v-model="sort_by" @change="sortBy">
+                <select name id class="sortBy" v-model="sort_by" @change="sortBy">
                   <option value="topRated">Top Rated</option>
                   <option value="created_at">Most Recent</option>
                   <option value="like_count">Most Liked</option>
@@ -255,7 +265,7 @@
 
 <script>
 import SearchPagination from "./SearchPagination";
-import moment from "moment";
+import moment, { max } from "moment";
 
 export default {
   props: ["threads", "query", "restriction"],
@@ -276,10 +286,14 @@ export default {
       category: [],
       // famous:[0,1],
       filter_tags: [],
+      filter_length: [],
       emojis: "",
     };
   },
   watch: {
+    filter_length(filter) {
+      this.filterThreads();
+    },
     filter_emojis(filter) {
       this.filterThreads();
     },
@@ -309,9 +323,6 @@ export default {
   methods: {
     filterThreads() {
       let data = this.threads.data;
-      // if(this.filter_emojis.length>0){
-      //     data = this.filterByEmojis(this.filter_emojis, data);
-      // }
 
       if (this.filter_rated.length > 0) {
         data = this.filterByRated(this.filter_rated, data);
@@ -325,7 +336,45 @@ export default {
         data = this.filterByTags(this.filter_tags, data);
       }
 
+      if (this.filter_length.length > 0) {
+        data = this.filterByLength(this.filter_length, data);
+      }
       this.allThreads = data;
+    },
+    filterByLength(filter, data) {
+      // filter_length: [],
+      let filterThreads = _.filter(data, (thread) => {
+        let match = false;
+        for (let i = 0; i < filter.length; i++) {
+          let min = 0;
+          let max = 301;
+          if (filter[i] == "sort") {
+            min = 0;
+            max = 100;
+          } else if (filter[i] == "medium") {
+            min = 100;
+            max = 300;
+          } else if (filter[i] == "long") {
+            min = 300;
+            max = 301;
+          }
+
+          if (max === 301) {
+            if (thread.word_count >= 300) {
+              match = true;
+              break;
+            }
+          } else {
+            if ((thread.word_count >= min) & (thread.word_count <= max)) {
+              match = true;
+              break;
+            }
+          }
+        }
+
+        return match;
+      });
+      return filterThreads;
     },
     filterByEmojis(filter, data) {
       let newThreads = _.filter(data, (thread) => {
@@ -356,26 +405,6 @@ export default {
         }
       });
       return filterThreads;
-
-      // let category = [];
-      // let newThreads = _.filter(data, (thread) => {
-      //   return thread.cno != null;
-
-      //   let threadCategory = thread.category;
-      //   if (threadCategory !== null) {
-      //     category = threadCategory.split("|");
-      //     return category.length > 0;
-      //   }
-      // });
-
-      // let filterThreads = _.filter(newThreads, (thread) => {
-      //   for (let i = 0; i < category.length; i++) {
-      //     if (_.includes(filter, category[i])) {
-      //       return true;
-      //     }
-      //   }
-      // });
-      // return filterThreads;
     },
 
     filterByTags(filter, data) {
@@ -406,24 +435,6 @@ export default {
       let threads = _.orderBy(this.threads.data, [this.sort_by], "desc");
       this.allThreads = threads;
       this.threads.data = threads;
-
-      console.log("sorting");
-
-      // if (this.sort_by == "top_rated") {
-      //   //axios.get('/search-by-top-rated?query='+this.q).then(res=>{
-      //   //  console.log(res.data);
-      //   // this.allThreads = res.data.data;
-      //   // let pageUrl = {
-      //   //     prev_page_url: res.data.prev_page_url,
-      //   //     next_page_url: res.data.next_page_url,
-      //   // }
-      //   // eventBus.$emit('pageChange',pageUrl );
-      //   // })
-      // } else {
-      //   let threads = _.orderBy(this.threads.data, [this.sort_by], "desc");
-      //   this.allThreads = threads;
-      //   this.threads.data = threads;
-      // }
     },
     ago(created_at) {
       return moment(created_at, "YYYY-MM-DD HH:mm:ss").fromNow() + "...";
@@ -525,7 +536,6 @@ export default {
 .search-results-sorting {
   display: flex;
   align-items: center;
-  font-weight: bold;
   color: black;
   font-size: 13px;
 }
@@ -542,7 +552,7 @@ export default {
   color: black;
   font-weight: bold;
   box-shadow: none;
-  font-size: 13px;
+  font-size: 12px;
 }
 .sortBy:focus {
   outline: none;
