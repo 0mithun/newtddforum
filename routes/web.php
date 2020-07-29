@@ -49,6 +49,7 @@ Route::get( '/threads?by={username}', 'ThreadsController@index' )->name( 'thread
 Route::get( '/anecdotes/{channel}/{thread}/replies', 'RepliesController@index' );
 
 Route::get( '/tags-show', 'FrontendController@showTags' )->name( 'show.tags' );
+Route::get( '/all-tags', 'FrontendController@allTags' );
 
 // Route::get("threads/most-likes",'ThreadsController@loadByLikes')->name('likes.threads.list');
 // Route::get("/threads/most-views",'ThreadsController@loadByViews')->name('views.threads.list');

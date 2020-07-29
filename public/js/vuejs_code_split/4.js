@@ -348,6 +348,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -369,7 +376,8 @@ __webpack_require__.r(__webpack_exports__);
       // famous:[0,1],
       filter_tags: [],
       filter_length: [],
-      emojis: ""
+      emojis: "",
+      tags: []
     };
   },
   watch: {
@@ -392,6 +400,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.allThreads = this.threads.data;
     this.getAllEmojis();
+    this.getAllTags();
   },
   computed: {
     postsCount: function postsCount() {
@@ -415,6 +424,10 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.filter_tags.length > 0) {
         data = this.filterByTags(this.filter_tags, data);
+      }
+
+      if (this.filter_emojis.length > 0) {
+        data = this.filterByEmojis(this.filter_emojis, data);
       }
 
       if (this.filter_length.length > 0) {
@@ -516,6 +529,13 @@ __webpack_require__.r(__webpack_exports__);
         _this.emojis = res.data;
       });
     },
+    getAllTags: function getAllTags() {
+      var _this2 = this;
+
+      axios.get("/all-tags").then(function (res) {
+        _this2.tags = res.data;
+      });
+    },
     searchThread: function searchThread() {
       // /threads/search
       var url = "/threads/search?query=" + this.q;
@@ -531,7 +551,7 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(created_at, "YYYY-MM-DD HH:mm:ss").fromNow() + "...";
     },
     searchThreads: function searchThreads() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.q == "") {
         return;
@@ -539,21 +559,21 @@ __webpack_require__.r(__webpack_exports__);
 
       this.search = true;
       axios.get("/threads/search?query=" + this.q + "&sort_by=" + this.sort_by).then(function (res) {
-        _this2.allThreads = res.data.data;
-        _this2.threads.data = res.data.data;
+        _this3.allThreads = res.data.data;
+        _this3.threads.data = res.data.data;
         var pageUrl = {
           prev_page_url: res.data.prev_page_url,
           next_page_url: res.data.next_page_url
         };
         eventBus.$emit("pageChange", pageUrl);
-        _this2.search = false;
+        _this3.search = false;
       });
     },
     fetch: function fetch(page) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get("threads/search?query=" + this.q + "&page=" + page).then(function (res) {
-        _this3.allThreads = res.data.data;
+        _this4.allThreads = res.data.data;
         var pageUrl = {
           prev_page_url: res.data.prev_page_url,
           next_page_url: res.data.next_page_url
@@ -738,6 +758,73 @@ var render = function() {
                 _c("div", { staticClass: "btn-group" }, [
                   _vm._m(0),
                   _vm._v(" "),
+                  _c(
+                    "ul",
+                    { staticClass: "dropdown-menu search-dropdown" },
+                    _vm._l(_vm.tags, function(tag, index) {
+                      return _c("li", { key: index }, [
+                        _c("div", { staticClass: "checkbox filter-item" }, [
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.filter_tags,
+                                  expression: "filter_tags"
+                                }
+                              ],
+                              attrs: {
+                                type: "checkbox",
+                                name: "rated",
+                                id: ""
+                              },
+                              domProps: {
+                                value: tag.toLowerCase(),
+                                checked: Array.isArray(_vm.filter_tags)
+                                  ? _vm._i(_vm.filter_tags, tag.toLowerCase()) >
+                                    -1
+                                  : _vm.filter_tags
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.filter_tags,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = tag.toLowerCase(),
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.filter_tags = $$a.concat([$$v]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.filter_tags = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.filter_tags = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _vm._v(
+                              "\n                      " +
+                                _vm._s(tag.toLowerCase()) +
+                                "\n                    "
+                            )
+                          ])
+                        ])
+                      ])
+                    }),
+                    0
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "btn-group" }, [
+                  _vm._m(1),
+                  _vm._v(" "),
                   _c("ul", { staticClass: "dropdown-menu search-dropdown" }, [
                     _c("li", [
                       _c("div", { staticClass: "checkbox filter-item" }, [
@@ -895,7 +982,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "btn-group" }, [
-                  _vm._m(1),
+                  _vm._m(2),
                   _vm._v(" "),
                   _c("ul", { staticClass: "dropdown-menu search-dropdown" }, [
                     _c("li", [
@@ -1042,7 +1129,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "btn-group" }, [
-                  _vm._m(2),
+                  _vm._m(3),
                   _vm._v(" "),
                   _c("ul", { staticClass: "dropdown-menu search-dropdown" }, [
                     _c("li", [
@@ -1201,7 +1288,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "btn-group" }, [
-                  _vm._m(3),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c(
                     "ul",
@@ -1355,11 +1442,11 @@ var render = function() {
         ]),
         _vm._v(" "),
         _vm.search == false && _vm.allThreads.length == 0
-          ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(4)])
+          ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(5)])
           : _vm._e(),
         _vm._v(" "),
         _vm.search
-          ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(5)])
+          ? _c("div", { staticClass: "panel panel-default" }, [_vm._m(6)])
           : _vm._e(),
         _vm._v(" "),
         _vm._l(_vm.allThreads, function(thread, index) {
@@ -1378,6 +1465,27 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-link btn-xs dropdown-toggle",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _vm._v("\n                All Tags\n                "),
+        _c("span", { staticClass: "caret" })
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

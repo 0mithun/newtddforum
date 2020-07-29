@@ -34,7 +34,7 @@
 
           <div class="row filter-row">
             <div class="col-md-12">
-              <!-- <div class="btn-group">
+              <div class="btn-group">
                 <button
                   class="btn btn-link btn-xs dropdown-toggle"
                   type="button"
@@ -46,15 +46,22 @@
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu search-dropdown">
-                  <li>
+                  <li v-for="(tag, index) in tags" :key="index">
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id :value="0" v-model="filter_rated" /> G-rated
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          :value="tag.toLowerCase()"
+                          v-model="filter_tags"
+                        />
+                        {{ tag.toLowerCase()}}
                       </label>
                     </div>
                   </li>
                 </ul>
-              </div>-->
+              </div>
 
               <div class="btn-group">
                 <button
@@ -288,6 +295,7 @@ export default {
       filter_tags: [],
       filter_length: [],
       emojis: "",
+      tags: [],
     };
   },
   watch: {
@@ -310,6 +318,7 @@ export default {
   created() {
     this.allThreads = this.threads.data;
     this.getAllEmojis();
+    this.getAllTags();
   },
   computed: {
     postsCount() {
@@ -336,9 +345,14 @@ export default {
         data = this.filterByTags(this.filter_tags, data);
       }
 
+      if (this.filter_emojis.length > 0) {
+        data = this.filterByEmojis(this.filter_emojis, data);
+      }
+
       if (this.filter_length.length > 0) {
         data = this.filterByLength(this.filter_length, data);
       }
+
       this.allThreads = data;
     },
     filterByLength(filter, data) {
@@ -380,6 +394,7 @@ export default {
       let newThreads = _.filter(data, (thread) => {
         return thread.emojis.length > 0;
       });
+
       let filterThreads = _.filter(newThreads, (thread) => {
         for (let i = 0; i < thread.emojis.length; i++) {
           if (_.includes(filter, thread.emojis[i].name)) {
@@ -424,6 +439,11 @@ export default {
     getAllEmojis() {
       axios.get("/all-emojis").then((res) => {
         this.emojis = res.data;
+      });
+    },
+    getAllTags() {
+      axios.get("/all-tags").then((res) => {
+        this.tags = res.data;
       });
     },
     searchThread() {

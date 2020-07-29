@@ -8,53 +8,60 @@ use App\Rules\Recaptcha;
 use App\Tags;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use DB;
 
-class FrontendController extends Controller
-{
-
-
-    public function contact(){
-        return view('pages.contact');
+class FrontendController extends Controller {
+    public function contact() {
+        return view( 'pages.contact' );
     }
 
-    public function tos(){
+    public function tos() {
         $admin = Admin::first();
-        return view('pages.tos', compact('admin'));
+
+        return view( 'pages.tos', compact( 'admin' ) );
     }
 
-    public function faq(){
+    public function faq() {
         $admin = Admin::first();
-        return view('pages.faq', compact('admin'));
+
+        return view( 'pages.faq', compact( 'admin' ) );
     }
 
-    public  function privacyPolicy(){
+    public function privacyPolicy() {
         $admin = Admin::first();
-        return view('pages.privacypolicy', compact('admin'));
+
+        return view( 'pages.privacypolicy', compact( 'admin' ) );
     }
 
-    public function contactAdmin(Recaptcha $recaptcha){
-
-        request()->validate([
-            'from'      =>  'required',
-            'subject'   =>  'required',
-            'body'      =>  'required',
+    public function contactAdmin( Recaptcha $recaptcha ) {
+        request()->validate( [
+            'from'                 => 'required',
+            'subject'              => 'required',
+            'body'                 => 'required',
             'g-recaptcha-response' => ['required', $recaptcha],
         ],
             [
-            'g-recaptcha-response.required' =>  'Please solve the captcha'
-        ]);
+                'g-recaptcha-response.required' => 'Please solve the captcha',
+            ] );
 
-        $data =  request()->only(['from','subject','body']);
+        $data = request()->only( ['from', 'subject', 'body'] );
 
-       Mail::to('admin@anecdotage.com')->send(new ContactToAdmin($data));
-        return  redirect('/');
+        Mail::to( 'admin@anecdotage.com' )->send( new ContactToAdmin( $data ) );
+
+        return redirect( '/' );
     }
 
-    public function showTags(){
-        $tags = Tags::withCount('threads')->orderBy('threads_count','desc')->take(100)->get();
+    public function showTags() {
+        $tags = Tags::withCount( 'threads' )->orderBy( 'threads_count', 'desc' )->take( 100 )->get();
         //return response()->json($tags);
-        $tags = json_encode($tags);
-        return view('threads.tags', compact('tags'));
+        $tags = json_encode( $tags );
+
+        return view( 'threads.tags', compact( 'tags' ) );
+    }
+
+    public function allTags() {
+        // return response()->json( Tags::orderBy( 'name' )->get() );
+        $tags = Tags::orderBy( 'name', 'ASC' )->get()->pluck( 'name' );
+
+        return response()->json( $tags );
     }
 }
