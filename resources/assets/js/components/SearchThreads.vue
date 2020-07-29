@@ -251,7 +251,7 @@ import moment from "moment";
 export default {
   props: ["threads", "query", "restriction"],
   components: {
-    SearchPagination
+    SearchPagination,
   },
 
   data() {
@@ -267,7 +267,7 @@ export default {
       category: [],
       // famous:[0,1],
       filter_tags: [],
-      emojis: ""
+      emojis: "",
     };
   },
   watch: {
@@ -282,7 +282,7 @@ export default {
     },
     filter_tags(filter) {
       this.filterThreads();
-    }
+    },
   },
   created() {
     this.allThreads = this.threads.data;
@@ -312,10 +312,10 @@ export default {
       this.allThreads = data;
     },
     filterByEmojis(filter, data) {
-      let newThreads = _.filter(data, thread => {
+      let newThreads = _.filter(data, (thread) => {
         return thread.emojis.length > 0;
       });
-      let filterThreads = _.filter(newThreads, thread => {
+      let filterThreads = _.filter(newThreads, (thread) => {
         for (let i = 0; i < thread.emojis.length; i++) {
           if (_.includes(filter, thread.emojis[i].name)) {
             return true;
@@ -326,7 +326,7 @@ export default {
     },
 
     filterByRated(filter, data) {
-      let filterThreads = _.filter(data, thread => {
+      let filterThreads = _.filter(data, (thread) => {
         if (_.includes(filter, thread.age_restriction)) {
           return true;
         }
@@ -335,14 +335,14 @@ export default {
     },
     filterByCategory(filter, data) {
       let category = [];
-      let newThreads = _.filter(data, thread => {
+      let newThreads = _.filter(data, (thread) => {
         let threadCategory = thread.category;
         if (threadCategory !== null) {
           category = threadCategory.split("|");
           return category.length > 0;
         }
       });
-      let filterThreads = _.filter(newThreads, thread => {
+      let filterThreads = _.filter(newThreads, (thread) => {
         for (let i = 0; i < category.length; i++) {
           if (_.includes(filter, category[i])) {
             return true;
@@ -353,10 +353,10 @@ export default {
     },
 
     filterByTags(filter, data) {
-      let newThreads = _.filter(data, thread => {
+      let newThreads = _.filter(data, (thread) => {
         return thread.tags.length > 0;
       });
-      let filterThreads = _.filter(newThreads, thread => {
+      let filterThreads = _.filter(newThreads, (thread) => {
         for (let i = 0; i < thread.tags.length; i++) {
           if (_.includes(filter, thread.tags[i].name.toLowerCase())) {
             return true;
@@ -367,7 +367,7 @@ export default {
     },
 
     getAllEmojis() {
-      axios.get("/all-emojis").then(res => {
+      axios.get("/all-emojis").then((res) => {
         this.emojis = res.data;
       });
     },
@@ -403,12 +403,12 @@ export default {
       this.search = true;
       axios
         .get("/threads/search?query=" + this.q + "&sort_by=" + this.sort_by)
-        .then(res => {
+        .then((res) => {
           this.allThreads = res.data.data;
           this.threads.data = res.data.data;
           let pageUrl = {
             prev_page_url: res.data.prev_page_url,
-            next_page_url: res.data.next_page_url
+            next_page_url: res.data.next_page_url,
           };
           eventBus.$emit("pageChange", pageUrl);
           this.search = false;
@@ -417,16 +417,16 @@ export default {
     fetch(page) {
       axios
         .get("threads/search?query=" + this.q + "&page=" + page)
-        .then(res => {
+        .then((res) => {
           this.allThreads = res.data.data;
           let pageUrl = {
             prev_page_url: res.data.prev_page_url,
-            next_page_url: res.data.next_page_url
+            next_page_url: res.data.next_page_url,
           };
           eventBus.$emit("pageChange", pageUrl);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

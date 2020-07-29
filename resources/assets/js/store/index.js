@@ -267,7 +267,7 @@ export default {
         profilePosts(state) {
             return state.profilePosts
         },
-        profilePostcount(state) {
+        profilePostCount(state) {
             return state.profilePosts.length
         },
         profileFavoritePosts(state) {
@@ -276,7 +276,7 @@ export default {
 
 
 
-        profileFavoritecount(state) {
+        profileFavoriteCount(state) {
             return state.profileFavoritePosts.length
         },
 

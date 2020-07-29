@@ -58,7 +58,7 @@ class Thread extends Model {
      * @var array
      */
     // protected $appends = ['isSubscribedTo','isReported','isFavorited','excerpt','threadImagePath','path'];
-    protected $appends = ['excerpt', 'threadImagePath', 'imageColor', 'path', 'isLiked', 'isDesliked', 'splitCategory'];
+    protected $appends = ['excerpt', 'threadImagePath', 'imageColor', 'path', 'isLiked', 'isDesliked', 'splitCategory', 'topRated'];
 
     /**
      * The attributes that should be cast to native types.
@@ -361,5 +361,9 @@ class Thread extends Model {
      */
     public function ratings() {
         return $this->hasMany( Rating::class );
+    }
+
+    public function getTopRatedAttribute() {
+        return ( $this->like_count - ( $this->dislike_count + 1 ) );
     }
 }

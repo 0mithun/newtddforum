@@ -3,34 +3,15 @@
     <div class="post-header">
       <div class="post-counts">{{ postCounts | formatCount }} posts</div>
       <div class="post-sorting">
-        <div class="dropdown">
-          <button
-            class="btn sorting-btn dropdown-toggle"
-            type="button"
-            id="dropdownMenu1"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="true"
-          >
-            Sort
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li>
-              <a href="#" @click.prevent="sortPost('top')">Top Rated</a>
-            </li>
-            <li>
-              <a href="#" @click.prevent="sortPost('top')">Most Viewed</a>
-            </li>
-            <li>
-              <a href="#" @click.prevent="sortPost('top')">Most Favorited</a>
-            </li>
-          </ul>
-        </div>
+        <select v-model="sort" class="sortBy">
+          <option value="topRated">Top Rated</option>
+          <option value="visits">Most Viewed</option>
+          <option value="favorite_count">Most Favorited</option>
+        </select>
       </div>
     </div>
     <div class="post-body">
-      <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
+      <single-thread v-for="(thread, index) in sortPosts" :thread="thread" :key="index"></single-thread>
     </div>
   </div>
 </template>
@@ -40,7 +21,7 @@ export default {
   props: ["profile_user"],
   data() {
     return {
-      //   posts: [],
+      sort: "topRated",
     };
   },
   computed: {
@@ -50,11 +31,16 @@ export default {
     posts() {
       return this.$store.getters.profilePosts;
     },
+    sortPosts() {
+      let threads = _.orderBy(this.posts, [this.sort], "desc");
+      return threads;
+    },
   },
-  created() {
-    // this.getAllPost();
+  methods: {
+    sortBy(sort) {
+      this.sort = sort;
+    },
   },
-  methods: {},
 };
 </script>
 
@@ -67,5 +53,16 @@ export default {
   color: black;
   font-weight: bold;
   margin-right: 20px;
+}
+.sortBy {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: auto;
+  color: rgb(255, 67, 1);
+}
+.sortBy:focus {
+  outline: none;
+  border: none;
 }
 </style>

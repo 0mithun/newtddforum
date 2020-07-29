@@ -77186,7 +77186,7 @@ Vue.component("following-counts", function () {
   return __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! ./components/Counts/FollowingCounts.vue */ "./resources/assets/js/components/Counts/FollowingCounts.vue"));
 });
 Vue.component("thread-replies", function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(46), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ./components/Replies */ "./resources/assets/js/components/Replies.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(46), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./components/Replies */ "./resources/assets/js/components/Replies.vue"));
 });
 Vue.component("up-votes", function () {
   return __webpack_require__.e(/*! import() */ 40).then(__webpack_require__.bind(null, /*! ./components/UpVotes.vue */ "./resources/assets/js/components/UpVotes.vue"));
@@ -77225,7 +77225,7 @@ Vue.component("trending-thread", function () {
   return __webpack_require__.e(/*! import() */ 33).then(__webpack_require__.bind(null, /*! ./components/threads/TrendingThread.vue */ "./resources/assets/js/components/threads/TrendingThread.vue"));
 });
 Vue.component("profile-page", function () {
-  return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./components/profile/profile-page.vue */ "./resources/assets/js/components/profile/profile-page.vue"));
+  return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ./components/profile/profile-page.vue */ "./resources/assets/js/components/profile/profile-page.vue"));
 });
 Vue.component("tag-page", function () {
   return __webpack_require__.e(/*! import() */ 29).then(__webpack_require__.bind(null, /*! ./components/tag/TagPage.vue */ "./resources/assets/js/components/tag/TagPage.vue"));
@@ -77625,13 +77625,13 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     profilePosts: function profilePosts(state) {
       return state.profilePosts;
     },
-    profilePostcount: function profilePostcount(state) {
+    profilePostCount: function profilePostCount(state) {
       return state.profilePosts.length;
     },
     profileFavoritePosts: function profileFavoritePosts(state) {
       return state.profilePosts;
     },
-    profileFavoritecount: function profileFavoritecount(state) {
+    profileFavoriteCount: function profileFavoriteCount(state) {
       return state.profileFavoritePosts.length;
     },
     profileLikePosts: function profileLikePosts(state) {
