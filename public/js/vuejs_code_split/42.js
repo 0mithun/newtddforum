@@ -40,6 +40,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       radius: 0,
+      query: "",
       //    center:{lat:42.363211, lng:-105.071875},
       center: {
         lat: parseFloat(this.userlat),
@@ -49,6 +50,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    this.query = location.search;
     this.radius = this.defaultradius;
     this.fetchNearestLocations();
   },
@@ -64,7 +66,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(url, {
         center: this.center,
         radius: this.radius,
-        nearest: this.nearest
+        nearest: this.nearest,
+        query: this.query
       }).then(function (res) {
         var data = res.data;
         var center = _this.center;

@@ -121,6 +121,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      query: "",
       center: {
         lat: parseFloat(this.userlat),
         lng: parseFloat(this.userlng)
@@ -155,7 +156,8 @@ __webpack_require__.r(__webpack_exports__);
 
       var url = "/map/all-threads";
       axios.post(url, {
-        center: this.center
+        center: this.center,
+        query: this.query
       }).then(function (res) {
         var data = res.data;
 
@@ -182,6 +184,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
+    this.query = location.search;
     this.fetchLocations();
     eventBus.$on("markers_fetched", function (data) {
       _this.markers = data.markers;

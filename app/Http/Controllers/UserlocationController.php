@@ -46,16 +46,35 @@ class UserlocationController extends Controller {
      */
 
     public function getAllThread() {
-        $center = request( 'center' );
-        $lat = $center['lat'];
-        $lng = $center['lng'];
-
-        if ( request( 'radius' ) ) {
-            $distance = request( 'radius' ) ?? 500;
-            $results = DB::select( DB::raw( 'SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance' ) );
-        } else {
-            $results = Thread::all();
+        $query = request( 'query' );
+        $search = '';
+        if ( $query != '' ) {
+            $query = ltrim( $query, '?' );
+            $splitQueryString = explode( '=', $query );
+            if ( count( $splitQueryString ) > 1 ) {
+                $search = array_pop( $splitQueryString );
+            }
         }
+
+        if ( $search != '' ) {
+            $results = Thread::
+                where( 'title', "LIKE", "%$search%" )
+                ->orWhere( 'body', "LIKE", "%$search%" )
+                ->get();
+        } else {
+            $center = request( 'center' );
+            $lat = $center['lat'];
+            $lng = $center['lng'];
+
+            if ( request( 'radius' ) ) {
+                $distance = request( 'radius' ) ?? 500;
+                $results = DB::select( DB::raw( 'SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance' ) );
+            } else {
+                $results = Thread::all();
+            }
+        }
+
+        // return response()->json( $results );
 
         if ( auth()->check() ) {
             $auth_user = auth()->user();

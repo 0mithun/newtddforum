@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       sort: "topRated",
+      subscribePosts: [],
     };
-    subscribePosts = [];
   },
   computed: {
     postCounts() {

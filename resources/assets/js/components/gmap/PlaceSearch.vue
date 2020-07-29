@@ -30,12 +30,14 @@ export default {
   data() {
     return {
       radius: 0,
+      query: "",
       //    center:{lat:42.363211, lng:-105.071875},
       center: { lat: parseFloat(this.userlat), lng: parseFloat(this.userlng) },
-      radiusOptions: [0, 100, 200, 300, 400, 500, 1000, 2000, 5000]
+      radiusOptions: [0, 100, 200, 300, 400, 500, 1000, 2000, 5000],
     };
   },
   created() {
+    this.query = location.search;
     this.radius = this.defaultradius;
     this.fetchNearestLocations();
   },
@@ -50,9 +52,10 @@ export default {
         .post(url, {
           center: this.center,
           radius: this.radius,
-          nearest: this.nearest
+          nearest: this.nearest,
+          query: this.query,
         })
-        .then(res => {
+        .then((res) => {
           let data = res.data;
           let center = this.center;
           let zoom = 6;
@@ -77,12 +80,12 @@ export default {
       this.radius = 500;
       let center = {
         lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
+        lng: place.geometry.location.lng(),
       };
       this.center = center;
       this.fetchNearestLocations();
-    }
-  }
+    },
+  },
 };
 </script>
 

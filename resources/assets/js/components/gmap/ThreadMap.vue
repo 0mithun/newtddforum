@@ -42,14 +42,15 @@ import InfoContent from "./InfoContent.vue";
 export default {
   props: ["userlat", "userlng", "nearest"],
   components: {
-    InfoContent
+    InfoContent,
   },
   data() {
     return {
+      query: "",
       center: { lat: parseFloat(this.userlat), lng: parseFloat(this.userlng) },
       mapCenter: {
         lat: parseFloat(this.userlat),
-        lng: parseFloat(this.userlng)
+        lng: parseFloat(this.userlng),
       },
       markers: [],
       results: [],
@@ -57,16 +58,16 @@ export default {
       infoContent: null,
       infoWindowPos: {
         lat: 0,
-        lng: 0
+        lng: 0,
       },
       infoWinOpen: false,
       currentMidx: null,
       infoOptions: {
         pixelOffset: {
           width: 0,
-          height: -35
-        }
-      }
+          height: -35,
+        },
+      },
     };
   },
   methods: {
@@ -78,9 +79,10 @@ export default {
 
       axios
         .post(url, {
-          center: this.center
+          center: this.center,
+          query: this.query,
         })
-        .then(res => {
+        .then((res) => {
           let data = res.data;
           if (res.data.status == "failed") {
             alert("You must provide your location first");
@@ -103,11 +105,13 @@ export default {
         this.infoWinOpen = true;
         this.currentMidx = idx;
       }
-    }
+    },
   },
   created() {
+    this.query = location.search;
+
     this.fetchLocations();
-    eventBus.$on("markers_fetched", data => {
+    eventBus.$on("markers_fetched", (data) => {
       this.markers = data.markers;
       this.results = data.results;
 
@@ -118,19 +122,19 @@ export default {
         this.mapCenter = data.markers[center].position;
       }
     });
-    eventBus.$on("markers_result_clicked", index => {
+    eventBus.$on("markers_result_clicked", (index) => {
       let targetMarkers = this.markers[index];
       this.mapCenter = targetMarkers.position;
       this.toggleInfoWindow(targetMarkers, index);
     });
 
-    eventBus.$on("zoom_decreased", zoom => {
+    eventBus.$on("zoom_decreased", (zoom) => {
       this.zoom = zoom;
     });
-    eventBus.$on("change_center", center => {
+    eventBus.$on("change_center", (center) => {
       this.mapCenter = center;
     });
-  }
+  },
 };
 </script>
 

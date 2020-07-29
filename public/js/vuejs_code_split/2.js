@@ -546,9 +546,9 @@ __webpack_require__.r(__webpack_exports__);
   props: ["profile_user"],
   data: function data() {
     return {
-      sort: "topRated"
+      sort: "topRated",
+      subscribePosts: []
     };
-    subscribePosts = [];
   },
   computed: {
     postCounts: function postCounts() {
