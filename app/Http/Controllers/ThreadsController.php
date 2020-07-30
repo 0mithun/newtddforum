@@ -237,9 +237,9 @@ class ThreadsController extends Controller {
         $this->uploadThreadImages( $request, $thread );
         $this->attachTags( $request, $thread );
 
-        // if(request('wiki_info_page_url') != ''){
-        //     WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
-        // }
+        if ( request( 'wiki_info_page_url' ) != '' ) {
+            WikiImageProcess::dispatch( request( 'wiki_info_page_url' ), $thread, false );
+        }
 
         if ( $request->expectsJson() ) {
             return response()->json( ['status' => 'success', 'thread' => $thread], 200 );

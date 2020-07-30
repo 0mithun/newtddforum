@@ -12,6 +12,7 @@
     </div>
     <div class="post-body">
       <single-thread v-for="(thread, index) in sortPosts" :thread="thread" :key="index"></single-thread>
+      <!-- <SearchPagination :dataSet="threads" @changedSearch="fetch" :query="q"></SearchPagination> -->
     </div>
   </div>
 </template>
@@ -26,7 +27,7 @@ export default {
   },
   computed: {
     postCounts() {
-      return this.$store.getters.profilePostcount;
+      return this.$store.getters.profilePostCount;
     },
     posts() {
       return this.$store.getters.profilePosts;
@@ -40,6 +41,19 @@ export default {
     sortBy(sort) {
       this.sort = sort;
     },
+
+    // fetch(page) {
+    //   axios
+    //     .get("/threads/search?query=" + this.q + "&page=" + page)
+    //     .then((res) => {
+    //       this.allThreads = res.data.data;
+    //       let pageUrl = {
+    //         prev_page_url: res.data.prev_page_url,
+    //         next_page_url: res.data.next_page_url,
+    //       };
+    //       eventBus.$emit("pageChange", pageUrl);
+    //     });
+    // },
   },
 };
 </script>

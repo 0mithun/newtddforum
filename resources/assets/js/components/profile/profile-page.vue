@@ -241,13 +241,13 @@ export default {
   },
   computed: {
     profilePostCount() {
-      return this.$store.getters.profilePostcount;
+      return this.$store.getters.profilePostCount;
     },
     profileLikeCount() {
       return this.$store.getters.profileLikeCount;
     },
     profileFavoriteCount() {
-      return this.$store.getters.profileFavoritecount;
+      return this.$store.getters.profileFavoriteCount;
     },
     followings() {
       return this.$store.getters.followings;

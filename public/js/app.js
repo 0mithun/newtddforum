@@ -77629,7 +77629,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return state.profilePosts.length;
     },
     profileFavoritePosts: function profileFavoritePosts(state) {
-      return state.profilePosts;
+      return state.profilePosts.data;
     },
     profileFavoriteCount: function profileFavoriteCount(state) {
       return state.profileFavoritePosts.length;

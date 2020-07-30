@@ -301,24 +301,31 @@ class ProfilesController extends Controller {
         $getUserInfo = User::with( 'userprivacy' )->where( 'username', $user )->first();
 
         if ( $auth_user->username == $user ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )->get();
+            $threads = Thread::where( 'user_id', $getUserInfo->id )
+            // ->get();
+            ;
         } else if ( $auth_user->id == 1 ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )->get();
+            $threads = Thread::where( 'user_id', $getUserInfo->id )
+            // ->get();
+            ;
         } else if ( $auth_user->userprivacy->restricted_18 == 1 ) {
             $threads = Thread::where( 'user_id', $getUserInfo->id )
                 ->where( 'anonymous', '=', 0 )
-                ->get();
+            // ->get();
+            ;
         } else if ( $auth_user->userprivacy->restricted_13 == 1 ) {
             $threads = Thread::where( 'user_id', $getUserInfo->id )->where( 'age_restriction', '!=', 18 )
                 ->where( 'anonymous', '=', 0 )
-                ->get();
+            // ->get();
+            ;
         } else {
             $threads = Thread::where( 'user_id', $getUserInfo->id )->where( 'age_restriction', 0 )
                 ->where( 'anonymous', '=', 0 )
-                ->get();
+            // ->get();
+            ;
         }
 
-        return response()->json( ['threads' => $threads] );
+        return response()->json( ['threads' => $threads->get()] );
     }
 
     /**

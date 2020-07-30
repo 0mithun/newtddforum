@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Jobs\TagImageProcessing;
 use App\Traits\Followed;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,6 +32,15 @@ class Tags extends Model {
     protected $appends = ['profileAvatarPath', 'followType'];
 
     public $timestamps = false;
+
+    protected static function boot() {
+        parent::boot();
+
+        static::created( function ( $tag ) {
+            TagImageProcessing::dispatch( $tag );
+        } );
+
+    }
 
     public function threads() {
 //        return $this->belongsToMany(Thread::class);

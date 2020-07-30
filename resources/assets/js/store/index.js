@@ -264,14 +264,16 @@ export default {
         followings(state) {
             return state.followings
         },
+
         profilePosts(state) {
             return state.profilePosts
         },
         profilePostCount(state) {
             return state.profilePosts.length
         },
+
         profileFavoritePosts(state) {
-            return state.profilePosts
+            return state.profilePosts.data
         },
 
 

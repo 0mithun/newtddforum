@@ -83,6 +83,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["profile_user"],
   data: function data() {
@@ -92,7 +93,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     postCounts: function postCounts() {
-      return this.$store.getters.profilePostcount;
+      return this.$store.getters.profilePostCount;
     },
     posts: function posts() {
       return this.$store.getters.profilePosts;
@@ -106,7 +107,19 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     sortBy: function sortBy(sort) {
       this.sort = sort;
-    }
+    } // fetch(page) {
+    //   axios
+    //     .get("/threads/search?query=" + this.q + "&page=" + page)
+    //     .then((res) => {
+    //       this.allThreads = res.data.data;
+    //       let pageUrl = {
+    //         prev_page_url: res.data.prev_page_url,
+    //         next_page_url: res.data.next_page_url,
+    //       };
+    //       eventBus.$emit("pageChange", pageUrl);
+    //     });
+    // },
+
   }
 });
 
@@ -837,13 +850,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     profilePostCount: function profilePostCount() {
-      return this.$store.getters.profilePostcount;
+      return this.$store.getters.profilePostCount;
     },
     profileLikeCount: function profileLikeCount() {
       return this.$store.getters.profileLikeCount;
     },
     profileFavoriteCount: function profileFavoriteCount() {
-      return this.$store.getters.profileFavoritecount;
+      return this.$store.getters.profileFavoriteCount;
     },
     followings: function followings() {
       return this.$store.getters.followings;
