@@ -572,7 +572,7 @@ __webpack_require__.r(__webpack_exports__);
     fetch: function fetch(page) {
       var _this4 = this;
 
-      axios.get("threads/search?query=" + this.q + "&page=" + page).then(function (res) {
+      axios.get("/threads/search?query=" + this.q + "&page=" + page).then(function (res) {
         _this4.allThreads = res.data.data;
         var pageUrl = {
           prev_page_url: res.data.prev_page_url,

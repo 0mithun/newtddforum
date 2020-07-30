@@ -479,7 +479,7 @@ export default {
     },
     fetch(page) {
       axios
-        .get("threads/search?query=" + this.q + "&page=" + page)
+        .get("/threads/search?query=" + this.q + "&page=" + page)
         .then((res) => {
           this.allThreads = res.data.data;
           let pageUrl = {
