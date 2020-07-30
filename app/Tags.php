@@ -62,8 +62,8 @@ class Tags extends Model {
     }
 
     public function getProfileAvatarPathAttribute( $avatar ) {
-        // $avatar = $this->avatar_path == '' ? 'default' : $this->avatar_path;
-        $avatar = 'images/avatars/default.png';
+        $avatar = $this->photo == '' ? 'default' : $this->photo;
+        // $avatar = 'images/avatars/default.png';
 
         return asset( $avatar );
     }

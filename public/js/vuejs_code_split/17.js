@@ -93,11 +93,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'NestedReplies',
-  props: ['reply'],
+  name: "NestedReplies",
+  props: ["reply"],
   components: {
     NestedReplies: function NestedReplies() {
       return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ./NestedReplies.vue */ "./resources/assets/js/components/NestedReplies.vue"));
@@ -113,25 +149,25 @@ __webpack_require__.r(__webpack_exports__);
       replies_count: this.reply.reply_count,
       showNested: false,
       addNested: false,
-      nestedbody: '',
+      nestedbody: "",
       showLoadMore: true
     };
   },
   computed: {
     ago: function ago() {
-      return moment(this.reply.created_at, 'YYYY-MM-DD HH:mm:ss').fromNow() + '...';
+      return moment(this.reply.created_at, "YYYY-MM-DD HH:mm:ss").fromNow() + "...";
     },
     signedIn: function signedIn() {
       return window.App.user ? true : false;
     },
     redirectToLogin: function redirectToLogin() {
-      return '/redirect-to?page=' + location.pathname;
+      return "/redirect-to?page=" + location.pathname;
     }
   },
   created: function created() {
     var _this = this;
 
-    eventBus.$on('nested_delete-' + this.reply.id, function (id) {
+    eventBus.$on("nested_delete-" + this.reply.id, function (id) {
       var newReplies = _this.replies.filter(function (item) {
         return item.id != id;
       });
@@ -150,7 +186,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addReplySuggest: function addReplySuggest() {
-      $('#bodyedit-' + this.reply.id).atwho({
+      $("#bodyedit-" + this.reply.id).atwho({
         at: "@",
         delay: 750,
         callbacks: {
@@ -163,7 +199,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       });
-      $('#addNested-' + this.reply.id).atwho({
+      $("#addNested-" + this.reply.id).atwho({
         at: "@",
         delay: 750,
         callbacks: {
@@ -178,7 +214,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     addNestedReplySuggest: function addNestedReplySuggest() {
-      $('#addNested-' + this.reply.id).atwho({
+      $("#addNested-" + this.reply.id).atwho({
         at: "@",
         delay: 750,
         callbacks: {
@@ -202,25 +238,25 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     update: function update() {
-      axios.patch('/replies/' + this.id, {
+      axios.patch("/replies/" + this.id, {
         body: this.editBody
       })["catch"](function (error) {
-        flash(error.response.data, 'danger');
+        flash(error.response.data, "danger");
       });
       this.body = this.editBody;
       this.editing = false;
-      flash('Updated!');
+      flash("Updated!");
     },
     destroy: function destroy() {
       if (this.replies_count > 0) {
-        flash('Your reply has many replies.', 'danger');
+        flash("Your reply has many replies.", "danger");
         return;
       }
 
-      if (confirm('Are you sure delete this reply')) {
-        axios["delete"]('/replies/' + this.id);
-        eventBus.$emit('nested_delete-' + this.reply.parent_id, this.id);
-        flash('Your reply has been deleted.');
+      if (confirm("Are you sure delete this reply")) {
+        axios["delete"]("/replies/" + this.id);
+        eventBus.$emit("nested_delete-" + this.reply.parent_id, this.id);
+        flash("Your reply has been deleted.");
       }
     },
     addNestedReply: function addNestedReply() {
@@ -230,17 +266,17 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(url, {
         body: this.nestedbody
       })["catch"](function (error) {
-        flash(error.response.data, 'danger');
+        flash(error.response.data, "danger");
       }).then(function (_ref2) {
         var data = _ref2.data;
-        _this3.nestedbody = '';
+        _this3.nestedbody = "";
 
         _this3.replies.push(data);
 
         _this3.replies_count = _this3.replies_count + 1;
         _this3.addNested = false;
         _this3.showLoadMore = true;
-        flash('Your reply has been posted.');
+        flash("Your reply has been posted.");
       });
     }
   }
@@ -260,7 +296,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.single-reply[data-v-5b761aea]{\n    margin: 5px;\n}\n.comment-body[data-v-5b761aea]{\n    resize: vertical !important;\n}\n.reply_created_at[data-v-5b761aea]{\n    color: #92959e;\n    font-size: 12px;\n    font-style: italic;\n    margin-right: 10px;\n}\n.reply-body[data-v-5b761aea]{\n    padding: 0;\n    margin-left: 20px;\n    margin-top: -8px;\n    color: #92959e;\n}\n.nested-reply-btn[data-v-5b761aea]{\n    margin-left: 10px;\n}\n.more-reply[data-v-5b761aea]{\n    margin-left: 20px;\n}\n.add-nested-reply-btn[data-v-5b761aea]{\n    color: #92959e;\n}\n.add-nested-reply-btn[data-v-5b761aea]:hover{\n    color: #92959e;\n    text-decoration: none;\n}\n.add-nested-reply-btn[data-v-5b761aea]:focus{\n    outline: none;\n    text-decoration: none;\n}\n.reply-edit-delete-btn[data-v-5b761aea]{\n    display: flex;\n    justify-content: flex-end;\n}\n.show-nested-replies-btn[data-v-5b761aea]{\n    /* color: black; */\n     color: #92959e;\n}\n.show-nested-replies-btn[data-v-5b761aea]:focus{\n    outline: none;\n    text-decoration: none;\n}\n.show-nested-replies-btn[data-v-5b761aea]:hover{\n    color: #92959e;\n    text-decoration: none;\n}\n.glyphicon-triangle-top[data-v-5b761aea],\n.glyphicon-triangle-bottom[data-v-5b761aea]{\n    margin-right: 5px;\n    font-size: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.single-reply[data-v-5b761aea] {\n  margin: 5px;\n}\n.comment-body[data-v-5b761aea] {\n  resize: vertical !important;\n}\n.reply_created_at[data-v-5b761aea] {\n  color: #92959e;\n  font-size: 12px;\n  font-style: italic;\n  margin-right: 10px;\n}\n.reply-body[data-v-5b761aea] {\n  padding: 0;\n  margin-left: 20px;\n  margin-top: -8px;\n  color: #92959e;\n}\n.nested-reply-btn[data-v-5b761aea] {\n  margin-left: 10px;\n}\n.more-reply[data-v-5b761aea] {\n  margin-left: 20px;\n}\n.add-nested-reply-btn[data-v-5b761aea] {\n  color: #92959e;\n}\n.add-nested-reply-btn[data-v-5b761aea]:hover {\n  color: #92959e;\n  text-decoration: none;\n}\n.add-nested-reply-btn[data-v-5b761aea]:focus {\n  outline: none;\n  text-decoration: none;\n}\n.reply-edit-delete-btn[data-v-5b761aea] {\n  display: flex;\n  justify-content: flex-end;\n}\n.show-nested-replies-btn[data-v-5b761aea] {\n  /* color: black; */\n  color: #92959e;\n}\n.show-nested-replies-btn[data-v-5b761aea]:focus {\n  outline: none;\n  text-decoration: none;\n}\n.show-nested-replies-btn[data-v-5b761aea]:hover {\n  color: #92959e;\n  text-decoration: none;\n}\n.glyphicon-triangle-top[data-v-5b761aea],\n.glyphicon-triangle-bottom[data-v-5b761aea] {\n  margin-right: 5px;\n  font-size: 10px;\n}\n", ""]);
 
 // exports
 
@@ -317,7 +353,7 @@ var render = function() {
     { staticClass: "single-reply", attrs: { id: "reply-" + _vm.id } },
     [
       _c("div", { staticClass: "row reply-heading" }, [
-        _c("div", { staticClass: "col-md-4" }, [
+        _c("div", { staticClass: "col-md-8" }, [
           _c("div", { staticClass: "thread_creator" }, [
             _c(
               "a",
@@ -338,9 +374,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("user-online", { attrs: { user: _vm.reply.owner } }),
                 _vm._v(
-                  "\n                    " +
-                    _vm._s(_vm.reply.owner.name) +
-                    "\n                "
+                  "\n          " + _vm._s(_vm.reply.owner.name) + "\n        "
                 )
               ],
               1
@@ -354,7 +388,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _vm.signedIn
-          ? _c("div", { staticClass: "col-md-8 reply-edit-delete-btn" }, [
+          ? _c("div", { staticClass: "col-md-4 reply-edit-delete-btn" }, [
               _c("div", { staticClass: "form-g" }, [
                 (_vm.authorize("owns", _vm.reply) ||
                   _vm.authorize("isAdmin")) &&
@@ -587,16 +621,16 @@ var render = function() {
                             _c("span", {
                               staticClass: "glyphicon glyphicon-triangle-top"
                             }),
-                            _vm._v(" Hide Reply\n                    ")
+                            _vm._v(" Hide Reply\n          ")
                           ])
                         : _c("div", [
                             _c("span", {
                               staticClass: "glyphicon glyphicon-triangle-bottom"
                             }),
                             _vm._v(
-                              "  " +
+                              "\n            " +
                                 _vm._s("View " + _vm.replies_count + " Reply") +
-                                "\n                    "
+                                "\n          "
                             )
                           ])
                     ]

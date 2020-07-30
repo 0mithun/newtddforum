@@ -43,14 +43,14 @@ class TagImageProcessing implements ShouldQueue {
                     $full_image_link = $node->extract( ['content'] )[0];
                     $fileExtension = explode( '.', $full_image_link );
                     $fileExtension = array_pop( $fileExtension );
-                    $fileName = strtoupper( $this->tag->name );
+                    $fileName = strtolower( $this->tag->name );
 
                     $fullFileName = $fileName . '.' . $fileExtension;
-                    $image_path = 'download/tag/' . $fullFileName;
+                    $image_path = strtolower( 'download/tag/' . $fullFileName );
                     $fullPath = 'public/' . $image_path;
 
                     $this->file_download_curl( $fullPath, $full_image_link );
-                    // $this->saveInfo( $image_path );
+                    $this->saveInfo( $image_path );
 
                 }
 
@@ -81,7 +81,7 @@ class TagImageProcessing implements ShouldQueue {
 
     public function saveInfo( $image_path ) {
         $tag = Tags::where( 'id', $this->tag->id )->first();
-        $tag->image_path = $image_path;
+        $tag->photo = $image_path;
         $tag->save();
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="counts-item">
     <i class="fa fa-user"></i>
-    <strong>{{ following_counts | formatCount}}</strong> following
+    <strong>{{ following_count | formatCount}}</strong> following
   </div>
 </template>
 

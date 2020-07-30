@@ -80,7 +80,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     tag: {
@@ -217,12 +216,16 @@ var render = function() {
         _c("div", { staticClass: "panel" }, [
           _c("div", { staticClass: "panel-body" }, [
             _c("div", { staticClass: "row profile-header" }, [
-              _vm._m(0),
+              _c("div", { staticClass: "profile-avatar" }, [
+                _c("img", {
+                  staticClass: "profile-img",
+                  attrs: { src: _vm.tag.profileAvatarPath, alt: "" }
+                })
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "profile-details" }, [
                 _c("h2", { staticClass: "profile-name" }, [
-                  _vm._v("\n                #\n                "),
-                  _c("span", [_vm._v(_vm._s(_vm.tag.name.toLowerCase()))])
+                  _c("span", [_vm._v("#" + _vm._s(_vm.tag.name.toLowerCase()))])
                 ]),
                 _vm._v(" "),
                 _c(
@@ -301,19 +304,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "profile-avatar" }, [
-      _c("img", {
-        staticClass: "profile-img",
-        attrs: { src: "/images/default.png", alt: "" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

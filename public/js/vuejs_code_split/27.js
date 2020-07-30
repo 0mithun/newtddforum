@@ -15,14 +15,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['location'],
+  props: ["location"],
   computed: {
     mapIcon: function mapIcon() {
       if (this.location == null) {
-        return '/images/png/map-icon-black.png';
+        return "/images/png/map-icon-black.png";
       } else {
-        return '/images/png/map-icon-red.png';
+        return "/images/png/map-icon-red.png";
       }
     }
   }
@@ -42,7 +43,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".map-location[data-v-6bcfe42e] {\n  color: black;\n  font-weight: bold;\n  font-size: 12px;\n}", ""]);
+exports.push([module.i, ".map-location[data-v-6bcfe42e] {\n  color: black;\n  font-weight: bold;\n  font-size: 13px;\n}", ""]);
 
 // exports
 
@@ -99,7 +100,7 @@ var render = function() {
     _vm._v(" "),
     _vm.location != null
       ? _c("span", { staticClass: "map-location" }, [
-          _vm._v(" " + _vm._s(_vm.location))
+          _vm._v(_vm._s(_vm.location))
         ])
       : _vm._e()
   ])

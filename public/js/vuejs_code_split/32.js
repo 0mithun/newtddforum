@@ -86,13 +86,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["thread"],
   computed: {
@@ -116,7 +109,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".threads-counts[data-v-70ba1062] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 10px 0;\n}\n.full-location[data-v-70ba1062] {\n  font-size: 12px;\n}\n.thread_thumb[data-v-70ba1062] {\n  display: block;\n  max-width: 100%;\n  text-align: center;\n  margin-bottom: 20px;\n  overflow: hidden;\n}\n.thread_thumb_image[data-v-70ba1062] {\n  max-width: 100%;\n}", ""]);
+exports.push([module.i, ".threads-counts[data-v-70ba1062] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 10px 0;\n}\n.thread_thumb[data-v-70ba1062] {\n  display: block;\n  max-width: 100%;\n  text-align: center;\n  margin-bottom: 20px;\n  overflow: hidden;\n}\n.thread_thumb_image[data-v-70ba1062] {\n  max-width: 100%;\n}", ""]);
 
 // exports
 
@@ -219,24 +212,8 @@ var render = function() {
           _c(
             "div",
             { staticClass: "thread-map-icon" },
-            [
-              _vm.thread.location != null
-                ? [
-                    _c("img", {
-                      attrs: { src: "/images/png/map-icon-red.png", alt: "" }
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "full-location" }, [
-                      _vm._v(_vm._s(_vm.thread.location))
-                    ])
-                  ]
-                : [
-                    _c("img", {
-                      attrs: { src: "/images/png/map-icon-black.png", alt: "" }
-                    })
-                  ]
-            ],
-            2
+            [_c("map-location", { attrs: { location: _vm.thread.location } })],
+            1
           )
         ],
         1

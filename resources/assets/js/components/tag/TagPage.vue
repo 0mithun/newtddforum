@@ -6,12 +6,11 @@
           <div class="panel-body">
             <div class="row profile-header">
               <div class="profile-avatar">
-                <img src="/images/default.png" alt class="profile-img" />
+                <img :src="tag.profileAvatarPath" alt class="profile-img" />
               </div>
               <div class="profile-details">
                 <h2 class="profile-name">
-                  #
-                  <span>{{ tag.name.toLowerCase() }}</span>
+                  <span>#{{ tag.name.toLowerCase() }}</span>
                 </h2>
                 <div class="profile-count">
                   <post-counts :post_count="posts.length"></post-counts>

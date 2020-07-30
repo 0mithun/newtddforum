@@ -22,14 +22,7 @@
 
         <emoji-counts :thread="thread"></emoji-counts>
         <div class="thread-map-icon">
-          <template v-if="thread.location !=null">
-            <img src="/images/png/map-icon-red.png" alt />
-            <span class="full-location">{{ thread.location }}</span>
-          </template>
-
-          <template v-else>
-            <img src="/images/png/map-icon-black.png" alt />
-          </template>
+          <map-location :location="thread.location"></map-location>
         </div>
       </div>
 
@@ -100,9 +93,7 @@ export default {
   justify-content: space-between;
   padding: 10px 0;
 }
-.full-location {
-  font-size: 12px;
-}
+
 .thread_thumb {
   display: block;
   max-width: 100%;

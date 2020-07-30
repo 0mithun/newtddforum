@@ -430,8 +430,10 @@ class ThreadsController extends Controller {
             if ( $searchTag ) {
                 $tag_ids[] = $searchTag->id;
             } else {
-                $newTag = Tags::create( ['name' => strtolower( $tag )] );
-                $tag_ids[] = $newTag->id;
+                if ( $tag != 'null' ) {
+                    $newTag = Tags::create( ['name' => strtolower( $tag )] );
+                    $tag_ids[] = $newTag->id;
+                }
             }
             // $thread->tags()->delete();
         }

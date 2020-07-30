@@ -89,7 +89,7 @@ var render = function() {
   return _c("div", { staticClass: "counts-item" }, [
     _c("i", { staticClass: "fa fa-user" }),
     _vm._v(" "),
-    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.following_counts)))]),
+    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.following_count)))]),
     _vm._v(" following\n")
   ])
 }
