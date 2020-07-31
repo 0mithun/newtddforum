@@ -286,7 +286,6 @@ export default {
       paginateThreads: this.threads,
       q: this.query,
       sort_by: "topRated",
-      filterOpen: false,
       filter_emojis: [],
       filter_rated: [],
       search: false,
@@ -321,8 +320,22 @@ export default {
     this.getAllTags();
   },
   computed: {
+    filterOpen() {
+      if (
+        this.filter_length.length > 0 ||
+        this.filter_emojis.length > 0 ||
+        this.filter_rated.length > 0 ||
+        this.category.length > 0 ||
+        this.filter_tags.length > 0
+      ) {
+        return true;
+      }
+    },
     postsCount() {
-      return this.allThreads.length;
+      if (this.filterOpen) {
+        return this.allThreads.length;
+      }
+      return this.threads.total;
     },
     mapUrl() {
       return `/map/show?query=${this.q}`;
