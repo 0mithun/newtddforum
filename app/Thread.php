@@ -7,10 +7,11 @@ use App\Filters\ThreadFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use ScoutElastic\Searchable;
 
 class Thread extends Model {
     //use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
-    use RecordsActivity, Notifiable, Favoritable, Likeable;
+    use RecordsActivity, Notifiable, Favoritable, Likeable, Searchable;
 
     protected $indexConfigurator = ThreadsIndexConfigurator::class;
 
