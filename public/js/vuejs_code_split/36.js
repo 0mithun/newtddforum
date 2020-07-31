@@ -1,1 +1,150 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[36],{aBzx:function(t,e,a){"use strict";a.r(e);var s={props:["userlat","userlng","defaultradius","nearest"],data:function(){return{radius:0,center:{lat:parseFloat(this.userlat),lng:parseFloat(this.userlng)},radiusOptions:[0,100,200,300,400,500,1e3,2e3,5e3]}},created:function(){this.radius=this.defaultradius,this.fetchNearestLocations()},methods:{fetchNearestLocations:function(){var t=this;NaN!=this.center.lat&&NaN!=this.center.lng||alert("You must provide your location first");var e="";e=1==this.nearest?"/map/nearest-threads":"/map/all-threads",axios.post(e,{center:this.center,radius:this.radius}).then((function(e){var a=e.data,s=t.center,r=6;eventBus.$emit("markers_fetched",a),eventBus.$emit("change_center",s),0==t.radius?r=2:500==t.radius?r=6:1e3==t.radius?r=5:2e3==t.radius?r=4:5e3==t.radius&&(r=3),eventBus.$emit("zoom_decreased",r)}))},setRelatedThread:function(t){console.log(t),this.radius=500;var e={lat:t.geometry.location.lat(),lng:t.geometry.location.lng()};this.center=e,this.fetchNearestLocations()},onRadiusChange:function(){}}},r=a("KHd+"),o=Object(r.a)(s,(function(){var t=this,e=t.$createElement,a=t._self._c||e;return a("div",{staticClass:"row"},[a("div",{staticClass:"col-md-9"},[a("gmap-autocomplete",{staticClass:"form-control",attrs:{placeholder:"Type location for search thread"},on:{place_changed:t.setRelatedThread}})],1),t._v(" "),a("div",{staticClass:"col-md-3"},[a("select",{directives:[{name:"model",rawName:"v-model",value:t.radius,expression:"radius"}],staticClass:"form-control",attrs:{name:"",id:""},on:{change:[function(e){var a=Array.prototype.filter.call(e.target.options,(function(t){return t.selected})).map((function(t){return"_value"in t?t._value:t.value}));t.radius=e.target.multiple?a:a[0]},t.fetchNearestLocations]}},[a("option",{attrs:{value:""}},[t._v("Select Radius")]),t._v(" "),a("option",{attrs:{value:"0"}},[t._v(" "+t._s(t.nearest?"0":"Full"))]),t._v(" "),a("option",{attrs:{value:"100"}},[t._v("100")]),t._v(" "),a("option",{attrs:{value:"200"}},[t._v("200")]),t._v(" "),a("option",{attrs:{value:"300"}},[t._v("300")]),t._v(" "),a("option",{attrs:{value:"400"}},[t._v("400")]),t._v(" "),a("option",{attrs:{value:"500"}},[t._v("500")]),t._v(" "),a("option",{attrs:{value:"1000"}},[t._v("1000")]),t._v(" "),a("option",{attrs:{value:"2000"}},[t._v("2000")]),t._v(" "),a("option",{attrs:{value:"5000"}},[t._v("5000")])])])])}),[],!1,null,null,null);e.default=o.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[36],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/FocusComment.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/FocusComment.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {
+    signedIn: function signedIn() {
+      return window.App.user ? true : false;
+    }
+  },
+  methods: {
+    focusComment: function focusComment() {
+      if (!this.signedIn) {
+        this.redirectToLogin();
+      }
+
+      var comment = document.getElementById('body');
+      comment.focus();
+    },
+    redirectToLogin: function redirectToLogin() {
+      window.location = '/redirect-to?page=' + location.pathname;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/FocusComment.vue?vue&type=template&id=e719d6c4&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/FocusComment.vue?vue&type=template&id=e719d6c4& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "tools-single-item" }, [
+    _c(
+      "button",
+      {
+        staticClass: "btn  thread-items-show-tools-btn focus-comment-btn",
+        on: {
+          click: function($event) {
+            $event.preventDefault()
+            return _vm.focusComment($event)
+          }
+        }
+      },
+      [_c("i", { staticClass: "fa fa-comment" })]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/FocusComment.vue":
+/*!*********************************************************!*\
+  !*** ./resources/assets/js/components/FocusComment.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _FocusComment_vue_vue_type_template_id_e719d6c4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FocusComment.vue?vue&type=template&id=e719d6c4& */ "./resources/assets/js/components/FocusComment.vue?vue&type=template&id=e719d6c4&");
+/* harmony import */ var _FocusComment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FocusComment.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/FocusComment.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _FocusComment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FocusComment_vue_vue_type_template_id_e719d6c4___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FocusComment_vue_vue_type_template_id_e719d6c4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/FocusComment.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/FocusComment.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/assets/js/components/FocusComment.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FocusComment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./FocusComment.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/FocusComment.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FocusComment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/FocusComment.vue?vue&type=template&id=e719d6c4&":
+/*!****************************************************************************************!*\
+  !*** ./resources/assets/js/components/FocusComment.vue?vue&type=template&id=e719d6c4& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FocusComment_vue_vue_type_template_id_e719d6c4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./FocusComment.vue?vue&type=template&id=e719d6c4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/FocusComment.vue?vue&type=template&id=e719d6c4&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FocusComment_vue_vue_type_template_id_e719d6c4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FocusComment_vue_vue_type_template_id_e719d6c4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);

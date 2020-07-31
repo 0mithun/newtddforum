@@ -28,7 +28,7 @@
             position: fixed;
             left: 0;
             top: 0;
-            width: 100%;
+            width: 100%;    
             height: 100%;
             background: #000;
             opacity: .8;
@@ -84,6 +84,7 @@
 @endsection
 
 @section('content')
+
     <div class="container">
         <div class="row top-margin" >
             <div class="col-md-12">
@@ -107,31 +108,28 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <h1 class="thread_title"> {{ $thread->title }}</h1>
+                                <h1 class="thread_title" style="margin-top: 5px;margin-bottom:5px"> {{ $thread->title }}</h1>
                             </div>
                             
                         </div>
                         <div class="row thread-show-item-counts">
-                            <div class="col-md-4 thread_item_counts">
+                            <div class="col-md-12 thread_item_counts">
                                 <view-counts :thread="{{ $thread }}"></view-counts>
                                 <point-counts :like_count="{{ $thread->like_count }}" :dislike_count="{{ $thread->dislike_count }}"></point-counts>
-                                <comment-counts :comment_counts="{{ $thread->replies_count }}"></comment-counts>
-                            </div>
-                            <div class="col-md-3">
-                                <star-rating :thread="{{ $thread }}"></star-rating>
-                            </div>
-                            <div class="col-md-5 thread_emoji_count_map">
+                                <comment-counts :comment_count="{{ $thread->replies_count }}"></comment-counts>
+                                <favorite-counts :favorite_count="{{ $thread->favorite_count }}"></favorite-counts>
                                 <emoji-counts :thread="{{ $thread }}"></emoji-counts>
             
                                 <div  class="thread-map-icon">
                                     @if($thread->location != NULL)
                                         <img src="{{ asset('images/png/map-icon-red.png') }}" alt="">
+                                        <span class="full-location">{{ $thread->location }}</span>
+
                                     @else
                                         <img src="{{ asset('images/png/map-icon-black.png') }}" alt="">
                                     @endif
                                 </div>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -179,8 +177,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="story">
-                                    <div class="thread_thumb">
-                                        <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image">
+                                    <div class="thread_thumb" style="background: rgba({{ $thread->imageColor }})">
+                                        <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image thread_thumb_image">
                                     </div>
                                     <div class="story-text">
                                         {!! $thread->body !!}
@@ -193,7 +191,7 @@
                                 <div class="col-md-12 thread-show-tags">                                                                   
                                     Tags:
                                     @foreach ($thread->tags as $tag)
-                                        <a  href="{{ strtolower(route('tags.threads.list', $tag->name))  }}" class="tag-name">{{ $tag->name }}</a>
+                                        <a  href="{{ strtolower(route('tags.threads.list', $tag->name))  }}" class="tag-name">#{{ $tag->name }}</a>
                                     @endforeach                               
                                 </div>
                             </div>
@@ -206,6 +204,7 @@
         @if($thread->location != NULL)
             <div class="row">
                 <div class="col-md-12">
+                    <h3 style="color:black;">Story Location</h3>
                     <simple-map :thread="{{ $thread }}"></simple-map>                    
                 </div>
             </div>

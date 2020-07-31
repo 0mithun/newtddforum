@@ -4,7 +4,13 @@
     <div class="container">
         <div class="row top-margin">
             <div class="col-md-8">
-                @include ('threads._list')
+                {{-- @include ('threads._list') --}}
+                @forelse ($threads as $thread)
+                
+                    <single-thread :thread="{{ $thread }}"></single-thread>
+                @empty
+                    <p>There are no relevant results at this time.</p>
+                @endforelse
 
                 {{ $threads->render() }}
             </div>
@@ -26,6 +32,9 @@
                         <h3 class="follow-on-title">Follow Us On</h3>
                     </div>
                 </div>
+                <trending-thread></trending-thread>
+{{-- 
+
                 @if (count($trending))
                         @php
                             $auth_user = null;
@@ -33,26 +42,28 @@
                                 $auth_user = auth()->user();
                             }
                         @endphp
-                        @foreach ($trending as $thread)
                             @if($auth_user == null)
                                 @if($thread->age_restriction == 0)
-                                    @include('threads._trendingitem')
+                                    <trending-thread></trending-thread>
                                 @endif
                             @else 
                                 @if($thread->age_restriction == 0)
-                                    @include('threads._trendingitem')
+                                <trending-thread></trending-thread>
+
                                 @elseif($auth_user->id ==1)
-                                     @include('threads._trendingitem')
+                                <trending-thread></trending-thread>
+
                                 @elseif($thread->user_id == $auth_user->id)
-                                    @include('threads._trendingitem')
+                                <trending-thread></trending-thread>
+
                                 @elseif($auth_user->userprivacy->restricted_18==1)
-                                    @include('threads._trendingitem')
+                                <trending-thread></trending-thread>
+
                                 @elseif($auth_user->userprivacy->restricted_13==1 && $thread->age_restriction==13)
-                                    @include('threads._trendingitem')                                  
+                                    <trending-thread></trending-thread>
                                 @endif
                             @endif
-                        @endforeach
-                @endif
+                @endif --}}
                
             </div>
         </div>

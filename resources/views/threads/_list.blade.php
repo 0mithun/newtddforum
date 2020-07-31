@@ -8,8 +8,4 @@
     }    
 
 @endphp
-@forelse ($threads as $thread)
-    @include('threads._single')
-@empty
-    <p>There are no relevant results at this time.</p>
-@endforelse
+

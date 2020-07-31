@@ -367,7 +367,6 @@
                         replyMessage: this.replyMessage,
                         replyId:this.replyId
                     }).then(res=>{
-                        console.log(res.data)
                         this.showReplyBox = false;
                         this.selectUser(this.selectFriend)
                     })

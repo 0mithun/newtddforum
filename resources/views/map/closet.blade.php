@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -7,23 +8,17 @@
     
             <div class="col-md-12">
                 <div class="row" style="margin-top:55px">
-                    <div class="col-md-3">
-                        <div class="panel">
-                            <div class="panel-heading">
-                                <place-search  userLat={{ $userLocations['lat'] }} userLng={{ $userLocations['lng'] }} :defaultradius=500 :nearest=true></place-search>
-                            </div>
-                            <div class="panel-body">
-                                <map-results></map-results>
-                            </div>
-                        </div>
-                        
+                    <div class="col-md-2">
+
+                        <place-search  userLat={{ $userLocations['lat'] }} userLng={{ $userLocations['lng'] }} :defaultradius=0 :nearest=false></place-search>
+
+                        <br>
+                        <map-results></map-results>
+                                               
                     </div>
-                    <div class="col-md-9">
-                    
-                        <div class="row">
+                    <div class="col-md-10">
                             <thread-map userLat={{ $userLocations['lat'] }} userLng={{ $userLocations['lng'] }} :nearest=true ></thread-map>
-                        </div>
-                    
+
                     </div>
                 </div>
             </div>

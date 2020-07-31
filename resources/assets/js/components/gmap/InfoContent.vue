@@ -1,5 +1,5 @@
-<template>   
-    <div class="info-content" @click="openThread">
+<template>
+  <!-- <div class="info-content" @click="openThread">
         <div class="">
             {{ this.infoContent.title }}
         </div>
@@ -9,39 +9,80 @@
         <div class="" style="margin-top:10px" v-else>
             <img src="/images/default.png" alt="" width="25"> Posted By: Anonymous
         </div>
-    </div>  
+  </div>-->
+  <div class="info-content" @click="openThread">
+    <h5 class="thread-title">{{ thread.title }}</h5>
+    <div class="info-content-body">
+      <div class="info-content-thread-thumb">
+        <img :src="thread.threadImagePath" class="thread-thumb" alt />
+      </div>
+
+      <div class="thread-counts">
+        <view-counts :thread="thread"></view-counts>
+        <point-counts :like_count="thread.like_count" :dislike_count="thread.dislike_count"></point-counts>
+        <emoji-counts :thread="thread"></emoji-counts>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-    props:['infoContent'],
-    data(){
-        return{
-           drawer:null,
-           results:[]
-        }
+  props: ["thread"],
+  data() {
+    return {
+      drawer: null,
+      results: []
+    };
+  },
+  methods: {
+    focusMarker(index) {
+      eventBus.$emit("markers_result_clicked", index);
     },
-    methods:{
-        focusMarker(index){
-            eventBus.$emit('markers_result_clicked', index);
-        },
-        openThread(){
-            window.open(
-            this.infoContent.path,
-            '_blank' // <- This is what makes it open in a new window.
-            );
-        }
-    },
-    created(){
-        eventBus.$on('markers_fetched', data=>{
-            this.results=data.results
-        });
+    openThread() {
+      window.open(
+        this.thread.path,
+        "_blank" // <- This is what makes it open in a new window.
+      );
     }
-}
+  },
+  created() {
+    eventBus.$on("markers_fetched", data => {
+      this.results = data.results;
+    });
+  }
+};
 </script>
 
+
 <style scoped>
-    .info-content{
-        cursor: pointer;
-    }
+.info-content {
+  cursor: pointer;
+  max-width: 10vw;
+}
+.info-content-body {
+  display: flex;
+  justify-content: space-between;
+}
+.info-content-thread-thumb {
+  margin-right: 5%;
+  width: 50%;
+}
+
+.thread-thumb {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
+.thread-counts {
+  width: 45%;
+  width: 45%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+
+.thread-title {
+  color: black;
+}
 </style>

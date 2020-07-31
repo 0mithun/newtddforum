@@ -1,1649 +1,1654 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[46],{
 
-/***/ "./node_modules/vue-text-highlight/dist/vue-text-highlight.esm.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/vue-text-highlight/dist/vue-text-highlight.esm.js ***!
-  \************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/at.js/dist/js/jquery.atwho.js":
+/*!****************************************************!*\
+  !*** ./node_modules/at.js/dist/js/jquery.atwho.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+ * at.js - 1.5.3
+ * Copyright (c) 2017 chord.luo <chord.luo@gmail.com>;
+ * Homepage: http://ichord.github.com/At.js
+ * License: MIT
+ */
+(function (root, factory) {
+  if (true) {
+    // AMD. Register as an anonymous module unless amdModuleId is set
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")], __WEBPACK_AMD_DEFINE_RESULT__ = (function (a0) {
+      return (factory(a0));
+    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+}(this, function ($) {
+var DEFAULT_CALLBACKS, KEY_CODE;
+
+KEY_CODE = {
+  ESC: 27,
+  TAB: 9,
+  ENTER: 13,
+  CTRL: 17,
+  A: 65,
+  P: 80,
+  N: 78,
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40,
+  BACKSPACE: 8,
+  SPACE: 32
+};
+
+DEFAULT_CALLBACKS = {
+  beforeSave: function(data) {
+    return Controller.arrayToDefaultHash(data);
+  },
+  matcher: function(flag, subtext, should_startWithSpace, acceptSpaceBar) {
+    var _a, _y, match, regexp, space;
+    flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    if (should_startWithSpace) {
+      flag = '(?:^|\\s)' + flag;
+    }
+    _a = decodeURI("%C3%80");
+    _y = decodeURI("%C3%BF");
+    space = acceptSpaceBar ? "\ " : "";
+    regexp = new RegExp(flag + "([A-Za-z" + _a + "-" + _y + "0-9_" + space + "\'\.\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
+    match = regexp.exec(subtext);
+    if (match) {
+      return match[2] || match[1];
+    } else {
+      return null;
+    }
+  },
+  filter: function(query, data, searchKey) {
+    var _results, i, item, len;
+    _results = [];
+    for (i = 0, len = data.length; i < len; i++) {
+      item = data[i];
+      if (~new String(item[searchKey]).toLowerCase().indexOf(query.toLowerCase())) {
+        _results.push(item);
+      }
+    }
+    return _results;
+  },
+  remoteFilter: null,
+  sorter: function(query, items, searchKey) {
+    var _results, i, item, len;
+    if (!query) {
+      return items;
+    }
+    _results = [];
+    for (i = 0, len = items.length; i < len; i++) {
+      item = items[i];
+      item.atwho_order = new String(item[searchKey]).toLowerCase().indexOf(query.toLowerCase());
+      if (item.atwho_order > -1) {
+        _results.push(item);
+      }
+    }
+    return _results.sort(function(a, b) {
+      return a.atwho_order - b.atwho_order;
+    });
+  },
+  tplEval: function(tpl, map) {
+    var error, error1, template;
+    template = tpl;
+    try {
+      if (typeof tpl !== 'string') {
+        template = tpl(map);
+      }
+      return template.replace(/\$\{([^\}]*)\}/g, function(tag, key, pos) {
+        return map[key];
+      });
+    } catch (error1) {
+      error = error1;
+      return "";
+    }
+  },
+  highlighter: function(li, query) {
+    var regexp;
+    if (!query) {
+      return li;
+    }
+    regexp = new RegExp(">\\s*([^\<]*?)(" + query.replace("+", "\\+") + ")([^\<]*)\\s*<", 'ig');
+    return li.replace(regexp, function(str, $1, $2, $3) {
+      return '> ' + $1 + '<strong>' + $2 + '</strong>' + $3 + ' <';
+    });
+  },
+  beforeInsert: function(value, $li, e) {
+    return value;
+  },
+  beforeReposition: function(offset) {
+    return offset;
+  },
+  afterMatchFailed: function(at, el) {}
+};
+
+var App;
+
+App = (function() {
+  function App(inputor) {
+    this.currentFlag = null;
+    this.controllers = {};
+    this.aliasMaps = {};
+    this.$inputor = $(inputor);
+    this.setupRootElement();
+    this.listen();
+  }
+
+  App.prototype.createContainer = function(doc) {
+    var ref;
+    if ((ref = this.$el) != null) {
+      ref.remove();
+    }
+    return $(doc.body).append(this.$el = $("<div class='atwho-container'></div>"));
+  };
+
+  App.prototype.setupRootElement = function(iframe, asRoot) {
+    var error, error1;
+    if (asRoot == null) {
+      asRoot = false;
+    }
+    if (iframe) {
+      this.window = iframe.contentWindow;
+      this.document = iframe.contentDocument || this.window.document;
+      this.iframe = iframe;
+    } else {
+      this.document = this.$inputor[0].ownerDocument;
+      this.window = this.document.defaultView || this.document.parentWindow;
+      try {
+        this.iframe = this.window.frameElement;
+      } catch (error1) {
+        error = error1;
+        this.iframe = null;
+        if ($.fn.atwho.debug) {
+          throw new Error("iframe auto-discovery is failed.\nPlease use `setIframe` to set the target iframe manually.\n" + error);
+        }
+      }
+    }
+    return this.createContainer((this.iframeAsRoot = asRoot) ? this.document : document);
+  };
+
+  App.prototype.controller = function(at) {
+    var c, current, currentFlag, ref;
+    if (this.aliasMaps[at]) {
+      current = this.controllers[this.aliasMaps[at]];
+    } else {
+      ref = this.controllers;
+      for (currentFlag in ref) {
+        c = ref[currentFlag];
+        if (currentFlag === at) {
+          current = c;
+          break;
+        }
+      }
+    }
+    if (current) {
+      return current;
+    } else {
+      return this.controllers[this.currentFlag];
+    }
+  };
+
+  App.prototype.setContextFor = function(at) {
+    this.currentFlag = at;
+    return this;
+  };
+
+  App.prototype.reg = function(flag, setting) {
+    var base, controller;
+    controller = (base = this.controllers)[flag] || (base[flag] = this.$inputor.is('[contentEditable]') ? new EditableController(this, flag) : new TextareaController(this, flag));
+    if (setting.alias) {
+      this.aliasMaps[setting.alias] = flag;
+    }
+    controller.init(setting);
+    return this;
+  };
+
+  App.prototype.listen = function() {
+    return this.$inputor.on('compositionstart', (function(_this) {
+      return function(e) {
+        var ref;
+        if ((ref = _this.controller()) != null) {
+          ref.view.hide();
+        }
+        _this.isComposing = true;
+        return null;
+      };
+    })(this)).on('compositionend', (function(_this) {
+      return function(e) {
+        _this.isComposing = false;
+        setTimeout(function(e) {
+          return _this.dispatch(e);
+        });
+        return null;
+      };
+    })(this)).on('keyup.atwhoInner', (function(_this) {
+      return function(e) {
+        return _this.onKeyup(e);
+      };
+    })(this)).on('keydown.atwhoInner', (function(_this) {
+      return function(e) {
+        return _this.onKeydown(e);
+      };
+    })(this)).on('blur.atwhoInner', (function(_this) {
+      return function(e) {
+        var c;
+        if (c = _this.controller()) {
+          c.expectedQueryCBId = null;
+          return c.view.hide(e, c.getOpt("displayTimeout"));
+        }
+      };
+    })(this)).on('click.atwhoInner', (function(_this) {
+      return function(e) {
+        return _this.dispatch(e);
+      };
+    })(this)).on('scroll.atwhoInner', (function(_this) {
+      return function() {
+        var lastScrollTop;
+        lastScrollTop = _this.$inputor.scrollTop();
+        return function(e) {
+          var currentScrollTop, ref;
+          currentScrollTop = e.target.scrollTop;
+          if (lastScrollTop !== currentScrollTop) {
+            if ((ref = _this.controller()) != null) {
+              ref.view.hide(e);
+            }
+          }
+          lastScrollTop = currentScrollTop;
+          return true;
+        };
+      };
+    })(this)());
+  };
+
+  App.prototype.shutdown = function() {
+    var _, c, ref;
+    ref = this.controllers;
+    for (_ in ref) {
+      c = ref[_];
+      c.destroy();
+      delete this.controllers[_];
+    }
+    this.$inputor.off('.atwhoInner');
+    return this.$el.remove();
+  };
+
+  App.prototype.dispatch = function(e) {
+    var _, c, ref, results;
+    ref = this.controllers;
+    results = [];
+    for (_ in ref) {
+      c = ref[_];
+      results.push(c.lookUp(e));
+    }
+    return results;
+  };
+
+  App.prototype.onKeyup = function(e) {
+    var ref;
+    switch (e.keyCode) {
+      case KEY_CODE.ESC:
+        e.preventDefault();
+        if ((ref = this.controller()) != null) {
+          ref.view.hide();
+        }
+        break;
+      case KEY_CODE.DOWN:
+      case KEY_CODE.UP:
+      case KEY_CODE.CTRL:
+      case KEY_CODE.ENTER:
+        $.noop();
+        break;
+      case KEY_CODE.P:
+      case KEY_CODE.N:
+        if (!e.ctrlKey) {
+          this.dispatch(e);
+        }
+        break;
+      default:
+        this.dispatch(e);
+    }
+  };
+
+  App.prototype.onKeydown = function(e) {
+    var ref, view;
+    view = (ref = this.controller()) != null ? ref.view : void 0;
+    if (!(view && view.visible())) {
+      return;
+    }
+    switch (e.keyCode) {
+      case KEY_CODE.ESC:
+        e.preventDefault();
+        view.hide(e);
+        break;
+      case KEY_CODE.UP:
+        e.preventDefault();
+        view.prev();
+        break;
+      case KEY_CODE.DOWN:
+        e.preventDefault();
+        view.next();
+        break;
+      case KEY_CODE.P:
+        if (!e.ctrlKey) {
+          return;
+        }
+        e.preventDefault();
+        view.prev();
+        break;
+      case KEY_CODE.N:
+        if (!e.ctrlKey) {
+          return;
+        }
+        e.preventDefault();
+        view.next();
+        break;
+      case KEY_CODE.TAB:
+      case KEY_CODE.ENTER:
+      case KEY_CODE.SPACE:
+        if (!view.visible()) {
+          return;
+        }
+        if (!this.controller().getOpt('spaceSelectsMatch') && e.keyCode === KEY_CODE.SPACE) {
+          return;
+        }
+        if (!this.controller().getOpt('tabSelectsMatch') && e.keyCode === KEY_CODE.TAB) {
+          return;
+        }
+        if (view.highlighted()) {
+          e.preventDefault();
+          view.choose(e);
+        } else {
+          view.hide(e);
+        }
+        break;
+      default:
+        $.noop();
+    }
+  };
+
+  return App;
+
+})();
+
+var Controller,
+  slice = [].slice;
+
+Controller = (function() {
+  Controller.prototype.uid = function() {
+    return (Math.random().toString(16) + "000000000").substr(2, 8) + (new Date().getTime());
+  };
+
+  function Controller(app, at1) {
+    this.app = app;
+    this.at = at1;
+    this.$inputor = this.app.$inputor;
+    this.id = this.$inputor[0].id || this.uid();
+    this.expectedQueryCBId = null;
+    this.setting = null;
+    this.query = null;
+    this.pos = 0;
+    this.range = null;
+    if ((this.$el = $("#atwho-ground-" + this.id, this.app.$el)).length === 0) {
+      this.app.$el.append(this.$el = $("<div id='atwho-ground-" + this.id + "'></div>"));
+    }
+    this.model = new Model(this);
+    this.view = new View(this);
+  }
+
+  Controller.prototype.init = function(setting) {
+    this.setting = $.extend({}, this.setting || $.fn.atwho["default"], setting);
+    this.view.init();
+    return this.model.reload(this.setting.data);
+  };
+
+  Controller.prototype.destroy = function() {
+    this.trigger('beforeDestroy');
+    this.model.destroy();
+    this.view.destroy();
+    return this.$el.remove();
+  };
+
+  Controller.prototype.callDefault = function() {
+    var args, error, error1, funcName;
+    funcName = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+    try {
+      return DEFAULT_CALLBACKS[funcName].apply(this, args);
+    } catch (error1) {
+      error = error1;
+      return $.error(error + " Or maybe At.js doesn't have function " + funcName);
+    }
+  };
+
+  Controller.prototype.trigger = function(name, data) {
+    var alias, eventName;
+    if (data == null) {
+      data = [];
+    }
+    data.push(this);
+    alias = this.getOpt('alias');
+    eventName = alias ? name + "-" + alias + ".atwho" : name + ".atwho";
+    return this.$inputor.trigger(eventName, data);
+  };
+
+  Controller.prototype.callbacks = function(funcName) {
+    return this.getOpt("callbacks")[funcName] || DEFAULT_CALLBACKS[funcName];
+  };
+
+  Controller.prototype.getOpt = function(at, default_value) {
+    var e, error1;
+    try {
+      return this.setting[at];
+    } catch (error1) {
+      e = error1;
+      return null;
+    }
+  };
+
+  Controller.prototype.insertContentFor = function($li) {
+    var data, tpl;
+    tpl = this.getOpt('insertTpl');
+    data = $.extend({}, $li.data('item-data'), {
+      'atwho-at': this.at
+    });
+    return this.callbacks("tplEval").call(this, tpl, data, "onInsert");
+  };
+
+  Controller.prototype.renderView = function(data) {
+    var searchKey;
+    searchKey = this.getOpt("searchKey");
+    data = this.callbacks("sorter").call(this, this.query.text, data.slice(0, 1001), searchKey);
+    return this.view.render(data.slice(0, this.getOpt('limit')));
+  };
+
+  Controller.arrayToDefaultHash = function(data) {
+    var i, item, len, results;
+    if (!$.isArray(data)) {
+      return data;
+    }
+    results = [];
+    for (i = 0, len = data.length; i < len; i++) {
+      item = data[i];
+      if ($.isPlainObject(item)) {
+        results.push(item);
+      } else {
+        results.push({
+          name: item
+        });
+      }
+    }
+    return results;
+  };
+
+  Controller.prototype.lookUp = function(e) {
+    var query, wait;
+    if (e && e.type === 'click' && !this.getOpt('lookUpOnClick')) {
+      return;
+    }
+    if (this.getOpt('suspendOnComposing') && this.app.isComposing) {
+      return;
+    }
+    query = this.catchQuery(e);
+    if (!query) {
+      this.expectedQueryCBId = null;
+      return query;
+    }
+    this.app.setContextFor(this.at);
+    if (wait = this.getOpt('delay')) {
+      this._delayLookUp(query, wait);
+    } else {
+      this._lookUp(query);
+    }
+    return query;
+  };
+
+  Controller.prototype._delayLookUp = function(query, wait) {
+    var now, remaining;
+    now = Date.now ? Date.now() : new Date().getTime();
+    this.previousCallTime || (this.previousCallTime = now);
+    remaining = wait - (now - this.previousCallTime);
+    if ((0 < remaining && remaining < wait)) {
+      this.previousCallTime = now;
+      this._stopDelayedCall();
+      return this.delayedCallTimeout = setTimeout((function(_this) {
+        return function() {
+          _this.previousCallTime = 0;
+          _this.delayedCallTimeout = null;
+          return _this._lookUp(query);
+        };
+      })(this), wait);
+    } else {
+      this._stopDelayedCall();
+      if (this.previousCallTime !== now) {
+        this.previousCallTime = 0;
+      }
+      return this._lookUp(query);
+    }
+  };
+
+  Controller.prototype._stopDelayedCall = function() {
+    if (this.delayedCallTimeout) {
+      clearTimeout(this.delayedCallTimeout);
+      return this.delayedCallTimeout = null;
+    }
+  };
+
+  Controller.prototype._generateQueryCBId = function() {
+    return {};
+  };
+
+  Controller.prototype._lookUp = function(query) {
+    var _callback;
+    _callback = function(queryCBId, data) {
+      if (queryCBId !== this.expectedQueryCBId) {
+        return;
+      }
+      if (data && data.length > 0) {
+        return this.renderView(this.constructor.arrayToDefaultHash(data));
+      } else {
+        return this.view.hide();
+      }
+    };
+    this.expectedQueryCBId = this._generateQueryCBId();
+    return this.model.query(query.text, $.proxy(_callback, this, this.expectedQueryCBId));
+  };
+
+  return Controller;
+
+})();
+
+var TextareaController,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+TextareaController = (function(superClass) {
+  extend(TextareaController, superClass);
+
+  function TextareaController() {
+    return TextareaController.__super__.constructor.apply(this, arguments);
+  }
+
+  TextareaController.prototype.catchQuery = function() {
+    var caretPos, content, end, isString, query, start, subtext;
+    content = this.$inputor.val();
+    caretPos = this.$inputor.caret('pos', {
+      iframe: this.app.iframe
+    });
+    subtext = content.slice(0, caretPos);
+    query = this.callbacks("matcher").call(this, this.at, subtext, this.getOpt('startWithSpace'), this.getOpt("acceptSpaceBar"));
+    isString = typeof query === 'string';
+    if (isString && query.length < this.getOpt('minLen', 0)) {
+      return;
+    }
+    if (isString && query.length <= this.getOpt('maxLen', 20)) {
+      start = caretPos - query.length;
+      end = start + query.length;
+      this.pos = start;
+      query = {
+        'text': query,
+        'headPos': start,
+        'endPos': end
+      };
+      this.trigger("matched", [this.at, query.text]);
+    } else {
+      query = null;
+      this.view.hide();
+    }
+    return this.query = query;
+  };
+
+  TextareaController.prototype.rect = function() {
+    var c, iframeOffset, scaleBottom;
+    if (!(c = this.$inputor.caret('offset', this.pos - 1, {
+      iframe: this.app.iframe
+    }))) {
+      return;
+    }
+    if (this.app.iframe && !this.app.iframeAsRoot) {
+      iframeOffset = $(this.app.iframe).offset();
+      c.left += iframeOffset.left;
+      c.top += iframeOffset.top;
+    }
+    scaleBottom = this.app.document.selection ? 0 : 2;
+    return {
+      left: c.left,
+      top: c.top,
+      bottom: c.top + c.height + scaleBottom
+    };
+  };
+
+  TextareaController.prototype.insert = function(content, $li) {
+    var $inputor, source, startStr, suffix, text;
+    $inputor = this.$inputor;
+    source = $inputor.val();
+    startStr = source.slice(0, Math.max(this.query.headPos - this.at.length, 0));
+    suffix = (suffix = this.getOpt('suffix')) === "" ? suffix : suffix || " ";
+    content += suffix;
+    text = "" + startStr + content + (source.slice(this.query['endPos'] || 0));
+    $inputor.val(text);
+    $inputor.caret('pos', startStr.length + content.length, {
+      iframe: this.app.iframe
+    });
+    if (!$inputor.is(':focus')) {
+      $inputor.focus();
+    }
+    return $inputor.change();
+  };
+
+  return TextareaController;
+
+})(Controller);
+
+var EditableController,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+EditableController = (function(superClass) {
+  extend(EditableController, superClass);
+
+  function EditableController() {
+    return EditableController.__super__.constructor.apply(this, arguments);
+  }
+
+  EditableController.prototype._getRange = function() {
+    var sel;
+    sel = this.app.window.getSelection();
+    if (sel.rangeCount > 0) {
+      return sel.getRangeAt(0);
+    }
+  };
+
+  EditableController.prototype._setRange = function(position, node, range) {
+    if (range == null) {
+      range = this._getRange();
+    }
+    if (!(range && node)) {
+      return;
+    }
+    node = $(node)[0];
+    if (position === 'after') {
+      range.setEndAfter(node);
+      range.setStartAfter(node);
+    } else {
+      range.setEndBefore(node);
+      range.setStartBefore(node);
+    }
+    range.collapse(false);
+    return this._clearRange(range);
+  };
+
+  EditableController.prototype._clearRange = function(range) {
+    var sel;
+    if (range == null) {
+      range = this._getRange();
+    }
+    sel = this.app.window.getSelection();
+    if (this.ctrl_a_pressed == null) {
+      sel.removeAllRanges();
+      return sel.addRange(range);
+    }
+  };
+
+  EditableController.prototype._movingEvent = function(e) {
+    var ref;
+    return e.type === 'click' || ((ref = e.which) === KEY_CODE.RIGHT || ref === KEY_CODE.LEFT || ref === KEY_CODE.UP || ref === KEY_CODE.DOWN);
+  };
+
+  EditableController.prototype._unwrap = function(node) {
+    var next;
+    node = $(node).unwrap().get(0);
+    if ((next = node.nextSibling) && next.nodeValue) {
+      node.nodeValue += next.nodeValue;
+      $(next).remove();
+    }
+    return node;
+  };
+
+  EditableController.prototype.catchQuery = function(e) {
+    var $inserted, $query, _range, index, inserted, isString, lastNode, matched, offset, query, query_content, range;
+    if (!(range = this._getRange())) {
+      return;
+    }
+    if (!range.collapsed) {
+      return;
+    }
+    if (e.which === KEY_CODE.ENTER) {
+      ($query = $(range.startContainer).closest('.atwho-query')).contents().unwrap();
+      if ($query.is(':empty')) {
+        $query.remove();
+      }
+      ($query = $(".atwho-query", this.app.document)).text($query.text()).contents().last().unwrap();
+      this._clearRange();
+      return;
+    }
+    if (/firefox/i.test(navigator.userAgent)) {
+      if ($(range.startContainer).is(this.$inputor)) {
+        this._clearRange();
+        return;
+      }
+      if (e.which === KEY_CODE.BACKSPACE && range.startContainer.nodeType === document.ELEMENT_NODE && (offset = range.startOffset - 1) >= 0) {
+        _range = range.cloneRange();
+        _range.setStart(range.startContainer, offset);
+        if ($(_range.cloneContents()).contents().last().is('.atwho-inserted')) {
+          inserted = $(range.startContainer).contents().get(offset);
+          this._setRange('after', $(inserted).contents().last());
+        }
+      } else if (e.which === KEY_CODE.LEFT && range.startContainer.nodeType === document.TEXT_NODE) {
+        $inserted = $(range.startContainer.previousSibling);
+        if ($inserted.is('.atwho-inserted') && range.startOffset === 0) {
+          this._setRange('after', $inserted.contents().last());
+        }
+      }
+    }
+    $(range.startContainer).closest('.atwho-inserted').addClass('atwho-query').siblings().removeClass('atwho-query');
+    if (($query = $(".atwho-query", this.app.document)).length > 0 && $query.is(':empty') && $query.text().length === 0) {
+      $query.remove();
+    }
+    if (!this._movingEvent(e)) {
+      $query.removeClass('atwho-inserted');
+    }
+    if ($query.length > 0) {
+      switch (e.which) {
+        case KEY_CODE.LEFT:
+          this._setRange('before', $query.get(0), range);
+          $query.removeClass('atwho-query');
+          return;
+        case KEY_CODE.RIGHT:
+          this._setRange('after', $query.get(0).nextSibling, range);
+          $query.removeClass('atwho-query');
+          return;
+      }
+    }
+    if ($query.length > 0 && (query_content = $query.attr('data-atwho-at-query'))) {
+      $query.empty().html(query_content).attr('data-atwho-at-query', null);
+      this._setRange('after', $query.get(0), range);
+    }
+    _range = range.cloneRange();
+    _range.setStart(range.startContainer, 0);
+    matched = this.callbacks("matcher").call(this, this.at, _range.toString(), this.getOpt('startWithSpace'), this.getOpt("acceptSpaceBar"));
+    isString = typeof matched === 'string';
+    if ($query.length === 0 && isString && (index = range.startOffset - this.at.length - matched.length) >= 0) {
+      range.setStart(range.startContainer, index);
+      $query = $('<span/>', this.app.document).attr(this.getOpt("editableAtwhoQueryAttrs")).addClass('atwho-query');
+      range.surroundContents($query.get(0));
+      lastNode = $query.contents().last().get(0);
+      if (lastNode) {
+        if (/firefox/i.test(navigator.userAgent)) {
+          range.setStart(lastNode, lastNode.length);
+          range.setEnd(lastNode, lastNode.length);
+          this._clearRange(range);
+        } else {
+          this._setRange('after', lastNode, range);
+        }
+      }
+    }
+    if (isString && matched.length < this.getOpt('minLen', 0)) {
+      return;
+    }
+    if (isString && matched.length <= this.getOpt('maxLen', 20)) {
+      query = {
+        text: matched,
+        el: $query
+      };
+      this.trigger("matched", [this.at, query.text]);
+      return this.query = query;
+    } else {
+      this.view.hide();
+      this.query = {
+        el: $query
+      };
+      if ($query.text().indexOf(this.at) >= 0) {
+        if (this._movingEvent(e) && $query.hasClass('atwho-inserted')) {
+          $query.removeClass('atwho-query');
+        } else if (false !== this.callbacks('afterMatchFailed').call(this, this.at, $query)) {
+          this._setRange("after", this._unwrap($query.text($query.text()).contents().first()));
+        }
+      }
+      return null;
+    }
+  };
+
+  EditableController.prototype.rect = function() {
+    var $iframe, iframeOffset, rect;
+    rect = this.query.el.offset();
+    if (!rect) {
+      return;
+    }
+    if (this.app.iframe && !this.app.iframeAsRoot) {
+      iframeOffset = ($iframe = $(this.app.iframe)).offset();
+      rect.left += iframeOffset.left - this.$inputor.scrollLeft();
+      rect.top += iframeOffset.top - this.$inputor.scrollTop();
+    }
+    rect.bottom = rect.top + this.query.el.height();
+    return rect;
+  };
+
+  EditableController.prototype.insert = function(content, $li) {
+    var data, range, suffix, suffixNode;
+    if (!this.$inputor.is(':focus')) {
+      this.$inputor.focus();
+    }
+    suffix = (suffix = this.getOpt('suffix')) === "" ? suffix : suffix || "\u00A0";
+    data = $li.data('item-data');
+    this.query.el.removeClass('atwho-query').addClass('atwho-inserted').html(content).attr('data-atwho-at-query', "" + data['atwho-at'] + this.query.text).attr('contenteditable', "false");
+    if (range = this._getRange()) {
+      if (this.query.el.length) {
+        range.setEndAfter(this.query.el[0]);
+      }
+      range.collapse(false);
+      range.insertNode(suffixNode = this.app.document.createTextNode("" + suffix));
+      this._setRange('after', suffixNode, range);
+    }
+    if (!this.$inputor.is(':focus')) {
+      this.$inputor.focus();
+    }
+    return this.$inputor.change();
+  };
+
+  return EditableController;
+
+})(Controller);
+
+var Model;
+
+Model = (function() {
+  function Model(context) {
+    this.context = context;
+    this.at = this.context.at;
+    this.storage = this.context.$inputor;
+  }
+
+  Model.prototype.destroy = function() {
+    return this.storage.data(this.at, null);
+  };
+
+  Model.prototype.saved = function() {
+    return this.fetch() > 0;
+  };
+
+  Model.prototype.query = function(query, callback) {
+    var _remoteFilter, data, searchKey;
+    data = this.fetch();
+    searchKey = this.context.getOpt("searchKey");
+    data = this.context.callbacks('filter').call(this.context, query, data, searchKey) || [];
+    _remoteFilter = this.context.callbacks('remoteFilter');
+    if (data.length > 0 || (!_remoteFilter && data.length === 0)) {
+      return callback(data);
+    } else {
+      return _remoteFilter.call(this.context, query, callback);
+    }
+  };
+
+  Model.prototype.fetch = function() {
+    return this.storage.data(this.at) || [];
+  };
+
+  Model.prototype.save = function(data) {
+    return this.storage.data(this.at, this.context.callbacks("beforeSave").call(this.context, data || []));
+  };
+
+  Model.prototype.load = function(data) {
+    if (!(this.saved() || !data)) {
+      return this._load(data);
+    }
+  };
+
+  Model.prototype.reload = function(data) {
+    return this._load(data);
+  };
+
+  Model.prototype._load = function(data) {
+    if (typeof data === "string") {
+      return $.ajax(data, {
+        dataType: "json"
+      }).done((function(_this) {
+        return function(data) {
+          return _this.save(data);
+        };
+      })(this));
+    } else {
+      return this.save(data);
+    }
+  };
+
+  return Model;
+
+})();
+
+var View;
+
+View = (function() {
+  function View(context) {
+    this.context = context;
+    this.$el = $("<div class='atwho-view'><ul class='atwho-view-ul'></ul></div>");
+    this.$elUl = this.$el.children();
+    this.timeoutID = null;
+    this.context.$el.append(this.$el);
+    this.bindEvent();
+  }
+
+  View.prototype.init = function() {
+    var header_tpl, id;
+    id = this.context.getOpt("alias") || this.context.at.charCodeAt(0);
+    header_tpl = this.context.getOpt("headerTpl");
+    if (header_tpl && this.$el.children().length === 1) {
+      this.$el.prepend(header_tpl);
+    }
+    return this.$el.attr({
+      'id': "at-view-" + id
+    });
+  };
+
+  View.prototype.destroy = function() {
+    return this.$el.remove();
+  };
+
+  View.prototype.bindEvent = function() {
+    var $menu, lastCoordX, lastCoordY;
+    $menu = this.$el.find('ul');
+    lastCoordX = 0;
+    lastCoordY = 0;
+    return $menu.on('mousemove.atwho-view', 'li', (function(_this) {
+      return function(e) {
+        var $cur;
+        if (lastCoordX === e.clientX && lastCoordY === e.clientY) {
+          return;
+        }
+        lastCoordX = e.clientX;
+        lastCoordY = e.clientY;
+        $cur = $(e.currentTarget);
+        if ($cur.hasClass('cur')) {
+          return;
+        }
+        $menu.find('.cur').removeClass('cur');
+        return $cur.addClass('cur');
+      };
+    })(this)).on('click.atwho-view', 'li', (function(_this) {
+      return function(e) {
+        $menu.find('.cur').removeClass('cur');
+        $(e.currentTarget).addClass('cur');
+        _this.choose(e);
+        return e.preventDefault();
+      };
+    })(this));
+  };
+
+  View.prototype.visible = function() {
+    return $.expr.filters.visible(this.$el[0]);
+  };
+
+  View.prototype.highlighted = function() {
+    return this.$el.find(".cur").length > 0;
+  };
+
+  View.prototype.choose = function(e) {
+    var $li, content;
+    if (($li = this.$el.find(".cur")).length) {
+      content = this.context.insertContentFor($li);
+      this.context._stopDelayedCall();
+      this.context.insert(this.context.callbacks("beforeInsert").call(this.context, content, $li, e), $li);
+      this.context.trigger("inserted", [$li, e]);
+      this.hide(e);
+    }
+    if (this.context.getOpt("hideWithoutSuffix")) {
+      return this.stopShowing = true;
+    }
+  };
+
+  View.prototype.reposition = function(rect) {
+    var _window, offset, overflowOffset, ref;
+    _window = this.context.app.iframeAsRoot ? this.context.app.window : window;
+    if (rect.bottom + this.$el.height() - $(_window).scrollTop() > $(_window).height()) {
+      rect.bottom = rect.top - this.$el.height();
+    }
+    if (rect.left > (overflowOffset = $(_window).width() - this.$el.width() - 5)) {
+      rect.left = overflowOffset;
+    }
+    offset = {
+      left: rect.left,
+      top: rect.bottom
+    };
+    if ((ref = this.context.callbacks("beforeReposition")) != null) {
+      ref.call(this.context, offset);
+    }
+    this.$el.offset(offset);
+    return this.context.trigger("reposition", [offset]);
+  };
+
+  View.prototype.next = function() {
+    var cur, next, nextEl, offset;
+    cur = this.$el.find('.cur').removeClass('cur');
+    next = cur.next();
+    if (!next.length) {
+      next = this.$el.find('li:first');
+    }
+    next.addClass('cur');
+    nextEl = next[0];
+    offset = nextEl.offsetTop + nextEl.offsetHeight + (nextEl.nextSibling ? nextEl.nextSibling.offsetHeight : 0);
+    return this.scrollTop(Math.max(0, offset - this.$el.height()));
+  };
+
+  View.prototype.prev = function() {
+    var cur, offset, prev, prevEl;
+    cur = this.$el.find('.cur').removeClass('cur');
+    prev = cur.prev();
+    if (!prev.length) {
+      prev = this.$el.find('li:last');
+    }
+    prev.addClass('cur');
+    prevEl = prev[0];
+    offset = prevEl.offsetTop + prevEl.offsetHeight + (prevEl.nextSibling ? prevEl.nextSibling.offsetHeight : 0);
+    return this.scrollTop(Math.max(0, offset - this.$el.height()));
+  };
+
+  View.prototype.scrollTop = function(scrollTop) {
+    var scrollDuration;
+    scrollDuration = this.context.getOpt('scrollDuration');
+    if (scrollDuration) {
+      return this.$elUl.animate({
+        scrollTop: scrollTop
+      }, scrollDuration);
+    } else {
+      return this.$elUl.scrollTop(scrollTop);
+    }
+  };
+
+  View.prototype.show = function() {
+    var rect;
+    if (this.stopShowing) {
+      this.stopShowing = false;
+      return;
+    }
+    if (!this.visible()) {
+      this.$el.show();
+      this.$el.scrollTop(0);
+      this.context.trigger('shown');
+    }
+    if (rect = this.context.rect()) {
+      return this.reposition(rect);
+    }
+  };
+
+  View.prototype.hide = function(e, time) {
+    var callback;
+    if (!this.visible()) {
+      return;
+    }
+    if (isNaN(time)) {
+      this.$el.hide();
+      return this.context.trigger('hidden', [e]);
+    } else {
+      callback = (function(_this) {
+        return function() {
+          return _this.hide();
+        };
+      })(this);
+      clearTimeout(this.timeoutID);
+      return this.timeoutID = setTimeout(callback, time);
+    }
+  };
+
+  View.prototype.render = function(list) {
+    var $li, $ul, i, item, len, li, tpl;
+    if (!($.isArray(list) && list.length > 0)) {
+      this.hide();
+      return;
+    }
+    this.$el.find('ul').empty();
+    $ul = this.$el.find('ul');
+    tpl = this.context.getOpt('displayTpl');
+    for (i = 0, len = list.length; i < len; i++) {
+      item = list[i];
+      item = $.extend({}, item, {
+        'atwho-at': this.context.at
+      });
+      li = this.context.callbacks("tplEval").call(this.context, tpl, item, "onDisplay");
+      $li = $(this.context.callbacks("highlighter").call(this.context, li, this.context.query.text));
+      $li.data("item-data", item);
+      $ul.append($li);
+    }
+    this.show();
+    if (this.context.getOpt('highlightFirst')) {
+      return $ul.find("li:first").addClass("cur");
+    }
+  };
+
+  return View;
+
+})();
+
+var Api;
+
+Api = {
+  load: function(at, data) {
+    var c;
+    if (c = this.controller(at)) {
+      return c.model.load(data);
+    }
+  },
+  isSelecting: function() {
+    var ref;
+    return !!((ref = this.controller()) != null ? ref.view.visible() : void 0);
+  },
+  hide: function() {
+    var ref;
+    return (ref = this.controller()) != null ? ref.view.hide() : void 0;
+  },
+  reposition: function() {
+    var c;
+    if (c = this.controller()) {
+      return c.view.reposition(c.rect());
+    }
+  },
+  setIframe: function(iframe, asRoot) {
+    this.setupRootElement(iframe, asRoot);
+    return null;
+  },
+  run: function() {
+    return this.dispatch();
+  },
+  destroy: function() {
+    this.shutdown();
+    return this.$inputor.data('atwho', null);
+  }
+};
+
+$.fn.atwho = function(method) {
+  var _args, result;
+  _args = arguments;
+  result = null;
+  this.filter('textarea, input, [contenteditable=""], [contenteditable=true]').each(function() {
+    var $this, app;
+    if (!(app = ($this = $(this)).data("atwho"))) {
+      $this.data('atwho', (app = new App(this)));
+    }
+    if (typeof method === 'object' || !method) {
+      return app.reg(method.at, method);
+    } else if (Api[method] && app) {
+      return result = Api[method].apply(app, Array.prototype.slice.call(_args, 1));
+    } else {
+      return $.error("Method " + method + " does not exist on jQuery.atwho");
+    }
+  });
+  if (result != null) {
+    return result;
+  } else {
+    return this;
+  }
+};
+
+$.fn.atwho["default"] = {
+  at: void 0,
+  alias: void 0,
+  data: null,
+  displayTpl: "<li>${name}</li>",
+  insertTpl: "${atwho-at}${name}",
+  headerTpl: null,
+  callbacks: DEFAULT_CALLBACKS,
+  searchKey: "name",
+  suffix: void 0,
+  hideWithoutSuffix: false,
+  startWithSpace: true,
+  acceptSpaceBar: false,
+  highlightFirst: true,
+  limit: 5,
+  maxLen: 20,
+  minLen: 0,
+  displayTimeout: 300,
+  delay: null,
+  spaceSelectsMatch: false,
+  tabSelectsMatch: true,
+  editableAtwhoQueryAttrs: {},
+  scrollDuration: 150,
+  suspendOnComposing: true,
+  lookUpOnClick: true
+};
+
+$.fn.atwho.debug = false;
+
+}));
+
+
+/***/ }),
+
+/***/ "./node_modules/jquery.caret/dist/jquery.caret.js":
+/*!********************************************************!*\
+  !*** ./node_modules/jquery.caret/dist/jquery.caret.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
+  if (true) {
+    // AMD. Register as an anonymous module.
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")], __WEBPACK_AMD_DEFINE_RESULT__ = (function ($) {
+      return (root.returnExportsGlobal = factory($));
+    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+}(this, function ($) {
+
+/*
+  Implement Github like autocomplete mentions
+  http://ichord.github.com/At.js
+
+  Copyright (c) 2013 chord.luo@gmail.com
+  Licensed under the MIT license.
+*/
+
+/*
+本插件操作 textarea 或者 input 内的插入符
+只实现了获得插入符在文本框中的位置，我设置
+插入符的位置.
+*/
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-var nestRE = /^(attrs|props|on|nativeOn|class|style|hook)$/;
+var EditableCaret, InputCaret, Mirror, Utils, discoveryIframeOf, methods, oDocument, oFrame, oWindow, pluginName, setContextBy;
 
-var babelHelperVueJsxMergeProps = function mergeJSXProps (objs) {
-  return objs.reduce(function (a, b) {
-    var aa, bb, key, nestedKey, temp;
-    for (key in b) {
-      aa = a[key];
-      bb = b[key];
-      if (aa && nestRE.test(key)) {
-        // normalize class
-        if (key === 'class') {
-          if (typeof aa === 'string') {
-            temp = aa;
-            a[key] = aa = {};
-            aa[temp] = true;
+pluginName = 'caret';
+
+EditableCaret = (function() {
+  function EditableCaret($inputor) {
+    this.$inputor = $inputor;
+    this.domInputor = this.$inputor[0];
+  }
+
+  EditableCaret.prototype.setPos = function(pos) {
+    var fn, found, offset, sel;
+    if (sel = oWindow.getSelection()) {
+      offset = 0;
+      found = false;
+      (fn = function(pos, parent) {
+        var node, range, _i, _len, _ref, _results;
+        _ref = parent.childNodes;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          node = _ref[_i];
+          if (found) {
+            break;
           }
-          if (typeof bb === 'string') {
-            temp = bb;
-            b[key] = bb = {};
-            bb[temp] = true;
+          if (node.nodeType === 3) {
+            if (offset + node.length >= pos) {
+              found = true;
+              range = oDocument.createRange();
+              range.setStart(node, pos - offset);
+              sel.removeAllRanges();
+              sel.addRange(range);
+              break;
+            } else {
+              _results.push(offset += node.length);
+            }
+          } else {
+            _results.push(fn(pos, node));
           }
         }
-        if (key === 'on' || key === 'nativeOn' || key === 'hook') {
-          // merge functions
-          for (nestedKey in bb) {
-            aa[nestedKey] = mergeFn(aa[nestedKey], bb[nestedKey]);
-          }
-        } else if (Array.isArray(aa)) {
-          a[key] = aa.concat(bb);
-        } else if (Array.isArray(bb)) {
-          a[key] = [aa].concat(bb);
-        } else {
-          for (nestedKey in bb) {
-            aa[nestedKey] = bb[nestedKey];
-          }
-        }
-      } else {
-        a[key] = b[key];
-      }
+        return _results;
+      })(pos, this.domInputor);
     }
-    return a
-  }, {})
-};
-
-function mergeFn (a, b) {
-  return function () {
-    a && a.apply(this, arguments);
-    b && b.apply(this, arguments);
-  }
-}
-
-function unwrapExports (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
-}
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
-var _iterStep = function (done, value) {
-  return { value: value, done: !!done };
-};
-
-var _iterators = {};
-
-var toString = {}.toString;
-
-var _cof = function (it) {
-  return toString.call(it).slice(8, -1);
-};
-
-// fallback for non-array-like ES3 and non-enumerable old V8 strings
-
-// eslint-disable-next-line no-prototype-builtins
-var _iobject = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
-  return _cof(it) == 'String' ? it.split('') : Object(it);
-};
-
-// 7.2.1 RequireObjectCoercible(argument)
-var _defined = function (it) {
-  if (it == undefined) throw TypeError("Can't call method on  " + it);
-  return it;
-};
-
-// to indexed object, toObject with fallback for non-array-like ES3 strings
-
-
-var _toIobject = function (it) {
-  return _iobject(_defined(it));
-};
-
-var _global = createCommonjsModule(function (module) {
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-var global = module.exports = typeof window != 'undefined' && window.Math == Math
-  ? window : typeof self != 'undefined' && self.Math == Math ? self
-  // eslint-disable-next-line no-new-func
-  : Function('return this')();
-if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
-});
-
-var _core = createCommonjsModule(function (module) {
-var core = module.exports = { version: '2.6.2' };
-if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-});
-var _core_1 = _core.version;
-
-var _aFunction = function (it) {
-  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
-  return it;
-};
-
-// optional / simple context binding
-
-var _ctx = function (fn, that, length) {
-  _aFunction(fn);
-  if (that === undefined) return fn;
-  switch (length) {
-    case 1: return function (a) {
-      return fn.call(that, a);
-    };
-    case 2: return function (a, b) {
-      return fn.call(that, a, b);
-    };
-    case 3: return function (a, b, c) {
-      return fn.call(that, a, b, c);
-    };
-  }
-  return function (/* ...args */) {
-    return fn.apply(that, arguments);
+    return this.domInputor;
   };
-};
 
-var _isObject = function (it) {
-  return typeof it === 'object' ? it !== null : typeof it === 'function';
-};
-
-var _anObject = function (it) {
-  if (!_isObject(it)) throw TypeError(it + ' is not an object!');
-  return it;
-};
-
-var _fails = function (exec) {
-  try {
-    return !!exec();
-  } catch (e) {
-    return true;
-  }
-};
-
-// Thank's IE8 for his funny defineProperty
-var _descriptors = !_fails(function () {
-  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
-});
-
-var document$1 = _global.document;
-// typeof document.createElement is 'object' in old IE
-var is = _isObject(document$1) && _isObject(document$1.createElement);
-var _domCreate = function (it) {
-  return is ? document$1.createElement(it) : {};
-};
-
-var _ie8DomDefine = !_descriptors && !_fails(function () {
-  return Object.defineProperty(_domCreate('div'), 'a', { get: function () { return 7; } }).a != 7;
-});
-
-// 7.1.1 ToPrimitive(input [, PreferredType])
-
-// instead of the ES6 spec version, we didn't implement @@toPrimitive case
-// and the second argument - flag - preferred type is a string
-var _toPrimitive = function (it, S) {
-  if (!_isObject(it)) return it;
-  var fn, val;
-  if (S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
-  if (typeof (fn = it.valueOf) == 'function' && !_isObject(val = fn.call(it))) return val;
-  if (!S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
-  throw TypeError("Can't convert object to primitive value");
-};
-
-var dP = Object.defineProperty;
-
-var f = _descriptors ? Object.defineProperty : function defineProperty(O, P, Attributes) {
-  _anObject(O);
-  P = _toPrimitive(P, true);
-  _anObject(Attributes);
-  if (_ie8DomDefine) try {
-    return dP(O, P, Attributes);
-  } catch (e) { /* empty */ }
-  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
-  if ('value' in Attributes) O[P] = Attributes.value;
-  return O;
-};
-
-var _objectDp = {
-	f: f
-};
-
-var _propertyDesc = function (bitmap, value) {
-  return {
-    enumerable: !(bitmap & 1),
-    configurable: !(bitmap & 2),
-    writable: !(bitmap & 4),
-    value: value
+  EditableCaret.prototype.getIEPosition = function() {
+    return this.getPosition();
   };
-};
 
-var _hide = _descriptors ? function (object, key, value) {
-  return _objectDp.f(object, key, _propertyDesc(1, value));
-} : function (object, key, value) {
-  object[key] = value;
-  return object;
-};
-
-var hasOwnProperty = {}.hasOwnProperty;
-var _has = function (it, key) {
-  return hasOwnProperty.call(it, key);
-};
-
-var PROTOTYPE = 'prototype';
-
-var $export = function (type, name, source) {
-  var IS_FORCED = type & $export.F;
-  var IS_GLOBAL = type & $export.G;
-  var IS_STATIC = type & $export.S;
-  var IS_PROTO = type & $export.P;
-  var IS_BIND = type & $export.B;
-  var IS_WRAP = type & $export.W;
-  var exports = IS_GLOBAL ? _core : _core[name] || (_core[name] = {});
-  var expProto = exports[PROTOTYPE];
-  var target = IS_GLOBAL ? _global : IS_STATIC ? _global[name] : (_global[name] || {})[PROTOTYPE];
-  var key, own, out;
-  if (IS_GLOBAL) source = name;
-  for (key in source) {
-    // contains in native
-    own = !IS_FORCED && target && target[key] !== undefined;
-    if (own && _has(exports, key)) continue;
-    // export native or passed
-    out = own ? target[key] : source[key];
-    // prevent global pollution for namespaces
-    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
-    // bind timers to global for call from export context
-    : IS_BIND && own ? _ctx(out, _global)
-    // wrap global constructors for prevent change them in library
-    : IS_WRAP && target[key] == out ? (function (C) {
-      var F = function (a, b, c) {
-        if (this instanceof C) {
-          switch (arguments.length) {
-            case 0: return new C();
-            case 1: return new C(a);
-            case 2: return new C(a, b);
-          } return new C(a, b, c);
-        } return C.apply(this, arguments);
-      };
-      F[PROTOTYPE] = C[PROTOTYPE];
-      return F;
-    // make static versions for prototype methods
-    })(out) : IS_PROTO && typeof out == 'function' ? _ctx(Function.call, out) : out;
-    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
-    if (IS_PROTO) {
-      (exports.virtual || (exports.virtual = {}))[key] = out;
-      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
-      if (type & $export.R && expProto && !expProto[key]) _hide(expProto, key, out);
-    }
-  }
-};
-// type bitmap
-$export.F = 1;   // forced
-$export.G = 2;   // global
-$export.S = 4;   // static
-$export.P = 8;   // proto
-$export.B = 16;  // bind
-$export.W = 32;  // wrap
-$export.U = 64;  // safe
-$export.R = 128; // real proto method for `library`
-var _export = $export;
-
-var _redefine = _hide;
-
-// 7.1.4 ToInteger
-var ceil = Math.ceil;
-var floor = Math.floor;
-var _toInteger = function (it) {
-  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-};
-
-// 7.1.15 ToLength
-
-var min = Math.min;
-var _toLength = function (it) {
-  return it > 0 ? min(_toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-};
-
-var max = Math.max;
-var min$1 = Math.min;
-var _toAbsoluteIndex = function (index, length) {
-  index = _toInteger(index);
-  return index < 0 ? max(index + length, 0) : min$1(index, length);
-};
-
-// false -> Array#indexOf
-// true  -> Array#includes
-
-
-
-var _arrayIncludes = function (IS_INCLUDES) {
-  return function ($this, el, fromIndex) {
-    var O = _toIobject($this);
-    var length = _toLength(O.length);
-    var index = _toAbsoluteIndex(fromIndex, length);
-    var value;
-    // Array#includes uses SameValueZero equality algorithm
-    // eslint-disable-next-line no-self-compare
-    if (IS_INCLUDES && el != el) while (length > index) {
-      value = O[index++];
-      // eslint-disable-next-line no-self-compare
-      if (value != value) return true;
-    // Array#indexOf ignores holes, Array#includes - not
-    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
-      if (O[index] === el) return IS_INCLUDES || index || 0;
-    } return !IS_INCLUDES && -1;
+  EditableCaret.prototype.getPosition = function() {
+    var inputor_offset, offset;
+    offset = this.getOffset();
+    inputor_offset = this.$inputor.offset();
+    offset.left -= inputor_offset.left;
+    offset.top -= inputor_offset.top;
+    return offset;
   };
-};
 
-var _shared = createCommonjsModule(function (module) {
-var SHARED = '__core-js_shared__';
-var store = _global[SHARED] || (_global[SHARED] = {});
-
-(module.exports = function (key, value) {
-  return store[key] || (store[key] = value !== undefined ? value : {});
-})('versions', []).push({
-  version: _core.version,
-  mode:  'pure' ,
-  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
-});
-});
-
-var id = 0;
-var px = Math.random();
-var _uid = function (key) {
-  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-};
-
-var shared = _shared('keys');
-
-var _sharedKey = function (key) {
-  return shared[key] || (shared[key] = _uid(key));
-};
-
-var arrayIndexOf = _arrayIncludes(false);
-var IE_PROTO = _sharedKey('IE_PROTO');
-
-var _objectKeysInternal = function (object, names) {
-  var O = _toIobject(object);
-  var i = 0;
-  var result = [];
-  var key;
-  for (key in O) if (key != IE_PROTO) _has(O, key) && result.push(key);
-  // Don't enum bug & hidden keys
-  while (names.length > i) if (_has(O, key = names[i++])) {
-    ~arrayIndexOf(result, key) || result.push(key);
-  }
-  return result;
-};
-
-// IE 8- don't enum bug keys
-var _enumBugKeys = (
-  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
-).split(',');
-
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-
-
-
-var _objectKeys = Object.keys || function keys(O) {
-  return _objectKeysInternal(O, _enumBugKeys);
-};
-
-var _objectDps = _descriptors ? Object.defineProperties : function defineProperties(O, Properties) {
-  _anObject(O);
-  var keys = _objectKeys(Properties);
-  var length = keys.length;
-  var i = 0;
-  var P;
-  while (length > i) _objectDp.f(O, P = keys[i++], Properties[P]);
-  return O;
-};
-
-var document$2 = _global.document;
-var _html = document$2 && document$2.documentElement;
-
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-
-
-
-var IE_PROTO$1 = _sharedKey('IE_PROTO');
-var Empty = function () { /* empty */ };
-var PROTOTYPE$1 = 'prototype';
-
-// Create object with fake `null` prototype: use iframe Object with cleared prototype
-var createDict = function () {
-  // Thrash, waste and sodomy: IE GC bug
-  var iframe = _domCreate('iframe');
-  var i = _enumBugKeys.length;
-  var lt = '<';
-  var gt = '>';
-  var iframeDocument;
-  iframe.style.display = 'none';
-  _html.appendChild(iframe);
-  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-  // createDict = iframe.contentWindow.Object;
-  // html.removeChild(iframe);
-  iframeDocument = iframe.contentWindow.document;
-  iframeDocument.open();
-  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
-  iframeDocument.close();
-  createDict = iframeDocument.F;
-  while (i--) delete createDict[PROTOTYPE$1][_enumBugKeys[i]];
-  return createDict();
-};
-
-var _objectCreate = Object.create || function create(O, Properties) {
-  var result;
-  if (O !== null) {
-    Empty[PROTOTYPE$1] = _anObject(O);
-    result = new Empty();
-    Empty[PROTOTYPE$1] = null;
-    // add "__proto__" for Object.getPrototypeOf polyfill
-    result[IE_PROTO$1] = O;
-  } else result = createDict();
-  return Properties === undefined ? result : _objectDps(result, Properties);
-};
-
-var _wks = createCommonjsModule(function (module) {
-var store = _shared('wks');
-
-var Symbol = _global.Symbol;
-var USE_SYMBOL = typeof Symbol == 'function';
-
-var $exports = module.exports = function (name) {
-  return store[name] || (store[name] =
-    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : _uid)('Symbol.' + name));
-};
-
-$exports.store = store;
-});
-
-var def = _objectDp.f;
-
-var TAG = _wks('toStringTag');
-
-var _setToStringTag = function (it, tag, stat) {
-  if (it && !_has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
-};
-
-var IteratorPrototype = {};
-
-// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-_hide(IteratorPrototype, _wks('iterator'), function () { return this; });
-
-var _iterCreate = function (Constructor, NAME, next) {
-  Constructor.prototype = _objectCreate(IteratorPrototype, { next: _propertyDesc(1, next) });
-  _setToStringTag(Constructor, NAME + ' Iterator');
-};
-
-// 7.1.13 ToObject(argument)
-
-var _toObject = function (it) {
-  return Object(_defined(it));
-};
-
-// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-
-
-var IE_PROTO$2 = _sharedKey('IE_PROTO');
-var ObjectProto = Object.prototype;
-
-var _objectGpo = Object.getPrototypeOf || function (O) {
-  O = _toObject(O);
-  if (_has(O, IE_PROTO$2)) return O[IE_PROTO$2];
-  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
-    return O.constructor.prototype;
-  } return O instanceof Object ? ObjectProto : null;
-};
-
-var ITERATOR = _wks('iterator');
-var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
-var FF_ITERATOR = '@@iterator';
-var KEYS = 'keys';
-var VALUES = 'values';
-
-var returnThis = function () { return this; };
-
-var _iterDefine = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
-  _iterCreate(Constructor, NAME, next);
-  var getMethod = function (kind) {
-    if (!BUGGY && kind in proto) return proto[kind];
-    switch (kind) {
-      case KEYS: return function keys() { return new Constructor(this, kind); };
-      case VALUES: return function values() { return new Constructor(this, kind); };
-    } return function entries() { return new Constructor(this, kind); };
+  EditableCaret.prototype.getOldIEPos = function() {
+    var preCaretTextRange, textRange;
+    textRange = oDocument.selection.createRange();
+    preCaretTextRange = oDocument.body.createTextRange();
+    preCaretTextRange.moveToElementText(this.domInputor);
+    preCaretTextRange.setEndPoint("EndToEnd", textRange);
+    return preCaretTextRange.text.length;
   };
-  var TAG = NAME + ' Iterator';
-  var DEF_VALUES = DEFAULT == VALUES;
-  var VALUES_BUG = false;
-  var proto = Base.prototype;
-  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-  var $default = $native || getMethod(DEFAULT);
-  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
-  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
-  var methods, key, IteratorPrototype;
-  // Fix native
-  if ($anyNative) {
-    IteratorPrototype = _objectGpo($anyNative.call(new Base()));
-    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
-      // Set @@toStringTag to native iterators
-      _setToStringTag(IteratorPrototype, TAG, true);
-    }
-  }
-  // fix Array#{values, @@iterator}.name in V8 / FF
-  if (DEF_VALUES && $native && $native.name !== VALUES) {
-    VALUES_BUG = true;
-    $default = function values() { return $native.call(this); };
-  }
-  // Define iterator
-  if (( FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
-    _hide(proto, ITERATOR, $default);
-  }
-  // Plug for library
-  _iterators[NAME] = $default;
-  _iterators[TAG] = returnThis;
-  if (DEFAULT) {
-    methods = {
-      values: DEF_VALUES ? $default : getMethod(VALUES),
-      keys: IS_SET ? $default : getMethod(KEYS),
-      entries: $entries
-    };
-    if (FORCED) for (key in methods) {
-      if (!(key in proto)) _redefine(proto, key, methods[key]);
-    } else _export(_export.P + _export.F * (BUGGY || VALUES_BUG), NAME, methods);
-  }
-  return methods;
-};
 
-// 22.1.3.4 Array.prototype.entries()
-// 22.1.3.13 Array.prototype.keys()
-// 22.1.3.29 Array.prototype.values()
-// 22.1.3.30 Array.prototype[@@iterator]()
-var es6_array_iterator = _iterDefine(Array, 'Array', function (iterated, kind) {
-  this._t = _toIobject(iterated); // target
-  this._i = 0;                   // next index
-  this._k = kind;                // kind
-// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-}, function () {
-  var O = this._t;
-  var kind = this._k;
-  var index = this._i++;
-  if (!O || index >= O.length) {
-    this._t = undefined;
-    return _iterStep(1);
-  }
-  if (kind == 'keys') return _iterStep(0, index);
-  if (kind == 'values') return _iterStep(0, O[index]);
-  return _iterStep(0, [index, O[index]]);
-}, 'values');
-
-// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
-_iterators.Arguments = _iterators.Array;
-
-var TO_STRING_TAG = _wks('toStringTag');
-
-var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
-  'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
-  'MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,' +
-  'SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,' +
-  'TextTrackList,TouchList').split(',');
-
-for (var i = 0; i < DOMIterables.length; i++) {
-  var NAME = DOMIterables[i];
-  var Collection = _global[NAME];
-  var proto = Collection && Collection.prototype;
-  if (proto && !proto[TO_STRING_TAG]) _hide(proto, TO_STRING_TAG, NAME);
-  _iterators[NAME] = _iterators.Array;
-}
-
-// true  -> String#at
-// false -> String#codePointAt
-var _stringAt = function (TO_STRING) {
-  return function (that, pos) {
-    var s = String(_defined(that));
-    var i = _toInteger(pos);
-    var l = s.length;
-    var a, b;
-    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
-    a = s.charCodeAt(i);
-    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-      ? TO_STRING ? s.charAt(i) : a
-      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-  };
-};
-
-var $at = _stringAt(true);
-
-// 21.1.3.27 String.prototype[@@iterator]()
-_iterDefine(String, 'String', function (iterated) {
-  this._t = String(iterated); // target
-  this._i = 0;                // next index
-// 21.1.5.2.1 %StringIteratorPrototype%.next()
-}, function () {
-  var O = this._t;
-  var index = this._i;
-  var point;
-  if (index >= O.length) return { value: undefined, done: true };
-  point = $at(O, index);
-  this._i += point.length;
-  return { value: point, done: false };
-});
-
-// getting tag from 19.1.3.6 Object.prototype.toString()
-
-var TAG$1 = _wks('toStringTag');
-// ES3 wrong here
-var ARG = _cof(function () { return arguments; }()) == 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (e) { /* empty */ }
-};
-
-var _classof = function (it) {
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG$1)) == 'string' ? T
-    // builtinTag case
-    : ARG ? _cof(O)
-    // ES3 arguments fallback
-    : (B = _cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-};
-
-var ITERATOR$1 = _wks('iterator');
-
-var core_isIterable = _core.isIterable = function (it) {
-  var O = Object(it);
-  return O[ITERATOR$1] !== undefined
-    || '@@iterator' in O
-    // eslint-disable-next-line no-prototype-builtins
-    || _iterators.hasOwnProperty(_classof(O));
-};
-
-var isIterable = core_isIterable;
-
-var isIterable$1 = createCommonjsModule(function (module) {
-module.exports = { "default": isIterable, __esModule: true };
-});
-
-unwrapExports(isIterable$1);
-
-var ITERATOR$2 = _wks('iterator');
-
-var core_getIteratorMethod = _core.getIteratorMethod = function (it) {
-  if (it != undefined) return it[ITERATOR$2]
-    || it['@@iterator']
-    || _iterators[_classof(it)];
-};
-
-var core_getIterator = _core.getIterator = function (it) {
-  var iterFn = core_getIteratorMethod(it);
-  if (typeof iterFn != 'function') throw TypeError(it + ' is not iterable!');
-  return _anObject(iterFn.call(it));
-};
-
-var getIterator = core_getIterator;
-
-var getIterator$1 = createCommonjsModule(function (module) {
-module.exports = { "default": getIterator, __esModule: true };
-});
-
-unwrapExports(getIterator$1);
-
-var slicedToArray = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-
-
-
-var _isIterable3 = _interopRequireDefault(isIterable$1);
-
-
-
-var _getIterator3 = _interopRequireDefault(getIterator$1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  function sliceIterator(arr, i) {
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-
-    try {
-      for (var _i = (0, _getIterator3.default)(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"]) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
-  }
-
-  return function (arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if ((0, _isIterable3.default)(Object(arr))) {
-      return sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  EditableCaret.prototype.getPos = function() {
+    var clonedRange, pos, range;
+    if (range = this.range()) {
+      clonedRange = range.cloneRange();
+      clonedRange.selectNodeContents(this.domInputor);
+      clonedRange.setEnd(range.endContainer, range.endOffset);
+      pos = clonedRange.toString().length;
+      clonedRange.detach();
+      return pos;
+    } else if (oDocument.selection) {
+      return this.getOldIEPos();
     }
   };
-}();
-});
 
-var _slicedToArray = unwrapExports(slicedToArray);
-
-// call something on iterator step with safe closing on error
-
-var _iterCall = function (iterator, fn, value, entries) {
-  try {
-    return entries ? fn(_anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch (e) {
-    var ret = iterator['return'];
-    if (ret !== undefined) _anObject(ret.call(iterator));
-    throw e;
-  }
-};
-
-// check on default Array iterator
-
-var ITERATOR$3 = _wks('iterator');
-var ArrayProto = Array.prototype;
-
-var _isArrayIter = function (it) {
-  return it !== undefined && (_iterators.Array === it || ArrayProto[ITERATOR$3] === it);
-};
-
-var _createProperty = function (object, index, value) {
-  if (index in object) _objectDp.f(object, index, _propertyDesc(0, value));
-  else object[index] = value;
-};
-
-var ITERATOR$4 = _wks('iterator');
-var SAFE_CLOSING = false;
-
-try {
-  var riter = [7][ITERATOR$4]();
-  riter['return'] = function () { SAFE_CLOSING = true; };
-  // eslint-disable-next-line no-throw-literal
-  Array.from(riter, function () { throw 2; });
-} catch (e) { /* empty */ }
-
-var _iterDetect = function (exec, skipClosing) {
-  if (!skipClosing && !SAFE_CLOSING) return false;
-  var safe = false;
-  try {
-    var arr = [7];
-    var iter = arr[ITERATOR$4]();
-    iter.next = function () { return { done: safe = true }; };
-    arr[ITERATOR$4] = function () { return iter; };
-    exec(arr);
-  } catch (e) { /* empty */ }
-  return safe;
-};
-
-_export(_export.S + _export.F * !_iterDetect(function (iter) { Array.from(iter); }), 'Array', {
-  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
-  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
-    var O = _toObject(arrayLike);
-    var C = typeof this == 'function' ? this : Array;
-    var aLen = arguments.length;
-    var mapfn = aLen > 1 ? arguments[1] : undefined;
-    var mapping = mapfn !== undefined;
-    var index = 0;
-    var iterFn = core_getIteratorMethod(O);
-    var length, result, step, iterator;
-    if (mapping) mapfn = _ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
-    // if object isn't iterable or it's array with default iterator - use simple case
-    if (iterFn != undefined && !(C == Array && _isArrayIter(iterFn))) {
-      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
-        _createProperty(result, index, mapping ? _iterCall(iterator, mapfn, [step.value, index], true) : step.value);
-      }
-    } else {
-      length = _toLength(O.length);
-      for (result = new C(length); length > index; index++) {
-        _createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
-      }
-    }
-    result.length = index;
-    return result;
-  }
-});
-
-var from_1 = _core.Array.from;
-
-var from_1$1 = createCommonjsModule(function (module) {
-module.exports = { "default": from_1, __esModule: true };
-});
-
-unwrapExports(from_1$1);
-
-var toConsumableArray = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-
-
-
-var _from2 = _interopRequireDefault(from_1$1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  } else {
-    return (0, _from2.default)(arr);
-  }
-};
-});
-
-var _toConsumableArray = unwrapExports(toConsumableArray);
-
-// most Object methods by ES6 should accept primitives
-
-
-
-var _objectSap = function (KEY, exec) {
-  var fn = (_core.Object || {})[KEY] || Object[KEY];
-  var exp = {};
-  exp[KEY] = exec(fn);
-  _export(_export.S + _export.F * _fails(function () { fn(1); }), 'Object', exp);
-};
-
-// 19.1.2.14 Object.keys(O)
-
-
-
-_objectSap('keys', function () {
-  return function keys(it) {
-    return _objectKeys(_toObject(it));
-  };
-});
-
-var keys = _core.Object.keys;
-
-var keys$1 = createCommonjsModule(function (module) {
-module.exports = { "default": keys, __esModule: true };
-});
-
-var _Object$keys = unwrapExports(keys$1);
-
-var isRegexp = function isRegexp(input) {
-  return Object.prototype.toString.call(input) === '[object RegExp]';
-};
-
-var flagMap = {
-	global: 'g',
-	ignoreCase: 'i',
-	multiline: 'm',
-	dotAll: 's',
-	sticky: 'y',
-	unicode: 'u'
-};
-
-var cloneRegexp = function cloneRegexp(regex) {
-	var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-	if (!isRegexp(regex)) {
-		throw new TypeError('Expected a RegExp instance');
-	}
-
-	var flags = _Object$keys(flagMap).map(function (flag) {
-		return (typeof options[flag] === 'boolean' ? options[flag] : regex[flag]) ? flagMap[flag] : '';
-	}).join('');
-
-	var clonedRegexp = new RegExp(options.source || regex.source, flags);
-
-	clonedRegexp.lastIndex = typeof options.lastIndex === 'number' ? options.lastIndex : regex.lastIndex;
-
-	return clonedRegexp;
-};
-
-var remove = removeDiacritics;
-
-var replacementList = [
-  {
-    base: ' ',
-    chars: "\u00A0",
-  }, {
-    base: '0',
-    chars: "\u07C0",
-  }, {
-    base: 'A',
-    chars: "\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F",
-  }, {
-    base: 'AA',
-    chars: "\uA732",
-  }, {
-    base: 'AE',
-    chars: "\u00C6\u01FC\u01E2",
-  }, {
-    base: 'AO',
-    chars: "\uA734",
-  }, {
-    base: 'AU',
-    chars: "\uA736",
-  }, {
-    base: 'AV',
-    chars: "\uA738\uA73A",
-  }, {
-    base: 'AY',
-    chars: "\uA73C",
-  }, {
-    base: 'B',
-    chars: "\u24B7\uFF22\u1E02\u1E04\u1E06\u0243\u0181",
-  }, {
-    base: 'C',
-    chars: "\u24b8\uff23\uA73E\u1E08\u0106\u0043\u0108\u010A\u010C\u00C7\u0187\u023B",
-  }, {
-    base: 'D',
-    chars: "\u24B9\uFF24\u1E0A\u010E\u1E0C\u1E10\u1E12\u1E0E\u0110\u018A\u0189\u1D05\uA779",
-  }, {
-    base: 'Dh',
-    chars: "\u00D0",
-  }, {
-    base: 'DZ',
-    chars: "\u01F1\u01C4",
-  }, {
-    base: 'Dz',
-    chars: "\u01F2\u01C5",
-  }, {
-    base: 'E',
-    chars: "\u025B\u24BA\uFF25\u00C8\u00C9\u00CA\u1EC0\u1EBE\u1EC4\u1EC2\u1EBC\u0112\u1E14\u1E16\u0114\u0116\u00CB\u1EBA\u011A\u0204\u0206\u1EB8\u1EC6\u0228\u1E1C\u0118\u1E18\u1E1A\u0190\u018E\u1D07",
-  }, {
-    base: 'F',
-    chars: "\uA77C\u24BB\uFF26\u1E1E\u0191\uA77B",
-  }, {
-    base: 'G',
-    chars: "\u24BC\uFF27\u01F4\u011C\u1E20\u011E\u0120\u01E6\u0122\u01E4\u0193\uA7A0\uA77D\uA77E\u0262",
-  }, {
-    base: 'H',
-    chars: "\u24BD\uFF28\u0124\u1E22\u1E26\u021E\u1E24\u1E28\u1E2A\u0126\u2C67\u2C75\uA78D",
-  }, {
-    base: 'I',
-    chars: "\u24BE\uFF29\xCC\xCD\xCE\u0128\u012A\u012C\u0130\xCF\u1E2E\u1EC8\u01CF\u0208\u020A\u1ECA\u012E\u1E2C\u0197",
-  }, {
-    base: 'J',
-    chars: "\u24BF\uFF2A\u0134\u0248\u0237",
-  }, {
-    base: 'K',
-    chars: "\u24C0\uFF2B\u1E30\u01E8\u1E32\u0136\u1E34\u0198\u2C69\uA740\uA742\uA744\uA7A2",
-  }, {
-    base: 'L',
-    chars: "\u24C1\uFF2C\u013F\u0139\u013D\u1E36\u1E38\u013B\u1E3C\u1E3A\u0141\u023D\u2C62\u2C60\uA748\uA746\uA780",
-  }, {
-    base: 'LJ',
-    chars: "\u01C7",
-  }, {
-    base: 'Lj',
-    chars: "\u01C8",
-  }, {
-    base: 'M',
-    chars: "\u24C2\uFF2D\u1E3E\u1E40\u1E42\u2C6E\u019C\u03FB",
-  }, {
-    base: 'N',
-    chars: "\uA7A4\u0220\u24C3\uFF2E\u01F8\u0143\xD1\u1E44\u0147\u1E46\u0145\u1E4A\u1E48\u019D\uA790\u1D0E",
-  }, {
-    base: 'NJ',
-    chars: "\u01CA",
-  }, {
-    base: 'Nj',
-    chars: "\u01CB",
-  }, {
-    base: 'O',
-    chars: "\u24C4\uFF2F\xD2\xD3\xD4\u1ED2\u1ED0\u1ED6\u1ED4\xD5\u1E4C\u022C\u1E4E\u014C\u1E50\u1E52\u014E\u022E\u0230\xD6\u022A\u1ECE\u0150\u01D1\u020C\u020E\u01A0\u1EDC\u1EDA\u1EE0\u1EDE\u1EE2\u1ECC\u1ED8\u01EA\u01EC\xD8\u01FE\u0186\u019F\uA74A\uA74C",
-  }, {
-    base: 'OE',
-    chars: "\u0152",
-  }, {
-    base: 'OI',
-    chars: "\u01A2",
-  }, {
-    base: 'OO',
-    chars: "\uA74E",
-  }, {
-    base: 'OU',
-    chars: "\u0222",
-  }, {
-    base: 'P',
-    chars: "\u24C5\uFF30\u1E54\u1E56\u01A4\u2C63\uA750\uA752\uA754",
-  }, {
-    base: 'Q',
-    chars: "\u24C6\uFF31\uA756\uA758\u024A",
-  }, {
-    base: 'R',
-    chars: "\u24C7\uFF32\u0154\u1E58\u0158\u0210\u0212\u1E5A\u1E5C\u0156\u1E5E\u024C\u2C64\uA75A\uA7A6\uA782",
-  }, {
-    base: 'S',
-    chars: "\u24C8\uFF33\u1E9E\u015A\u1E64\u015C\u1E60\u0160\u1E66\u1E62\u1E68\u0218\u015E\u2C7E\uA7A8\uA784",
-  }, {
-    base: 'T',
-    chars: "\u24C9\uFF34\u1E6A\u0164\u1E6C\u021A\u0162\u1E70\u1E6E\u0166\u01AC\u01AE\u023E\uA786",
-  }, {
-    base: 'Th',
-    chars: "\u00DE",
-  }, {
-    base: 'TZ',
-    chars: "\uA728",
-  }, {
-    base: 'U',
-    chars: "\u24CA\uFF35\xD9\xDA\xDB\u0168\u1E78\u016A\u1E7A\u016C\xDC\u01DB\u01D7\u01D5\u01D9\u1EE6\u016E\u0170\u01D3\u0214\u0216\u01AF\u1EEA\u1EE8\u1EEE\u1EEC\u1EF0\u1EE4\u1E72\u0172\u1E76\u1E74\u0244",
-  }, {
-    base: 'V',
-    chars: "\u24CB\uFF36\u1E7C\u1E7E\u01B2\uA75E\u0245",
-  }, {
-    base: 'VY',
-    chars: "\uA760",
-  }, {
-    base: 'W',
-    chars: "\u24CC\uFF37\u1E80\u1E82\u0174\u1E86\u1E84\u1E88\u2C72",
-  }, {
-    base: 'X',
-    chars: "\u24CD\uFF38\u1E8A\u1E8C",
-  }, {
-    base: 'Y',
-    chars: "\u24CE\uFF39\u1EF2\xDD\u0176\u1EF8\u0232\u1E8E\u0178\u1EF6\u1EF4\u01B3\u024E\u1EFE",
-  }, {
-    base: 'Z',
-    chars: "\u24CF\uFF3A\u0179\u1E90\u017B\u017D\u1E92\u1E94\u01B5\u0224\u2C7F\u2C6B\uA762",
-  }, {
-    base: 'a',
-    chars: "\u24D0\uFF41\u1E9A\u00E0\u00E1\u00E2\u1EA7\u1EA5\u1EAB\u1EA9\u00E3\u0101\u0103\u1EB1\u1EAF\u1EB5\u1EB3\u0227\u01E1\u00E4\u01DF\u1EA3\u00E5\u01FB\u01CE\u0201\u0203\u1EA1\u1EAD\u1EB7\u1E01\u0105\u2C65\u0250\u0251",
-  }, {
-    base: 'aa',
-    chars: "\uA733",
-  }, {
-    base: 'ae',
-    chars: "\u00E6\u01FD\u01E3",
-  }, {
-    base: 'ao',
-    chars: "\uA735",
-  }, {
-    base: 'au',
-    chars: "\uA737",
-  }, {
-    base: 'av',
-    chars: "\uA739\uA73B",
-  }, {
-    base: 'ay',
-    chars: "\uA73D",
-  }, {
-    base: 'b',
-    chars: "\u24D1\uFF42\u1E03\u1E05\u1E07\u0180\u0183\u0253\u0182",
-  }, {
-    base: 'c',
-    chars: "\uFF43\u24D2\u0107\u0109\u010B\u010D\u00E7\u1E09\u0188\u023C\uA73F\u2184",
-  }, {
-    base: 'd',
-    chars: "\u24D3\uFF44\u1E0B\u010F\u1E0D\u1E11\u1E13\u1E0F\u0111\u018C\u0256\u0257\u018B\u13E7\u0501\uA7AA",
-  }, {
-    base: 'dh',
-    chars: "\u00F0",
-  }, {
-    base: 'dz',
-    chars: "\u01F3\u01C6",
-  }, {
-    base: 'e',
-    chars: "\u24D4\uFF45\u00E8\u00E9\u00EA\u1EC1\u1EBF\u1EC5\u1EC3\u1EBD\u0113\u1E15\u1E17\u0115\u0117\u00EB\u1EBB\u011B\u0205\u0207\u1EB9\u1EC7\u0229\u1E1D\u0119\u1E19\u1E1B\u0247\u01DD",
-  }, {
-    base: 'f',
-    chars: "\u24D5\uFF46\u1E1F\u0192",
-  }, {
-    base: 'ff',
-    chars: "\uFB00",
-  }, {
-    base: 'fi',
-    chars: "\uFB01",
-  }, {
-    base: 'fl',
-    chars: "\uFB02",
-  }, {
-    base: 'ffi',
-    chars: "\uFB03",
-  }, {
-    base: 'ffl',
-    chars: "\uFB04",
-  }, {
-    base: 'g',
-    chars: "\u24D6\uFF47\u01F5\u011D\u1E21\u011F\u0121\u01E7\u0123\u01E5\u0260\uA7A1\uA77F\u1D79",
-  }, {
-    base: 'h',
-    chars: "\u24D7\uFF48\u0125\u1E23\u1E27\u021F\u1E25\u1E29\u1E2B\u1E96\u0127\u2C68\u2C76\u0265",
-  }, {
-    base: 'hv',
-    chars: "\u0195",
-  }, {
-    base: 'i',
-    chars: "\u24D8\uFF49\xEC\xED\xEE\u0129\u012B\u012D\xEF\u1E2F\u1EC9\u01D0\u0209\u020B\u1ECB\u012F\u1E2D\u0268\u0131",
-  }, {
-    base: 'j',
-    chars: "\u24D9\uFF4A\u0135\u01F0\u0249",
-  }, {
-    base: 'k',
-    chars: "\u24DA\uFF4B\u1E31\u01E9\u1E33\u0137\u1E35\u0199\u2C6A\uA741\uA743\uA745\uA7A3",
-  }, {
-    base: 'l',
-    chars: "\u24DB\uFF4C\u0140\u013A\u013E\u1E37\u1E39\u013C\u1E3D\u1E3B\u017F\u0142\u019A\u026B\u2C61\uA749\uA781\uA747\u026D",
-  }, {
-    base: 'lj',
-    chars: "\u01C9",
-  }, {
-    base: 'm',
-    chars: "\u24DC\uFF4D\u1E3F\u1E41\u1E43\u0271\u026F",
-  }, {
-    base: 'n',
-    chars: "\u24DD\uFF4E\u01F9\u0144\xF1\u1E45\u0148\u1E47\u0146\u1E4B\u1E49\u019E\u0272\u0149\uA791\uA7A5\u043B\u0509",
-  }, {
-    base: 'nj',
-    chars: "\u01CC",
-  }, {
-    base: 'o',
-    chars: "\u24DE\uFF4F\xF2\xF3\xF4\u1ED3\u1ED1\u1ED7\u1ED5\xF5\u1E4D\u022D\u1E4F\u014D\u1E51\u1E53\u014F\u022F\u0231\xF6\u022B\u1ECF\u0151\u01D2\u020D\u020F\u01A1\u1EDD\u1EDB\u1EE1\u1EDF\u1EE3\u1ECD\u1ED9\u01EB\u01ED\xF8\u01FF\uA74B\uA74D\u0275\u0254\u1D11",
-  }, {
-    base: 'oe',
-    chars: "\u0153",
-  }, {
-    base: 'oi',
-    chars: "\u01A3",
-  }, {
-    base: 'oo',
-    chars: "\uA74F",
-  }, {
-    base: 'ou',
-    chars: "\u0223",
-  }, {
-    base: 'p',
-    chars: "\u24DF\uFF50\u1E55\u1E57\u01A5\u1D7D\uA751\uA753\uA755\u03C1",
-  }, {
-    base: 'q',
-    chars: "\u24E0\uFF51\u024B\uA757\uA759",
-  }, {
-    base: 'r',
-    chars: "\u24E1\uFF52\u0155\u1E59\u0159\u0211\u0213\u1E5B\u1E5D\u0157\u1E5F\u024D\u027D\uA75B\uA7A7\uA783",
-  }, {
-    base: 's',
-    chars: "\u24E2\uFF53\u015B\u1E65\u015D\u1E61\u0161\u1E67\u1E63\u1E69\u0219\u015F\u023F\uA7A9\uA785\u1E9B\u0282",
-  }, {
-    base: 'ss',
-    chars: "\xDF",
-  }, {
-    base: 't',
-    chars: "\u24E3\uFF54\u1E6B\u1E97\u0165\u1E6D\u021B\u0163\u1E71\u1E6F\u0167\u01AD\u0288\u2C66\uA787",
-  }, {
-    base: 'th',
-    chars: "\u00FE",
-  }, {
-    base: 'tz',
-    chars: "\uA729",
-  }, {
-    base: 'u',
-    chars: "\u24E4\uFF55\xF9\xFA\xFB\u0169\u1E79\u016B\u1E7B\u016D\xFC\u01DC\u01D8\u01D6\u01DA\u1EE7\u016F\u0171\u01D4\u0215\u0217\u01B0\u1EEB\u1EE9\u1EEF\u1EED\u1EF1\u1EE5\u1E73\u0173\u1E77\u1E75\u0289",
-  }, {
-    base: 'v',
-    chars: "\u24E5\uFF56\u1E7D\u1E7F\u028B\uA75F\u028C",
-  }, {
-    base: 'vy',
-    chars: "\uA761",
-  }, {
-    base: 'w',
-    chars: "\u24E6\uFF57\u1E81\u1E83\u0175\u1E87\u1E85\u1E98\u1E89\u2C73",
-  }, {
-    base: 'x',
-    chars: "\u24E7\uFF58\u1E8B\u1E8D",
-  }, {
-    base: 'y',
-    chars: "\u24E8\uFF59\u1EF3\xFD\u0177\u1EF9\u0233\u1E8F\xFF\u1EF7\u1E99\u1EF5\u01B4\u024F\u1EFF",
-  }, {
-    base: 'z',
-    chars: "\u24E9\uFF5A\u017A\u1E91\u017C\u017E\u1E93\u1E95\u01B6\u0225\u0240\u2C6C\uA763",
-  }
-];
-
-var diacriticsMap = {};
-for (var i$1 = 0; i$1 < replacementList.length; i$1 += 1) {
-  var chars = replacementList[i$1].chars;
-  for (var j = 0; j < chars.length; j += 1) {
-    diacriticsMap[chars[j]] = replacementList[i$1].base;
-  }
-}
-
-function removeDiacritics(str) {
-  return str.replace(/[^\u0000-\u007e]/g, function(c) {
-    return diacriticsMap[c] || c;
-  });
-}
-
-var replacementList_1 = replacementList;
-var diacriticsMap_1 = diacriticsMap;
-
-var diacritics = {
-	remove: remove,
-	replacementList: replacementList_1,
-	diacriticsMap: diacriticsMap_1
-};
-
-function indicesOf(text, searchStringOrRegex) {
-  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-      _ref$caseSensitive = _ref.caseSensitive,
-      caseSensitive = _ref$caseSensitive === undefined ? false : _ref$caseSensitive,
-      _ref$diacriticsSensit = _ref.diacriticsSensitive,
-      diacriticsSensitive = _ref$diacriticsSensit === undefined ? false : _ref$diacriticsSensit;
-
-  if (searchStringOrRegex instanceof RegExp) {
-    var re = cloneRegexp(searchStringOrRegex, { global: true });
-    var _indices = [];
-
-    var match = re.exec(text);
-    while (match) {
-      var offset = match.index + match[0].length;
-      _indices.push([match.index, offset]);
-      match = re.exec(text);
-    }
-    return _indices;
-  }
-  var searchStringLen = searchStringOrRegex.length;
-
-  if (searchStringLen === 0) {
-    return [];
-  }
-
-  var indices = [];
-
-  var strCpy = text;
-  var searchStringCpy = searchStringOrRegex;
-  if (!caseSensitive) {
-    strCpy = text.toLocaleLowerCase();
-    searchStringCpy = searchStringOrRegex.toLocaleLowerCase();
-  }
-
-  if (!diacriticsSensitive) {
-    strCpy = diacritics.remove(strCpy);
-    searchStringCpy = diacritics.remove(searchStringCpy);
-  }
-
-  var startIndex = 0;
-  var index = strCpy.indexOf(searchStringCpy, startIndex);
-  while (index > -1) {
-    startIndex = index + searchStringLen;
-    indices.push([index, startIndex]);
-
-    index = strCpy.indexOf(searchStringCpy, index + 1);
-  }
-
-  return indices;
-}
-
-var toArray = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-
-
-
-var _from2 = _interopRequireDefault(from_1$1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (arr) {
-  return Array.isArray(arr) ? arr : (0, _from2.default)(arr);
-};
-});
-
-var _toArray = unwrapExports(toArray);
-
-function mergeRange(_ref) {
-  var _ref2 = _toArray(_ref),
-      ranges = _ref2.slice(0);
-
-  if (!ranges.length) return [];
-
-  ranges.sort(function (fir, sec) {
-    if (fir[0] !== sec[0]) return fir[0] - sec[0];
-    return fir[1] - sec[1];
-  });
-
-  var merged = [];
-
-  var curStart = ranges[0][0];
-  var curEnd = ranges[0][1];
-
-  ranges.shift();
-
-  ranges.forEach(function (_ref3) {
-    var _ref4 = _slicedToArray(_ref3, 2),
-        start = _ref4[0],
-        end = _ref4[1];
-
-    if (start >= curEnd) {
-      merged.push([curStart, curEnd]);
-      curStart = start;
-      curEnd = end;
-    } else if (end > curEnd) curEnd = end;
-  });
-
-  merged.push([curStart, curEnd]);
-
-  return merged;
-}
-
-function highlightChunks(text, queriesOrQuery) {
-  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-      _ref$caseSensitive = _ref.caseSensitive,
-      caseSensitive = _ref$caseSensitive === undefined ? false : _ref$caseSensitive,
-      _ref$diacriticsSensit = _ref.diacriticsSensitive,
-      diacriticsSensitive = _ref$diacriticsSensit === undefined ? false : _ref$diacriticsSensit;
-
-  var queries = queriesOrQuery;
-  if (typeof queriesOrQuery === 'string' || queriesOrQuery instanceof RegExp) {
-    queries = [queriesOrQuery];
-  } else if (!Array.isArray(queriesOrQuery)) {
-    if (true) {
-      throw new Error('queries must be either string, array of strings or regex.');
-    } else {}
-  }
-
-  var matches = [];
-
-  queries.forEach(function (query) {
-    matches.push.apply(matches, _toConsumableArray(indicesOf(text, query, { caseSensitive: caseSensitive, diacriticsSensitive: diacriticsSensitive })));
-  });
-
-  var highlights = mergeRange(matches);
-
-  var chunks = [];
-  var lastEnd = 0;
-
-  highlights.forEach(function (_ref2, index) {
-    var _ref3 = _slicedToArray(_ref2, 2),
-        start = _ref3[0],
-        end = _ref3[1];
-
-    if (lastEnd !== start) {
-      chunks.push({
-        isHighlighted: false,
-        text: text.slice(lastEnd, start)
-      });
-    }
-    chunks.push({
-      isHighlighted: true,
-      text: text.slice(start, end),
-      highlightIndex: index
-    });
-
-    lastEnd = end;
-  });
-
-  if (lastEnd !== text.length) {
-    chunks.push({
-      isHighlighted: false,
-      text: text.slice(lastEnd)
-    });
-  }
-
-  return chunks;
-}
-
-var classAndStyleTypes = [Object, Array, String];
-
-var script = {
-  name: 'text-highlight',
-  props: {
-    queries: [Array, String, RegExp],
-    caseSensitive: Boolean,
-    diacriticsSensitive: Boolean,
-    highlightStyle: classAndStyleTypes,
-    highlightClass: classAndStyleTypes,
-    highlightComponent: {
-      type: [String, Object],
-      default: 'mark'
-    }
-  },
-  data: function data() {
+  EditableCaret.prototype.getOldIEOffset = function() {
+    var range, rect;
+    range = oDocument.selection.createRange().duplicate();
+    range.moveStart("character", -1);
+    rect = range.getBoundingClientRect();
     return {
-      text: ''
+      height: rect.bottom - rect.top,
+      left: rect.left,
+      top: rect.top
     };
-  },
-
-  /**
-   * Unless `h` is given as parameter, testing (Jest) will yield error:
-   *    TypeError: unknown: Duplicate declaration "h"
-   *    (This is an error on an internal node. Probably an internal error)
-   *
-   * Seems babel-plugin-transform-vue-jsx make strange behaivor.
-   *
-   * Related issue: https://github.com/storybooks/storybook/issues/2727
-   */
-  /* eslint-disable-next-line no-unused-vars */
-  render: function render(h) {
-    var _this = this;
-
-    return h('span', [this.highlights.map(function (_ref) {
-      var text = _ref.text,
-          isHighlighted = _ref.isHighlighted,
-          highlightIndex = _ref.highlightIndex;
-      return !isHighlighted ? text : h(
-        _this.highlightComponent,
-        babelHelperVueJsxMergeProps([{
-          'class': ['text__highlight', _this.highlightClass],
-          style: _this.highlightStyle,
-          key: highlightIndex,
-          attrs: { index: highlightIndex,
-            text: text
-          }
-        }, _this.attributes]),
-        [text]
-      );
-    })]);
-  },
-  beforeMount: function beforeMount() {
-    this.setTextFromSlot();
-  },
-  beforeUpdate: function beforeUpdate() {
-    this.setTextFromSlot();
-  },
-
-  methods: {
-    setTextFromSlot: function setTextFromSlot() {
-      var defaultSlot = this.$slots.default;
-
-      if (!defaultSlot) this.text = '';else if (defaultSlot[0].tag !== undefined && "development" !== 'production') {
-        /* eslint-disable-next-line no-console */
-        console.warn('children of <text-highlight> must be a plain string.');
-        this.text = '';
-      } else {
-        this.text = defaultSlot[0].text;
-      }
-    }
-  },
-  computed: {
-    attributes: function attributes() {
-      return {
-        props: this.$attrs,
-        on: this.$listeners
-      };
-    },
-    highlights: function highlights() {
-      var text = this.text,
-          queries = this.queries,
-          caseSensitive = this.caseSensitive,
-          diacriticsSensitive = this.diacriticsSensitive;
-
-      return highlightChunks(text, queries, { caseSensitive: caseSensitive, diacriticsSensitive: diacriticsSensitive });
-    }
-  }
-};
-
-function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
-/* server only */
-, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
-  if (typeof shadowMode !== 'boolean') {
-    createInjectorSSR = createInjector;
-    createInjector = shadowMode;
-    shadowMode = false;
-  } // Vue.extend constructor export interop.
-
-
-  var options = typeof script === 'function' ? script.options : script; // render functions
-
-  if (template && template.render) {
-    options.render = template.render;
-    options.staticRenderFns = template.staticRenderFns;
-    options._compiled = true; // functional template
-
-    if (isFunctionalTemplate) {
-      options.functional = true;
-    }
-  } // scopedId
-
-
-  if (scopeId) {
-    options._scopeId = scopeId;
-  }
-
-  var hook;
-
-  if (moduleIdentifier) {
-    // server build
-    hook = function hook(context) {
-      // 2.3 injection
-      context = context || // cached call
-      this.$vnode && this.$vnode.ssrContext || // stateful
-      this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext; // functional
-      // 2.2 with runInNewContext: true
-
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__;
-      } // inject component styles
-
-
-      if (style) {
-        style.call(this, createInjectorSSR(context));
-      } // register component module identifier for async chunk inference
-
-
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier);
-      }
-    }; // used by ssr in case component is cached and beforeCreate
-    // never gets called
-
-
-    options._ssrRegister = hook;
-  } else if (style) {
-    hook = shadowMode ? function () {
-      style.call(this, createInjectorShadow(this.$root.$options.shadowRoot));
-    } : function (context) {
-      style.call(this, createInjector(context));
-    };
-  }
-
-  if (hook) {
-    if (options.functional) {
-      // register for functional component in vue file
-      var originalRender = options.render;
-
-      options.render = function renderWithStyleInjection(h, context) {
-        hook.call(context);
-        return originalRender(h, context);
-      };
-    } else {
-      // inject component registration as beforeCreate hook
-      var existing = options.beforeCreate;
-      options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
-    }
-  }
-
-  return script;
-}
-
-var normalizeComponent_1 = normalizeComponent;
-
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-function createInjector(context) {
-  return function (id, style) {
-    return addStyle(id, style);
   };
-}
-var HEAD = document.head || document.getElementsByTagName('head')[0];
-var styles = {};
 
-function addStyle(id, css) {
-  var group = isOldIE ? css.media || 'default' : id;
-  var style = styles[group] || (styles[group] = {
-    ids: new Set(),
-    styles: []
-  });
-
-  if (!style.ids.has(id)) {
-    style.ids.add(id);
-    var code = css.source;
-
-    if (css.map) {
-      // https://developer.chrome.com/devtools/docs/javascript-debugging
-      // this makes source maps inside style tags work properly in Chrome
-      code += '\n/*# sourceURL=' + css.map.sources[0] + ' */'; // http://stackoverflow.com/a/26603875
-
-      code += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) + ' */';
+  EditableCaret.prototype.getOffset = function(pos) {
+    var clonedRange, offset, range, rect, shadowCaret;
+    if (oWindow.getSelection && (range = this.range())) {
+      if (range.endOffset - 1 > 0 && range.endContainer !== this.domInputor) {
+        clonedRange = range.cloneRange();
+        clonedRange.setStart(range.endContainer, range.endOffset - 1);
+        clonedRange.setEnd(range.endContainer, range.endOffset);
+        rect = clonedRange.getBoundingClientRect();
+        offset = {
+          height: rect.height,
+          left: rect.left + rect.width,
+          top: rect.top
+        };
+        clonedRange.detach();
+      }
+      if (!offset || (offset != null ? offset.height : void 0) === 0) {
+        clonedRange = range.cloneRange();
+        shadowCaret = $(oDocument.createTextNode("|"));
+        clonedRange.insertNode(shadowCaret[0]);
+        clonedRange.selectNode(shadowCaret[0]);
+        rect = clonedRange.getBoundingClientRect();
+        offset = {
+          height: rect.height,
+          left: rect.left,
+          top: rect.top
+        };
+        shadowCaret.remove();
+        clonedRange.detach();
+      }
+    } else if (oDocument.selection) {
+      offset = this.getOldIEOffset();
     }
-
-    if (!style.element) {
-      style.element = document.createElement('style');
-      style.element.type = 'text/css';
-      if (css.media) style.element.setAttribute('media', css.media);
-      HEAD.appendChild(style.element);
+    if (offset) {
+      offset.top += $(oWindow).scrollTop();
+      offset.left += $(oWindow).scrollLeft();
     }
+    return offset;
+  };
 
-    if ('styleSheet' in style.element) {
-      style.styles.push(code);
-      style.element.styleSheet.cssText = style.styles.filter(Boolean).join('\n');
+  EditableCaret.prototype.range = function() {
+    var sel;
+    if (!oWindow.getSelection) {
+      return;
+    }
+    sel = oWindow.getSelection();
+    if (sel.rangeCount > 0) {
+      return sel.getRangeAt(0);
     } else {
-      var index = style.ids.size - 1;
-      var textNode = document.createTextNode(code);
-      var nodes = style.element.childNodes;
-      if (nodes[index]) style.element.removeChild(nodes[index]);
-      if (nodes.length) style.element.insertBefore(textNode, nodes[index]);else style.element.appendChild(textNode);
+      return null;
     }
+  };
+
+  return EditableCaret;
+
+})();
+
+InputCaret = (function() {
+  function InputCaret($inputor) {
+    this.$inputor = $inputor;
+    this.domInputor = this.$inputor[0];
   }
-}
 
-var browser = createInjector;
+  InputCaret.prototype.getIEPos = function() {
+    var endRange, inputor, len, normalizedValue, pos, range, textInputRange;
+    inputor = this.domInputor;
+    range = oDocument.selection.createRange();
+    pos = 0;
+    if (range && range.parentElement() === inputor) {
+      normalizedValue = inputor.value.replace(/\r\n/g, "\n");
+      len = normalizedValue.length;
+      textInputRange = inputor.createTextRange();
+      textInputRange.moveToBookmark(range.getBookmark());
+      endRange = inputor.createTextRange();
+      endRange.collapse(false);
+      if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+        pos = len;
+      } else {
+        pos = -textInputRange.moveStart("character", -len);
+      }
+    }
+    return pos;
+  };
 
-/* script */
-var __vue_script__ = script;
+  InputCaret.prototype.getPos = function() {
+    if (oDocument.selection) {
+      return this.getIEPos();
+    } else {
+      return this.domInputor.selectionStart;
+    }
+  };
 
-/* template */
+  InputCaret.prototype.setPos = function(pos) {
+    var inputor, range;
+    inputor = this.domInputor;
+    if (oDocument.selection) {
+      range = inputor.createTextRange();
+      range.move("character", pos);
+      range.select();
+    } else if (inputor.setSelectionRange) {
+      inputor.setSelectionRange(pos, pos);
+    }
+    return inputor;
+  };
 
-/* style */
-var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
-  if (!inject) return;
-  inject("data-v-f670ad86_0", { source: ".text__highlight{background:#fc0;border-radius:3px}", map: undefined, media: undefined });
+  InputCaret.prototype.getIEOffset = function(pos) {
+    var h, textRange, x, y;
+    textRange = this.domInputor.createTextRange();
+    pos || (pos = this.getPos());
+    textRange.move('character', pos);
+    x = textRange.boundingLeft;
+    y = textRange.boundingTop;
+    h = textRange.boundingHeight;
+    return {
+      left: x,
+      top: y,
+      height: h
+    };
+  };
+
+  InputCaret.prototype.getOffset = function(pos) {
+    var $inputor, offset, position;
+    $inputor = this.$inputor;
+    if (oDocument.selection) {
+      offset = this.getIEOffset(pos);
+      offset.top += $(oWindow).scrollTop() + $inputor.scrollTop();
+      offset.left += $(oWindow).scrollLeft() + $inputor.scrollLeft();
+      return offset;
+    } else {
+      offset = $inputor.offset();
+      position = this.getPosition(pos);
+      return offset = {
+        left: offset.left + position.left - $inputor.scrollLeft(),
+        top: offset.top + position.top - $inputor.scrollTop(),
+        height: position.height
+      };
+    }
+  };
+
+  InputCaret.prototype.getPosition = function(pos) {
+    var $inputor, at_rect, end_range, format, html, mirror, start_range;
+    $inputor = this.$inputor;
+    format = function(value) {
+      value = value.replace(/<|>|`|"|&/g, '?').replace(/\r\n|\r|\n/g, "<br/>");
+      if (/firefox/i.test(navigator.userAgent)) {
+        value = value.replace(/\s/g, '&nbsp;');
+      }
+      return value;
+    };
+    if (pos === void 0) {
+      pos = this.getPos();
+    }
+    start_range = $inputor.val().slice(0, pos);
+    end_range = $inputor.val().slice(pos);
+    html = "<span style='position: relative; display: inline;'>" + format(start_range) + "</span>";
+    html += "<span id='caret' style='position: relative; display: inline;'>|</span>";
+    html += "<span style='position: relative; display: inline;'>" + format(end_range) + "</span>";
+    mirror = new Mirror($inputor);
+    return at_rect = mirror.create(html).rect();
+  };
+
+  InputCaret.prototype.getIEPosition = function(pos) {
+    var h, inputorOffset, offset, x, y;
+    offset = this.getIEOffset(pos);
+    inputorOffset = this.$inputor.offset();
+    x = offset.left - inputorOffset.left;
+    y = offset.top - inputorOffset.top;
+    h = offset.height;
+    return {
+      left: x,
+      top: y,
+      height: h
+    };
+  };
+
+  return InputCaret;
+
+})();
+
+Mirror = (function() {
+  Mirror.prototype.css_attr = ["borderBottomWidth", "borderLeftWidth", "borderRightWidth", "borderTopStyle", "borderRightStyle", "borderBottomStyle", "borderLeftStyle", "borderTopWidth", "boxSizing", "fontFamily", "fontSize", "fontWeight", "height", "letterSpacing", "lineHeight", "marginBottom", "marginLeft", "marginRight", "marginTop", "outlineWidth", "overflow", "overflowX", "overflowY", "paddingBottom", "paddingLeft", "paddingRight", "paddingTop", "textAlign", "textOverflow", "textTransform", "whiteSpace", "wordBreak", "wordWrap"];
+
+  function Mirror($inputor) {
+    this.$inputor = $inputor;
+  }
+
+  Mirror.prototype.mirrorCss = function() {
+    var css,
+      _this = this;
+    css = {
+      position: 'absolute',
+      left: -9999,
+      top: 0,
+      zIndex: -20000
+    };
+    if (this.$inputor.prop('tagName') === 'TEXTAREA') {
+      this.css_attr.push('width');
+    }
+    $.each(this.css_attr, function(i, p) {
+      return css[p] = _this.$inputor.css(p);
+    });
+    return css;
+  };
+
+  Mirror.prototype.create = function(html) {
+    this.$mirror = $('<div></div>');
+    this.$mirror.css(this.mirrorCss());
+    this.$mirror.html(html);
+    this.$inputor.after(this.$mirror);
+    return this;
+  };
+
+  Mirror.prototype.rect = function() {
+    var $flag, pos, rect;
+    $flag = this.$mirror.find("#caret");
+    pos = $flag.position();
+    rect = {
+      left: pos.left,
+      top: pos.top,
+      height: $flag.height()
+    };
+    this.$mirror.remove();
+    return rect;
+  };
+
+  return Mirror;
+
+})();
+
+Utils = {
+  contentEditable: function($inputor) {
+    return !!($inputor[0].contentEditable && $inputor[0].contentEditable === 'true');
+  }
 };
-/* scoped */
-var __vue_scope_id__ = undefined;
-/* module identifier */
-var __vue_module_identifier__ = undefined;
-/* functional template */
-var __vue_is_functional_template__ = undefined;
-/* style inject SSR */
 
-var TextHighlight = normalizeComponent_1({}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, browser, undefined);
+methods = {
+  pos: function(pos) {
+    if (pos || pos === 0) {
+      return this.setPos(pos);
+    } else {
+      return this.getPos();
+    }
+  },
+  position: function(pos) {
+    if (oDocument.selection) {
+      return this.getIEPosition(pos);
+    } else {
+      return this.getPosition(pos);
+    }
+  },
+  offset: function(pos) {
+    var offset;
+    offset = this.getOffset(pos);
+    return offset;
+  }
+};
 
-/* harmony default export */ __webpack_exports__["default"] = (TextHighlight);
+oDocument = null;
+
+oWindow = null;
+
+oFrame = null;
+
+setContextBy = function(settings) {
+  var iframe;
+  if (iframe = settings != null ? settings.iframe : void 0) {
+    oFrame = iframe;
+    oWindow = iframe.contentWindow;
+    return oDocument = iframe.contentDocument || oWindow.document;
+  } else {
+    oFrame = void 0;
+    oWindow = window;
+    return oDocument = document;
+  }
+};
+
+discoveryIframeOf = function($dom) {
+  var error;
+  oDocument = $dom[0].ownerDocument;
+  oWindow = oDocument.defaultView || oDocument.parentWindow;
+  try {
+    return oFrame = oWindow.frameElement;
+  } catch (_error) {
+    error = _error;
+  }
+};
+
+$.fn.caret = function(method, value, settings) {
+  var caret;
+  if (methods[method]) {
+    if ($.isPlainObject(value)) {
+      setContextBy(value);
+      value = void 0;
+    } else {
+      setContextBy(settings);
+    }
+    caret = Utils.contentEditable(this) ? new EditableCaret(this) : new InputCaret(this);
+    return methods[method].apply(caret, [value]);
+  } else {
+    return $.error("Method " + method + " does not exist on jQuery.caret");
+  }
+};
+
+$.fn.caret.EditableCaret = EditableCaret;
+
+$.fn.caret.InputCaret = InputCaret;
+
+$.fn.caret.Utils = Utils;
+
+$.fn.caret.apis = methods;
+
+
+}));
 
 
 /***/ })
