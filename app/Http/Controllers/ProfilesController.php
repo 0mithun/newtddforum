@@ -20,6 +20,13 @@ class ProfilesController extends Controller {
      */
     public function show( $user ) {
         $authUser = auth()->user();
+        $friend = User::where( 'username', $user )
+            ->first();
+
+        if ( $authUser->isBlockedBy( $friend ) || $authUser->hasBlocked( $friend ) ) {
+            return redirect( '/' );
+        }
+
         $usredata = User::
             with( 'userprivacy' )->
             where( 'username', $user )
@@ -35,8 +42,6 @@ class ProfilesController extends Controller {
                 // 'activities' => Activity::feed($usredata)
             ] );
         } else {
-            $friend = User::where( 'username', $user )
-                ->first();
             $isFriend = $authUser->isFriendWith( $friend );
 
             return view( 'profiles.show', [
