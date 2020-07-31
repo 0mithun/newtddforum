@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
-class RegisterController extends Controller
-{
+class RegisterController extends Controller {
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -21,7 +20,7 @@ class RegisterController extends Controller
     | validation and creation. By default this controller uses a trait to
     | provide this functionality without requiring any additional code.
     |
-    */
+     */
 
     use RegistersUsers;
 
@@ -30,16 +29,15 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('guest');
+    public function __construct() {
+        $this->middleware( 'guest' );
     }
 
     /**
@@ -48,15 +46,14 @@ class RegisterController extends Controller
      * @param  array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
+    protected function validator( array $data ) {
+        return Validator::make( $data, [
             'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'username' =>  'required|max:40|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
+            'last_name'  => 'required|max:255',
+            'email'      => 'required|email|max:255|unique:users',
+            'username'   => 'required|max:40|unique:users',
+            'password'   => 'required|min:6|confirmed',
+        ] );
     }
 
     /**
@@ -65,20 +62,20 @@ class RegisterController extends Controller
      * @param  array $data
      * @return User
      */
-    protected function create(array $data)
-    {
-        $arr_ip = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
-        return User::forceCreate([
-            'name' => $data['first_name'] ." ". $data['last_name'],
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'username'  => $data['username'],
-            'password' => bcrypt($data['password']),
-            'confirmation_token' => str_limit(md5($data['email'] . str_random()), 25, ''),
-            'lat'           =>  $arr_ip['lat'],
-            'lng'           =>  $arr_ip['lon'],   
-        ]);
+    protected function create( array $data ) {
+        $arr_ip = geoip()->getLocation( $_SERVER['REMOTE_ADDR'] );
+
+        return User::forceCreate( [
+            'name'               => $data['first_name'] . " " . $data['last_name'],
+            'first_name'         => $data['first_name'],
+            'last_name'          => $data['last_name'],
+            'email'              => $data['email'],
+            'username'           => $data['username'],
+            'password'           => bcrypt( $data['password'] ),
+            'confirmation_token' => str_limit( md5( $data['email'] . str_random() ), 25, '' ),
+            'lat'                => $arr_ip['lat'],
+            'lng'                => $arr_ip['lon'],
+        ] );
     }
 
     /**
@@ -88,8 +85,19 @@ class RegisterController extends Controller
      * @param  \App\User                $user
      * @return void
      */
-    protected function registered(Request $request, $user)
-    {
-        Mail::to($user)->send(new PleaseConfirmYourEmail($user));
+    protected function registered( Request $request, $user ) {
+        Mail::to( $user )->send( new PleaseConfirmYourEmail( $user ) );
     }
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm() {
+        $pageTitle = 'Register';
+
+        return view( 'auth.register', compact( 'pageTitle' ) );
+    }
+
 }

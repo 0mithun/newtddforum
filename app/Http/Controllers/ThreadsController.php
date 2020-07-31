@@ -314,18 +314,23 @@ class ThreadsController extends Controller {
     /**
      * Get Threads by tag
      */
-    public function loadByTag( $tag ) {
-        $tag = Tags::where( 'name', \request( 'tag' ) )->first();
+    public function loadByTag( $tagname ) {
+        $tag = Tags::where( 'name', \request( 'tagname' ) )->first();
 
-        if ( $tag ) {
-            $threads = $tag->threads;
-            $trending = $trending->get();
-            $pageTitle = 'Tag. ' . $tag->name;
+        if ( !$tag ) {
+            $channel = Channel::where( 'name', ucfirst( $tagname ) )->first();
+            if ( $channel ) {
+                $tag = Tags::create( ['name' => strtolower( $channel->name )] );
 
-            return view( 'threads.threeadsbytag', compact( 'tag', 'pageTitle' ) );
-        } else {
-            abort( 404 );
+            } else {
+                abort( 404 );
+            }
         }
+
+        $pageTitle = 'Tag: ' . $tag->name;
+        $tag->load( 'threads' );
+
+        return view( 'threads.threadsbytag', compact( 'tag', 'pageTitle' ) );
 
     }
 

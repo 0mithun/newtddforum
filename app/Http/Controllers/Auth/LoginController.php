@@ -51,6 +51,17 @@ class LoginController extends Controller {
         return redirect( '/' );
     }
 
+/**
+ * Show the application's login form.
+ *
+ * @return \Illuminate\Http\Response
+ */
+    public function showLoginForm() {
+        $pageTitle = 'Login';
+
+        return view( 'auth.login', compact( 'pageTitle' ) );
+    }
+
     /**
      * Redirect the user to the Facebook authentication page.
      *

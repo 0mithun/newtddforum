@@ -26,7 +26,9 @@ class UserlocationController extends Controller {
             ];
         }
 
-        return view( 'map.show', compact( 'userLocations' ) );
+        $pageTitle = 'Maps';
+
+        return view( 'map.show', compact( 'userLocations', 'pageTitle' ) );
     }
 
     public function showCloset() {
@@ -38,7 +40,9 @@ class UserlocationController extends Controller {
             'lng' => $auth_user->lng,
         ];
 
-        return view( 'map.closet', compact( 'userLocations' ) );
+        $pageTitle = 'Closet maps';
+
+        return view( 'map.closet', compact( 'userLocations', 'pageTitle' ) );
     }
 
     /**

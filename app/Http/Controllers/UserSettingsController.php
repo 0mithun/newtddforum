@@ -8,7 +8,9 @@ class UserSettingsController extends Controller {
     public function index() {
         $settings = auth()->user()->usersetting;
 
-        return view( 'profiles.settings.notifications', compact( 'settings' ) );
+        $pageTitle = 'Profile settings';
+
+        return view( 'profiles.settings.notifications', compact( 'settings', 'pageTitle' ) );
     }
 
     public function update( Request $request ) {
@@ -24,7 +26,9 @@ class UserSettingsController extends Controller {
     public function getPrivacy() {
         $privacy = auth()->user()->userprivacy;
 
-        return view( 'profiles.settings.privacy', compact( 'privacy' ) );
+        $pageTitle = 'Profile Privacy';
+
+        return view( 'profiles.settings.privacy', compact( 'privacy', 'pageTitle' ) );
     }
 
     public function updatePrivacy( Request $request ) {

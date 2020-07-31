@@ -28,6 +28,7 @@ class Tags extends Model {
 
     protected $fillable = [
         'name',
+        'photo',
     ];
     protected $appends = ['profileAvatarPath', 'followType'];
 
@@ -62,7 +63,7 @@ class Tags extends Model {
     }
 
     public function getProfileAvatarPathAttribute( $avatar ) {
-        $avatar = $this->photo == '' ? 'default' : $this->photo;
+        $avatar = $this->photo == '' ? 'images/avatars/default.png' : $this->photo;
         // $avatar = 'images/avatars/default.png';
 
         return asset( $avatar );
