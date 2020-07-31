@@ -32,12 +32,15 @@ class ProfilesController extends Controller {
             where( 'username', $user )
             ->first();
 
+        $pageTitle = 'Profile | ' . $friend->name;
+
         if ( $authUser->username == $user ) {
             return view( 'profiles.show', [
                 'profileUser'        => $usredata,
                 'profileUserPrivacy' => $usredata->userprivacy,
                 'is_owner'           => true,
                 'is_friend'          => false,
+                'pageTitle'          => $pageTitle,
 
                 // 'activities' => Activity::feed($usredata)
             ] );
@@ -49,6 +52,7 @@ class ProfilesController extends Controller {
                 'profileUserPrivacy' => $usredata->userprivacy,
                 'is_owner'           => false,
                 'is_friend'          => $isFriend,
+                'pageTitle'          => $pageTitle,
             ] );
         }
 
@@ -58,7 +62,9 @@ class ProfilesController extends Controller {
         $user = auth()->user();
         $profileUser = $user;
 
-        return view( 'profiles.edit', compact( 'user', 'profileUser' ) );
+        $pageTitle = 'Profile edit information';
+
+        return view( 'profiles.edit', compact( 'user', 'profileUser', 'pageTitle' ) );
 
     }
 
@@ -205,7 +211,9 @@ class ProfilesController extends Controller {
 
         $profileUser = $auth_user;
 
-        return view( 'profiles.avatar', compact( 'profileUser' ) );
+        $pageTitle = 'Update Avatar';
+
+        return view( 'profiles.avatar', compact( 'profileUser', 'pageTitle' ) );
     }
 
     public function settings() {
@@ -215,7 +223,9 @@ class ProfilesController extends Controller {
             return redirect( '/' );
         }
 
-        return view( 'profiles.settings' );
+        $pageTitle = 'Profile settings';
+
+        return view( 'profiles.settings', compact( 'pageTitle' ) );
     }
 
     public function avatarChange( $user ) {

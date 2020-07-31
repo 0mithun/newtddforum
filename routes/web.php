@@ -33,7 +33,7 @@ Route::post( '/map/all-threads', 'UserlocationController@getAllThread' );
 Route::get( 'threads/search', 'SearchController@search' );
 
 Route::get( '/', 'ThreadsController@index' );
-Route::get( '/home', 'ThreadsController@index' );
+
 Route::get( '/trending', 'ThreadsController@getTrending' );
 
 Route::resource( 'threads', 'ThreadsController' )->except( ['show', 'update'] );
@@ -142,8 +142,6 @@ Route::middleware( ['auth'] )->group( function () {
 
     // Route::post('api/users/report','ReportController@user');
     // Route::post('api/users/check-user-report','ReportController@checkUserReport');
-
-    // Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 
     Route::get( '/profiles/{user}', 'ProfilesController@show' )->name( 'profile' );
 

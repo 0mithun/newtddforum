@@ -21,9 +21,12 @@ class SearchController extends Controller {
         } else {
             $threads = $this->filterSearch( $query );
 
+            $pageTitle = 'Search Threads';
+
             return view( 'threads.search', [
-                'threads' => $threads,
-                'query'   => $query,
+                'threads'   => $threads,
+                'query'     => $query,
+                'pageTitle' => $pageTitle,
             ] );
         }
     }

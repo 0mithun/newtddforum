@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Admin;
 use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Http\Requests\CreateThreadRequest;
@@ -78,10 +79,13 @@ class ThreadsController extends Controller {
         if ( request()->wantsJson() ) {
             return $threads;
         }
+        $admin = Admin::first();
 
         return view( 'threads.index', [
-            'threads'  => $threads,
-            'trending' => $trending->get(),
+            'threads'   => $threads,
+            'trending'  => $trending->get(),
+            'pageTitle' => $admin->app_title,
+
         ] );
     }
 
@@ -99,9 +103,10 @@ class ThreadsController extends Controller {
         $trending->push( $thread );
         $thread->increment( 'visits' );
 
-        $relatedThreads = $this->getRelatedThread( $thread );
+        // $relatedThreads = $this->getRelatedThread( $thread );
+        $pageTitle = $thread->title;
 
-        return view( 'threads.show', compact( 'thread', 'relatedThreads' ) );
+        return view( 'threads.show', compact( 'thread', 'pageTitle' ) );
     }
 
     /**
@@ -116,8 +121,9 @@ class ThreadsController extends Controller {
         } );
 
         $channel = Channel::select( ['id', 'name'] )->orderBy( 'name', 'ASC' )->get();
+        $pageTitle = 'Add new Thread';
 
-        return view( 'threads.create', compact( 'tags', 'channel' ) );
+        return view( 'threads.create', compact( 'tags', 'channel', 'pageTitle' ) );
     }
 
     /**
@@ -189,7 +195,9 @@ class ThreadsController extends Controller {
 
         $channel = Channel::select( ['id', 'name'] )->orderBy( 'name', 'ASC' )->get();
 
-        return view( 'threads.edit', compact( 'tags', 'channel', 'thread' ) );
+        $pageTitle = 'Edit: ' . $thread->title;
+
+        return view( 'threads.edit', compact( 'tags', 'channel', 'thread', '$pageTitle' ) );
     }
 
     /**
@@ -306,14 +314,15 @@ class ThreadsController extends Controller {
     /**
      * Get Threads by tag
      */
-    public function loadByTag( $tag, Trending $trending ) {
+    public function loadByTag( $tag ) {
         $tag = Tags::where( 'name', \request( 'tag' ) )->first();
 
         if ( $tag ) {
             $threads = $tag->threads;
             $trending = $trending->get();
+            $pageTitle = 'Tag. ' . $tag->name;
 
-            return view( 'threads.threeadsbytag', compact( 'tag', 'trending' ) );
+            return view( 'threads.threeadsbytag', compact( 'tag', 'pageTitle' ) );
         } else {
             abort( 404 );
         }

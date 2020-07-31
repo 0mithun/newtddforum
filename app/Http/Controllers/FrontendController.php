@@ -16,20 +16,25 @@ class FrontendController extends Controller {
 
     public function tos() {
         $admin = Admin::first();
+        $pageTitle = 'Terms & conditions';
 
-        return view( 'pages.tos', compact( 'admin' ) );
+        return view( 'pages.tos', compact( 'admin', 'pageTitle' ) );
     }
 
     public function faq() {
         $admin = Admin::first();
 
-        return view( 'pages.faq', compact( 'admin' ) );
+        $pageTitle = 'Frequently asked questions';
+
+        return view( 'pages.faq', compact( 'admin', 'pageTitle' ) );
     }
 
     public function privacyPolicy() {
         $admin = Admin::first();
 
-        return view( 'pages.privacypolicy', compact( 'admin' ) );
+        $pageTitle = 'Privacy policy';
+
+        return view( 'pages.privacypolicy', compact( 'admin', 'pageTitle' ) );
     }
 
     public function contactAdmin( Recaptcha $recaptcha ) {
@@ -54,12 +59,12 @@ class FrontendController extends Controller {
         $tags = Tags::withCount( 'threads' )->orderBy( 'threads_count', 'desc' )->take( 100 )->get();
         //return response()->json($tags);
         $tags = json_encode( $tags );
+        $pageTitle = 'All Tags';
 
-        return view( 'threads.tags', compact( 'tags' ) );
+        return view( 'threads.tags', compact( 'tags', 'pageTitle' ) );
     }
 
     public function allTags() {
-        // return response()->json( Tags::orderBy( 'name' )->get() );
         $tags = Tags::orderBy( 'name', 'ASC' )->get()->pluck( 'name' );
 
         return response()->json( $tags );

@@ -4,16 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Thread;
 
-class ThreadSubscriptionsController extends Controller
-{
+class ThreadSubscriptionsController extends Controller {
     /**
      * Store a new thread subscription.
      *
      * @param int    $channelId
      * @param Thread $thread
      */
-    public function store($channelId, Thread $thread)
-    {
+    public function store( $channelId, Thread $thread ) {
         $thread->subscribe();
     }
 
@@ -23,8 +21,7 @@ class ThreadSubscriptionsController extends Controller
      * @param int    $channelId
      * @param Thread $thread
      */
-    public function destroy($channelId, Thread $thread)
-    {
+    public function destroy( $channelId, Thread $thread ) {
         $thread->unsubscribe();
     }
 
@@ -32,22 +29,15 @@ class ThreadSubscriptionsController extends Controller
      * Check thread is subscribed
      */
 
-    public function checkSubscribe(){
-        //return request()->all();
+    public function checkSubscribe() {
+        $threadId = request( 'thread' );
+        $thread = Thread::where( 'id', $threadId )->first();
 
-        $threadId = request('thread');
-        $thread = Thread::where('id', $threadId)->first();
-
-        
-        // $subscribed = $thread->subscriptions()
-        //     ->where('user_id', auth()->id())
-        //     ->exists();
-            
-        if($thread->isSubscribedTo){
-            return response()->json(['subscribed'=>true]);
+        if ( $thread->isSubscribedTo ) {
+            return response()->json( ['subscribed' => true] );
         }
-        return response()->json(['subscribed'=>false]);
-     
+
+        return response()->json( ['subscribed' => false] );
 
     }
 }

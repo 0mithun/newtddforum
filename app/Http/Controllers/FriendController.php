@@ -174,9 +174,6 @@ class FriendController extends Controller {
 
         return \response()->json( ['success' => true, 'message' => 'User unblock successfully'] );
 
-        // session()->flash( 'succes', 'Unblock successfully' );
-
-        // return redirect()->route( 'profile.friendlist', $authUser->username );
     }
 
     public function checkFriend( Request $request ) {
@@ -187,8 +184,6 @@ class FriendController extends Controller {
         $isFriend = $user->isFriendWith( $friend );
 
         return response()->json( $isFriend );
-
-        //return $isFriend;
 
     }
 
