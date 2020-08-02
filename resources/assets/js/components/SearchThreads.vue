@@ -56,7 +56,7 @@
                           :value="tag.toLowerCase()"
                           v-model="filter_tags"
                         />
-                        {{ tag.toLowerCase()}}
+                        {{ tag.toLowerCase() }}
                       </label>
                     </div>
                   </li>
@@ -84,7 +84,8 @@
                           id
                           value="sort"
                           v-model="filter_length"
-                        /> Sort
+                        />
+                        Sort
                       </label>
                     </div>
                   </li>
@@ -97,7 +98,8 @@
                           id
                           value="medium"
                           v-model="filter_length"
-                        /> Medium
+                        />
+                        Medium
                       </label>
                     </div>
                   </li>
@@ -110,7 +112,8 @@
                           id
                           value="long"
                           v-model="filter_length"
-                        /> Long
+                        />
+                        Long
                       </label>
                     </div>
                   </li>
@@ -132,21 +135,42 @@
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id :value="0" v-model="filter_rated" /> G-rated
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          :value="0"
+                          v-model="filter_rated"
+                        />
+                        G-rated
                       </label>
                     </div>
                   </li>
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id :value="13" v-model="filter_rated" /> PG-rated
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          :value="13"
+                          v-model="filter_rated"
+                        />
+                        PG-rated
                       </label>
                     </div>
                   </li>
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id :value="18" v-model="filter_rated" /> R-rated
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          :value="18"
+                          v-model="filter_rated"
+                        />
+                        R-rated
                       </label>
                     </div>
                   </li>
@@ -168,21 +192,42 @@
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id value="C" v-model="category" /> Celebrities
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          value="C"
+                          v-model="category"
+                        />
+                        Celebrities
                       </label>
                     </div>
                   </li>
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id value="N" v-model="category" /> Other notables
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          value="N"
+                          v-model="category"
+                        />
+                        Other notables
                       </label>
                     </div>
                   </li>
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id value="O" v-model="category" /> Other People
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          value="O"
+                          v-model="category"
+                        />
+                        Other People
                       </label>
                     </div>
                   </li>
@@ -216,8 +261,12 @@
                           class="filter-emoji"
                           :class="emoji.name"
                           :key="index"
-                          v-bind:style="{ 'background-image': 'url(/images/emojis/' + emoji.name + '.png)' }"
-                        >{{emoji.name}}</span>
+                          v-bind:style="{
+                            'background-image':
+                              'url(/images/emojis/' + emoji.name + '.png)',
+                          }"
+                          >{{ emoji.name }}</span
+                        >
                       </label>
                     </div>
                   </li>
@@ -228,9 +277,17 @@
           <hr />
           <div class="row">
             <div class="col-md-12 search-results-sorting">
-              <div class="count-column">{{ postsCount | formatCount}} Results</div>
+              <div class="count-column">
+                {{ postsCount | formatCount }} Results
+              </div>
               <div class="sort-column">
-                <select name id class="sortBy" v-model="sort_by" @change="sortBy">
+                <select
+                  name
+                  id
+                  class="sortBy"
+                  v-model="sort_by"
+                  @change="sortBy"
+                >
                   <option value="topRated">Top Rated</option>
                   <option value="created_at">Most Recent</option>
                   <option value="like_count">Most Liked</option>
@@ -249,7 +306,10 @@
         </div>
       </div>
 
-      <div class="panel panel-default" v-if="search == false && allThreads.length == 0">
+      <div
+        class="panel panel-default"
+        v-if="search == false && allThreads.length == 0"
+      >
         <div class="panel-body">
           <h3 class="text-center">No Results Found</h3>
         </div>
@@ -260,9 +320,43 @@
           <h3 class="text-center">Search.....</h3>
         </div>
       </div>
-      <single-thread v-for="(thread, index) in allThreads" :thread="thread" :key="index"></single-thread>
+      <single-thread
+        v-for="(thread, index) in paginatedItems"
+        :thread="thread"
+        :key="index"
+      ></single-thread>
 
-      <SearchPagination :dataSet="threads" @changedSearch="fetch" :query="q"></SearchPagination>
+      <!-- <SearchPagination
+        :dataSet="threads"
+        @changedSearch="fetch"
+        :query="q"
+      ></SearchPagination> -->
+
+      <nav aria-label="..." v-if="totalPage > 1">
+        <ul class="pagination">
+          <li v-if="currentPage != 1">
+            <span>
+              <span aria-hidden="true">&laquo;</span>
+            </span>
+          </li>
+          <li
+            v-for="page in totalPage"
+            :key="page"
+            @click="onPageChange(page)"
+            :class="{ active: currentPage == page }"
+          >
+            <span
+              >{{ page }} <span class="sr-only">{{ page }}</span></span
+            >
+          </li>
+
+          <li v-if="currentPage != totalPage">
+            <span>
+              <span aria-hidden="true">&raquo;</span>
+            </span>
+          </li>
+        </ul>
+      </nav>
     </div>
     <div class="col-md-4">
       <trending-thread></trending-thread>
@@ -295,6 +389,10 @@ export default {
       filter_length: [],
       emojis: "",
       tags: [],
+
+      currentPage: 1,
+      perPage: 3,
+      paginatedItems: this.allThreads,
     };
   },
   watch: {
@@ -315,11 +413,15 @@ export default {
     },
   },
   created() {
-    this.allThreads = this.threads.data;
+    this.allThreads = this.threads;
     this.getAllEmojis();
     this.getAllTags();
+    this.paginate(this.perPage, 1);
   },
   computed: {
+    totalPage() {
+      return Math.ceil(this.postsCount / this.perPage);
+    },
     filterOpen() {
       if (
         this.filter_length.length > 0 ||
@@ -330,12 +432,13 @@ export default {
       ) {
         return true;
       }
+      return false;
     },
     postsCount() {
       if (this.filterOpen) {
         return this.allThreads.length;
       }
-      return this.threads.total;
+      return this.threads.length;
     },
     mapUrl() {
       return `/map/show?query=${this.q}`;
@@ -343,8 +446,25 @@ export default {
   },
 
   methods: {
+    paginate(per_page, page_number) {
+      let itemsToParse = this.allThreads;
+      let start = (page_number - 1) * per_page;
+      let end = page_number * per_page;
+      const newThreads = itemsToParse.slice(start, end);
+
+      this.paginatedItems = newThreads;
+    },
+
+    onPageChange(page) {
+      this.currentPage = page;
+      this.paginate(this.perPage, page);
+    },
+
     filterThreads() {
-      let data = this.threads.data;
+      this.paginatedItems = [];
+      this.currentPage = 1;
+
+      let data = this.threads;
 
       if (this.filter_rated.length > 0) {
         data = this.filterByRated(this.filter_rated, data);
@@ -367,6 +487,8 @@ export default {
       }
 
       this.allThreads = data;
+      this.paginatedItems = this.allThreads;
+      this.paginate(this.perPage, this.currentPage);
     },
     filterByLength(filter, data) {
       // filter_length: [],
@@ -465,9 +587,9 @@ export default {
       window.location.href = url;
     },
     sortBy() {
-      let threads = _.orderBy(this.threads.data, [this.sort_by], "desc");
-      this.allThreads = threads;
-      this.threads.data = threads;
+      let threads = _.orderBy(this.allThreads, [this.sort_by], "desc");
+      this.paginatedItems = threads;
+      // this.threads = threads;
     },
     ago(created_at) {
       return moment(created_at, "YYYY-MM-DD HH:mm:ss").fromNow() + "...";
@@ -480,8 +602,8 @@ export default {
       axios
         .get("/threads/search?query=" + this.q + "&sort_by=" + this.sort_by)
         .then((res) => {
-          this.allThreads = res.data.data;
-          this.threads.data = res.data.data;
+          this.allThreads = res.data;
+          this.threads.data = res.data;
           let pageUrl = {
             prev_page_url: res.data.prev_page_url,
             next_page_url: res.data.next_page_url,
@@ -494,7 +616,7 @@ export default {
       axios
         .get("/threads/search?query=" + this.q + "&page=" + page)
         .then((res) => {
-          this.allThreads = res.data.data;
+          this.allThreads = res.data;
           let pageUrl = {
             prev_page_url: res.data.prev_page_url,
             next_page_url: res.data.next_page_url,
@@ -599,5 +721,9 @@ hr {
   color: black;
   font-size: 13px;
   text-decoration: none;
+}
+
+.pagination li {
+  cursor: pointer;
 }
 </style>
