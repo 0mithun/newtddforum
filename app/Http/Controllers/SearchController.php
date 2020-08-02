@@ -34,7 +34,7 @@ class SearchController extends Controller {
     public function filterSearch( $query ) {
         //For Development
         // return Thread::with( 'emojis' )->paginate( 10 );
-        return Thread::with( 'emojis' )->get();
+        // return Thread::with( 'emojis' )->get();
 
         if ( auth()->check() ) {
             $user = auth()->user();

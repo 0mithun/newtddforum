@@ -1,8 +1,11 @@
-
-
 <template>
   <div class="tools-single-item">
-    <button class="btn thread-items-show-tools-btn" @click.prevent="toggle" :class="classes">
+    <button
+      class="btn thread-items-show-tools-btn"
+      @click.prevent="toggle"
+      :class="classes"
+      :style="style"
+    >
       <i class="fa fa-star"></i>
     </button>
   </div>
@@ -12,16 +15,28 @@
 export default {
   props: {
     thread: {
-      type: Object
-    }
+      type: Object,
+    },
+    size: {
+      type: String,
+      default: "big",
+    },
   },
   data() {
     return {
       active: this.thread.isFavorited,
-      isFavoriteThread: false
+      isFavoriteThread: false,
     };
   },
   computed: {
+    style() {
+      return {
+        borderWidth: this.size == "small" ? "1px" : "2px",
+        height: this.size == "small" ? "24px" : "40px",
+        width: this.size == "small" ? "24px" : "40px",
+        fontSize: this.size == "small" ? "20px" : "25px",
+      };
+    },
     classes() {
       return [this.isFavoriteThread ? "active-favorite" : "inactive-favorite"];
     },
@@ -31,7 +46,7 @@ export default {
     },
     signedIn() {
       return window.App.user ? true : false;
-    }
+    },
   },
   created() {
     this.checkIsFavoriteThread();
@@ -45,7 +60,7 @@ export default {
     },
 
     create() {
-      axios.post(this.endpoint).then(res => {});
+      axios.post(this.endpoint).then((res) => {});
       this.isFavoriteThread = true;
       flash("You are successfully favorite this thread", "success");
     },
@@ -60,9 +75,9 @@ export default {
         axios
           .post("/thread/check-thread-favorite", {
             thread: this.thread.id,
-            user: window.App.user.id
+            user: window.App.user.id,
           })
-          .then(res => {
+          .then((res) => {
             if (res.data.favorited) {
               return (this.isFavoriteThread = true);
             }
@@ -73,8 +88,8 @@ export default {
     },
     redirectToLogin() {
       window.location = "/redirect-to?page=" + location.pathname;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -95,5 +110,10 @@ export default {
 .inactive-favorite:hover {
   color: #f6d743;
   border: 2px solid #f6d743;
+}
+.thread-items-show-tools-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

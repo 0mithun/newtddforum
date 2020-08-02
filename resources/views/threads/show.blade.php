@@ -159,14 +159,14 @@
                             </div>
                         </div>
                         <div class="row thread-show-tool-items">
-                            <vote-emoji-list :thread="{{ $thread }}"></vote-emoji-list>
+                            <vote-emoji-list :thread="{{ $thread }}"  position="top"></vote-emoji-list>
                             <div class="col-md-3 social-share-btn">
                                 <fb-share :thread="{{ $thread }}"></fb-share>
                                 <twitter-share :thread="{{ $thread }}"></twitter-share>
                             </div>
                             <div class="col-md-9 thread-show-tools">
                                 <focus-comment></focus-comment>
-                                <vote-emojis :thread="{{ $thread }}"></vote-emojis>
+                                <vote-emojis :thread="{{ $thread }}"  position="top"></vote-emojis>
                                 <favorite-thread :thread="{{ $thread }}"></favorite-thread>
                                 <up-votes :thread="{{ $thread }}"></up-votes>
                                 <down-votes :thread="{{ $thread }}"></down-votes>
@@ -196,6 +196,22 @@
                                 </div>
                             </div>
                         @endif
+                        <div class="row thread-show-tool-items">
+                            <vote-emoji-list :thread="{{ $thread }}"  position="bottom"></vote-emoji-list>
+                            <div class="col-md-3 social-share-btn">
+                                <fb-share :thread="{{ $thread }}"></fb-share>
+                                <twitter-share :thread="{{ $thread }}"></twitter-share>
+                            </div>
+                            <div class="col-md-9 thread-show-tools">
+                                <focus-comment></focus-comment>
+                                <vote-emojis :thread="{{ $thread }}"  position="bottom"></vote-emojis>
+                                <favorite-thread :thread="{{ $thread }}"></favorite-thread>
+                                <up-votes :thread="{{ $thread }}"></up-votes>
+                                <down-votes :thread="{{ $thread }}"></down-votes>
+                                <report-thread :thread="{{ $thread }}"></report-thread>                             
+                                <show-source :thread="{{ $thread }}"></show-source>                            
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

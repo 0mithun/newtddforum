@@ -32,8 +32,27 @@
           </div>
           </div>-->
 
-          <div class="row filter-row">
-            <div class="col-md-12">
+          <div class="row ">
+            <div class="col-md-12 filter-search">
+              <div class="count-column">
+                {{ postsCount | formatCount }} Results
+              </div>
+              <div class="sort-column">
+                <select
+                  name
+                  id
+                  class="sortBy"
+                  v-model="sort_by"
+                  @change="sortBy"
+                >
+                  <option value="topRated">Top Rated</option>
+                  <option value="created_at">Most Recent</option>
+                  <option value="like_count">Most Liked</option>
+                  <option value="favorite_count">Most Favorited</option>
+                  <option value="visits">Most Visits</option>
+                </select>
+              </div>
+
               <div class="btn-group">
                 <button
                   class="btn btn-link btn-xs dropdown-toggle"
@@ -71,7 +90,103 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  All Length
+                  All People
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu search-dropdown">
+                  <li>
+                    <div class="checkbox filter-item">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          value="C"
+                          v-model="category"
+                        />
+                        Celebrities
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="checkbox filter-item">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          value="N"
+                          v-model="category"
+                        />
+                        Other notables
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="checkbox filter-item">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          value="O"
+                          v-model="category"
+                        />
+                        Other People
+                      </label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="btn-group">
+                <button
+                  class="btn btn-link btn-xs dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  All Moods
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu search-dropdown">
+                  <li v-for="(emoji, index) in emojis" :key="index">
+                    <div class="checkbox filter-item">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="like"
+                          id
+                          :value="emoji.name"
+                          class="filter-emoji-checkbox"
+                          v-model="filter_emojis"
+                        />
+                        <span
+                          class="filter-emoji"
+                          :class="emoji.name"
+                          :key="index"
+                          v-bind:style="{
+                            'background-image':
+                              'url(/images/emojis/' + emoji.name + '.png)',
+                          }"
+                          >{{ emoji.name }}</span
+                        >
+                      </label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="btn-group">
+                <button
+                  class="btn btn-link btn-xs dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  All Lengths
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu search-dropdown">
@@ -177,124 +292,6 @@
                 </ul>
               </div>
 
-              <div class="btn-group">
-                <button
-                  class="btn btn-link btn-xs dropdown-toggle"
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All People
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu search-dropdown">
-                  <li>
-                    <div class="checkbox filter-item">
-                      <label>
-                        <input
-                          type="checkbox"
-                          name="rated"
-                          id
-                          value="C"
-                          v-model="category"
-                        />
-                        Celebrities
-                      </label>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="checkbox filter-item">
-                      <label>
-                        <input
-                          type="checkbox"
-                          name="rated"
-                          id
-                          value="N"
-                          v-model="category"
-                        />
-                        Other notables
-                      </label>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="checkbox filter-item">
-                      <label>
-                        <input
-                          type="checkbox"
-                          name="rated"
-                          id
-                          value="O"
-                          v-model="category"
-                        />
-                        Other People
-                      </label>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="btn-group">
-                <button
-                  class="btn btn-link btn-xs dropdown-toggle"
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All Mood
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu search-dropdown">
-                  <li v-for="(emoji, index) in emojis" :key="index">
-                    <div class="checkbox filter-item">
-                      <label>
-                        <input
-                          type="checkbox"
-                          name="like"
-                          id
-                          :value="emoji.name"
-                          class="filter-emoji-checkbox"
-                          v-model="filter_emojis"
-                        />
-                        <span
-                          class="filter-emoji"
-                          :class="emoji.name"
-                          :key="index"
-                          v-bind:style="{
-                            'background-image':
-                              'url(/images/emojis/' + emoji.name + '.png)',
-                          }"
-                          >{{ emoji.name }}</span
-                        >
-                      </label>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div class="row">
-            <div class="col-md-12 search-results-sorting">
-              <div class="count-column">
-                {{ postsCount | formatCount }} Results
-              </div>
-              <div class="sort-column">
-                <select
-                  name
-                  id
-                  class="sortBy"
-                  v-model="sort_by"
-                  @change="sortBy"
-                >
-                  <option value="topRated">Top Rated</option>
-                  <option value="created_at">Most Recent</option>
-                  <option value="like_count">Most Liked</option>
-                  <option value="favorite_count">Most Favorited</option>
-                  <option value="visits">Most Visits</option>
-                </select>
-              </div>
               <div class="map-column">
                 <a :href="mapUrl">
                   <img src="/images/png/map-icon-red.png" alt />
@@ -369,7 +366,7 @@ import SearchPagination from "./SearchPagination";
 import moment, { max } from "moment";
 
 export default {
-  props: ["threads", "query", "restriction"],
+  props: ["threads", "query"],
   components: {
     SearchPagination,
   },
@@ -377,7 +374,7 @@ export default {
   data() {
     return {
       allThreads: [],
-      paginateThreads: this.threads,
+      // paginateThreads: this.threads,
       q: this.query,
       sort_by: "topRated",
       filter_emojis: [],
@@ -390,8 +387,8 @@ export default {
       emojis: "",
       tags: [],
 
-      currentPage: 1,
-      perPage: 3,
+      page: 1,
+      perPage: 10,
       paginatedItems: this.allThreads,
     };
   },
@@ -416,9 +413,13 @@ export default {
     this.allThreads = this.threads;
     this.getAllEmojis();
     this.getAllTags();
+    this.setCurrentPage();
     this.paginate(this.perPage, 1);
   },
   computed: {
+    currentPage() {
+      return this.page;
+    },
     totalPage() {
       return Math.ceil(this.postsCount / this.perPage);
     },
@@ -446,6 +447,16 @@ export default {
   },
 
   methods: {
+    setCurrentPage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const page = urlParams.get("page");
+
+      if (page && page != "") {
+        this.page = page;
+      } else {
+        this.page = this.page;
+      }
+    },
     paginate(per_page, page_number) {
       let itemsToParse = this.allThreads;
       let start = (page_number - 1) * per_page;
@@ -456,13 +467,15 @@ export default {
     },
 
     onPageChange(page) {
-      this.currentPage = page;
+      this.page = page;
+
+      history.pushState(null, null, "?query=" + this.q + "&page=" + page);
       this.paginate(this.perPage, page);
     },
 
     filterThreads() {
       this.paginatedItems = [];
-      this.currentPage = 1;
+      this.page = 1;
 
       let data = this.threads;
 
@@ -603,27 +616,27 @@ export default {
         .get("/threads/search?query=" + this.q + "&sort_by=" + this.sort_by)
         .then((res) => {
           this.allThreads = res.data;
-          this.threads.data = res.data;
-          let pageUrl = {
-            prev_page_url: res.data.prev_page_url,
-            next_page_url: res.data.next_page_url,
-          };
-          eventBus.$emit("pageChange", pageUrl);
-          this.search = false;
+          this.threads = res.data;
+          // let pageUrl = {
+          //   prev_page_url: res.data.prev_page_url,
+          //   next_page_url: res.data.next_page_url,
+          // };
+          // eventBus.$emit("pageChange", pageUrl);
+          // this.search = false;
         });
     },
-    fetch(page) {
-      axios
-        .get("/threads/search?query=" + this.q + "&page=" + page)
-        .then((res) => {
-          this.allThreads = res.data;
-          let pageUrl = {
-            prev_page_url: res.data.prev_page_url,
-            next_page_url: res.data.next_page_url,
-          };
-          eventBus.$emit("pageChange", pageUrl);
-        });
-    },
+    // fetch(page) {
+    //   axios
+    //     .get("/threads/search?query=" + this.q + "&page=" + page)
+    //     .then((res) => {
+    //       this.allThreads = res.data;
+    //       let pageUrl = {
+    //         prev_page_url: res.data.prev_page_url,
+    //         next_page_url: res.data.next_page_url,
+    //       };
+    //       eventBus.$emit("pageChange", pageUrl);
+    //     });
+    // },
   },
 };
 </script>
@@ -725,5 +738,14 @@ hr {
 
 .pagination li {
   cursor: pointer;
+}
+.filter-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.count-column {
+  font-size: 13px;
 }
 </style>
