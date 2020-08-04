@@ -48,7 +48,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.getUserEmojiType();
-    window.events.$on("VoteUserEmojis", function (emoji) {
+    eventBus.$on("VoteUserEmojis-" + this.thread.id, function (emoji) {
       _this.userEmoji = emoji;
     });
   },

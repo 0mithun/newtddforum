@@ -62,6 +62,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     voteEmoji: function voteEmoji(emoji) {
+      var _this2 = this;
+
       if (!this.signedIn) {
         this.redirectToLogin();
       }
@@ -69,25 +71,24 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/thread/".concat(this.thread.id, "/emojis"), {
         type: emoji.id
       }).then(function (res) {
-        window.events.$emit("VoteUserEmojis", emoji);
+        // window.events.$emit("VoteUserEmojis", emoji);
+        eventBus.$emit("VoteUserEmojis-" + _this2.thread.id, emoji);
       });
     },
     getAllEmojis: function getAllEmojis() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/thread/".concat(this.thread.id, "/emojis")).then(function (res) {
-        _this2.emojis = res.data;
+        _this3.emojis = res.data;
       });
     },
     redirectToLogin: function redirectToLogin() {
       window.location = "/redirect-to?page=" + location.pathname;
     },
     hideEmojiList: function hideEmojiList() {
-      var _this3 = this;
-
-      setTimeout(function () {
-        _this3.show = false;
-      }, 1500);
+      this.show = false; // setTimeout(() => {
+      //   this.show = false;
+      // }, 1500);
     }
   }
 });
@@ -164,7 +165,7 @@ var render = function() {
         {
           staticClass: "emoji-list-buttons",
           class: _vm.emojiLiistBtnClass,
-          on: { mouseout: _vm.hideEmojiList }
+          on: { mouseleave: _vm.hideEmojiList }
         },
         _vm._l(_vm.emojis, function(emoji, index) {
           return _c("button", {

@@ -2,7 +2,7 @@
   <div
     class="emoji-list-buttons"
     v-if="show"
-    @mouseout="hideEmojiList"
+    @mouseleave="hideEmojiList"
     :class="emojiLiistBtnClass"
   >
     <button
@@ -61,7 +61,8 @@ export default {
           type: emoji.id,
         })
         .then((res) => {
-          window.events.$emit("VoteUserEmojis", emoji);
+          // window.events.$emit("VoteUserEmojis", emoji);
+          eventBus.$emit("VoteUserEmojis-" + this.thread.id, emoji);
         });
     },
     getAllEmojis() {
@@ -73,9 +74,10 @@ export default {
       window.location = "/redirect-to?page=" + location.pathname;
     },
     hideEmojiList() {
-      setTimeout(() => {
-        this.show = false;
-      }, 1500);
+      this.show = false;
+      // setTimeout(() => {
+      //   this.show = false;
+      // }, 1500);
     },
   },
 };

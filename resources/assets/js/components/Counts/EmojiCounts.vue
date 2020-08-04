@@ -5,10 +5,13 @@
       :title="emoji.name"
       class="emoji-count-btn"
       :class="[{ 'big-emoji-btn': emoji.id == userEmoji }, emoji.name]"
-      v-bind:style="{ 'background-image': 'url(/images/emojis/' + emoji.name + '.png)' }"
+      v-bind:style="{
+        'background-image': 'url(/images/emojis/' + emoji.name + '.png)',
+      }"
       v-for="(emoji, index) in emojis"
       :key="index"
-    >{{ formateEmojiCounts(emoji.count) }}</span>
+      >{{ formateEmojiCounts(emoji.count) }}</span
+    >
   </div>
 </template>
 
@@ -18,25 +21,29 @@ export default {
   data() {
     return {
       emojis: null,
-      userEmoji: null
+      userEmoji: null,
     };
   },
   computed: {
     signedIn() {
       return window.App.user ? true : false;
-    }
+    },
   },
 
   created() {
     // this.getUserEmojiType();
     this.getEmojiCount();
+    eventBus.$on("VoteUserEmojis-" + this.thread.id, (emoji) => {
+      this.getEmojiCount();
+      this.getEmojiCount();
+    });
   },
   methods: {
     formateEmojiCounts(value) {
       return abbreviate(value, 1);
     },
     getEmojiCount() {
-      axios.get(`/thread/${this.thread.id}/emoji-counts`).then(res => {
+      axios.get(`/thread/${this.thread.id}/emoji-counts`).then((res) => {
         this.emojis = res.data;
       });
     },
@@ -46,15 +53,14 @@ export default {
       }
       axios
         .get(`/thread/${this.thread.id}/user-emoji-type`)
-        .then(res => {
+        .then((res) => {
           this.userEmoji = res.data;
         })
-        .catch(err => {});
-    }
-  }
+        .catch((err) => {});
+    },
+  },
 };
 </script>
-
 
 <style scoped>
 .emoji-lists {
