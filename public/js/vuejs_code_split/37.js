@@ -37,12 +37,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -165,15 +159,10 @@ var render = function() {
             { staticClass: "trending_footer" },
             [
               _c("comment-counts", {
-                attrs: { color: "#ff4301", comment_count: thread.replies_count }
+                attrs: { color: "#ff4301", thread: thread }
               }),
               _vm._v(" "),
-              _c("point-counts", {
-                attrs: {
-                  like_count: thread.like_count,
-                  dislike_count: thread.dislike_count
-                }
-              })
+              _c("point-counts", { attrs: { thread: thread } })
             ],
             1
           )

@@ -116,7 +116,7 @@
                             <div class="col-md-12 thread_item_counts">
                                 <view-counts :thread="{{ $thread }}"></view-counts>
                                 <point-counts :thread="{{ $thread }}"></point-counts>
-                                <comment-counts :comment_count="{{ $thread->replies_count }}"></comment-counts>
+                                <comment-counts :thread="{{ $thread }}"></comment-counts>
                                 <favorite-counts :thread="{{ $thread }}"></favorite-counts>
                                 <emoji-counts :thread="{{ $thread }}"></emoji-counts>
             
@@ -228,7 +228,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <thread-replies ></thread-replies>
+            <thread-replies :thread="{{ $thread }}"></thread-replies>
             </div>
         </div>
     </div>

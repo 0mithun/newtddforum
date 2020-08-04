@@ -1,5 +1,5 @@
 <template>
-  <div :id="'reply-'+id" class="single-reply">
+  <div :id="'reply-' + id" class="single-reply">
     <div class="row reply-heading">
       <div class="col-md-8">
         <div class="thread_creator">
@@ -22,13 +22,20 @@
           <button
             class="btn btn-xs btn-danger"
             @click="destroy"
-            v-if="(authorize('owns', reply) || authorize('isAdmin')) && !authorize('isBan') "
-          >Delete</button>
+            v-if="
+              (authorize('owns', reply) || authorize('isAdmin')) &&
+                !authorize('isBan')
+            "
+          >
+            Delete
+          </button>
           <button
             class="btn btn-xs btn-primary"
-            @click="editing=true"
-            v-if="(authorize('owns', reply) && !authorize('isBan'))"
-          >Edit</button>
+            @click="editing = true"
+            v-if="authorize('owns', reply) && !authorize('isBan')"
+          >
+            Edit
+          </button>
         </div>
       </div>
     </div>
@@ -39,10 +46,20 @@
         <div class="nested-reply-btn">
           <button
             class="btn btn-link add-nested-reply-btn"
-            @click="addNested = true; showLoadMore= false"
+            @click="
+              addNested = true;
+              showLoadMore = false;
+            "
             v-if="signedIn"
-          >Reply</button>
-          <a :href="redirectToLogin" class="btn btn-link add-nested-reply-btn" v-else>Reply</a>
+          >
+            Reply
+          </button>
+          <a
+            :href="redirectToLogin"
+            class="btn btn-link add-nested-reply-btn"
+            v-else
+            >Reply</a
+          >
 
           <div class="edit-reply" v-if="editing">
             <div>
@@ -53,14 +70,21 @@
                     type="text"
                     class="form-control"
                     aria-label="..."
-                    :id="'bodyedit-'+reply.id"
+                    :id="'bodyedit-' + reply.id"
                     v-model="editBody"
                     placeholder="Add a comment"
                   />
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-primary btn-xs" type="submit">Save</button>
-                  <button class="btn btn-danger btn-xs" @click="editing=false">Cancel</button>
+                  <button class="btn btn-primary btn-xs" type="submit">
+                    Save
+                  </button>
+                  <button
+                    class="btn btn-danger btn-xs"
+                    @click="editing = false"
+                  >
+                    Cancel
+                  </button>
                 </div>
               </form>
             </div>
@@ -75,24 +99,34 @@
                     type="text"
                     class="form-control"
                     aria-label="..."
-                    :id="'addNested-'+reply.id"
+                    :id="'addNested-' + reply.id"
                     v-model="nestedbody"
                     placeholder="Add a comment"
                   />
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-primary btn-xs" type="submit">Add</button>
+                  <button class="btn btn-primary btn-xs" type="submit">
+                    Add
+                  </button>
                   <button
                     class="btn btn-danger btn-xs"
-                    @click="addNested=false; showLoadMore = true"
-                  >Cancel</button>
+                    @click="
+                      addNested = false;
+                      showLoadMore = true;
+                    "
+                  >
+                    Cancel
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
-        <div class="more-reply" v-if="showLoadMore && replies_count>0">
-          <button class="btn btn-xs btn-link show-nested-replies-btn" @click="toggleNestedReplies">
+        <div class="more-reply" v-if="showLoadMore && replies_count > 0">
+          <button
+            class="btn btn-xs btn-link show-nested-replies-btn"
+            @click="toggleNestedReplies"
+          >
             <div v-if="showNested">
               <span class="glyphicon glyphicon-triangle-top"></span> Hide Reply
             </div>
@@ -178,8 +212,8 @@ export default {
         at: "@",
         delay: 750,
         callbacks: {
-          remoteFilter: function (query, callback) {
-            $.getJSON("/api/users", { name: query }, function (usernames) {
+          remoteFilter: function(query, callback) {
+            $.getJSON("/api/users", { name: query }, function(usernames) {
               callback(usernames);
             });
           },
@@ -190,8 +224,8 @@ export default {
         at: "@",
         delay: 750,
         callbacks: {
-          remoteFilter: function (query, callback) {
-            $.getJSON("/api/users", { name: query }, function (usernames) {
+          remoteFilter: function(query, callback) {
+            $.getJSON("/api/users", { name: query }, function(usernames) {
               callback(usernames);
             });
           },
@@ -203,8 +237,8 @@ export default {
         at: "@",
         delay: 750,
         callbacks: {
-          remoteFilter: function (query, callback) {
-            $.getJSON("/api/users", { name: query }, function (usernames) {
+          remoteFilter: function(query, callback) {
+            $.getJSON("/api/users", { name: query }, function(usernames) {
               callback(usernames);
             });
           },
@@ -240,6 +274,7 @@ export default {
       if (confirm("Are you sure delete this reply")) {
         axios.delete("/replies/" + this.id);
         eventBus.$emit("nested_delete-" + this.reply.parent_id, this.id);
+        eventBus.$emit("deleteNestedReplies-" + this.reply.thread_id);
         flash("Your reply has been deleted.");
       }
     },
@@ -257,6 +292,8 @@ export default {
 
           this.addNested = false;
           this.showLoadMore = true;
+          eventBus.$emit("addNestedReplies-" + this.reply.thread_id);
+
           flash("Your reply has been posted.");
         });
     },
@@ -264,8 +301,7 @@ export default {
 };
 </script>
 
-
-<style  scoped>
+<style scoped>
 .single-reply {
   margin: 5px;
 }

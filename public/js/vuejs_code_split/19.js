@@ -129,6 +129,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -256,6 +290,7 @@ __webpack_require__.r(__webpack_exports__);
       if (confirm("Are you sure delete this reply")) {
         axios["delete"]("/replies/" + this.id);
         eventBus.$emit("nested_delete-" + this.reply.parent_id, this.id);
+        eventBus.$emit("deleteNestedReplies-" + this.reply.thread_id);
         flash("Your reply has been deleted.");
       }
     },
@@ -276,6 +311,7 @@ __webpack_require__.r(__webpack_exports__);
         _this3.replies_count = _this3.replies_count + 1;
         _this3.addNested = false;
         _this3.showLoadMore = true;
+        eventBus.$emit("addNestedReplies-" + _this3.reply.thread_id);
         flash("Your reply has been posted.");
       });
     }
@@ -399,7 +435,7 @@ var render = function() {
                         staticClass: "btn btn-xs btn-danger",
                         on: { click: _vm.destroy }
                       },
-                      [_vm._v("Delete")]
+                      [_vm._v("\n          Delete\n        ")]
                     )
                   : _vm._e(),
                 _vm._v(" "),
@@ -414,7 +450,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Edit")]
+                      [_vm._v("\n          Edit\n        ")]
                     )
                   : _vm._e()
               ])
@@ -442,7 +478,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("Reply")]
+                  [_vm._v("\n          Reply\n        ")]
                 )
               : _c(
                   "a",
@@ -505,7 +541,11 @@ var render = function() {
                               staticClass: "btn btn-primary btn-xs",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Save")]
+                            [
+                              _vm._v(
+                                "\n                  Save\n                "
+                              )
+                            ]
                           ),
                           _vm._v(" "),
                           _c(
@@ -518,7 +558,11 @@ var render = function() {
                                 }
                               }
                             },
-                            [_vm._v("Cancel")]
+                            [
+                              _vm._v(
+                                "\n                  Cancel\n                "
+                              )
+                            ]
                           )
                         ])
                       ]
@@ -579,7 +623,11 @@ var render = function() {
                               staticClass: "btn btn-primary btn-xs",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Add")]
+                            [
+                              _vm._v(
+                                "\n                  Add\n                "
+                              )
+                            ]
                           ),
                           _vm._v(" "),
                           _c(
@@ -593,7 +641,11 @@ var render = function() {
                                 }
                               }
                             },
-                            [_vm._v("Cancel")]
+                            [
+                              _vm._v(
+                                "\n                  Cancel\n                "
+                              )
+                            ]
                           )
                         ])
                       ]

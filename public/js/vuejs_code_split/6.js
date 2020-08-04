@@ -17,13 +17,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["comment_count", "color"],
+  props: ["thread", "color"],
+  data: function data() {
+    return {
+      count: this.thread.replies_count
+    };
+  },
   computed: {
+    commentCounts: function commentCounts() {
+      return this.count;
+    },
     commentStyle: function commentStyle() {
       return {
         color: this.color ? this.color : "#636b6f"
       };
     }
+  },
+  created: function created() {
+    var _this = this;
+
+    eventBus.$on("commentAdded-" + this.thread.id, function () {
+      console.log("New Reply added");
+      _this.count = _this.count + 1;
+    });
+    eventBus.$on("commentDeleted-" + this.thread.id, function () {
+      console.log("Reply Deleted");
+      _this.count = _this.count - 1;
+    });
   }
 });
 
@@ -96,8 +116,8 @@ var render = function() {
   return _c("div", { staticClass: "counts-item", style: _vm.commentStyle }, [
     _c("i", { staticClass: "fa fa-comment" }),
     _vm._v(" "),
-    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.comment_count)))]),
-    _vm._v(" comment\n")
+    _c("strong", [_vm._v(_vm._s(_vm._f("formatCount")(_vm.commentCounts)))]),
+    _vm._v(" comments\n")
   ])
 }
 var staticRenderFns = []

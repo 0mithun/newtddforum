@@ -108,9 +108,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["thread"],
   computed: {
@@ -217,16 +214,9 @@ var render = function() {
         [
           _c("view-counts", { attrs: { thread: _vm.thread } }),
           _vm._v(" "),
-          _c("comment-counts", {
-            attrs: { comment_count: _vm.thread.replies_count }
-          }),
+          _c("comment-counts", { attrs: { thread: _vm.thread } }),
           _vm._v(" "),
-          _c("point-counts", {
-            attrs: {
-              like_count: _vm.thread.like_count,
-              dislike_count: _vm.thread.dislike_count
-            }
-          }),
+          _c("point-counts", { attrs: { thread: _vm.thread } }),
           _vm._v(" "),
           _c("favorite-counts", { attrs: { thread: _vm.thread } }),
           _vm._v(" "),

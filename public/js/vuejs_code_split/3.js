@@ -42,7 +42,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -87,6 +86,8 @@ __webpack_require__.r(__webpack_exports__);
         flash("Your reply has been posted.");
 
         _this.$emit("created", data);
+
+        eventBus.$emit("addNewReply", data);
       });
     }
   }
@@ -181,12 +182,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["thread"],
   components: {
     Reply: _Reply_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     NewReply: _NewReply_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -199,7 +200,21 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
+
     this.fetch();
+    eventBus.$on("addNewReply", function (thread) {
+      eventBus.$emit("commentAdded-" + _this.thread.id);
+    });
+    eventBus.$on("deleteReply", function () {
+      eventBus.$emit("commentDeleted-" + _this.thread.id);
+    });
+    eventBus.$on("addNestedReplies-" + this.thread.id, function () {
+      eventBus.$emit("commentAdded-" + _this.thread.id);
+    });
+    eventBus.$on("deleteNestedReplies-" + this.thread.id, function () {
+      eventBus.$emit("commentDeleted-" + _this.thread.id);
+    });
   },
   methods: {
     fetch: function fetch(page) {
@@ -237,6 +252,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery_caret__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery_caret__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var at_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! at.js */ "./node_modules/at.js/dist/js/jquery.atwho.js");
 /* harmony import */ var at_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(at_js__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -479,6 +528,7 @@ __webpack_require__.r(__webpack_exports__);
       if (confirm("Are you sure delete this reply")) {
         axios["delete"]("/replies/" + this.id);
         this.$emit("deleted", this.id);
+        eventBus.$emit("deleteReply", this.id);
         flash("Your reply has been deleted.");
       }
     },
@@ -499,6 +549,7 @@ __webpack_require__.r(__webpack_exports__);
         _this3.replies_count = _this3.replies_count + 1;
         _this3.addNested = false;
         _this3.showLoadMore = true;
+        eventBus.$emit("addNestedReplies-" + _this3.reply.thread_id);
         flash("Your reply has been posted.");
       });
     }
@@ -727,7 +778,7 @@ var render = function() {
           _c("a", { attrs: { href: _vm.redirectToLogin } }, [
             _vm._v("sign in")
           ]),
-          _vm._v(" to participate in this\n    discussion.\n  ")
+          _vm._v(" to participate in this discussion.\n  ")
         ])
   ])
 }
@@ -974,7 +1025,7 @@ var render = function() {
                         staticClass: "btn btn-xs btn-danger",
                         on: { click: _vm.destroy }
                       },
-                      [_vm._v("Delete")]
+                      [_vm._v("\n          Delete\n        ")]
                     )
                   : _vm._e(),
                 _vm._v(" "),
@@ -989,7 +1040,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Edit")]
+                      [_vm._v("\n          Edit\n        ")]
                     )
                   : _vm._e()
               ])
@@ -1017,7 +1068,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("Reply")]
+                  [_vm._v("\n          Reply\n        ")]
                 )
               : _c(
                   "a",
@@ -1080,7 +1131,11 @@ var render = function() {
                               staticClass: "btn btn-primary btn-xs",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Save")]
+                            [
+                              _vm._v(
+                                "\n                  Save\n                "
+                              )
+                            ]
                           ),
                           _vm._v(" "),
                           _c(
@@ -1093,7 +1148,11 @@ var render = function() {
                                 }
                               }
                             },
-                            [_vm._v("Cancel")]
+                            [
+                              _vm._v(
+                                "\n                  Cancel\n                "
+                              )
+                            ]
                           )
                         ])
                       ]
@@ -1154,7 +1213,11 @@ var render = function() {
                               staticClass: "btn btn-primary btn-xs",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Add")]
+                            [
+                              _vm._v(
+                                "\n                  Add\n                "
+                              )
+                            ]
                           ),
                           _vm._v(" "),
                           _c(
@@ -1168,7 +1231,11 @@ var render = function() {
                                 }
                               }
                             },
-                            [_vm._v("Cancel")]
+                            [
+                              _vm._v(
+                                "\n                  Cancel\n                "
+                              )
+                            ]
                           )
                         ])
                       ]
