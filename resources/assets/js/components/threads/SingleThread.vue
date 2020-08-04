@@ -22,9 +22,7 @@
           :like_count="thread.like_count"
           :dislike_count="thread.dislike_count"
         ></point-counts>
-        <favorite-counts
-          :favorite_count="thread.favorite_count"
-        ></favorite-counts>
+        <favorite-counts :thread="thread"></favorite-counts>
 
         <emoji-counts :thread="thread"></emoji-counts>
         <div class="thread-map-icon">

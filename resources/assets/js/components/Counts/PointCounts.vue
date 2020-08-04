@@ -7,18 +7,37 @@
 
 <script>
 export default {
-  props: ["like_count", "dislike_count"],
+  props: ["thread"],
+  data() {
+    return {
+      likeCount: this.thread.like_count,
+      dislikeCount: this.thread.dislike_count,
+    };
+  },
 
   computed: {
     pointCounts() {
-      return this.like_count - this.dislike_count;
+      return this.likeCount - (this.dislikeCount + 1);
       // return abbreviate((this.like_count - this.dislike_count), 1)
+    },
+  },
+  created() {
+    eventBus.$on("threadVoted-" + this.thread.id, (thread) => {
+      this.getThreads();
+    });
+  },
+  methods: {
+    getThreads() {
+      axios.get("/thread/get-single-thread/" + this.thread.slug).then((res) => {
+        this.likeCount = res.data.like_count;
+        this.dislikeCount = res.data.dislike_count;
+      });
     },
   },
 };
 </script>
 
-<style  scoped>
+<style scoped>
 .counts-item {
 }
 </style>

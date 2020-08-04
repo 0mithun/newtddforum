@@ -523,4 +523,8 @@ class ThreadsController extends Controller {
         return response()->json( $threads );
     }
 
+    public function getSingleThread( Thread $thread ) {
+        return response()->json( $thread );
+    }
+
 }

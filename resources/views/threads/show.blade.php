@@ -115,9 +115,9 @@
                         <div class="row thread-show-item-counts">
                             <div class="col-md-12 thread_item_counts">
                                 <view-counts :thread="{{ $thread }}"></view-counts>
-                                <point-counts :like_count="{{ $thread->like_count }}" :dislike_count="{{ $thread->dislike_count }}"></point-counts>
+                                <point-counts :thread="{{ $thread }}"></point-counts>
                                 <comment-counts :comment_count="{{ $thread->replies_count }}"></comment-counts>
-                                <favorite-counts :favorite_count="{{ $thread->favorite_count }}"></favorite-counts>
+                                <favorite-counts :thread="{{ $thread }}"></favorite-counts>
                                 <emoji-counts :thread="{{ $thread }}"></emoji-counts>
             
                                 <div  class="thread-map-icon">

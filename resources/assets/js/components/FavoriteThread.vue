@@ -62,13 +62,15 @@ export default {
     create() {
       axios.post(this.endpoint).then((res) => {});
       this.isFavoriteThread = true;
+      eventBus.$emit("favoriteAdded-" + this.thread.id, this.thread.id);
       flash("You are successfully favorite this thread", "success");
     },
 
     destroy() {
       axios.delete(this.endpoint);
       this.isFavoriteThread = false;
-      flash("You are successfully un favorite this thread", "success");
+      eventBus.$emit("favoriteDeleted-" + this.thread.id, this.thread.id);
+      flash("You are successfully unfavorite this thread", "success");
     },
     checkIsFavoriteThread() {
       if (this.signedIn) {
