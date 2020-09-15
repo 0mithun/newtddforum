@@ -284,16 +284,16 @@ class Thread extends Model
         $tags = $this->tags;
         $tagsList = [];
         $tagName = '';
-        if ($tags->count() > 0) {
-            foreach ($tags as $tag) {
-                array_push($tagsList, $tag->name);
-            }
-        }
+        // if ($tags->count() > 0) {
+        //     foreach ($tags as $tag) {
+        //         array_push($tagsList, $tag->name);
+        //     }
+        // }
         $tagName = join(' ', $tagsList);
         $searchable = [
             'title' => $this->title,
             'body'  => $this->body,
-            'tags'  => $tagName,
+            // 'tags'  => $tagName,
         ];
 
         return $searchable;
