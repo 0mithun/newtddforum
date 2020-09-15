@@ -65,6 +65,7 @@ export default {
           this.isLiked = true;
           window.events.$emit("isLiked", this.thread.id);
         }
+        eventBus.$emit("threadVoted-" + this.thread.id, this.thread.id);
       });
     },
     redirectToLogin() {

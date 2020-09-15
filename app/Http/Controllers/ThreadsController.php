@@ -289,7 +289,18 @@ class ThreadsController extends Controller {
      * @return mixed
      */
     protected function getThreads( Channel $channel, ThreadFilters $filters ) {
-        $threads = Thread::latest()->filter( $filters );
+        // $threads = Thread::latest()->filter( $filters );
+
+        $threads = Thread::latest();
+
+        if ( request()->path() == '/' ) {
+            $threads->getQuery()->orders = [];
+
+            $threads->whereColumn( 'like_count', '>', 'dislike_count' )->orderByRaw( 'like_count - (dislike_count + 1 ) DESC' );
+        } else {
+            $threads->latest()->filter( $filters );
+        }
+
         if ( $channel->exists ) {
             $threads->where( 'channel_id', $channel->id );
         }
@@ -510,6 +521,10 @@ class ThreadsController extends Controller {
         }
 
         return response()->json( $threads );
+    }
+
+    public function getSingleThread( Thread $thread ) {
+        return response()->json( $thread );
     }
 
 }

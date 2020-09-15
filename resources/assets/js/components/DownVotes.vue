@@ -65,6 +65,8 @@ export default {
           this.isDesliked = true;
           window.events.$emit("isDesliked", this.thread.id);
         }
+
+        eventBus.$emit("threadVoted-" + this.thread.id, this.thread.id);
       });
     },
     redirectToLogin() {

@@ -18,14 +18,8 @@
           </a>
         </div>
         <div class="trending_footer">
-          <comment-counts
-            color="#ff4301"
-            :comment_count="thread.replies_count"
-          ></comment-counts>
-          <point-counts
-            :like_count="thread.like_count"
-            :dislike_count="thread.dislike_count"
-          ></point-counts>
+          <comment-counts color="#ff4301" :thread="thread"></comment-counts>
+          <point-counts :thread="thread"></point-counts>
         </div>
       </div>
     </div>

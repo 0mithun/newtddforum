@@ -31,7 +31,7 @@
         </div>
         <div class="thread-counts">
           <view-counts :thread="thread"></view-counts>
-          <point-counts :like_count="thread.like_count" :dislike_count="thread.dislike_count"></point-counts>
+          <point-counts :thread="thread"></point-counts>
           <emoji-counts :thread="thread"></emoji-counts>
         </div>
       </div>
@@ -45,7 +45,7 @@ export default {
     return {
       drawer: null,
       results: [],
-      activeIndex: null
+      activeIndex: null,
     };
   },
 
@@ -63,18 +63,18 @@ export default {
     getThreadDetails(thread_id) {
       axios
         .post("/map/thread-details", {
-          thread_id
+          thread_id,
         })
-        .then(res => {
+        .then((res) => {
           window.open(res.data.path, "_blank");
         });
-    }
+    },
   },
   created() {
-    eventBus.$on("markers_fetched", data => {
+    eventBus.$on("markers_fetched", (data) => {
       this.results = data.results;
     });
-  }
+  },
 };
 </script>
 

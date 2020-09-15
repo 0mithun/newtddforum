@@ -17,14 +17,9 @@
       </div>
       <div class="card-header threads-counts">
         <view-counts :thread="thread"></view-counts>
-        <comment-counts :comment_count="thread.replies_count"></comment-counts>
-        <point-counts
-          :like_count="thread.like_count"
-          :dislike_count="thread.dislike_count"
-        ></point-counts>
-        <favorite-counts
-          :favorite_count="thread.favorite_count"
-        ></favorite-counts>
+        <comment-counts :thread="thread"></comment-counts>
+        <point-counts :thread="thread"></point-counts>
+        <favorite-counts :thread="thread"></favorite-counts>
 
         <emoji-counts :thread="thread"></emoji-counts>
         <div class="thread-map-icon">

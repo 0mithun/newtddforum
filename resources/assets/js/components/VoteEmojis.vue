@@ -41,7 +41,7 @@ export default {
   created() {
     this.getUserEmojiType();
 
-    window.events.$on("VoteUserEmojis", (emoji) => {
+    eventBus.$on("VoteUserEmojis-" + this.thread.id, (emoji) => {
       this.userEmoji = emoji;
     });
   },

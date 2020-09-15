@@ -91,7 +91,9 @@ Vue.component("text-highlight", () => import("vue-text-highlight"));
 
 Vue.component("star-rating", () => import("./components/StarRating.vue"));
 
-Vue.component("emoji-counts", () => import("./components/EmojiCounts.vue"));
+Vue.component("emoji-counts", () =>
+  import("./components/Counts/EmojiCounts.vue")
+);
 
 //Counts
 
@@ -148,13 +150,10 @@ Vue.component("trending-thread", () =>
   import("./components/threads/TrendingThread.vue")
 );
 
-
 Vue.component("profile-page", () =>
   import("./components/profile/profile-page.vue")
 );
-Vue.component("tag-page", () =>
-  import("./components/tag/TagPage.vue")
-);
+Vue.component("tag-page", () => import("./components/tag/TagPage.vue"));
 
 window.eventBus = new Vue();
 const app = new Vue({
@@ -174,6 +173,8 @@ const app = new Vue({
   },
 });
 
-Vue.filter('formatCount', function (value) {
-  return abbreviate(value, 1).toString().toUpperCase();
-})
+Vue.filter("formatCount", function(value) {
+  return abbreviate(value, 1)
+    .toString()
+    .toUpperCase();
+});

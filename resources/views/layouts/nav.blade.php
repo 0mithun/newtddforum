@@ -11,7 +11,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Top <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/threads?rated=1">Top Rated</a></li>
+                        <li><a href="/threads?rated=1">Trending</a></li>
                         <li><a href="/threads?viewed=1">Most Viewed</a></li>
                         <li><a href="/threads?recents=1">Most Recent</a></li>
                         <li><a href="{{ route('closet.thread') }}">Closest</a></li>

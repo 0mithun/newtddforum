@@ -22,8 +22,7 @@
 
     <p class="text-center" v-else>
       Please
-      <a :href="redirectToLogin">sign in</a> to participate in this
-      discussion.
+      <a :href="redirectToLogin">sign in</a> to participate in this discussion.
     </p>
   </div>
 </template>
@@ -49,8 +48,8 @@ export default {
       at: "@",
       delay: 750,
       callbacks: {
-        remoteFilter: function (query, callback) {
-          $.getJSON("/api/users", { name: query }, function (usernames) {
+        remoteFilter: function(query, callback) {
+          $.getJSON("/api/users", { name: query }, function(usernames) {
             callback(usernames);
           });
         },
@@ -72,14 +71,14 @@ export default {
           flash("Your reply has been posted.");
 
           this.$emit("created", data);
+          eventBus.$emit("addNewReply", data);
         });
     },
   },
 };
 </script>
 
-
-<style  scoped>
+<style scoped>
 .comment-body {
   resize: vertical !important;
 }
