@@ -26,7 +26,7 @@ class ThreadSearchRule extends SearchRule
                     'match' => [
                         'title' => [
                             'query' => $query,
-                            'boost' => 3
+                            'boost' => 2
                         ]
                     ]
                 ],
@@ -34,18 +34,18 @@ class ThreadSearchRule extends SearchRule
                     'match' => [
                         'body' => [
                             'query' => $query,
-                            'boost' => 2
-                        ]
-                    ]
-                ],
-                [
-                    'match' => [
-                        'tags' => [
-                            'query' => $query,
                             'boost' => 1
                         ]
                     ]
-                ]
+                ],
+                // [
+                //     'match' => [
+                //         'tags' => [
+                //             'query' => $query,
+                //             'boost' => 1
+                //         ]
+                //     ]
+                // ]
             ]
         ];
     }
