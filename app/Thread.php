@@ -279,28 +279,26 @@ class Thread extends Model
     //  *
     //  * @return array
     //  */
+    public function toSearchableArray()
+    {
+        $tags = $this->tags;
+        $tagsList = [];
+        $tagName = '';
+        if ($tags->count() > 0) {
+            foreach ($tags as $tag) {
+                array_push($tagsList, $tag->name);
+            }
+        }
+        $tagName = join(' ', $tagsList);
+        $searchable = [
+            'title' => $this->title,
+            'body'  => $this->body,
+            'tags'  => $tagName,
+        ];
 
-
-    // public function toSearchableArray() {
-    //     $tags = $this->tags;
-    //     $tagsList = [];
-    //     $tagName = '';
-    //     if ( $tags->count() ) {
-    //         foreach ( $tags as $tag ) {
-    //             array_push( $tagsList, $tag->name );
-    //         }
-
-    //         $tagName = join( ' ', $tagsList );
-    //     }
-    //     $searchable = [
-    //         'title' => $this->title,
-    //         'body'  => $this->body,
-    //         'tags'  => $tagName,
-    //     ];
-
-    //     return $searchable;
-    //     //return $this->toArray($searchable) + ['path' => $this->path()];
-    // }
+        return $searchable;
+        //return $this->toArray($searchable) + ['path' => $this->path()];
+    }
 
     public function tags()
     {
