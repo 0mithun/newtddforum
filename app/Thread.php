@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use ScoutElastic\Searchable;
 
-class Thread extends Model {
+class Thread extends Model
+{
     //use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
     use RecordsActivity, Notifiable, Favoritable, Likeable, Searchable;
 
@@ -73,17 +74,17 @@ class Thread extends Model {
     /**
      * Boot the model.
      */
-    protected static function boot() {
+    protected static function boot()
+    {
         parent::boot();
 
-        static::deleting( function ( $thread ) {
+        static::deleting(function ($thread) {
             $thread->replies->each->delete();
-        } );
+        });
 
-        static::created( function ( $thread ) {
-            $thread->update( ['slug' => $thread->title] );
-        } );
-
+        static::created(function ($thread) {
+            $thread->update(['slug' => $thread->title]);
+        });
     }
 
     /**
@@ -91,14 +92,16 @@ class Thread extends Model {
      *
      * @return string
      */
-    public function path() {
-        $lower = strtolower( $this->channel->slug );
+    public function path()
+    {
+        $lower = strtolower($this->channel->slug);
 
         return "/anecdotes/{$lower}/{$this->slug}";
     }
 
-    public function getPathAttribute() {
-        return url( $this->path() );
+    public function getPathAttribute()
+    {
+        return url($this->path());
     }
 
     /**
@@ -106,8 +109,9 @@ class Thread extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function creator() {
-        return $this->belongsTo( User::class, 'user_id' );
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -115,8 +119,9 @@ class Thread extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function channel() {
-        return $this->belongsTo( Channel::class );
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
     }
 
     /**
@@ -124,8 +129,9 @@ class Thread extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function replies() {
-        return $this->hasMany( Reply::class );
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
     }
 
     /**
@@ -134,10 +140,11 @@ class Thread extends Model {
      * @param  array $reply
      * @return Model
      */
-    public function addReply( $reply ) {
-        $reply = $this->replies()->create( $reply );
+    public function addReply($reply)
+    {
+        $reply = $this->replies()->create($reply);
 
-        event( new ThreadReceivedNewReply( $reply ) );
+        event(new ThreadReceivedNewReply($reply));
 
         return $reply;
     }
@@ -149,8 +156,9 @@ class Thread extends Model {
      * @param  ThreadFilters $filters
      * @return Builder
      */
-    public function scopeFilter( $query, ThreadFilters $filters ) {
-        return $filters->apply( $query );
+    public function scopeFilter($query, ThreadFilters $filters)
+    {
+        return $filters->apply($query);
     }
 
     /**
@@ -159,10 +167,11 @@ class Thread extends Model {
      * @param  int|null $userId
      * @return $this
      */
-    public function subscribe( $userId = null ) {
-        $this->subscriptions()->create( [
+    public function subscribe($userId = null)
+    {
+        $this->subscriptions()->create([
             'user_id' => $userId ?: auth()->id(),
-        ] );
+        ]);
 
         return $this;
     }
@@ -172,9 +181,10 @@ class Thread extends Model {
      *
      * @param int|null $userId
      */
-    public function unsubscribe( $userId = null ) {
+    public function unsubscribe($userId = null)
+    {
         $this->subscriptions()
-            ->where( 'user_id', $userId ?: auth()->id() )
+            ->where('user_id', $userId ?: auth()->id())
             ->delete();
     }
 
@@ -183,8 +193,9 @@ class Thread extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function subscriptions() {
-        return $this->hasMany( ThreadSubscription::class );
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
     }
 
     /**
@@ -192,9 +203,10 @@ class Thread extends Model {
      *
      * @return boolean
      */
-    public function getIsSubscribedToAttribute() {
+    public function getIsSubscribedToAttribute()
+    {
         return $this->subscriptions()
-            ->where( 'user_id', auth()->id() )
+            ->where('user_id', auth()->id())
             ->exists();
     }
 
@@ -204,10 +216,11 @@ class Thread extends Model {
      * @param  User $user
      * @return bool
      */
-    public function hasUpdatesFor( $user ) {
-        $key = $user->visitedThreadCacheKey( $this );
+    public function hasUpdatesFor($user)
+    {
+        $key = $user->visitedThreadCacheKey($this);
 
-        return $this->updated_at > cache( $key );
+        return $this->updated_at > cache($key);
     }
 
     /**
@@ -215,7 +228,8 @@ class Thread extends Model {
      *
      * @return string
      */
-    public function getRouteKeyName() {
+    public function getRouteKeyName()
+    {
         return 'slug';
     }
 
@@ -235,8 +249,9 @@ class Thread extends Model {
      *
      * @param string $value
      */
-    public function setSlugAttribute( $value ) {
-        if ( static::whereSlug( $slug = str_slug( $value ) )->exists() ) {
+    public function setSlugAttribute($value)
+    {
+        if (static::whereSlug($slug = str_slug($value))->exists()) {
             $slug = "{$slug}-{$this->id}";
         }
 
@@ -254,8 +269,9 @@ class Thread extends Model {
      *
      * @param Reply $reply
      */
-    public function markBestReply( Reply $reply ) {
-        $this->update( ['best_reply_id' => $reply->id] );
+    public function markBestReply(Reply $reply)
+    {
+        $this->update(['best_reply_id' => $reply->id]);
     }
 
     // /**
@@ -263,62 +279,70 @@ class Thread extends Model {
     //  *
     //  * @return array
     //  */
-    public function toSearchableArray() {
-        $tags = $this->tags;
-        $tagsList = [];
-        $tagName = '';
-        if ( $tags->count() ) {
-            foreach ( $tags as $tag ) {
-                array_push( $tagsList, $tag->name );
-            }
 
-            $tagName = join( ' ', $tagsList );
-        }
-        $searchable = [
-            'title' => $this->title,
-            'body'  => $this->body,
-            'tags'  => $tagName,
-        ];
 
-        return $searchable;
-        //return $this->toArray($searchable) + ['path' => $this->path()];
+    // public function toSearchableArray() {
+    //     $tags = $this->tags;
+    //     $tagsList = [];
+    //     $tagName = '';
+    //     if ( $tags->count() ) {
+    //         foreach ( $tags as $tag ) {
+    //             array_push( $tagsList, $tag->name );
+    //         }
+
+    //         $tagName = join( ' ', $tagsList );
+    //     }
+    //     $searchable = [
+    //         'title' => $this->title,
+    //         'body'  => $this->body,
+    //         'tags'  => $tagName,
+    //     ];
+
+    //     return $searchable;
+    //     //return $this->toArray($searchable) + ['path' => $this->path()];
+    // }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tags::class, 'thread_tag', 'thread_id', 'tag_id');
     }
 
-    public function tags() {
-        return $this->belongsToMany( Tags::class, 'thread_tag', 'thread_id', 'tag_id' );
+    public function emojis()
+    {
+        return $this->belongsToMany(Emoji::class, 'thread_emoji', 'thread_id', 'emoji_id');
     }
 
-    public function emojis() {
-        return $this->belongsToMany( Emoji::class, 'thread_emoji', 'thread_id', 'emoji_id' );
+    public function getExcerptAttribute()
+    {
+        //        return substr(strip_tags($this->body),80);
+        $body = strip_tags($this->body);
+        $body = preg_replace('/\s+/', ' ', $this->body);
+
+        return substr(strip_tags($body), 0, 250);
     }
 
-    public function getExcerptAttribute() {
-//        return substr(strip_tags($this->body),80);
-        $body = strip_tags( $this->body );
-        $body = preg_replace( '/\s+/', ' ', $this->body );
-
-        return substr( strip_tags( $body ), 0, 250 );
-
+    public function threadImagePath()
+    {
+        return $this->image_path == '' ? '//upload.wikimedia.org/wikipedia/commons/thumb/8/84/Picture_font_awesome.svg/512px-Picture_font_awesome.svg.png' : asset($this->image_path);
     }
 
-    public function threadImagePath() {
-        return $this->image_path == '' ? '//upload.wikimedia.org/wikipedia/commons/thumb/8/84/Picture_font_awesome.svg/512px-Picture_font_awesome.svg.png' : asset( $this->image_path );
-    }
-
-    public function getThreadImagePathAttribute() {
+    public function getThreadImagePathAttribute()
+    {
         return $this->threadImagePath();
     }
 
-    public function splitCategory() {
+    public function splitCategory()
+    {
         $categories = $this->category;
-        if ( $categories != null ) {
-            $categories = explode( '|', $categories );
+        if ($categories != null) {
+            $categories = explode('|', $categories);
         }
 
         return $categories;
     }
 
-    public function getSplitCategoryAttribute() {
+    public function getSplitCategoryAttribute()
+    {
         return $this->splitCategory();
     }
 
@@ -326,33 +350,30 @@ class Thread extends Model {
      * Get rgb color value from image
      */
 
-    public function getImageColorAttribute() {
-        if ( $this->image_path != NULL ) {
-            $splitName = explode( '.', $this->image_path );
-            $extension = array_pop( $splitName );
+    public function getImageColorAttribute()
+    {
+        if ($this->image_path != NULL) {
+            $splitName = explode('.', $this->image_path);
+            $extension = array_pop($splitName);
 
-            if ( $extension == 'jpg' ) {
-                $im = imagecreatefromjpeg( $this->image_path );
-
+            if ($extension == 'jpg') {
+                $im = imagecreatefromjpeg($this->image_path);
             }
-            if ( $extension == 'jpeg' ) {
-                $im = imagecreatefromjpeg( $this->image_path );
-
-            } else if ( $extension == 'png' ) {
-                $im = imagecreatefrompng( $this->image_path );
-
+            if ($extension == 'jpeg') {
+                $im = imagecreatefromjpeg($this->image_path);
+            } else if ($extension == 'png') {
+                $im = imagecreatefrompng($this->image_path);
             }
-            $rgb = imagecolorat( $im, 0, 0 );
-            $colors = imagecolorsforindex( $im, $rgb );
-            array_pop( $colors );
-            array_push( $colors, 1 );
+            $rgb = imagecolorat($im, 0, 0);
+            $colors = imagecolorsforindex($im, $rgb);
+            array_pop($colors);
+            array_push($colors, 1);
         } else {
             $colors = ['red' => 128, 'green' => 128, 'blue' => 128, 'alpha' => 1];
         }
-        $rgbaString = join( ', ', $colors );
+        $rgbaString = join(', ', $colors);
 
         return $rgbaString;
-
     }
 
     /**
@@ -360,11 +381,13 @@ class Thread extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function ratings() {
-        return $this->hasMany( Rating::class );
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
     }
 
-    public function getTopRatedAttribute() {
-        return ( $this->like_count - ( $this->dislike_count + 1 ) );
+    public function getTopRatedAttribute()
+    {
+        return ($this->like_count - ($this->dislike_count + 1));
     }
 }
