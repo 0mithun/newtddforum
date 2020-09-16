@@ -362,41 +362,61 @@ class Thread extends Model
 
     public function getImageColorAttribute()
     {
-        $image = '';
-        if ($this->image_path != NULL) {
-            $image = $this->image_path;
-        } else if ($this->amazon_image_path != '') {
-            $image = ($this->amazon_image_path);
-        } else if ($this->other_image_path != '') {
-            $image = ($this->other_image_path);
-        } else if ($this->wiki_image_path != '') {
-            $image = $this->wiki_image_path;
+
+        if ($this->image_path_pixel_color != '') {
+            return $this->image_path_pixel_color;
+        } else if ($this->amazon_image_path_pixel_color != '') {
+            return ($this->amazon_image_path_pixel_color);
+        } else if ($this->other_image_path_pixel_color != '') {
+            return ($this->other_image_path_pixel_color);
+        } else if ($this->wiki_image_path_pixel_color != '') {
+            return $this->wiki_image_path_pixel_color;
+        } else {
+            return '255,255,255,1';
         }
 
-        if ($image != '') {
 
-            $splitName = explode('.', $image);
-            $extension = strtolower(array_pop($splitName));
 
-            if ($extension == 'jpg') {
-                $im = imagecreatefromjpeg($image);
-            }
-            if ($extension == 'jpeg') {
-                $im = imagecreatefromjpeg($image);
-            } else if ($extension == 'png') {
-                $im = imagecreatefrompng($image);
-            }
-            $rgb = imagecolorat($im, 0, 0);
-            $colors = imagecolorsforindex($im, $rgb);
-            array_pop($colors);
-            array_push($colors, 1);
+        // $image = '';
+        // if ($this->image_path != NULL) {
+        //     $image = $this->image_path;
+        // } else if ($this->amazon_image_path != '') {
+        //     $image = ($this->amazon_image_path);
+        // } else if ($this->other_image_path != '') {
+        //     $image = ($this->other_image_path);
+        // } else if ($this->wiki_image_path != '') {
+        //     $image = $this->wiki_image_path;
+        // }
 
-            $rgbaString = join(', ', $colors);
+        // if ($image != '') {
 
-            return $rgbaString;
-        }
+        //     $splitName = explode('.', $image);
+        //     $extension = strtolower(array_pop($splitName));
 
-        return '255,255,255,1';
+        //     if ($extension == 'jpg') {
+        //         $im = imagecreatefromjpeg($image);
+        //     }
+        //     if ($extension == 'jpeg') {
+        //         $im = imagecreatefromjpeg($image);
+        //     } else if ($extension == 'png') {
+        //         $im = imagecreatefrompng($image);
+        //     }
+
+        //     if (isset($im)) {
+
+        //         $rgb = imagecolorat($im, 0, 0);
+        //         $colors = imagecolorsforindex($im, $rgb);
+        //         array_pop($colors);
+        //         array_push($colors, 1);
+
+        //         $rgbaString = join(', ', $colors);
+
+        //         return $rgbaString;
+        //     }
+        //     return '255,255,255,1';
+        // }
+
+        // return '255,255,255,1';
     }
 
     /**
