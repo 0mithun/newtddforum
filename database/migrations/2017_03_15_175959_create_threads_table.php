@@ -62,12 +62,12 @@ class CreateThreadsTable extends Migration
             //New Items
             $table->boolean('famous')->default(0);
             $table->text('slide_body')->nullable();
-            $table->varchar('slide_image_pos')->nullable();
-            $table->varchar('slide_color_bg')->nullable();
-            $table->varchar('slide_color_0')->nullable();
-            $table->varchar('slide_color_1')->nullable();
-            $table->varchar('slide_color_2')->nullable();
-            $table->varchar('photo_desc', 1000)->nullable();
+            $table->string('slide_image_pos')->nullable();
+            $table->string('slide_color_bg')->nullable();
+            $table->string('slide_color_0')->nullable();
+            $table->string('slide_color_1')->nullable();
+            $table->string('slide_color_2')->nullable();
+            $table->string('photo_desc', 1000)->nullable();
             $table->boolean('error')->default(0);
 
             $table->timestamps();
