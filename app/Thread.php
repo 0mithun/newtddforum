@@ -332,7 +332,8 @@ class Thread extends Model
         } else if ($this->wiki_image_path != '') {
             return $this->wiki_image_path;
         } else {
-            return   '//upload.wikimedia.org/wikipedia/commons/thumb/8/84/Picture_font_awesome.svg/512px-Picture_font_awesome.svg.png';
+            // return   '//upload.wikimedia.org/wikipedia/commons/thumb/8/84/Picture_font_awesome.svg/512px-Picture_font_awesome.svg.png';
+            return '';
         }
     }
 

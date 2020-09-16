@@ -47,7 +47,11 @@
                   <div class="post-counts">{{ postCounts }} posts</div>
                 </div>
                 <div class="post-body">
-                  <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
+                  <single-thread
+                    v-for="(thread, index) in paginatedItems"
+                    :thread="thread"
+                    :key="index"
+                  ></single-thread>
                   <nav aria-label="..." v-if="totalPage > 1">
                     <ul class="pagination">
                       <li v-if="currentPage != 1">
@@ -163,6 +167,7 @@ export default {
         this.page = this.page;
       }
     },
+
     paginate(per_page, page_number) {
       let itemsToParse = this.tag.threads;
       let start = (page_number - 1) * per_page;
