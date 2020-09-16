@@ -281,15 +281,15 @@ class Thread extends Model
     //  */
     public function toSearchableArray()
     {
-        $tags = $this->tags;
-        $tagsList = [];
+        // $tags = $this->tags;
+        // $tagsList = [];
         $tagName = '';
         // if ($tags->count() > 0) {
         //     foreach ($tags as $tag) {
         //         array_push($tagsList, $tag->name);
         //     }
         // }
-        $tagName = join(' ', $tagsList);
+        // $tagName = join(' ', $tagsList);
         $searchable = [
             'title' => $this->title,
             'body'  => $this->body,
@@ -321,7 +321,20 @@ class Thread extends Model
 
     public function threadImagePath()
     {
-        return $this->image_path == '' ? '//upload.wikimedia.org/wikipedia/commons/thumb/8/84/Picture_font_awesome.svg/512px-Picture_font_awesome.svg.png' : asset($this->image_path);
+        // return $this->image_path == '' ? '//upload.wikimedia.org/wikipedia/commons/thumb/8/84/Picture_font_awesome.svg/512px-Picture_font_awesome.svg.png' : asset($this->image_path);
+
+        if ($this->image_path != '') {
+            return asset($this->image_path);
+        } else if ($this->amazon_image_path != '') {
+            return asset($this->amazon_image_path);
+        } else if ($this->other_image_path != '') {
+            return asset($this->other_image_path);
+        } else if ($this->wiki_image_path != '') {
+            return $this->wiki_image_path;
+        } else {
+            // return   '//upload.wikimedia.org/wikipedia/commons/thumb/8/84/Picture_font_awesome.svg/512px-Picture_font_awesome.svg.png';
+            return '';
+        }
     }
 
     public function getThreadImagePathAttribute()
@@ -350,28 +363,61 @@ class Thread extends Model
 
     public function getImageColorAttribute()
     {
-        if ($this->image_path != NULL) {
-            $splitName = explode('.', $this->image_path);
-            $extension = array_pop($splitName);
 
-            if ($extension == 'jpg') {
-                $im = imagecreatefromjpeg($this->image_path);
-            }
-            if ($extension == 'jpeg') {
-                $im = imagecreatefromjpeg($this->image_path);
-            } else if ($extension == 'png') {
-                $im = imagecreatefrompng($this->image_path);
-            }
-            $rgb = imagecolorat($im, 0, 0);
-            $colors = imagecolorsforindex($im, $rgb);
-            array_pop($colors);
-            array_push($colors, 1);
+        if ($this->image_path_pixel_color != '') {
+            return $this->image_path_pixel_color;
+        } else if ($this->amazon_image_path_pixel_color != '') {
+            return ($this->amazon_image_path_pixel_color);
+        } else if ($this->other_image_path_pixel_color != '') {
+            return ($this->other_image_path_pixel_color);
+        } else if ($this->wiki_image_path_pixel_color != '') {
+            return $this->wiki_image_path_pixel_color;
         } else {
-            $colors = ['red' => 128, 'green' => 128, 'blue' => 128, 'alpha' => 1];
+            return '255,255,255,1';
         }
-        $rgbaString = join(', ', $colors);
 
-        return $rgbaString;
+
+
+        // $image = '';
+        // if ($this->image_path != NULL) {
+        //     $image = $this->image_path;
+        // } else if ($this->amazon_image_path != '') {
+        //     $image = ($this->amazon_image_path);
+        // } else if ($this->other_image_path != '') {
+        //     $image = ($this->other_image_path);
+        // } else if ($this->wiki_image_path != '') {
+        //     $image = $this->wiki_image_path;
+        // }
+
+        // if ($image != '') {
+
+        //     $splitName = explode('.', $image);
+        //     $extension = strtolower(array_pop($splitName));
+
+        //     if ($extension == 'jpg') {
+        //         $im = imagecreatefromjpeg($image);
+        //     }
+        //     if ($extension == 'jpeg') {
+        //         $im = imagecreatefromjpeg($image);
+        //     } else if ($extension == 'png') {
+        //         $im = imagecreatefrompng($image);
+        //     }
+
+        //     if (isset($im)) {
+
+        //         $rgb = imagecolorat($im, 0, 0);
+        //         $colors = imagecolorsforindex($im, $rgb);
+        //         array_pop($colors);
+        //         array_push($colors, 1);
+
+        //         $rgbaString = join(', ', $colors);
+
+        //         return $rgbaString;
+        //     }
+        //     return '255,255,255,1';
+        // }
+
+        // return '255,255,255,1';
     }
 
     /**

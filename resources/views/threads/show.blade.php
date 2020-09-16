@@ -186,11 +186,15 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($thread->tags->count()>0)
+
+                        @php $threadTags = $thread->tags()->get(); @endphp
+                        @if ($threadTags->count()>0)
                             <div class="row">
                                 <div class="col-md-12 thread-show-tags">                                                                   
                                     Tags:
-                                    @foreach ($thread->tags as $tag)
+                                    
+                                   
+                                    @foreach ($threadTags as $tag)
                                         <a  href="{{ strtolower(route('tags.threads.list', $tag->name))  }}" class="tag-name">#{{ $tag->name }}</a>
                                     @endforeach                               
                                 </div>

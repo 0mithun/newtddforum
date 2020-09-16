@@ -47,7 +47,37 @@
                   <div class="post-counts">{{ postCounts }} posts</div>
                 </div>
                 <div class="post-body">
-                  <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
+                  <single-thread
+                    v-for="(thread, index) in paginatedItems"
+                    :thread="thread"
+                    :key="index"
+                  ></single-thread>
+                  <nav aria-label="..." v-if="totalPage > 1">
+                    <ul class="pagination">
+                      <li v-if="currentPage != 1">
+                        <span>
+                          <span aria-hidden="true">&laquo;</span>
+                        </span>
+                      </li>
+                      <li
+                        v-for="page in totalPage"
+                        :key="page"
+                        @click="onPageChange(page)"
+                        :class="{ active: currentPage == page }"
+                      >
+                        <span>
+                          {{ page }}
+                          <span class="sr-only">{{ page }}</span>
+                        </span>
+                      </li>
+
+                      <li v-if="currentPage != totalPage">
+                        <span>
+                          <span aria-hidden="true">&raquo;</span>
+                        </span>
+                      </li>
+                    </ul>
+                  </nav>
                 </div>
               </div>
             </div>
@@ -75,16 +105,28 @@ export default {
       posts: this.tag.threads,
       followings: [],
       isFollow: false,
+      page: 1,
+      perPage: 10,
+      paginatedItems: [],
     };
   },
   computed: {
     postCounts() {
       return abbreviate(this.posts.length, 1);
     },
+    currentPage() {
+      return this.page;
+    },
+    totalPage() {
+      return Math.ceil(this.posts.length / this.perPage);
+    },
   },
   created() {
     this.checkIsFollow();
     this.getAllFollowings();
+
+    this.setCurrentPage();
+    this.paginate(this.perPage, 1);
   },
   methods: {
     toggleFollow() {
@@ -113,6 +155,33 @@ export default {
       axios.get(`/tag/${this.tag.id}/followings`).then((res) => {
         this.followings = res.data.followings;
       });
+    },
+
+    setCurrentPage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const page = urlParams.get("page");
+
+      if (page && page != "") {
+        this.page = page;
+      } else {
+        this.page = this.page;
+      }
+    },
+
+    paginate(per_page, page_number) {
+      let itemsToParse = this.tag.threads;
+      let start = (page_number - 1) * per_page;
+      let end = page_number * per_page;
+      const newThreads = itemsToParse.slice(start, end);
+
+      this.paginatedItems = newThreads;
+    },
+
+    onPageChange(page) {
+      this.page = page;
+
+      history.pushState(null, null, "?page=" + page);
+      this.paginate(this.perPage, page);
     },
   },
 };
