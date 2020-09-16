@@ -9,64 +9,74 @@ use App\Tags;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
-class FrontendController extends Controller {
-    public function contact() {
-        return view( 'pages.contact' );
+class FrontendController extends Controller
+{
+    public function contact()
+    {
+        return view('pages.contact');
     }
 
-    public function tos() {
+    public function tos()
+    {
         $admin = Admin::first();
         $pageTitle = 'Terms & conditions';
 
-        return view( 'pages.tos', compact( 'admin', 'pageTitle' ) );
+        return view('pages.tos', compact('admin', 'pageTitle'));
     }
 
-    public function faq() {
+    public function faq()
+    {
         $admin = Admin::first();
 
         $pageTitle = 'Frequently asked questions';
 
-        return view( 'pages.faq', compact( 'admin', 'pageTitle' ) );
+        return view('pages.faq', compact('admin', 'pageTitle'));
     }
 
-    public function privacyPolicy() {
+    public function privacyPolicy()
+    {
         $admin = Admin::first();
 
         $pageTitle = 'Privacy policy';
 
-        return view( 'pages.privacypolicy', compact( 'admin', 'pageTitle' ) );
+        return view('pages.privacypolicy', compact('admin', 'pageTitle'));
     }
 
-    public function contactAdmin( Recaptcha $recaptcha ) {
-        request()->validate( [
-            'from'                 => 'required',
-            'subject'              => 'required',
-            'body'                 => 'required',
-            'g-recaptcha-response' => ['required', $recaptcha],
-        ],
+    public function contactAdmin(Recaptcha $recaptcha)
+    {
+        request()->validate(
+            [
+                'from'                 => 'required',
+                'subject'              => 'required',
+                'body'                 => 'required',
+                'g-recaptcha-response' => ['required', $recaptcha],
+            ],
             [
                 'g-recaptcha-response.required' => 'Please solve the captcha',
-            ] );
+            ]
+        );
 
-        $data = request()->only( ['from', 'subject', 'body'] );
+        $data = request()->only(['from', 'subject', 'body']);
 
-        Mail::to( 'admin@anecdotage.com' )->send( new ContactToAdmin( $data ) );
+        Mail::to('admin@anecdotage.com')->send(new ContactToAdmin($data));
 
-        return redirect( '/' );
+        return redirect('/');
     }
 
-    public function showTags() {
-        $tags = Tags::withCount( 'threads' )->orderBy( 'threads_count', 'desc' )->take( 100 )->get();
+    public function showTags()
+    {
+        $tags = Tags::withCount('threads')->orderBy('threads_count', 'desc')->take(100)->get();
         //return response()->json($tags);
-        $tags = json_encode( $tags );
+        $tags = json_encode($tags);
         $pageTitle = 'All Tags';
 
-        return view( 'threads.tags', compact( 'tags', 'pageTitle' ) );
+        return view('threads.tags', compact('tags', 'pageTitle'));
     }
 
-    public function allTags() {
-        $tags = Tags::orderBy( 'name', 'ASC' )->get()->pluck( 'name' );
+    public function allTags()
+    {
+        $tags = Tags::orderBy('name', 'ASC')->get()->pluck('name');
 
-        return response()->json( $tags );
+        return response()->json($tags);
     }
 }

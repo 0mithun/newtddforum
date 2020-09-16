@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Admin;
 use App\Channel;
 use App\Filters\ThreadFilters;
@@ -21,15 +22,17 @@ use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Spatie\Geocoder\Geocoder;
 
-class ThreadsController extends Controller {
+class ThreadsController extends Controller
+{
     /**
      * Create a new ThreadsController instance.
      */
-    public function __construct() {
-        $this->middleware( 'auth' )->except( ['index', 'show', 'loadByTag', 'getTrending'] );
-        $this->middleware( 'userban' )->only( ['create', 'update', 'destroy'] );
-        $this->middleware( 'must-be-confirmed' )->only( ['create', 'update', 'destroy'] );
-        $this->middleware( 'throttle:10' )->only( ['show'] );
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show', 'loadByTag', 'getTrending']);
+        $this->middleware('userban')->only(['create', 'update', 'destroy']);
+        $this->middleware('must-be-confirmed')->only(['create', 'update', 'destroy']);
+        $this->middleware('throttle:10')->only(['show']);
     }
 
     /**
@@ -40,53 +43,53 @@ class ThreadsController extends Controller {
      * @param \App\Trending $trending
      * @return \Illuminate\Http\Response
      */
-    public function index( Channel $channel, ThreadFilters $filters, Trending $trending ) {
-        $threads = $this->getThreads( $channel, $filters );
-        if ( auth()->check() ) {
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
+    {
+        $threads = $this->getThreads($channel, $filters);
+        if (auth()->check()) {
             $user = auth()->user();
             $privacy = $user->userprivacy;
-            if ( $privacy->restricted_18 == 1 ) {
-                $threads = collect( $threads->get() );
-            } else if ( $user->id == 1 ) {
-                $threads = collect( $threads->get() );
-            } else if ( $privacy->restricted_13 == 1 ) {
-                $collect = collect( $threads->get() );
-                $threads = $collect->filter( function ( $thread ) use ( $user ) {
-                    if ( $thread->user_id == $user->id ) {
+            if ($privacy->restricted_18 == 1) {
+                $threads = collect($threads->get());
+            } else if ($user->id == 1) {
+                $threads = collect($threads->get());
+            } else if ($privacy->restricted_13 == 1) {
+                $collect = collect($threads->get());
+                $threads = $collect->filter(function ($thread) use ($user) {
+                    if ($thread->user_id == $user->id) {
                         return true;
-                    } else if ( $thread->age_restriction != 18 ) {
+                    } else if ($thread->age_restriction != 18) {
                         return true;
                     }
-                } );
+                });
             } else {
-                $collect = collect( $threads->get() );
-                $threads = $collect->filter( function ( $thread ) use ( $user ) {
-                    if ( $thread->user_id == $user->id ) {
+                $collect = collect($threads->get());
+                $threads = $collect->filter(function ($thread) use ($user) {
+                    if ($thread->user_id == $user->id) {
                         return true;
-                    } else if ( $thread->age_restriction == 0 ) {
+                    } else if ($thread->age_restriction == 0) {
                         return true;
                     }
-                } );
+                });
             }
-
         } else {
-            $collect = collect( $threads->get() );
-            $threads = $collect->where( 'age_restriction', 0 );
+            $collect = collect($threads->get());
+            $threads = $collect->where('age_restriction', 0);
         }
 
-        $threads = $this->paginate( $threads, 10 );
+        $threads = $this->paginate($threads, 10);
 
-        if ( request()->wantsJson() ) {
+        if (request()->wantsJson()) {
             return $threads;
         }
         $admin = Admin::first();
 
-        return view( 'threads.index', [
+        return view('threads.index', [
             'threads'   => $threads,
             'trending'  => $trending->get(),
             'pageTitle' => $admin->app_title,
 
-        ] );
+        ]);
     }
 
     /**
@@ -97,16 +100,18 @@ class ThreadsController extends Controller {
      * @param \App\Trending $trending
      * @return \Illuminate\Http\Response
      */
-    public function show( $channel, Thread $thread, Trending $trending ) {
-        $this->authorize( 'show', $thread );
+    public function show($channel, Thread $thread, Trending $trending)
+    {
+        $this->authorize('show', $thread);
 
-        $trending->push( $thread );
-        $thread->increment( 'visits' );
+        $trending->push($thread);
+        $thread->increment('visits');
 
         // $relatedThreads = $this->getRelatedThread( $thread );
         $pageTitle = $thread->title;
 
-        return view( 'threads.show', compact( 'thread', 'pageTitle' ) );
+
+        return view('threads.show', compact('thread', 'pageTitle'));
     }
 
     /**
@@ -114,16 +119,17 @@ class ThreadsController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        $tags = Tags::orderBy( 'name', 'ASC' )->get()->pluck( 'name' );
-        $tags = $tags->map( function ( $tag ) {
-            return \strtolower( $tag );
-        } );
+    public function create()
+    {
+        $tags = Tags::orderBy('name', 'ASC')->get()->pluck('name');
+        $tags = $tags->map(function ($tag) {
+            return \strtolower($tag);
+        });
 
-        $channel = Channel::select( ['id', 'name'] )->orderBy( 'name', 'ASC' )->get();
+        $channel = Channel::select(['id', 'name'])->orderBy('name', 'ASC')->get();
         $pageTitle = 'Add new Thread';
 
-        return view( 'threads.create', compact( 'tags', 'channel', 'pageTitle' ) );
+        return view('threads.create', compact('tags', 'channel', 'pageTitle'));
     }
 
     /**
@@ -132,13 +138,14 @@ class ThreadsController extends Controller {
      * @param  \App\Rules\Recaptcha $recaptcha
      * @return \Illuminate\Http\Response
      */
-    public function store( CreateThreadRequest $request ) {
+    public function store(CreateThreadRequest $request)
+    {
         $authUser = auth()->user();
         $data = [
             'user_id'                => $authUser->id,
             'title'                  => $request->title,
             'body'                   => $request->body,
-            'word_count'             => str_word_count( $request->body ),
+            'word_count'             => str_word_count($request->body),
             'source'                 => $request->source == null ? '' : $request->source,
             'location'               => $request->location == null ? '' : $request->location,
             'main_subject'           => $request->main_subject == null ? '' : $request->main_subject,
@@ -146,40 +153,40 @@ class ThreadsController extends Controller {
             'wiki_image_description' => $request->wiki_image_description == null ? '' : $request->wiki_image_description,
             'cno'                    => $request->cno == null ? '' : $request->cno,
             'age_restriction'        => $request->age_restriction ? $request->age_restriction : 0,
-            'anonymous'              => request( 'anonymous', 0 ),
+            'anonymous'              => request('anonymous', 0),
         ];
 
-        if ( $request->location != null ) {
-            $location = $this->getGeocodeing( $request->location );
-            if ( $location['accuracy'] != 'result_not_found' ) {
+        if ($request->location != null) {
+            $location = $this->getGeocodeing($request->location);
+            if ($location['accuracy'] != 'result_not_found') {
                 $data['lat'] = $location['lat'];
                 $data['lng'] = $location['lng'];
             }
         }
 
         $channel = '';
-        if ( $request->has( 'channel' ) && $request->channel != null ) {
-            $channel = json_decode( $request->channel );
+        if ($request->has('channel') && $request->channel != null) {
+            $channel = json_decode($request->channel);
             $data['channel_id'] = $channel->id;
         } else {
             $data['channel_id'] = 1;
         }
 
-        $thread = Thread::create( $data );
+        $thread = Thread::create($data);
 
-        $this->uploadThreadImages( $request, $thread );
-        $this->attachTags( $request, $thread );
+        $this->uploadThreadImages($request, $thread);
+        $this->attachTags($request, $thread);
 
         // if(request('wiki_info_page_url') != ''){
         //     WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
         // }
 
-        if ( $request->expectsJson() ) {
-            return response()->json( ['status' => 'success', 'thread' => $thread], 200 );
+        if ($request->expectsJson()) {
+            return response()->json(['status' => 'success', 'thread' => $thread], 200);
         }
 
-        return redirect( $thread->path() )
-            ->with( 'flash', 'Your thread has been published!' );
+        return redirect($thread->path())
+            ->with('flash', 'Your thread has been published!');
     }
 
     /**
@@ -187,17 +194,18 @@ class ThreadsController extends Controller {
      * @param string $slug
      */
 
-    public function edit( Thread $thread ) {
-        $tags = Tags::orderBy( 'name', 'ASC' )->get()->pluck( 'name' );
-        $tags = $tags->map( function ( $tag ) {
-            return \strtolower( $tag );
-        } );
+    public function edit(Thread $thread)
+    {
+        $tags = Tags::orderBy('name', 'ASC')->get()->pluck('name');
+        $tags = $tags->map(function ($tag) {
+            return \strtolower($tag);
+        });
 
-        $channel = Channel::select( ['id', 'name'] )->orderBy( 'name', 'ASC' )->get();
+        $channel = Channel::select(['id', 'name'])->orderBy('name', 'ASC')->get();
 
         $pageTitle = 'Edit: ' . $thread->title;
 
-        return view( 'threads.edit', compact( 'tags', 'channel', 'thread', '$pageTitle' ) );
+        return view('threads.edit', compact('tags', 'channel', 'thread', '$pageTitle'));
     }
 
     /**
@@ -206,14 +214,15 @@ class ThreadsController extends Controller {
      * @param string $channel
      * @param Thread $thread
      */
-    public function update( UpdateThreadRequest $request, Thread $thread ) {
-        $this->authorize( 'update', $thread );
+    public function update(UpdateThreadRequest $request, Thread $thread)
+    {
+        $this->authorize('update', $thread);
         $authUser = auth()->user();
 
         $data = [
             'title'                  => $request->title,
             'body'                   => $request->body,
-            'word_count'             => str_word_count( $request->body ),
+            'word_count'             => str_word_count($request->body),
             'source'                 => $request->source == null ? '' : $request->source,
             'location'               => $request->location == null ? '' : $request->location,
             'main_subject'           => $request->main_subject == null ? '' : $request->main_subject,
@@ -221,40 +230,40 @@ class ThreadsController extends Controller {
             'wiki_image_description' => $request->wiki_image_description == null ? '' : $request->wiki_image_description,
             'cno'                    => $request->cno == null ? '' : $request->cno,
             'age_restriction'        => $request->age_restriction ? $request->age_restriction : 0,
-            'anonymous'              => request( 'anonymous', 0 ),
+            'anonymous'              => request('anonymous', 0),
         ];
 
-        if ( $request->location != null ) {
-            $location = $this->getGeocodeing( $request->location );
-            if ( $location['accuracy'] != 'result_not_found' ) {
+        if ($request->location != null) {
+            $location = $this->getGeocodeing($request->location);
+            if ($location['accuracy'] != 'result_not_found') {
                 $data['lat'] = $location['lat'];
                 $data['lng'] = $location['lng'];
             }
         }
 
         $channel = '';
-        if ( $request->has( 'channel' ) && $request->channel != null ) {
-            $channel = json_decode( $request->channel );
+        if ($request->has('channel') && $request->channel != null) {
+            $channel = json_decode($request->channel);
             $data['channel_id'] = $channel->id;
         } else {
             $data['channel_id'] = 1;
         }
 
-        $thread->update( $data );
+        $thread->update($data);
 
-        $this->uploadThreadImages( $request, $thread );
-        $this->attachTags( $request, $thread );
+        $this->uploadThreadImages($request, $thread);
+        $this->attachTags($request, $thread);
 
-        if ( request( 'wiki_info_page_url' ) != '' ) {
-            WikiImageProcess::dispatch( request( 'wiki_info_page_url' ), $thread, false );
+        if (request('wiki_info_page_url') != '') {
+            WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
         }
 
-        if ( $request->expectsJson() ) {
-            return response()->json( ['status' => 'success', 'thread' => $thread], 200 );
+        if ($request->expectsJson()) {
+            return response()->json(['status' => 'success', 'thread' => $thread], 200);
         }
 
-        return redirect( $thread->path() )
-            ->with( 'flash', 'Your thread has been published!' );
+        return redirect($thread->path())
+            ->with('flash', 'Your thread has been published!');
     }
 
     /**
@@ -264,21 +273,22 @@ class ThreadsController extends Controller {
      * @param Thread $thread
      * @return mixed
      */
-    public function destroy( Thread $thread ) {
-        $this->authorize( 'update', $thread );
+    public function destroy(Thread $thread)
+    {
+        $this->authorize('update', $thread);
 
         $thread->delete();
         $thread_thumb = $thread->image_path;
-        if ( file_exists( $thread_thumb ) ) {
-            unlink( $thread_thumb );
+        if (file_exists($thread_thumb)) {
+            unlink($thread_thumb);
         }
-        session()->flash( 'success', 'Thread delete Successfully' );
+        session()->flash('success', 'Thread delete Successfully');
 
-        if ( request()->wantsJson() ) {
-            return response( [], 204 );
+        if (request()->wantsJson()) {
+            return response([], 204);
         }
 
-        return redirect( '/threads' );
+        return redirect('/threads');
     }
 
     /**
@@ -288,21 +298,22 @@ class ThreadsController extends Controller {
      * @param ThreadFilters $filters
      * @return mixed
      */
-    protected function getThreads( Channel $channel, ThreadFilters $filters ) {
+    protected function getThreads(Channel $channel, ThreadFilters $filters)
+    {
         // $threads = Thread::latest()->filter( $filters );
 
         $threads = Thread::latest();
 
-        if ( request()->path() == '/' ) {
+        if (request()->path() == '/') {
             $threads->getQuery()->orders = [];
 
-            $threads->whereColumn( 'like_count', '>', 'dislike_count' )->orderByRaw( 'like_count - (dislike_count + 1 ) DESC' );
+            $threads->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - (dislike_count + 1 ) DESC');
         } else {
-            $threads->latest()->filter( $filters );
+            $threads->latest()->filter($filters);
         }
 
-        if ( $channel->exists ) {
-            $threads->where( 'channel_id', $channel->id );
+        if ($channel->exists) {
+            $threads->where('channel_id', $channel->id);
         }
 
         return $threads;
@@ -312,94 +323,96 @@ class ThreadsController extends Controller {
      * Paginate Filter Threads
      */
 
-    public function paginate( $items, $perPage = 2, $page = null ) {
-        $page = $page ?: ( Paginator::resolveCurrentPage() ?: 1 );
-        $items = $items instanceof Collection ? $items : Collection::make( $items );
+    public function paginate($items, $perPage = 2, $page = null)
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
 
-        return new LengthAwarePaginator( $items->forPage( $page, $perPage ), $items->count(), $perPage, $page, [
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, [
             'path'     => Paginator::resolveCurrentPath(),
             'pageName' => 'page',
-        ] );
+        ]);
     }
 
     /**
      * Get Threads by tag
      */
-    public function loadByTag( $tagname ) {
-        $tag = Tags::where( 'name', \request( 'tagname' ) )->first();
+    public function loadByTag($tagname)
+    {
+        $tag = Tags::where('name', \request('tagname'))->first();
 
-        if ( !$tag ) {
-            $channel = Channel::where( 'name', ucfirst( $tagname ) )->first();
-            if ( $channel ) {
-                $tag = Tags::create( ['name' => strtolower( $channel->name )] );
-
+        if (!$tag) {
+            $channel = Channel::where('name', ucfirst($tagname))->first();
+            if ($channel) {
+                $tag = Tags::create(['name' => strtolower($channel->name)]);
             } else {
-                abort( 404 );
+                abort(404);
             }
         }
 
         $pageTitle = 'Tag: ' . $tag->name;
-        $tag->load( 'threads' );
+        $tag->load('threads');
 
-        return view( 'threads.threadsbytag', compact( 'tag', 'pageTitle' ) );
-
+        return view('threads.threadsbytag', compact('tag', 'pageTitle'));
     }
 
     /**
      * Get lat, lng with thread location
      */
 
-    public function getGeocodeing( $address ) {
+    public function getGeocodeing($address)
+    {
         $client = new \GuzzleHttp\Client();
 
-        $geocoder = new Geocoder( $client );
+        $geocoder = new Geocoder($client);
 
-        $geocoder->setApiKey( config( 'geocoder.key' ) );
+        $geocoder->setApiKey(config('geocoder.key'));
 
-        $geocoder->setCountry( config( 'geocoder.country', 'US' ) );
+        $geocoder->setCountry(config('geocoder.country', 'US'));
 
-        return $geocoder->getCoordinatesForAddress( $address );
+        return $geocoder->getCoordinatesForAddress($address);
     }
 
     /**
      * Get Related Threads
      */
 
-    public function getRelatedThread( $thread ) {
+    public function getRelatedThread($thread)
+    {
         //Related Threads
-        $threadTags = $thread->tags->pluck( 'id' )->all();
+        $threadTags = $thread->tags->pluck('id')->all();
         $relatedThreads = [];
-        $relatedThreads = Thread::whereHas( 'tags', function ( $q ) use ( $threadTags ) {
-            $q->whereIn( 'id', $threadTags ); // or email <> ''
-        } )
-            ->whereNotIn( 'id', [$thread->id] )
+        $relatedThreads = Thread::whereHas('tags', function ($q) use ($threadTags) {
+            $q->whereIn('id', $threadTags); // or email <> ''
+        })
+            ->whereNotIn('id', [$thread->id])
             ->get();
-        $relatedThreads = collect( $relatedThreads );
+        $relatedThreads = collect($relatedThreads);
 
-        if ( auth()->check() ) {
+        if (auth()->check()) {
             $auth_user = auth()->user();
-            $relatedThreads = $relatedThreads->filter( function ( $value, $key ) use ( $auth_user ) {
-                if ( $value->age_restriction == 0 ) {
+            $relatedThreads = $relatedThreads->filter(function ($value, $key) use ($auth_user) {
+                if ($value->age_restriction == 0) {
                     return true;
-                } else if ( $value->user_id == $auth_user->id ) {
+                } else if ($value->user_id == $auth_user->id) {
                     return true;
-                } else if ( $auth_user->id == 1 ) {
+                } else if ($auth_user->id == 1) {
                     return true;
-                } else if ( $auth_user->userprivacy->restricted_18 == 1 ) {
+                } else if ($auth_user->userprivacy->restricted_18 == 1) {
                     return true;
-                } else if ( $value->age_restriction == 13 && $auth_user->userprivacy->restricted_13 == 1 ) {
+                } else if ($value->age_restriction == 13 && $auth_user->userprivacy->restricted_13 == 1) {
                     return true;
                 }
-            } );
+            });
         } else {
-            $relatedThreads = $relatedThreads->filter( function ( $value, $key ) {
-                if ( $value->age_restriction == 0 ) {
+            $relatedThreads = $relatedThreads->filter(function ($value, $key) {
+                if ($value->age_restriction == 0) {
                     return true;
                 }
-            } );
+            });
         }
-        if ( $relatedThreads->count() > 4 ) {
-            $relatedThreads = $relatedThreads->random( 5 );
+        if ($relatedThreads->count() > 4) {
+            $relatedThreads = $relatedThreads->random(5);
         }
 
         return $relatedThreads;
@@ -409,16 +422,17 @@ class ThreadsController extends Controller {
      * Uplod Thread Images
      */
 
-    public function uploadThreadImages( $request, $thread ) {
-        if ( $request->hasFile( 'image_path' ) ) {
+    public function uploadThreadImages($request, $thread)
+    {
+        if ($request->hasFile('image_path')) {
             $thread_thumb = $thread->image_path;
-            if ( file_exists( $thread_thumb ) ) {
-                unlink( $thread_thumb );
+            if (file_exists($thread_thumb)) {
+                unlink($thread_thumb);
             }
 
-            $extension = $request->file( 'image_path' )->getClientOriginalExtension();
+            $extension = $request->file('image_path')->getClientOriginalExtension();
             $file_name = $thread->id . "." . $extension;
-            $file_path = $request->image_path->storeAs( 'threads', $file_name );
+            $file_path = $request->image_path->storeAs('threads', $file_name);
             $thread->image_path = 'uploads/' . $file_path;
             $thread->save();
         }
@@ -428,67 +442,68 @@ class ThreadsController extends Controller {
      * Attacg & Save Thread Tags
      */
 
-    public function attachTags( $request, $thread ) {
+    public function attachTags($request, $thread)
+    {
         $tags = [];
-        if ( $request->has( 'tags' ) && $request->tags != null ) {
-            $tags = explode( ',', $request->tags );
+        if ($request->has('tags') && $request->tags != null) {
+            $tags = explode(',', $request->tags);
         }
 
-        if ( $request->has( 'channel' ) && $request->channel != null ) {
-            $channel = json_decode( $request->channel );
-            if ( !in_array( \strtolower( $channel->name ), $tags ) ) {
-                $tags[] = \strtolower( $channel->name );
+        if ($request->has('channel') && $request->channel != null) {
+            $channel = json_decode($request->channel);
+            if (!in_array(\strtolower($channel->name), $tags)) {
+                $tags[] = \strtolower($channel->name);
             }
         }
 
         $main_subject = $request->main_subject;
-        if ( $request->has( 'main_subject' ) && $request->main_subject != null ) {
-            if ( !in_array( \strtolower( $request->main_subject ), $tags ) ) {
-                $tags[] = \strtolower( $request->main_subject );
+        if ($request->has('main_subject') && $request->main_subject != null) {
+            if (!in_array(\strtolower($request->main_subject), $tags)) {
+                $tags[] = \strtolower($request->main_subject);
             }
         }
 
         $tag_ids = [];
-        foreach ( $tags as $tag ) {
-            $searchTag = Tags::where( 'name', strtolower( $tag ) )->first();
+        foreach ($tags as $tag) {
+            $searchTag = Tags::where('name', strtolower($tag))->first();
 
-            if ( $searchTag ) {
+            if ($searchTag) {
                 $tag_ids[] = $searchTag->id;
             } else {
-                if ( $tag != 'null' ) {
-                    $newTag = Tags::create( ['name' => strtolower( $tag )] );
+                if ($tag != 'null') {
+                    $newTag = Tags::create(['name' => strtolower($tag)]);
                     $tag_ids[] = $newTag->id;
                 }
             }
             // $thread->tags()->delete();
         }
 
-        $thread->tags()->sync( $tag_ids );
-
+        $thread->tags()->sync($tag_ids);
     }
 
     /**
      * Share Thread
      */
 
-    public function share( Request $request ) {
-        $thread = Thread::where( 'id', $request->thread )->first();
+    public function share(Request $request)
+    {
+        $thread = Thread::where('id', $request->thread)->first();
         $authUser = auth()->user();
 
         //Send user Notification
-        if ( $authUser->userprivacy->thread_create_share_facebook == 1 ) {
-            return response()->json( 'under default facebook' );
-            $thread->notify( new ThreadPostFacebook );
-        } else if ( $request->has( 'share_on_facebook' ) && $request->share_on_facebook == true ) {
-            $thread->notify( new ThreadPostFacebook );
+        if ($authUser->userprivacy->thread_create_share_facebook == 1) {
+            return response()->json('under default facebook');
+            $thread->notify(new ThreadPostFacebook);
+        } else if ($request->has('share_on_facebook') && $request->share_on_facebook == true) {
+            $thread->notify(new ThreadPostFacebook);
         }
 
         //Send user Notification
-        if ( $authUser->userprivacy->thread_create_share_twitter == 1 ) {
-            return response()->json( 'under default twitter' );
-            $thread->notify( new ThreadPostTwitter );
-        } else if ( $request->has( 'share_on_twitter' ) && $request->share_on_twitter == true ) {
-            $thread->notify( new ThreadPostTwitter );
+        if ($authUser->userprivacy->thread_create_share_twitter == 1) {
+            return response()->json('under default twitter');
+            $thread->notify(new ThreadPostTwitter);
+        } else if ($request->has('share_on_twitter') && $request->share_on_twitter == true) {
+            $thread->notify(new ThreadPostTwitter);
         }
     }
 
@@ -496,35 +511,35 @@ class ThreadsController extends Controller {
      * Get all trending item
      */
 
-    public function getTrending( Trending $trending ) {
+    public function getTrending(Trending $trending)
+    {
         $trendingThreads = $trending->get();
-        if ( auth()->check() ) {
+        if (auth()->check()) {
             $auth_user = auth()->user();
-            $threads = collect( $trendingThreads )->filter( function ( $thread ) use ( $auth_user ) {
-                if ( $thread->age_restriction == 0 ) {
+            $threads = collect($trendingThreads)->filter(function ($thread) use ($auth_user) {
+                if ($thread->age_restriction == 0) {
                     return true;
-                } elseif ( $auth_user->id == 1 ) {
+                } elseif ($auth_user->id == 1) {
                     return true;
-                } elseif ( $thread->user_id == $auth_user->id ) {
+                } elseif ($thread->user_id == $auth_user->id) {
                     return true;
-                } elseif ( $auth_user->userprivacy->restricted_18 == 1 ) {
+                } elseif ($auth_user->userprivacy->restricted_18 == 1) {
                     return true;
-                } elseif ( $auth_user->userprivacy->restricted_13 == 1 && $thread->age_restriction == 13 ) {
+                } elseif ($auth_user->userprivacy->restricted_13 == 1 && $thread->age_restriction == 13) {
                     return true;
                 }
-            } )->values();
-
+            })->values();
         } else {
-            $threads = collect( $trendingThreads )->filter( function ( $thread ) {
+            $threads = collect($trendingThreads)->filter(function ($thread) {
                 return $thread->age_restriction == 0;
-            } )->values();
+            })->values();
         }
 
-        return response()->json( $threads );
+        return response()->json($threads);
     }
 
-    public function getSingleThread( Thread $thread ) {
-        return response()->json( $thread );
+    public function getSingleThread(Thread $thread)
+    {
+        return response()->json($thread);
     }
-
 }

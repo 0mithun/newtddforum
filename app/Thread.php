@@ -281,15 +281,15 @@ class Thread extends Model
     //  */
     public function toSearchableArray()
     {
-        $tags = $this->tags;
-        $tagsList = [];
+        // $tags = $this->tags;
+        // $tagsList = [];
         $tagName = '';
         // if ($tags->count() > 0) {
         //     foreach ($tags as $tag) {
         //         array_push($tagsList, $tag->name);
         //     }
         // }
-        $tagName = join(' ', $tagsList);
+        // $tagName = join(' ', $tagsList);
         $searchable = [
             'title' => $this->title,
             'body'  => $this->body,
