@@ -126,7 +126,7 @@ export default {
     this.getAllFollowings();
 
     this.setCurrentPage();
-    this.paginate(this.perPage, 1);
+    this.paginate(this.perPage, this.page);
   },
   methods: {
     toggleFollow() {
@@ -249,5 +249,9 @@ export default {
 }
 .sidebar {
   margin: 30px auto;
+}
+
+.pagination li {
+  cursor: pointer;
 }
 </style>

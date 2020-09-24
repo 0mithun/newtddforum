@@ -52,7 +52,8 @@ class Thread extends Model
      *
      * @var array
      */
-    protected $with = ['creator', 'channel', 'likes', 'tags'];
+    // protected $with = ['creator', 'channel', 'likes', 'tags'];
+    protected $with = ['creator', 'channel', 'likes',];
 
     /**
      * The accessors to append to the model's array form.
@@ -60,7 +61,7 @@ class Thread extends Model
      * @var array
      */
     // protected $appends = ['isSubscribedTo','isReported','isFavorited','excerpt','threadImagePath','path'];
-    protected $appends = ['excerpt', 'threadImagePath', 'imageColor', 'path', 'isLiked', 'isDesliked', 'splitCategory', 'topRated'];
+    protected $appends = ['excerpt', 'threadImagePath', 'imageColor', 'path', 'isLiked', 'isDesliked', 'splitCategory', 'topRated', 'tagNameList'];
 
     /**
      * The attributes that should be cast to native types.
@@ -84,6 +85,21 @@ class Thread extends Model
 
         static::created(function ($thread) {
             $thread->update(['slug' => $thread->title]);
+
+
+            $tags = $thread->tags->pluck('name')->all();
+            if (count($tags) > 0) {
+                $tagNameList = implode(',', $tags);
+                $thread->update(['tag_names' => $tagNameList]);
+            }
+        });
+
+        static::updated(function ($thread) {
+            $tags = $thread->tags->pluck('name')->all();
+            if (count($tags) > 0) {
+                $tagNameList = implode(',', $tags);
+                $thread->update(['tag_names' => $tagNameList]);
+            }
         });
     }
 
@@ -281,19 +297,9 @@ class Thread extends Model
     //  */
     public function toSearchableArray()
     {
-        // $tags = $this->tags;
-        // $tagsList = [];
-        $tagName = '';
-        // if ($tags->count() > 0) {
-        //     foreach ($tags as $tag) {
-        //         array_push($tagsList, $tag->name);
-        //     }
-        // }
-        // $tagName = join(' ', $tagsList);
         $searchable = [
             'title' => $this->title,
             'body'  => $this->body,
-            // 'tags'  => $tagName,
         ];
 
         return $searchable;
@@ -305,6 +311,19 @@ class Thread extends Model
         return $this->belongsToMany(Tags::class, 'thread_tag', 'thread_id', 'tag_id');
     }
 
+
+    public function getTagNameListAttribute()
+    {
+
+        if ($this->tag_names == null) {
+            return [];
+        }
+
+        $tag_names = explode(',', $this->tag_names);
+
+        return count($tag_names) > 0  ? $tag_names : [];
+    }
+
     public function emojis()
     {
         return $this->belongsToMany(Emoji::class, 'thread_emoji', 'thread_id', 'emoji_id');
@@ -312,11 +331,15 @@ class Thread extends Model
 
     public function getExcerptAttribute()
     {
-        //        return substr(strip_tags($this->body),80);
         $body = strip_tags($this->body);
         $body = preg_replace('/\s+/', ' ', $this->body);
 
-        return substr(strip_tags($body), 0, 250);
+        $body = substr(strip_tags($body), 0, 250);
+        if (strlen($body) <= 250) {
+            $body = $body . '<strong>...</strong>';
+        }
+
+        return $body;
     }
 
     public function threadImagePath()
@@ -333,7 +356,7 @@ class Thread extends Model
             return $this->wiki_image_path;
         } else {
             // return   '//upload.wikimedia.org/wikipedia/commons/thumb/8/84/Picture_font_awesome.svg/512px-Picture_font_awesome.svg.png';
-            return '';
+            return 'https://www.maxpixel.net/static/photo/1x/Geometric-Rectangles-Background-Shapes-Pattern-4973341.jpg';
         }
     }
 
@@ -377,7 +400,7 @@ class Thread extends Model
         }
 
 
-
+        //This should be set
         // $image = '';
         // if ($this->image_path != NULL) {
         //     $image = $this->image_path;
@@ -432,6 +455,7 @@ class Thread extends Model
 
     public function getTopRatedAttribute()
     {
-        return ($this->like_count - ($this->dislike_count + 1));
+        // return ($this->like_count - ($this->dislike_count + 1));
+        return ($this->like_count - $this->dislike_count);
     }
 }

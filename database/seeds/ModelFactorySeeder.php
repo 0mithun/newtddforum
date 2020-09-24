@@ -12,7 +12,7 @@ class ModelFactorySeeder extends Seeder
     public function run()
     {
         factory(App\Admin::class)->create();
-        factory(App\User::class)->create([
+        $user = factory(App\User::class)->create([
             'name'           => 'Jason Payne',
             'first_name'     => 'Jason',
             'last_name'      => 'Payne',
@@ -23,7 +23,8 @@ class ModelFactorySeeder extends Seeder
             'confirmed'      => true,
         ]);
 
-        factory(App\User::class, 10)->create();
+
+        // factory(App\User::class, 10)->create();
 
         $channels = [
             'Entertainment', 'Other', 'Architecture', 'Art', 'Books', 'Business', 'Celebrities', 'Death', 'Dumb', 'Education', 'Food', 'Funny', 'History', 'Insults', 'Life', 'Love', 'Mistakes', 'Money', 'Movies',

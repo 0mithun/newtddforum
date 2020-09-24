@@ -483,3 +483,7 @@ li.list-group-item {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.pagination > li {
+  display: inline-block;
+}
