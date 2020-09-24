@@ -7,81 +7,92 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
-class SearchController extends Controller {
-    public function search() {
-        $query = request( 'query' );
-        if ( request()->expectsJson() ) {
-            if ( $query == '' ) {
+class SearchController extends Controller
+{
+    public function search()
+    {
+
+        $threads = Thread::where('id', '<', 400)->get();
+
+
+        $query = request('query');
+        return view('threads.search', [
+            'threads'   => $threads,
+            'query'     => $query,
+        ]);
+
+
+        if (request()->expectsJson()) {
+            if ($query == '') {
                 $threads = Thread::all();
             } else {
-                $threads = $this->filterSearch( $query );
+                $threads = $this->filterSearch($query);
             }
 
             return $threads;
         } else {
-            $threads = $this->filterSearch( $query );
+            $threads = $this->filterSearch($query);
 
             $pageTitle = 'Search Threads';
 
-            return view( 'threads.search', [
+            return view('threads.search', [
                 'threads'   => $threads,
                 'query'     => $query,
                 'pageTitle' => $pageTitle,
-            ] );
+            ]);
         }
     }
 
-    public function filterSearch( $query ) {
+    public function filterSearch($query)
+    {
         //For Development
         // return Thread::with( 'emojis' )->paginate( 10 );
         // return Thread::with( 'emojis' )->get();
 
-        if ( auth()->check() ) {
+        if (auth()->check()) {
             $user = auth()->user();
             $privacy = $user->userprivacy;
-            if ( $privacy->restricted_18 == 1 ) {
-                $threads = Thread::search( $query )
-                    ->paginate( 10 )
-                    ->load( 'emojis' );
-                $collect = collect( $threads );
-            } else if ( $privacy->restricted_13 == 1 ) {
-                $threads = Thread::search( $query )
+            if ($privacy->restricted_18 == 1) {
+                $threads = Thread::search($query)
+                    ->paginate(10)
+                    ->load('emojis');
+                $collect = collect($threads);
+            } else if ($privacy->restricted_13 == 1) {
+                $threads = Thread::search($query)
                     ->paginate()
-                    ->load( 'emojis' );
+                    ->load('emojis');
 
-                $collect = collect( $threads );
-                $threads = $collect->where( 'age_restriction', '!=', 18 );
+                $collect = collect($threads);
+                $threads = $collect->where('age_restriction', '!=', 18);
             } else {
-                $threads = Thread::search( $query )
+                $threads = Thread::search($query)
                     ->paginate()
-                    ->load( 'emojis' );
-                $collect = collect( $threads );
-                $threads = $collect->where( 'age_restriction', 0 );
+                    ->load('emojis');
+                $collect = collect($threads);
+                $threads = $collect->where('age_restriction', 0);
             }
-
         } else {
-            $threads = Thread::search( $query )
+            $threads = Thread::search($query)
                 ->paginate()
-                ->load( 'emojis' );
+                ->load('emojis');
 
-            $collect = collect( $threads );
-            $threads = $collect->where( 'age_restriction', 0 );
-
+            $collect = collect($threads);
+            $threads = $collect->where('age_restriction', 0);
         }
 
-        $threads = $this->paginate( $threads, 10 );
+        $threads = $this->paginate($threads, 10);
 
         return $threads;
-
     }
 
-    public function paginate( $items, $perPage = 2, $page = null ) {
-        $page = $page ?: ( Paginator::resolveCurrentPage() ?: 1 );
-        $items = $items instanceof Collection ? $items : Collection::make( $items );
+    public function paginate($items, $perPage = 2, $page = null)
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
 
-        return new LengthAwarePaginator( $items->forPage( $page, $perPage ), $items->count(), $perPage, $page, [
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, [
             'path'     => Paginator::resolveCurrentPath(),
             'pageName' => 'page',
-        ] );
+        ]);
     }
 }
