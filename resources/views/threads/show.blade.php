@@ -179,6 +179,7 @@
                                 <div class="story">
                                     <div class="thread_thumb" style="background: rgba({{ $thread->imageColor }})">
                                         <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image thread_thumb_image">
+                                        {{-- Under images: need show img description + license info + amazon [shop] --}}
                                     </div>
                                     <div class="story-text">
                                         {!! $thread->body !!}
@@ -187,7 +188,23 @@
                             </div>
                         </div>
 
-                        @php $threadTags = $thread->tags()->get(); @endphp
+                        @php 
+                            $threadTags = $thread->tag_name_list;
+                        @endphp
+                        @if ( count($threadTags)>0)
+                            <div class="row">
+                                <div class="col-md-12 thread-show-tags">                                                                   
+                                    Tags:
+                                    
+                                   
+                                    @foreach ($threadTags as $tag)
+                                        <a  href="{{ strtolower(route('tags.threads.list', trim($tag)))  }}" class="tag-name">#{{ trim($tag) }}</a>
+                                    @endforeach                               
+                                </div>
+                            </div>
+                        @endif
+                        
+                        {{-- @php $threadTags = $thread->tags()->get(); @endphp
                         @if ($threadTags->count()>0)
                             <div class="row">
                                 <div class="col-md-12 thread-show-tags">                                                                   
@@ -199,7 +216,8 @@
                                     @endforeach                               
                                 </div>
                             </div>
-                        @endif
+                        @endif --}}
+
                         <div class="row thread-show-tool-items">
                             <vote-emoji-list :thread="{{ $thread }}"  position="bottom"></vote-emoji-list>
                             <div class="col-md-3 social-share-btn">

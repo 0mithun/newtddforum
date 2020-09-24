@@ -3,12 +3,11 @@
     <div class="panel-body">
       <div class="thread-tags">
         <a
-          :href="'/threads/' + tag.name.toLowerCase()"
+          :href="'/threads/'+ tag.toLowerCase().trim()"
           class="tag-name"
-          v-for="(tag, index) in thread.tags"
+          v-for="(tag, index) in thread.tagNameList"
           :key="index"
-          >#{{ tag.name }}</a
-        >
+        >#{{ tag.toLowerCase().trim() }}</a>
       </div>
       <div class="thread_title">
         <a :href="thread.path">
@@ -35,6 +34,7 @@
             :alt="thread.title"
           />
         </a>
+        <!-- Under images: need show img description + license info + amazon [shop] -->
       </div>
 
       <div v-html="thread.excerpt"></div>
@@ -65,27 +65,19 @@
           <user-online :user="thread.creator"></user-online>
           {{ thread.creator.name }}
         </a>
-      </div> -->
+      </div>-->
 
       <div class="tools-row">
-        <vote-emoji-list
-          :thread="thread"
-          size="small"
-          position="top"
-        ></vote-emoji-list>
+        <vote-emoji-list :thread="thread" size="small" position="top"></vote-emoji-list>
         <div class="col-md-3 social-share-btn">
           <fb-share :thread="thread"></fb-share>
           <twitter-share :thread="thread"></twitter-share>
         </div>
         <!--         
         <div class="col-md-4 thread_item_counts"></div>
-        <div class="col-md-5 thread_emoji_count_map"></div> -->
+        <div class="col-md-5 thread_emoji_count_map"></div>-->
         <div class="col-md-9 thread-show-tools">
-          <vote-emojis
-            :thread="thread"
-            size="small"
-            position="top"
-          ></vote-emojis>
+          <vote-emojis :thread="thread" size="small" position="top"></vote-emojis>
           <favorite-thread :thread="thread" size="small"></favorite-thread>
           <up-votes :thread="thread" size="small"></up-votes>
           <down-votes :thread="thread" size="small"></down-votes>

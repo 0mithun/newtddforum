@@ -205,7 +205,7 @@ class ThreadsController extends Controller
 
         $pageTitle = 'Edit: ' . $thread->title;
 
-        return view('threads.edit', compact('tags', 'channel', 'thread', '$pageTitle'));
+        return view('threads.edit', compact('tags', 'channel', 'thread', 'pageTitle'));
     }
 
     /**
