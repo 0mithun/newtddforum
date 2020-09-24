@@ -12,7 +12,7 @@ use ScoutElastic\Searchable;
 class Thread extends Model
 {
     //use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
-    use RecordsActivity, Notifiable, Favoritable, Likeable;
+    use RecordsActivity, Notifiable, Favoritable, Likeable, Searchable;
 
     protected $indexConfigurator = ThreadsIndexConfigurator::class;
 

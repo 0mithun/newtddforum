@@ -11,17 +11,7 @@ class SearchController extends Controller
 {
     public function search()
     {
-
-        $threads = Thread::where('id', '<', 400)->get();
-
-
         $query = request('query');
-        return view('threads.search', [
-            'threads'   => $threads,
-            'query'     => $query,
-        ]);
-
-
         if (request()->expectsJson()) {
             if ($query == '') {
                 $threads = Thread::all();
