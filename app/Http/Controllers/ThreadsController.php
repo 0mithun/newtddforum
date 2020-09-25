@@ -96,7 +96,8 @@ class ThreadsController extends Controller
             'pageTitle' => $admin->app_title,
             'per_page'  => $perPage,
             'current_page'  => (request('page') && request('page') != '') ? request('page') : 1,
-            'total_records' => $totalRecords
+            'total_records' => $totalRecords,
+
 
         ]);
     }

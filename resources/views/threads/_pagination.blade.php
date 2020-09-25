@@ -1,12 +1,25 @@
 @php
     $totalPage = ceil($total_records / $per_page);
     $link_limit = 12; // maximum number of links (a little bit inaccurate, but will be ok for now)
+  
+    // dd(http_build_query($query));
+
+    function generateQuery($page =1){
+      $query = request()->query();
+      if(isset($query['page'])){
+        unset($query['page']);
+      }
+      $query['page'] = $page;
+     
+
+      return http_build_query($query);
+    }
 @endphp
 
 @if ($totalPage > 1)
     <ul class="pagination">
         <li class="{{ ($current_page== 1) ? ' disabled' : '' }}">
-            <a href="?page=1">First</a>
+        <a href="?{{ generateQuery(1)}}">First</a>
          </li>
         @for ($i = 1; $i <= $totalPage; $i++)
             @php
@@ -22,12 +35,12 @@
             @endphp
             @if ($from < $i && $i < $to)
                 <li class="{{ ($current_page == $i) ? ' active' : '' }}">
-                    <a href="?page={{ $i }}">{{ $i }}</a>
+                    <a href="?{{ generateQuery($i)}}">{{ $i }}</a>
                 </li>
             @endif
         @endfor
         <li class="{{ ($current_page == $totalPage) ? ' disabled' : '' }}">
-            <a href="?page={{ $totalPage }}">Last</a>
+            <a href="?{{ generateQuery($totalPage)}}">Last</a>
         </li>
     </ul>
 @endif
