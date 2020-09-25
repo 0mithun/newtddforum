@@ -12,7 +12,8 @@
                     <p>There are no relevant results at this time.</p>
                 @endforelse
 
-                {{ $threads->render() }}
+                @include('threads._pagination')
+                {{-- {{ $threads->render() }} --}}
             </div>
 
             <div class="col-md-4">

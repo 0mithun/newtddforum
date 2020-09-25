@@ -25,6 +25,7 @@ class ThreadFilters extends Filters
     {
         $user = User::where('username', $username)->firstOrFail();
 
+        // $this->filterThreads();
         return $this->builder->where('user_id', $user->id);
     }
 
@@ -37,6 +38,7 @@ class ThreadFilters extends Filters
     {
         $this->builder->getQuery()->orders = [];
 
+        // $this->filterThreads();
         return $this->builder->orderBy('replies_count', 'desc');
     }
 
@@ -47,13 +49,14 @@ class ThreadFilters extends Filters
      */
     protected function unanswered()
     {
+        // $this->filterThreads();
         return $this->builder->where('replies_count', 0);
     }
 
     public function viewed()
     {
         $this->builder->getQuery()->orders = [];
-
+        // $this->filterThreads();
         return $this->builder->orderBy('visits', 'desc');
     }
 
@@ -61,7 +64,10 @@ class ThreadFilters extends Filters
     {
         $this->builder->getQuery()->orders = [];
 
-        return $this->builder->orderBy('created_at', 'desc');
+        // $this->filterThreads();
+        $this->builder->orderBy('created_at', 'desc');
+
+        return $this->builder;
     }
 
     public function liked()
@@ -77,7 +83,9 @@ class ThreadFilters extends Filters
             $likeThreadId[] = $like->likeable_id;
         }
 
-        return $this->builder->whereIn('id', $likeThreadId)->orderBy('created_at', 'desc');
+        $this->builder->whereIn('id', $likeThreadId)->orderBy('created_at', 'desc');
+        // $this->filterThreads();
+        return $this->builder;
     }
 
     public function rated()
@@ -85,18 +93,22 @@ class ThreadFilters extends Filters
         //  return $this->builder->where('average_rating', '>', 0)->orderBy('average_rating','desc');
 
         $this->builder->getQuery()->orders = [];
-        $threads = $this->builder->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - (dislike_count + 1 ) DESC');
+        // $threads = $this->builder->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - (dislike_count + 1 ) DESC');
+        $this->builder->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - dislike_count DESC');
 
-        return $threads;
+        // $this->filterThreads();
+        return $this->builder;
     }
 
     public function bestofweek()
     {
         // return $this->builder->where('average_rating', '>', 0)->where('created_at', '>=', now()->subDays(7) )->orderBy('average_rating','desc');
         $this->builder->getQuery()->orders = [];
-        $threads = $this->builder->whereColumn('like_count', '>', 'dislike_count')->where('created_at', '>=', now()->subDays(7))->orderByRaw('like_count - (dislike_count + 1 ) DESC');
+        // $this->builder->whereColumn('like_count', '>', 'dislike_count')->where('created_at', '>=', now()->subDays(7))->orderByRaw('like_count - (dislike_count + 1 ) DESC');
+        $this->builder->whereColumn('like_count', '>', 'dislike_count')->where('created_at', '>=', now()->subDays(7))->orderByRaw('like_count - dislike_count) DESC');
 
-        return $threads;
+        // $this->filterThreads();
+        return $this->builder;
     }
 
     public function favorites()
@@ -112,18 +124,18 @@ class ThreadFilters extends Filters
             $favoriteThreadId[] = $favorite->favorited_id;
         }
 
-        return $this->builder->whereIn('id', $favoriteThreadId)->orderBy('created_at', 'desc');
+        $this->builder->whereIn('id', $favoriteThreadId)->orderBy('created_at', 'desc');
+        // $this->filterThreads();
+        return $this->builder;
     }
 
     public function video()
     {
-        $threads = DB::table('threads')
-            ->where('body', 'LIKE', '%https://www.youtube.com/watch?v=%')
-            ->get();
-
-        return $this->builder
-            ->where('body', 'LIKE', '%https://www.youtube.com/watch?v=%')
+        $this->builder
+            ->where('body', 'LIKE', '%https://www.youtube.com/%')
             ->orderBy('created_at', 'desc');
+        // $this->filterThreads();
+        return $this->builder;
     }
 
     public function emoji($type)
@@ -136,8 +148,32 @@ class ThreadFilters extends Filters
             ->pluck('thread_id')
             ->all();
 
-        return $this->builder
+        $this->builder
             ->whereIn('id', $threadsId)
-            ->get();
+            // ->get()
+        ;
+        // $this->filterThreads();
+
+
+        return $this->builder;
+    }
+
+    public function filterThreads()
+    {
+        if (auth()->check()) {
+            $user = auth()->user();
+            $privacy = $user->userprivacy;
+            if ($privacy->restricted_18 == 1) {
+                // return $this->builder->puck('id')->all();
+            } else if ($user->id == 1) {
+                // return $this->builder->pluck('id')->all();
+            } else if ($privacy->restricted_13 == 1) {
+                $this->builder->where('age_restriction', '!=', 18)->orWhere('user_id', $user->id);
+            } else {
+                $this->builder->where('age_restriction', 0)->orWhere('user_id', $user->id);
+            }
+        } else {
+            $this->builder->where('age_restriction', 0);
+        }
     }
 }
