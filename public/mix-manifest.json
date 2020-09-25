@@ -1,10 +1,15 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "/js/app.js": "/js/app.js?id=ceebf75f855d7b68bae3",
     "/css/app.css": "/css/app.css?id=db1b9d5650530461ced8",
 =======
     "/js/app.js": "/js/app.js?id=8c1c898e9adcb236f0f2",
     "/css/app.css": "/css/app.css?id=e62734cf3894d7dfb2fd",
+>>>>>>> social
+=======
+    "/js/app.js": "/js/app.js?id=8fdd4236dd5f09af6082",
+    "/css/app.css": "/css/app.css?id=db1b9d5650530461ced8",
 >>>>>>> social
     "/css/custom.css": "/css/custom.css?id=c3159634450770f77556"
 }
