@@ -14,15 +14,25 @@
                 </h2>
                 <div class="profile-count">
                   <post-counts :post_count="posts.length"></post-counts>
-                  <following-counts :following_count="followings.length"></following-counts>
+                  <following-counts
+                    :following_count="followings.length"
+                  ></following-counts>
                 </div>
                 <div class="profile-buttons">
                   <button
                     class="btn btn-sm unfollow-btn"
                     @click.prevent="toggleFollow"
                     v-if="isFollow"
-                  >Unfllow</button>
-                  <button class="btn btn-sm follow-btn" @click.prevent="toggleFollow" v-else>Follow</button>
+                  >
+                    Unfllow
+                  </button>
+                  <button
+                    class="btn btn-sm follow-btn"
+                    @click.prevent="toggleFollow"
+                    v-else
+                  >
+                    Follow
+                  </button>
                 </div>
                 <!-- <div class="profile-tags">
               <strong>Following:</strong>
@@ -54,13 +64,13 @@
                   ></single-thread>
                   <nav aria-label="..." v-if="totalPage > 1">
                     <ul class="pagination">
-                      <li v-if="currentPage != 1">
+                      <li v-if="currentPage != 1" @click="onPageChange(1)">
                         <span>
                           <span aria-hidden="true">&laquo;</span>
                         </span>
                       </li>
                       <li
-                        v-for="page in totalPage"
+                        v-for="page in pageRange"
                         :key="page"
                         @click="onPageChange(page)"
                         :class="{ active: currentPage == page }"
@@ -71,7 +81,10 @@
                         </span>
                       </li>
 
-                      <li v-if="currentPage != totalPage">
+                      <li
+                        v-if="currentPage != totalPage"
+                        @click="onPageChange(totalPage)"
+                      >
                         <span>
                           <span aria-hidden="true">&raquo;</span>
                         </span>
@@ -108,6 +121,9 @@ export default {
       page: 1,
       perPage: 10,
       paginatedItems: [],
+      limitLinks: 10,
+      formPage: 1,
+      toPage: 1,
     };
   },
   computed: {
@@ -120,6 +136,12 @@ export default {
     totalPage() {
       return Math.ceil(this.posts.length / this.perPage);
     },
+    signedIn() {
+      return window.App.user ? true : false;
+    },
+    pageRange() {
+      return _.range(this.formPage, this.toPage);
+    },
   },
   created() {
     this.checkIsFollow();
@@ -127,6 +149,7 @@ export default {
 
     this.setCurrentPage();
     this.paginate(this.perPage, this.page);
+    this.paginateLimit();
   },
   methods: {
     toggleFollow() {
@@ -147,6 +170,10 @@ export default {
       });
     },
     checkIsFollow() {
+      if (!this.signedIn) {
+        return;
+      }
+
       axios.get(`/tag/${this.tag.id}/is-follow`).then((res) => {
         this.isFollow = res.data;
       });
@@ -162,7 +189,7 @@ export default {
       const page = urlParams.get("page");
 
       if (page && page != "") {
-        this.page = page;
+        this.page = Number.parseInt(page);
       } else {
         this.page = this.page;
       }
@@ -182,6 +209,26 @@ export default {
 
       history.pushState(null, null, "?page=" + page);
       this.paginate(this.perPage, page);
+      this.paginateLimit();
+    },
+
+    paginateLimit() {
+      let half_total_links = Math.floor(this.limitLinks / 2);
+      let from = this.page - half_total_links;
+      let to = Number.parseInt(this.page) + half_total_links;
+      if (this.page < half_total_links) {
+        to += half_total_links - this.page;
+      }
+      if (this.totalPage - this.page < half_total_links) {
+        from -= half_total_links - (this.totalPage - this.page) - 1;
+      }
+
+      if (from < half_total_links) {
+        from = 1;
+      }
+
+      this.formPage = from;
+      this.toPage = to;
     },
   },
 };
