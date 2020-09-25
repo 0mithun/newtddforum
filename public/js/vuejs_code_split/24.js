@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[24],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/TwitterShare.vue?vue&type=script&lang=js&":
@@ -231,3 +232,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
+=======
+(window.webpackJsonp=window.webpackJsonp||[]).push([[24],{MR70:function(s,t,e){"use strict";e.r(t);var n={props:["message"],data:function(){return{body:this.message,level:"success",show:!1}},created:function(){var s=this;this.message&&this.flash(),window.events.$on("flash",(function(t){return s.flash(t)}))},methods:{flash:function(s){s&&(this.body=s.message,this.level=s.level),this.show=!0,this.hide()},hide:function(){var s=this;setTimeout((function(){s.show=!1}),3e3)}}},i=(e("lExf"),e("KHd+")),o=Object(i.a)(n,(function(){var s=this.$createElement;return(this._self._c||s)("div",{directives:[{name:"show",rawName:"v-show",value:this.show,expression:"show"}],staticClass:"alert alert-flash",class:"alert-"+this.level,attrs:{role:"alert"},domProps:{textContent:this._s(this.body)}})}),[],!1,null,null,null);t.default=o.exports},Ybab:function(s,t,e){var n=e("mlfl");"string"==typeof n&&(n=[[s.i,n,""]]);var i={hmr:!0,transform:void 0,insertInto:void 0};e("aET+")(n,i);n.locals&&(s.exports=n.locals)},lExf:function(s,t,e){"use strict";var n=e("Ybab");e.n(n).a},mlfl:function(s,t,e){(s.exports=e("I1BE")(!1)).push([s.i,"\n.alert-flash {\n    position: fixed;\n    right: 25px;\n    bottom: 25px;\n}\n",""])}}]);
+>>>>>>> social

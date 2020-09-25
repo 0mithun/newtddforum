@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[47],{
 
 /***/ "./node_modules/marker-clusterer-plus/src/markerclusterer.js":
@@ -1793,3 +1794,6 @@ exports.default = (0, _mapElementFactory2.default)({
 /***/ })
 
 }]);
+=======
+(window.webpackJsonp=window.webpackJsonp||[]).push([[47],{tYAB:function(t,e,r){"use strict";r.r(e);var l={props:["profile_user"],data:function(){return{center:{lat:parseFloat(this.profile_user.lat),lng:parseFloat(this.profile_user.lng)},markers:[{position:{lat:parseFloat(this.profile_user.lat),lng:parseFloat(this.profile_user.lng)}}],zoom:4}},computed:{location:function(){return null!=this.profile_user.lat||null!=this.profile_user.lng?"".concat(this.profile_user.city,", ").concat(this.profile_user.country):null}}},i=r("KHd+"),o=Object(i.a)(l,(function(){var t=this,e=t.$createElement,r=t._self._c||e;return r("div",[r("div",{staticStyle:{padding:"15px 0"}},[r("map-location",{attrs:{location:t.location}})],1),t._v(" "),null!=t.profile_user.lat||null!=t.profile_user.lng?r("div",[r("GmapMap",{staticStyle:{width:"100%",height:"40vh"},attrs:{center:t.center,zoom:t.zoom,"map-type-id":"terrain"}},t._l(t.markers,(function(t,e){return r("GmapMarker",{key:e,attrs:{position:t.position,clickable:!0,draggable:!1}})})),1)],1):t._e()])}),[],!1,null,null,null);e.default=o.exports}}]);
+>>>>>>> social

@@ -21,6 +21,10 @@ class SearchController extends Controller
 
             return $threads;
         } else {
+
+            if ($query == '') {
+                return redirect()->back();
+            }
             $threads = $this->filterSearch($query);
 
             $pageTitle = 'Search Threads';

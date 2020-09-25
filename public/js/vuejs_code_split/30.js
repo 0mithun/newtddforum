@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[30],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/chat/UserOnline.vue?vue&type=script&lang=js&":
@@ -215,3 +216,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
+=======
+(window.webpackJsonp=window.webpackJsonp||[]).push([[30],{TnR2:function(t,e,n){"use strict";n.r(e);var r={props:{thread:{type:Object}},computed:{threadUrl:function(){return"https://twitter.com/intent/tweet?url="+this.thread.path+"&text="+this.thread.title+"&via=anecdotage_com"},signedIn:function(){return!!window.App.user}},methods:{share:function(){this.signedIn||this.redirectToLogin(),window.open(this.threadUrl,"Share on Twitter","width=600, height=400")},redirectToLogin:function(){window.location="/redirect-to?page="+location.pathname}}},i=(n("XgsB"),n("KHd+")),a=Object(i.a)(r,(function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("a",{staticClass:"btn btn-xs twitter-share-btn",attrs:{href:t.threadUrl,target:"_blank"},on:{click:function(e){return e.preventDefault(),t.share(e)}}},[n("i",{staticClass:"fa fa-twitter",attrs:{"aria-hidden":"true"},on:{click:function(e){return e.preventDefault(),t.share(e)}}}),t._v(" Share\n")])}),[],!1,null,"c8eb9388",null);e.default=a.exports},XgsB:function(t,e,n){"use strict";var r=n("qxDR");n.n(r).a},bo4E:function(t,e,n){(t.exports=n("I1BE")(!1)).push([t.i,"\n.twitter-share-btn[data-v-c8eb9388]{\n    /* padding: 5px; */\n    color: white;\n    background-color: #12cad6;\n}\n",""])},qxDR:function(t,e,n){var r=n("bo4E");"string"==typeof r&&(r=[[t.i,r,""]]);var i={hmr:!0,transform:void 0,insertInto:void 0};n("aET+")(r,i);r.locals&&(t.exports=r.locals)}}]);
+>>>>>>> social

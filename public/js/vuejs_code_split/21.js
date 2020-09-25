@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[21],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/ReportThread.vue?vue&type=script&lang=js&":
@@ -437,3 +438,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
+=======
+(window.webpackJsonp=window.webpackJsonp||[]).push([[21],{"+p29":function(t,s,n){"use strict";n.r(s);var i={props:["post_count"]},o=(n("pOUD"),n("KHd+")),a=Object(o.a)(i,(function(){var t=this.$createElement,s=this._self._c||t;return s("div",{staticClass:"counts-item"},[s("i",{staticClass:"fa fa-pencil-square"}),this._v(" "),s("strong",[this._v(this._s(this._f("formatCount")(this.post_count)))]),this._v(" posts\n")])}),[],!1,null,"6c0e8a9c",null);s.default=a.exports},Mkdc:function(t,s,n){(t.exports=n("I1BE")(!1)).push([t.i,"\n.counts-item[data-v-6c0e8a9c] {\n}\r\n",""])},PGM0:function(t,s,n){var i=n("Mkdc");"string"==typeof i&&(i=[[t.i,i,""]]);var o={hmr:!0,transform:void 0,insertInto:void 0};n("aET+")(i,o);i.locals&&(t.exports=i.locals)},pOUD:function(t,s,n){"use strict";var i=n("PGM0");n.n(i).a}}]);
+>>>>>>> social

@@ -49,10 +49,11 @@
             </ul>
        </div>
        <div class="nav-col tools-menu">
-            <form class="navbar-form search-form"  method="GET" action="/threads/search">
+            {{-- <form class="navbar-form search-form"  method="GET" action="/threads/search">
                     <input type="text" class="form-control search-box" name="query" placeholder="Search">
 
-            </form>
+            </form> --}}
+            <search-form></search-form>
             <ul class="nav navbar-nav tools-right">
                 <li>
                     <a href="{{ route('map.show') }}" class="navbar-menu-icon">

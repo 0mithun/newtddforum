@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[17],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Flash.vue?vue&type=script&lang=js&":
@@ -229,3 +230,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
+=======
+(window.webpackJsonp=window.webpackJsonp||[]).push([[17],{KTWK:function(t,n,i){(t.exports=i("I1BE")(!1)).push([t.i,"\n.fa-star[data-v-1a7640ad] {\r\n  color: #f6d743;\n}\r\n",""])},TiFe:function(t,n,i){var o=i("KTWK");"string"==typeof o&&(o=[[t.i,o,""]]);var s={hmr:!0,transform:void 0,insertInto:void 0};i("aET+")(o,s);o.locals&&(t.exports=o.locals)},fwUq:function(t,n,i){"use strict";i.r(n);var o={props:["thread"],data:function(){return{count:this.thread.favorite_count}},computed:{favoriteCounts:function(){return this.count}},created:function(){var t=this;eventBus.$on("favoriteAdded-"+this.thread.id,(function(n){t.count=t.count+1})),eventBus.$on("favoriteDeleted-"+this.thread.id,(function(n){t.count=t.count+-1}))}},s=(i("z2Fi"),i("KHd+")),a=Object(s.a)(o,(function(){var t=this.$createElement,n=this._self._c||t;return n("div",{staticClass:"counts-item"},[n("i",{staticClass:"fa fa-star"}),this._v(" "),n("strong",[this._v(this._s(this._f("formatCount")(this.favoriteCounts)))]),this._v(" favorite\n")])}),[],!1,null,"1a7640ad",null);n.default=a.exports},z2Fi:function(t,n,i){"use strict";var o=i("TiFe");i.n(o).a}}]);
+>>>>>>> social

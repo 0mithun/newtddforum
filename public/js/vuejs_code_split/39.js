@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[39],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/NewTag.vue?vue&type=script&lang=js&":
@@ -373,3 +374,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
+=======
+(window.webpackJsonp=window.webpackJsonp||[]).push([[39],{Ko6T:function(t,a,n){"use strict";var r=n("QzQ5");n.n(r).a},Opmu:function(t,a,n){(t.exports=n("I1BE")(!1)).push([t.i,"\n.thread_thumb[data-v-74609a62] {\r\n  display: block;\r\n  max-width: 100%;\r\n  text-align: center;\r\n  overflow: hidden;\r\n  margin-bottom: 20px;\n}\n.thread_thumb_image[data-v-74609a62] {\r\n  max-width: 100%;\n}\r\n",""])},QzQ5:function(t,a,n){var r=n("Opmu");"string"==typeof r&&(r=[[t.i,r,""]]);var e={hmr:!0,transform:void 0,insertInto:void 0};n("aET+")(r,e);r.locals&&(t.exports=r.locals)},"qO+U":function(t,a,n){"use strict";n.r(a);var r={data:function(){return{threads:[]}},created:function(){this.getTrending()},methods:{threadThumbStyle:function(t){return"background: rgba(".concat(t.imageColor,")")},getTrending:function(){var t=this;axios.get("/trending").then((function(a){t.threads=a.data}))}}},e=(n("Ko6T"),n("KHd+")),i=Object(e.a)(r,(function(){var t=this,a=t.$createElement,n=t._self._c||a;return n("div",t._l(t.threads,(function(a,r){return n("div",{key:r,staticClass:"panel"},[n("div",{staticClass:"card-header thread_thumb",style:t.threadThumbStyle(a)},[n("a",{attrs:{href:a.path}},[n("img",{staticClass:"thread_thumb_image",staticStyle:{"max-width":"100%"},attrs:{src:a.threadImagePath,alt:a.title}})])]),t._v(" "),n("div",{staticClass:"panel-body"},[n("div",{staticClass:"trending_thread_title"},[n("a",{attrs:{href:a.path}},[n("strong",[t._v(t._s(a.title))])])]),t._v(" "),n("div",{staticClass:"trending_footer"},[n("comment-counts",{attrs:{color:"#ff4301",thread:a}}),t._v(" "),n("point-counts",{attrs:{thread:a}})],1)])])})),0)}),[],!1,null,"74609a62",null);a.default=i.exports}}]);
+>>>>>>> social

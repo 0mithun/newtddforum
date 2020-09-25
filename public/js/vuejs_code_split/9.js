@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[9],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Counts/FollowingCounts.vue?vue&type=script&lang=js&":
@@ -188,3 +189,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
+=======
+(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{"7i72":function(r,t,e){(r.exports=e("I1BE")(!1)).push([r.i,".navbar-form .form-control.search-box.active-search[data-v-291339e7] {\n  width: 100%;\n  border: 2px solid #98cbe8;\n  border-radius: 4px;\n  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n}",""])},Y3Cs:function(r,t,e){"use strict";e.r(t);var a={data:function(){return{query:""}},computed:{activeSearch:function(){return""!=this.query?"active-search":""}},created:function(){this.getSearchQuery()},methods:{getSearchQuery:function(){var r=new URLSearchParams(window.location.search).get("query");r&&""!=r&&(this.query=r)}}},o=(e("z/DR"),e("KHd+")),s=Object(o.a)(a,(function(){var r=this.$createElement,t=this._self._c||r;return t("form",{staticClass:"navbar-form search-form",attrs:{method:"GET",action:"/threads/search"}},[t("input",{staticClass:"form-control search-box",class:this.activeSearch,attrs:{type:"text",name:"query",placeholder:"Search"},domProps:{value:this.query}})])}),[],!1,null,"291339e7",null);t.default=s.exports},x9M3:function(r,t,e){var a=e("7i72");"string"==typeof a&&(a=[[r.i,a,""]]);var o={hmr:!0,transform:void 0,insertInto:void 0};e("aET+")(a,o);a.locals&&(r.exports=a.locals)},"z/DR":function(r,t,e){"use strict";var a=e("x9M3");e.n(a).a}}]);
+>>>>>>> social

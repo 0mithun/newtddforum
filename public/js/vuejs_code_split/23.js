@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[23],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/StarRating.vue?vue&type=script&lang=js&":
@@ -274,3 +275,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
+=======
+(window.webpackJsonp=window.webpackJsonp||[]).push([[23],{"9FRe":function(t,e,n){"use strict";n.r(e);var r={props:{thread:{type:Object}},computed:{threadUrl:function(){return"https://www.facebook.com/sharer/sharer.php?u="+this.thread.path+"&title="+this.thread.title},signedIn:function(){return!!window.App.user}},methods:{share:function(){this.signedIn||this.redirectToLogin(),window.open(this.threadUrl,"Share on Facebook","width=600, height=400")},redirectToLogin:function(){window.location="/redirect-to?page="+location.pathname}}},a=(n("bVkS"),n("KHd+")),o=Object(a.a)(r,(function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("a",{staticClass:"btn btn-xs facebook-share-btn",attrs:{href:t.threadUrl,target:"_blank"},on:{click:function(e){return e.preventDefault(),t.share(e)}}},[n("i",{staticClass:"fa fa-facebook-square",attrs:{"aria-hidden":"true"}}),t._v(" Share\n")])}),[],!1,null,"e74999bc",null);e.default=o.exports},AX6k:function(t,e,n){(t.exports=n("I1BE")(!1)).push([t.i,"\n.facebook-share-btn[data-v-e74999bc]{\n    color: white;\n    background-color: #1b6ca8;\n}\n",""])},Aj3O:function(t,e,n){var r=n("AX6k");"string"==typeof r&&(r=[[t.i,r,""]]);var a={hmr:!0,transform:void 0,insertInto:void 0};n("aET+")(r,a);r.locals&&(t.exports=r.locals)},bVkS:function(t,e,n){"use strict";var r=n("Aj3O");n.n(r).a}}]);
+>>>>>>> social
