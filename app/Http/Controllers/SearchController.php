@@ -70,7 +70,9 @@ class SearchController extends Controller
             $threads = $collect->where('age_restriction', 0);
         }
 
-        $threads = $this->paginate($threads, 10);
+
+
+        // $threads = $this->paginate($threads, 10);
 
         return $threads;
     }
