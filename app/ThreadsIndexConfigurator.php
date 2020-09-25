@@ -14,5 +14,6 @@ class ThreadsIndexConfigurator extends IndexConfigurator
      */
     protected $settings = [
         //
+        // 'include_type_name' => true,
     ];
 }

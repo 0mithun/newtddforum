@@ -34,9 +34,17 @@
 
           <div class="row">
             <div class="col-md-12 filter-search">
-              <div class="count-column">{{ postsCount | formatCount }} Results</div>
+              <div class="count-column">
+                {{ postsCount | formatCount }} Results
+              </div>
               <div class="sort-column">
-                <select name id class="sortBy" v-model="sort_by" @change="sortBy">
+                <select
+                  name
+                  id
+                  class="sortBy"
+                  v-model="sort_by"
+                  @change="sortBy"
+                >
                   <option value="topRated">Top Rated</option>
                   <option value="created_at">Most Recent</option>
                   <option value="like_count">Most Liked</option>
@@ -89,7 +97,13 @@
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id value="C" v-model="category" />
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          value="C"
+                          v-model="category"
+                        />
                         Celebrities
                       </label>
                     </div>
@@ -97,7 +111,13 @@
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id value="N" v-model="category" />
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          value="N"
+                          v-model="category"
+                        />
                         Other notables
                       </label>
                     </div>
@@ -105,7 +125,13 @@
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id value="O" v-model="category" />
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          value="O"
+                          v-model="category"
+                        />
                         Other People
                       </label>
                     </div>
@@ -144,7 +170,8 @@
                             'background-image':
                               'url(/images/emojis/' + emoji.name + '.png)',
                           }"
-                        >{{ emoji.name }}</span>
+                          >{{ emoji.name }}</span
+                        >
                       </label>
                     </div>
                   </li>
@@ -223,7 +250,13 @@
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id :value="0" v-model="filter_rated" />
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          :value="0"
+                          v-model="filter_rated"
+                        />
                         G-rated
                       </label>
                     </div>
@@ -231,7 +264,13 @@
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id :value="13" v-model="filter_rated" />
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          :value="13"
+                          v-model="filter_rated"
+                        />
                         PG-rated
                       </label>
                     </div>
@@ -239,7 +278,13 @@
                   <li>
                     <div class="checkbox filter-item">
                       <label>
-                        <input type="checkbox" name="rated" id :value="18" v-model="filter_rated" />
+                        <input
+                          type="checkbox"
+                          name="rated"
+                          id
+                          :value="18"
+                          v-model="filter_rated"
+                        />
                         R-rated
                       </label>
                     </div>
@@ -258,7 +303,10 @@
         </div>
       </div>
 
-      <div class="panel panel-default" v-if="search == false && allThreads.length == 0">
+      <div
+        class="panel panel-default"
+        v-if="search == false && allThreads.length == 0"
+      >
         <div class="panel-body">
           <h3 class="text-center">No Results Found</h3>
         </div>
@@ -269,7 +317,11 @@
           <h3 class="text-center">Search.....</h3>
         </div>
       </div>
-      <single-thread v-for="(thread, index) in paginatedItems" :thread="thread" :key="index"></single-thread>
+      <single-thread
+        v-for="(thread, index) in paginatedItems"
+        :thread="thread"
+        :key="index"
+      ></single-thread>
 
       <!-- <SearchPagination
         :dataSet="threads"
@@ -279,7 +331,7 @@
 
       <nav aria-label="..." v-if="totalPage > 1">
         <ul class="pagination">
-          <li v-if="currentPage != 1">
+          <li v-if="currentPage != 1" @click="onPageChange(currentPage - 1)">
             <span>
               <span aria-hidden="true">&laquo;</span>
             </span>
@@ -296,9 +348,13 @@
             </span>
           </li>
 
-          <li v-if="currentPage != totalPage">
+          <li
+            v-if="currentPage != totalPage"
+            @click="onPageChange(currentPage + 1)"
+          >
             <span>
               <span aria-hidden="true">&raquo;</span>
+              <!-- <span aria-hidden="true">&rarr;</span> -->
             </span>
           </li>
         </ul>
