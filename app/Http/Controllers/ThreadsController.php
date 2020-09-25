@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Tags;
+use App\User;
 use App\Admin;
+use App\Thread;
 use App\Channel;
+use App\Trending;
+use App\Rules\Recaptcha;
+use Illuminate\Http\Request;
+use Spatie\Geocoder\Geocoder;
 use App\Filters\ThreadFilters;
+use App\Jobs\WikiImageProcess;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Collection;
+use function GuzzleHttp\Promise\all;
+use Illuminate\Pagination\Paginator;
+use App\Notifications\ThreadPostTwitter;
+use App\Notifications\ThreadPostFacebook;
 use App\Http\Requests\CreateThreadRequest;
 use App\Http\Requests\UpdateThreadRequest;
-use App\Notifications\ThreadPostFacebook;
-use App\Notifications\ThreadPostTwitter;
-use App\Rules\Recaptcha;
-use App\Tags;
-use App\Thread;
-use App\Trending;
-use App\User;
-use function GuzzleHttp\Promise\all;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\Rule;
-use Spatie\Geocoder\Geocoder;
 
 class ThreadsController extends Controller
 {
@@ -45,39 +46,44 @@ class ThreadsController extends Controller
      */
     public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
+        $perPage = 10;
         $threads = $this->getThreads($channel, $filters);
-        if (auth()->check()) {
-            $user = auth()->user();
-            $privacy = $user->userprivacy;
-            if ($privacy->restricted_18 == 1) {
-                $threads = collect($threads->get());
-            } else if ($user->id == 1) {
-                $threads = collect($threads->get());
-            } else if ($privacy->restricted_13 == 1) {
-                $collect = collect($threads->get());
-                $threads = $collect->filter(function ($thread) use ($user) {
-                    if ($thread->user_id == $user->id) {
-                        return true;
-                    } else if ($thread->age_restriction != 18) {
-                        return true;
-                    }
-                });
-            } else {
-                $collect = collect($threads->get());
-                $threads = $collect->filter(function ($thread) use ($user) {
-                    if ($thread->user_id == $user->id) {
-                        return true;
-                    } else if ($thread->age_restriction == 0) {
-                        return true;
-                    }
-                });
-            }
-        } else {
-            $collect = collect($threads->get());
-            $threads = $collect->where('age_restriction', 0);
-        }
+        // if (auth()->check()) {
+        //     $user = auth()->user();
+        //     $privacy = $user->userprivacy;
+        //     if ($privacy->restricted_18 == 1) {
+        //         $threads = collect($threads->get());
+        //     } else if ($user->id == 1) {
+        //         $threads = collect($threads->get());
+        //     } else if ($privacy->restricted_13 == 1) {
+        //         $collect = collect($threads->get());
+        //         $threads = $collect->filter(function ($thread) use ($user) {
+        //             if ($thread->user_id == $user->id) {
+        //                 return true;
+        //             } else if ($thread->age_restriction != 18) {
+        //                 return true;
+        //             }
+        //         });
+        //     } else {
+        //         $collect = collect($threads->get());
+        //         $threads = $collect->filter(function ($thread) use ($user) {
+        //             if ($thread->user_id == $user->id) {
+        //                 return true;
+        //             } else if ($thread->age_restriction == 0) {
+        //                 return true;
+        //             }
+        //         });
+        //     }
+        // } else {
+        //     $collect = collect($threads->get());
+        //     $threads = $collect->where('age_restriction', 0);
+        // }
 
-        $threads = $this->paginate($threads, 10);
+        // $threads = $this->paginate($threads->get(), 10);
+
+
+
+        $totalRecords = $threads->count();
 
         if (request()->wantsJson()) {
             return $threads;
@@ -85,12 +91,26 @@ class ThreadsController extends Controller
         $admin = Admin::first();
 
         return view('threads.index', [
-            'threads'   => $threads,
+            'threads'   =>  $this->generateCurrentPageResults($threads, $perPage),
             'trending'  => $trending->get(),
             'pageTitle' => $admin->app_title,
+            'per_page'  => $perPage,
+            'current_page'  => (request('page') && request('page') != '') ? request('page') : 1,
+            'total_records' => $totalRecords
 
         ]);
     }
+
+    public function generateCurrentPageResults($threads, $perPage)
+    {
+        $currentPage = 1;
+        if (request('page') && request('page') != '') {
+            $currentPage = request('page');
+        }
+        $skip = ($currentPage - 1) * $perPage;
+        return $threads->skip($skip)->take($perPage)->get();
+    }
+
 
     /**
      * Display the specified resource.
@@ -177,9 +197,9 @@ class ThreadsController extends Controller
         $this->uploadThreadImages($request, $thread);
         $this->attachTags($request, $thread);
 
-        // if(request('wiki_info_page_url') != ''){
-        //     WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
-        // }
+        if (request('wiki_info_page_url') != '') {
+            WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(['status' => 'success', 'thread' => $thread], 200);
@@ -304,11 +324,15 @@ class ThreadsController extends Controller
 
         $threads = Thread::latest();
 
+
+        $this->filterThreads($threads);
+
         if (request()->path() == '/') {
             $threads->getQuery()->orders = [];
-
-            $threads->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - (dislike_count + 1 ) DESC');
+            // $threads->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - (dislike_count + 1 ) DESC');
+            $threads->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - dislike_count DESC');
         } else {
+            // $threads->latest()->filter($filters);
             $threads->latest()->filter($filters);
         }
 
@@ -316,7 +340,29 @@ class ThreadsController extends Controller
             $threads->where('channel_id', $channel->id);
         }
 
+        // dd($threads->pluck('id')->all());
         return $threads;
+    }
+
+    public function filterThreads($threads)
+    {
+        if (auth()->check()) {
+            $user = auth()->user();
+            $privacy = $user->userprivacy;
+            if ($privacy->restricted_18 == 1) {
+                // $threadsId = $threads->pluck('id')->all();
+            } else if ($user->id == 1) {
+                // $threadsId =  $threads->pluck('id')->all();
+            } else if ($privacy->restricted_13 == 1) {
+                $threadsId =  $threads->where('age_restriction', '!=', 18)->orWhere('user_id', $user->id);
+            } else {
+                $threadsId =  $threads->where('age_restriction', 0)->orWhere('user_id', $user->id);
+            }
+        } else {
+            $threadsId =  $threads->where('age_restriction', 0);
+        }
+
+        // return $threadsId;
     }
 
     /**
