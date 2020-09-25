@@ -64,6 +64,7 @@ Vue.use(VueGoogleMaps, {
   },
 });
 
+Vue.component("search-form", () => import("./components/SearchForm"));
 Vue.component("search-threads", () => import("./components/SearchThreads"));
 
 Vue.component("chat-message", () =>

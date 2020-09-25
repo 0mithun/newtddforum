@@ -1,1 +1,135 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[41],{"2vNL":function(t,e,n){"use strict";n.r(e);var i={props:["recipient","isFriend"],data:function(){return{sentRequst:!1,isMyFriend:this.isFriend}},created:function(){this.isMyFriend||this.checkSentRequest()},methods:{addFriend:function(){var t=this;axios.post("/friend/sent-request",{recipient:this.recipient.id}).then((function(e){t.sentRequst=!0}))},checkSentRequest:function(){var t=this;axios.post("/friend/check-request-sent",{recipient:this.recipient.id}).then((function(e){1==e.data&&(t.sentRequst=!0)}))},unFriend:function(){var t=this;axios.post("/friend/unfriend",{friend:this.recipient.id}).then((function(e){t.isMyFriend=!1,t.sentRequst=!1,t.$store.dispatch("removeFriend",window.App.user.id)}))},blockFriend:function(){var t=this;axios.post("/profiles/block-friend",{friend:this.recipient.id}).then((function(e){t.$store.dispatch("addBlockLists",t.recipient),flash(e.data.message),window.location="/"}))},cancelRequest:function(){var t=this;axios.post("/profiles/cancel-friend-request",{friend:this.recipient.id}).then((function(e){t.sentRequst=!1,t.$store.dispatch("removeFriendRequest",t.recipient.id),flash(e.data.message)}))}}},s=n("KHd+"),a=Object(s.a)(i,(function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("div",{staticClass:"btn-group"},[t.isMyFriend?[t._m(0),t._v(" "),n("ul",{staticClass:"dropdown-menu"},[n("li",[n("a",{on:{click:function(e){return e.preventDefault(),t.unFriend(e)}}},[t._v("Unfriend")])]),t._v(" "),n("li",[n("a",{on:{click:function(e){return e.preventDefault(),t.blockFriend(e)}}},[t._v("Block")])])])]:[t.sentRequst?[t._m(1),t._v(" "),n("ul",{staticClass:"dropdown-menu"},[n("li",[n("a",{on:{click:function(e){return e.preventDefault(),t.cancelRequest(e)}}},[t._v("Cancel Request")])])])]:[n("button",{staticClass:"btn btn-primary btn-sm",attrs:{type:"button","data-toggle":"dropdown","aria-haspopup":"true","aria-expanded":"false"},on:{click:function(e){return e.preventDefault(),t.addFriend(e)}}},[n("i",{staticClass:"fa fa-user-plus",attrs:{"aria-hidden":"true"}})])]]],2)}),[function(){var t=this.$createElement,e=this._self._c||t;return e("button",{staticClass:"btn btn-default btn-sm dropdown-toggle",attrs:{type:"button","data-toggle":"dropdown","aria-haspopup":"true","aria-expanded":"false"}},[e("i",{staticClass:"fa fa-user",attrs:{"aria-hidden":"true"}})])},function(){var t=this.$createElement,e=this._self._c||t;return e("button",{staticClass:"btn btn-success btn-sm dropdown-toggle",attrs:{type:"button","data-toggle":"dropdown","aria-haspopup":"true","aria-expanded":"false"}},[e("i",{staticClass:"fa fa-ellipsis-h",attrs:{"aria-hidden":"true"}}),this._v(" Request sent\n      ")])}],!1,null,"4a5954a6",null);e.default=a.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[41],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/UnscribeButton.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/UnscribeButton.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['thread', 'channel'],
+  data: function data() {
+    return {
+      active: true
+    };
+  },
+  computed: {
+    classes: function classes() {
+      return ['btn', this.active ? 'btn-danger' : 'btn-default'];
+    }
+  },
+  methods: {
+    subscribe: function subscribe() {
+      var url = "/threads/".concat(this.channel, "/").concat(this.thread, "/subscriptions");
+      console.log(url);
+      axios[this.active ? 'delete' : 'post'](url);
+      this.active = !this.active;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/UnscribeButton.vue?vue&type=template&id=68e0b128&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/UnscribeButton.vue?vue&type=template&id=68e0b128& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("button", { class: _vm.classes, on: { click: _vm.subscribe } }, [
+    _vm._v("Subscribe")
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/UnscribeButton.vue":
+/*!***********************************************************!*\
+  !*** ./resources/assets/js/components/UnscribeButton.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _UnscribeButton_vue_vue_type_template_id_68e0b128___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UnscribeButton.vue?vue&type=template&id=68e0b128& */ "./resources/assets/js/components/UnscribeButton.vue?vue&type=template&id=68e0b128&");
+/* harmony import */ var _UnscribeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UnscribeButton.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/UnscribeButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _UnscribeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _UnscribeButton_vue_vue_type_template_id_68e0b128___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _UnscribeButton_vue_vue_type_template_id_68e0b128___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/UnscribeButton.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/UnscribeButton.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/assets/js/components/UnscribeButton.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UnscribeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./UnscribeButton.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/UnscribeButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UnscribeButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/UnscribeButton.vue?vue&type=template&id=68e0b128&":
+/*!******************************************************************************************!*\
+  !*** ./resources/assets/js/components/UnscribeButton.vue?vue&type=template&id=68e0b128& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UnscribeButton_vue_vue_type_template_id_68e0b128___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./UnscribeButton.vue?vue&type=template&id=68e0b128& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/UnscribeButton.vue?vue&type=template&id=68e0b128&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UnscribeButton_vue_vue_type_template_id_68e0b128___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UnscribeButton_vue_vue_type_template_id_68e0b128___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);
