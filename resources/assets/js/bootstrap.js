@@ -71,6 +71,7 @@ window.Echo = new Echo({
   wssPort: 443,
   // wssPort: 6001,
   disableStats: true,
+  encrypted: true,
   enabledTransports: ["ws", "wss"],
   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 });
