@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class UserBanNotification extends Notification
+class UserBanNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -32,7 +32,7 @@ class UserBanNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','broadcast'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -44,13 +44,13 @@ class UserBanNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
-   
-     /**
+
+    /**
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
@@ -63,9 +63,9 @@ class UserBanNotification extends Notification
             'message' => $this->reason,
             'link' => url('/')
         ];
-
     }
-    public function toBroadcast($notifiable){
+    public function toBroadcast($notifiable)
+    {
         $user = auth()->user();
         return new BroadcastMessage([
             'message' =>  $this->reason,

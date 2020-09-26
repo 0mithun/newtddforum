@@ -12,7 +12,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
  * Class ThreadWasReported
  * @package App\Notifications
  */
-class ThreadWasReported extends Notification
+class ThreadWasReported extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -37,7 +37,7 @@ class ThreadWasReported extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','broadcast'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -49,9 +49,9 @@ class ThreadWasReported extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -64,18 +64,17 @@ class ThreadWasReported extends Notification
     {
         $user = auth()->user();
         return [
-//            'data' => "User " . $user->username . " ".  " reported thread with id = " . $this->thread->id . " because: " . $this->reason,
-            'message' => "User " . $user->username . " ".  " reported thread with id = " . $this->thread->id . ", because: " . $this->reason,
+            //            'data' => "User " . $user->username . " ".  " reported thread with id = " . $this->thread->id . " because: " . $this->reason,
+            'message' => "User " . $user->username . " " .  " reported thread with id = " . $this->thread->id . ", because: " . $this->reason,
             'link' => $this->thread->path()
         ];
-
-
     }
 
-    public function toBroadcast($notifiable){
+    public function toBroadcast($notifiable)
+    {
         $user = auth()->user();
         return new BroadcastMessage([
-            'message' => "User " . $user->username . " ".  " reported thread with id = " . $this->thread->id . ", because: " . $this->reason,
+            'message' => "User " . $user->username . " " .  " reported thread with id = " . $this->thread->id . ", because: " . $this->reason,
             'link' => $this->thread->path()
         ]);
     }

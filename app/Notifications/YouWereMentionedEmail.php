@@ -7,9 +7,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class YouWereMentionedEmail extends Notification
+class YouWereMentionedEmail extends Notification implements ShouldQueue
 {
-    //use Queueable;
+    use Queueable;
 
     /**
      * Create a new notification instance.
@@ -47,10 +47,9 @@ class YouWereMentionedEmail extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line($this->reply->owner->name . ' mentioned you in ' . $this->reply->thread->title)
-                    ->action('Visit reply', url($this->reply->path()) )
-                    ->line('Thank you for using our application!');
-
+            ->line($this->reply->owner->name . ' mentioned you in ' . $this->reply->thread->title)
+            ->action('Visit reply', url($this->reply->path()))
+            ->line('Thank you for using our application!');
     }
 
     /**

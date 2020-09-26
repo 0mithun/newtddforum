@@ -9,7 +9,7 @@ use NotificationChannels\Twitter\TwitterChannel;
 use Illuminate\Notifications\Messages\MailMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class ThreadPostTwitter extends Notification
+class ThreadPostTwitter extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -43,9 +43,9 @@ class ThreadPostTwitter extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -61,8 +61,9 @@ class ThreadPostTwitter extends Notification
         ];
     }
 
-    public function toTwitter($notifiable){
-        $limit =270; 
+    public function toTwitter($notifiable)
+    {
+        $limit = 270;
         // $title_count = strlen($notifiable->title);
         $tag_count = strlen("#anecdotes");
         $path_count = strlen($notifiable->path);
@@ -73,13 +74,13 @@ class ThreadPostTwitter extends Notification
 
         $status = "{$description} #anecdotes {$notifiable->path} ";
 
-        if($notifiable->image_path == ''){
+        if ($notifiable->image_path == '') {
             // return (new TwitterStatusUpdate($notifiable->title));
             return (new TwitterStatusUpdate($status));
-        }else{
+        } else {
             // return (new TwitterStatusUpdate($notifiable->title))
             return (new TwitterStatusUpdate($status))
-            ->withImage($notifiable->image_path);
-        }        
+                ->withImage($notifiable->image_path);
+        }
     }
 }

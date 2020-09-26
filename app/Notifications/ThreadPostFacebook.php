@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use NotificationChannels\FacebookPoster\FacebookPosterPost;
 use NotificationChannels\FacebookPoster\FacebookPosterChannel;
 
-class ThreadPostFacebook extends Notification
+class ThreadPostFacebook extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -43,9 +43,9 @@ class ThreadPostFacebook extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -61,13 +61,13 @@ class ThreadPostFacebook extends Notification
         ];
     }
 
-    public function toFacebookPoster($notifiable) {
+    public function toFacebookPoster($notifiable)
+    {
         return (new FacebookPosterPost($notifiable->title))
-         ->withLink(url($notifiable->path()))
-        // ->withLink("https://laravel.com")
-        // ->withImage($notifiable->threadImagePath)
-        //->withImage("http://142.93.11.128/uploads/threads/143.jpeg")
+            ->withLink(url($notifiable->path()))
+            // ->withLink("https://laravel.com")
+            // ->withImage($notifiable->threadImagePath)
+            //->withImage("http://142.93.11.128/uploads/threads/143.jpeg")
         ;
-
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class ThreadRestrictionReported extends Notification
+class ThreadRestrictionReported extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -33,7 +33,7 @@ class ThreadRestrictionReported extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','broadcast'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -45,9 +45,9 @@ class ThreadRestrictionReported extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -60,15 +60,15 @@ class ThreadRestrictionReported extends Notification
 
     public function toArray($notifiable)
     {
-        
+
         return [
             'message' => $this->reason,
             'link' => $this->thread->path()
         ];
-
     }
 
-    public function toBroadcast($notifiable){
+    public function toBroadcast($notifiable)
+    {
         return [
             'message' => $this->reason,
             'link' => $this->thread->path()
