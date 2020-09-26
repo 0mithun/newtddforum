@@ -63,18 +63,18 @@ import Echo from "laravel-echo";
 
 window.Pusher = require("pusher-js");
 
-window.Echo = new Echo({
-  broadcaster: "pusher",
-  key: process.env.MIX_PUSHER_APP_KEY,
-  wsHost: window.location.hostname,
-  wsPort: 80,
-  wssPort: 443,
-  // wssPort: 6001,
-  disableStats: true,
-  encrypted: true,
-  enabledTransports: ["ws", "wss"],
-  cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-});
+// window.Echo = new Echo({
+//   broadcaster: "pusher",
+//   key: process.env.MIX_PUSHER_APP_KEY,
+//   wsHost: window.location.hostname,
+//   wsPort: 80,
+//   wssPort: 443,
+//   // wssPort: 6001,
+//   disableStats: true,
+//   encrypted: true,
+//   enabledTransports: ["ws", "wss"],
+//   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+// });
 
 // window.Echo = new Echo({
 //   broadcaster: "pusher",
@@ -86,3 +86,14 @@ window.Echo = new Echo({
 //   disableStats: true,
 //   enabledTransports: ["ws", "wss"],
 // });
+
+window.Echo = new Echo({
+  broadcaster: "pusher",
+  key: process.env.MIX_PUSHER_APP_KEY,
+  wsHost: window.location.host,
+  wsPort: 80,
+  wssPort: 443,
+  disableStats: true,
+  enabledTransports: ["ws", "wss"],
+  cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+});
