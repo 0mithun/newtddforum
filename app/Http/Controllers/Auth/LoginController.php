@@ -127,7 +127,7 @@ class LoginController extends Controller {
     public function handleInstagramProviderCallback() {
         // $user = Socialite::driver('instagram')->user();
         $user = Socialite::driver( 'instagram' )->user();
-        dd( $user );
+        // dd( $user );
 
         return $this->oauthLogin( $user, 'instagram' );
         // $user->token;

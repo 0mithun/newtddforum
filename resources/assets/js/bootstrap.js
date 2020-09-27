@@ -76,24 +76,24 @@ window.Pusher = require("pusher-js");
 //   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 // });
 
-// window.Echo = new Echo({
-//   broadcaster: "pusher",
-//   key: process.env.MIX_PUSHER_APP_KEY,
-//   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//   wsHost: window.location.hostname,
-//   wsPort: 6001,
-//   wssPort: 6001,
-//   disableStats: true,
-//   enabledTransports: ["ws", "wss"],
-// });
-
 window.Echo = new Echo({
   broadcaster: "pusher",
   key: process.env.MIX_PUSHER_APP_KEY,
-  wsHost: window.location.host,
-  wsPort: 80,
-  wssPort: 443,
+  cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+  wsHost: window.location.hostname,
+  wsPort: 6001,
+  wssPort: 6001,
   disableStats: true,
   enabledTransports: ["ws", "wss"],
-  cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 });
+
+// window.Echo = new Echo({
+//   broadcaster: "pusher",
+//   key: process.env.MIX_PUSHER_APP_KEY,
+//   wsHost: window.location.host,
+//   wsPort: 80,
+//   wssPort: 443,
+//   disableStats: true,
+//   enabledTransports: ["ws", "wss"],
+//   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+// });
