@@ -17,7 +17,8 @@ export default {
 
   computed: {
     pointCounts() {
-      return this.likeCount - (this.dislikeCount + 1);
+      // return this.likeCount - (this.dislikeCount + 1);
+      return this.likeCount - this.dislikeCount;
       // return abbreviate((this.like_count - this.dislike_count), 1)
     },
   },

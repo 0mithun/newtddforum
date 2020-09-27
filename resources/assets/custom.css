@@ -395,6 +395,7 @@ li.list-group-item {
 }
 .thread-image {
   display: inline-block;
+  max-width: 100%;
 }
 
 .story-text {

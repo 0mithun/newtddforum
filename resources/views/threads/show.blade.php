@@ -87,7 +87,7 @@
 
     <div class="container">
         <div class="row top-margin" >
-            <div class="col-md-12">
+            <div class="col-md-8">
 
                 <div class="panel">
                     <div class="panel-body">
@@ -236,23 +236,28 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        @if($thread->location != NULL)
+                @if($thread->location != NULL)
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 style="color:black;">Story Location</h3>
+                        <simple-map :thread="{{ $thread }}"></simple-map>                    
+                    </div>
+                </div>
+            @endif
+    
             <div class="row">
                 <div class="col-md-12">
-                    <h3 style="color:black;">Story Location</h3>
-                    <simple-map :thread="{{ $thread }}"></simple-map>                    
+                <thread-replies :thread="{{ $thread }}"></thread-replies>
                 </div>
             </div>
-        @endif
-
-        <div class="row">
-            <div class="col-md-12">
-            <thread-replies :thread="{{ $thread }}"></thread-replies>
             </div>
+            <div class="col-md-4">
+                <trending-thread></trending-thread>
+              </div>
         </div>
+
+       
     </div>
 @endsection
 @section('footer_script')
