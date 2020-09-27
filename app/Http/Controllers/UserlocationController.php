@@ -72,13 +72,18 @@ class UserlocationController extends Controller {
 
             if ( request( 'radius' ) ) {
                 $distance = request( 'radius' ) ?? 500;
-                $results = DB::select( DB::raw( 'SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance' ) );
+
+                $results = $this->search($lat,$lng,$distance);
+                
+                // $results = DB::select( DB::raw( 'SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance' ) );
+                // $threadsId = DB::select( DB::raw( 'SELECT id, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance' ) );
+               
+
             } else {
                 $results = Thread::all();
             }
         }
 
-        // return response()->json( $results );
 
         if ( auth()->check() ) {
             $auth_user = auth()->user();
@@ -130,6 +135,18 @@ class UserlocationController extends Controller {
         ];
 
         return response( $data, 200 );
+    }
+
+
+    public function search($lat,$lng,$distance=10){
+        $threadsId = \DB::table('threads')
+        ->selectRaw('id, ( 3959 * acos( cos( radians('.$lat.') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('.$lng.') ) + sin( radians('.$lat.') ) * sin(radians(lat)) ) ) AS distance')
+        ->having('distance','<',$distance)
+        ->orderBy('distance')
+        // ->lists('id')
+        ->pluck('id')
+        ;
+        return Thread::whereIn('id', $threadsId)->get();
     }
 
 }

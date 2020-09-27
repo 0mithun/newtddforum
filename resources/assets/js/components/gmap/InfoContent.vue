@@ -19,7 +19,7 @@
 
       <div class="thread-counts">
         <view-counts :thread="thread"></view-counts>
-        <point-counts :like_count="thread.like_count" :dislike_count="thread.dislike_count"></point-counts>
+        <point-counts :thread="thread"></point-counts>
         <emoji-counts :thread="thread"></emoji-counts>
       </div>
     </div>
