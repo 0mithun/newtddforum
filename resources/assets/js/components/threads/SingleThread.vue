@@ -11,7 +11,7 @@
       </div>
       <div class="thread_title">
         <a :href="thread.path">
-          <strong>{{ thread.title }}</strong>
+          <strong v-html="thread.title"></strong>
         </a>
       </div>
       <div class="card-header threads-counts">
@@ -37,7 +37,7 @@
         <!-- Under images: need show img description + license info + amazon [shop] -->
       </div>
 
-      <div v-html="thread.excerpt"></div>
+      <div v-html="thread.excerpt" class="thread_excerpt"></div>
       <!-- 
       <div class="thread_creator">
         <a href="#" class="creator_name" v-if="thread.anonymous == 1">
@@ -102,8 +102,8 @@ export default {
 
 <style lang="scss" scoped>
 .social-share-btn {
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
 }
 .threads-counts {
   display: flex;
@@ -127,5 +127,20 @@ export default {
 }
 .tools-row {
   margin-top: 20px;
+}
+.panel-body{
+  padding:0px;
+}
+
+.thread-tags, .thread_title, .threads-counts, .thread_excerpt, .tools-row{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.thread-tags{
+  padding-top:15px;
+}
+
+.tools-row{
+  padding-bottom: 15px;
 }
 </style>

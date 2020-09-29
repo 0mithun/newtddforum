@@ -255,10 +255,25 @@ class Thread extends Model
      * @param  string $body
      * @return string
      */
-    // public function getBodyAttribute($body)
-    // {
-    //     return \Purify::clean($body);
-    // }
+    public function getBodyAttribute($body)
+    {
+        // return \Purify::clean($body);
+
+        return html_entity_decode($body);
+    }
+
+     /**
+     * Access the title attribute.
+     *
+     * @param  string $title
+     * @return string
+     */
+    public function getTitleAttribute($title)
+    {
+        // return \Purify::clean($body);
+
+        return html_entity_decode($title);
+    }
 
     /**
      * Set the proper slug attribute.
@@ -458,4 +473,6 @@ class Thread extends Model
         // return ($this->like_count - ($this->dislike_count + 1));
         return ($this->like_count - $this->dislike_count);
     }
+
+    
 }

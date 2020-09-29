@@ -3,6 +3,7 @@
     <button
       class="btn  thread-items-show-tools-btn focus-comment-btn"
       @click.prevent="focusComment"
+      :style="style"
     >
       <i class="fa fa-comment"></i>
     </button>
@@ -11,9 +12,23 @@
 
 <script>
 export default {
+  props:{
+    size: {
+      type: String,
+      default: "big",
+    },
+  },
   computed: {
     signedIn() {
       return window.App.user ? true : false;
+    },
+    style() {
+      return {
+        borderWidth: this.size == "small" ? "1px" : "2px",
+        height: this.size == "small" ? "24px" : "40px",
+        width: this.size == "small" ? "24px" : "40px",
+        fontSize: this.size == "small" ? "20px" : "25px",
+      };
     },
   },
   methods: {
@@ -42,3 +57,5 @@ export default {
   padding-top: 0px;
 }
 </style>
+
+
