@@ -348,5 +348,6 @@ export default {
 
 .description{
   transition: cubic-bezier(0.075, 0.82, 0.165, .3) ease-in;
+  overflow: hidden;
 }
 </style>
