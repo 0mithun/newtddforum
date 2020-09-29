@@ -91,17 +91,13 @@ class ThreadsController extends Controller
         $admin = Admin::first();
 
         $threads = $this->generateCurrentPageResults($threads, $perPage);
-        // dd($threads);
+
         $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
      
         $threads = collect($threads)->map(function ($voucher) {
             return (object) $voucher;
         });
-        // dd($threads->values());
-        // dd($threads->toArray());
-     
 
-        // dd($object);
         return view('threads.index', [
             'threads'   =>  $threads,
             'trending'  => $trending->get(),
@@ -336,8 +332,6 @@ class ThreadsController extends Controller
         // $threads = Thread::latest()->filter( $filters );
 
         $threads = Thread::latest();
-
-
         $this->filterThreads($threads);
 
         if (request()->path() == '/') {
@@ -345,15 +339,12 @@ class ThreadsController extends Controller
             // $threads->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - (dislike_count + 1 ) DESC');
             $threads->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - dislike_count DESC');
         } else {
-            // $threads->latest()->filter($filters);
             $threads->latest()->filter($filters);
         }
 
         if ($channel->exists) {
             $threads->where('channel_id', $channel->id);
         }
-
-        // dd($threads->pluck('id')->all());
         return $threads;
     }
 
@@ -381,6 +372,7 @@ class ThreadsController extends Controller
     /**
      * Paginate Filter Threads
      */
+    //currently not used
 
     public function paginate($items, $perPage = 2, $page = null)
     {
@@ -398,6 +390,7 @@ class ThreadsController extends Controller
      */
     public function loadByTag($tagname)
     {
+        
         $tag = Tags::where('name', \request('tagname'))->first();
 
         if (!$tag) {
@@ -409,12 +402,28 @@ class ThreadsController extends Controller
             }
         }
 
-        
-        $pageTitle = 'Tag: ' . $tag->name;
-        $tag->load('threads');
+        // dd($tag);
+        // $pageTitle = 'Tag: ' . $tag->name;
+        // $tag->load('threads');
+
+        // dd($tag);
+
+        $threads = Thread::where('tag_names','LIKE', "%{$tag->name}%");
+
+        $this->filterThreads($threads);
+        $perPage = 10;
+        $totalRecords = $threads->count();
+        $threads = $this->generateCurrentPageResults($threads, $perPage);
+
      
-        $data = $this->convert_from_latin1_to_utf8_recursively($tag->toArray());
-        return view('threads.threadsbytag', compact('data', 'pageTitle'));
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+        // $tag = $this->convert_from_latin1_to_utf8_recursively($tag->toArray());
+        return view('threads.threadsbytag', [
+            'tag' => $tag,
+            'threads'   =>  $threads,
+            'current_page'  => (request('page') && request('page') != '') ? request('page') : 1,
+            'total_records' => $totalRecords,
+        ]);
     }
     
    
@@ -458,6 +467,7 @@ class ThreadsController extends Controller
      * Get Related Threads
      */
 
+     //currently not used
     public function getRelatedThread($thread)
     {
         //Related Threads
