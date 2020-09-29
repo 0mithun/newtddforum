@@ -90,8 +90,20 @@ class ThreadsController extends Controller
         }
         $admin = Admin::first();
 
+        $threads = $this->generateCurrentPageResults($threads, $perPage);
+        // dd($threads);
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+     
+        $threads = collect($threads)->map(function ($voucher) {
+            return (object) $voucher;
+        });
+        // dd($threads->values());
+        // dd($threads->toArray());
+     
+
+        // dd($object);
         return view('threads.index', [
-            'threads'   =>  $this->generateCurrentPageResults($threads, $perPage),
+            'threads'   =>  $threads,
             'trending'  => $trending->get(),
             'pageTitle' => $admin->app_title,
             'per_page'  => $perPage,
@@ -397,12 +409,34 @@ class ThreadsController extends Controller
             }
         }
 
+        
         $pageTitle = 'Tag: ' . $tag->name;
         $tag->load('threads');
-
-        return view('threads.threadsbytag', compact('tag', 'pageTitle'));
+     
+        $data = $this->convert_from_latin1_to_utf8_recursively($tag->toArray());
+        return view('threads.threadsbytag', compact('data', 'pageTitle'));
     }
-
+    
+   
+    /**
+     * Convert latin to UTF-8
+     */
+    public static function convert_from_latin1_to_utf8_recursively($dat)
+   {
+      if (is_string($dat)) {
+         return utf8_encode($dat);
+      } elseif (is_array($dat)) {
+         $ret = [];
+         foreach ($dat as $i => $d) $ret[ $i ] = self::convert_from_latin1_to_utf8_recursively($d);
+         return $ret;
+      } elseif (is_object($dat)) {
+         foreach ($dat as $i => $d) $dat->$i = self::convert_from_latin1_to_utf8_recursively($d);
+         return $dat;
+      } else {
+         return $dat;
+      }
+   }
+    
     /**
      * Get lat, lng with thread location
      */
@@ -581,6 +615,13 @@ class ThreadsController extends Controller
                 return $thread->age_restriction == 0;
             })->values();
         }
+
+        $threads = $threads->map(function($thread){
+            $thread->title = html_entity_decode($thread->title);
+            return $thread;
+        });
+
+        $threads =$this->convert_from_latin1_to_utf8_recursively($threads->toArray());
 
         return response()->json($threads);
     }

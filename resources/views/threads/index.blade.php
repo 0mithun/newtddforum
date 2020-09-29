@@ -7,7 +7,7 @@
                 {{-- @include ('threads._list') --}}
                 @forelse ($threads as $thread)
                 
-                    <single-thread :thread="{{ $thread }}"></single-thread>
+                    <single-thread :thread="{{ json_encode($thread) }}"></single-thread>
                 @empty
                     <p>There are no relevant results at this time.</p>
                 @endforelse
