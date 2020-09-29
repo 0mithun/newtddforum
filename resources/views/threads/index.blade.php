@@ -20,13 +20,13 @@
                 <div class="panel">
                     <div class="panel-heading">
                         <div class="social-follow-btn">
-                            <a href="#" class="follow-item">
+                            <a href="https://facebook.com/Anecdotagecom-104983414515616/" class="follow-item">
                                 <img class="follow-item-icon" src="{{ asset('images/social/facebook.png') }}" alt="">
                             </a>
-                            <a href="#" class="follow-item">
+                            <a href="https://twitter.com/anecdotage_com" class="follow-item">
                                 <img class="follow-item-icon" src="{{ asset('images/social/twitter.png') }}" alt="">
                             </a>
-                            <a href="#" class="follow-item">
+                            <a href="https://www.instagram.com/anecdevs_ig/" class="follow-item">
                                 <img class="follow-item-icon" src="{{ asset('images/social/instagram.png') }}" alt="">
                             </a>
                         </div>

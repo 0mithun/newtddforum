@@ -7,6 +7,11 @@
             <div class="row profile-header">
               <div class="profile-avatar">
                 <img :src="tag.profileAvatarPath" alt class="profile-img" />
+                <div style="text-align:center">
+
+                <!-- <button class="btn btn-xs btn-primary">Show</button> -->
+                <i class="fa fa-question-circle tooltip-icon" @click="showDescription = !showDescription"></i>
+                </div>
               </div>
               <div class="profile-details">
                 <h2 class="profile-name">
@@ -51,12 +56,24 @@
                 </div>-->
               </div>
             </div>
+            <div class="row description" v-if="showDescription">
+              <div class="col-md-12">
+                {{ tag.description }}
+                
+              </div>
+            </div>
             <div class="row">
               <div class="col-md-12">
                 <div class="post-header">
                   <div class="post-counts">{{ postCounts }} posts</div>
                 </div>
-                <div class="post-body">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="post-body">
                   <single-thread
                     v-for="(thread, index) in paginatedItems"
                     :thread="thread"
@@ -92,16 +109,29 @@
                     </ul>
                   </nav>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="col-md-4 sidebar">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="social-follow-btn">
+                    <a href="https://facebook.com/Anecdotagecom-104983414515616/" class="follow-item">
+                        <img class="follow-item-icon" src="/images/social/facebook.png" alt="">
+                    </a>
+                    <a href="https://twitter.com/anecdotage_com" class="follow-item">
+                        <img class="follow-item-icon" src="/images/social/twitter.png" alt="">
+                    </a>
+                    <a href="https://www.instagram.com/anecdevs_ig/" class="follow-item">
+                        <img class="follow-item-icon" src="/images/social/instagram.png" alt="">
+                    </a>
+                </div>
+                <h3 class="follow-on-title">Follow Us On</h3>
+            </div>
+        </div>
         <trending-thread></trending-thread>
       </div>
+      </div>
     </div>
-  </div>
+
 </template>
 
 <script>
@@ -124,6 +154,7 @@ export default {
       limitLinks: 10,
       formPage: 1,
       toPage: 1,
+      showDescription:false
     };
   },
   computed: {
@@ -239,6 +270,8 @@ export default {
   margin: 30px auto;
   display: flex;
   align-items: center;
+  margin-top:10px;
+  margin-bottom: 0px;
 }
 .profile-name {
   padding: 0;
@@ -256,6 +289,7 @@ export default {
   padding: 3px;
   border: 2px solid rgb(255, 67, 1);
   border-radius: 50%;
+  display: block;
 }
 
 .profile-avatar {
@@ -293,12 +327,26 @@ export default {
   color: black;
   padding: 15px 0;
   font-weight: bold;
+  padding-bottom: 0px;
 }
 .sidebar {
-  margin: 30px auto;
+  /* margin: 30px auto; */
 }
 
 .pagination li {
   cursor: pointer;
+}
+
+.tools-row{
+  margin-bottom: 20px;
+}
+
+.tooltip-icon{
+  font-size:20px;
+  cursor:pointer
+}
+
+.description{
+  transition: cubic-bezier(0.075, 0.82, 0.165, .3) ease-in;
 }
 </style>

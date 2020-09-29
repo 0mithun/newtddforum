@@ -108,12 +108,12 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <h1 class="thread_title" style="margin-top: 5px;margin-bottom:5px"> {{ $thread->title }}</h1>
+                                <h1 class="thread_title" style="margin-top: 5px;margin-bottom:5px"> {!! ($thread->title) !!}</h1>
                             </div>
                             
                         </div>
                         <div class="row thread-show-item-counts">
-                            <div class="col-md-12 thread_item_counts">
+                            <div class="col-md-12 thread_item_counts no-padding">
                                 <view-counts :thread="{{ $thread }}"></view-counts>
                                 <point-counts :thread="{{ $thread }}"></point-counts>
                                 <comment-counts :thread="{{ $thread }}"></comment-counts>
@@ -165,22 +165,29 @@
                                 <twitter-share :thread="{{ $thread }}"></twitter-share>
                             </div>
                             <div class="col-md-9 thread-show-tools">
-                                <focus-comment></focus-comment>
-                                <vote-emojis :thread="{{ $thread }}"  position="top"></vote-emojis>
-                                <favorite-thread :thread="{{ $thread }}"></favorite-thread>
-                                <up-votes :thread="{{ $thread }}"></up-votes>
-                                <down-votes :thread="{{ $thread }}"></down-votes>
-                                <report-thread :thread="{{ $thread }}"></report-thread>                             
-                                <show-source :thread="{{ $thread }}"></show-source>                            
+                                <focus-comment size="small"></focus-comment>
+                                <vote-emojis :thread="{{ $thread }}"  position="top" size="small"></vote-emojis>
+                                <favorite-thread :thread="{{ $thread }}" size="small"></favorite-thread>
+                                <up-votes :thread="{{ $thread }}" size="small"></up-votes>
+                                <down-votes :thread="{{ $thread }}" size="small"></down-votes>
+                                <report-thread :thread="{{ $thread }}" size="small"></report-thread>                             
+                                <show-source :thread="{{ $thread }}" size="small"></show-source>                            
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-12 no-padding">
                                 <div class="story">
                                     <div class="thread_thumb" style="background: rgba({{ $thread->imageColor }})">
                                         <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image thread_thumb_image">
                                         {{-- Under images: need show img description + license info + amazon [shop] --}}
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="story">
                                     <div class="story-text">
                                         {!! $thread->body !!}
                                     </div>
@@ -225,13 +232,13 @@
                                 <twitter-share :thread="{{ $thread }}"></twitter-share>
                             </div>
                             <div class="col-md-9 thread-show-tools">
-                                <focus-comment></focus-comment>
-                                <vote-emojis :thread="{{ $thread }}"  position="bottom"></vote-emojis>
-                                <favorite-thread :thread="{{ $thread }}"></favorite-thread>
-                                <up-votes :thread="{{ $thread }}"></up-votes>
-                                <down-votes :thread="{{ $thread }}"></down-votes>
-                                <report-thread :thread="{{ $thread }}"></report-thread>                             
-                                <show-source :thread="{{ $thread }}"></show-source>                            
+                                <focus-comment size="small"></focus-comment>
+                                <vote-emojis :thread="{{ $thread }}"  position="bottom" size="small"></vote-emojis>
+                                <favorite-thread :thread="{{ $thread }}" size="small"></favorite-thread>
+                                <up-votes :thread="{{ $thread }}" size="small"></up-votes>
+                                <down-votes :thread="{{ $thread }}" size="small"></down-votes>
+                                <report-thread :thread="{{ $thread }}" size="small"></report-thread>                             
+                                <show-source :thread="{{ $thread }}" size="small"></show-source>                            
                             </div>
                         </div>
                     </div>
@@ -253,6 +260,22 @@
             </div>
             </div>
             <div class="col-md-4">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="social-follow-btn">
+                            <a href="https://facebook.com/Anecdotagecom-104983414515616/" class="follow-item">
+                                <img class="follow-item-icon" src="{{ asset('images/social/facebook.png') }}" alt="">
+                            </a>
+                            <a href="https://twitter.com/anecdotage_com" class="follow-item">
+                                <img class="follow-item-icon" src="{{ asset('images/social/twitter.png') }}" alt="">
+                            </a>
+                            <a href="https://www.instagram.com/anecdevs_ig/" class="follow-item">
+                                <img class="follow-item-icon" src="{{ asset('images/social/instagram.png') }}" alt="">
+                            </a>
+                        </div>
+                        <h3 class="follow-on-title">Follow Us On</h3>
+                    </div>
+                </div>
                 <trending-thread></trending-thread>
               </div>
         </div>

@@ -14,7 +14,7 @@
       <div class="panel-body">
         <div class="trending_thread_title">
           <a :href="thread.path">
-            <strong>{{ thread.title }}</strong>
+            <strong v-html="thread.title"></strong>
           </a>
         </div>
         <div class="trending_footer">
