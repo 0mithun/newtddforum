@@ -517,6 +517,8 @@ li.list-group-item {
 .social-share-btn {
   padding-left: 20px !important;
   padding-right: 10px !important;
+  padding-bottom: 15px;
+  /* margin-bottom: 20px; */
 }
 
 .navbar-nav > li > .dropdown-menu {
