@@ -8,14 +8,14 @@
                                 <i class="fa fa-search"></i>
                             </div> -->
 
-                             <ul class="list">
+                             <ul class="list" v-if="friendLists.length<1">
                                 <li class="clearfix">
                                    
                                   <span style="color:white"> No Friends</span>
                                 </li>
                                 
                             </ul>
-                            <ul class="list">
+                            <ul class="list" v-else>
                                 <li class="clearfix" v-for="(friend, index) in friendLists" :key="index" @click.prevent="selectUser(friend.id)" :class="friend.id == selectFriend ? 'active-friend': '' " >
                                     <img :src="friend.profileAvatarPath" alt="avatar" style="width:50px; border-radius:50%;height:50px" />
                                     <div class="about">
