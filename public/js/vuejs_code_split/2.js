@@ -65,6 +65,22 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -88,8 +104,15 @@ __webpack_require__.r(__webpack_exports__);
   props: ["profile_user"],
   data: function data() {
     return {
-      sort: "topRated"
+      sort: "topRated",
+      page: 1,
+      loading: false
     };
+  },
+  watch: {
+    sort: function sort(sortBy) {
+      this.getAllPost();
+    }
   },
   computed: {
     postCounts: function postCounts() {
@@ -98,28 +121,36 @@ __webpack_require__.r(__webpack_exports__);
     posts: function posts() {
       return this.$store.getters.profilePosts;
     },
-    sortPosts: function sortPosts() {
-      var threads = _.orderBy(this.posts, [this.sort], "desc");
-
-      return threads;
+    totalPage: function totalPage() {
+      return Math.ceil(this.postCounts / 10);
+    },
+    signedIn: function signedIn() {
+      return window.App.user ? true : false;
     }
   },
   methods: {
-    sortBy: function sortBy(sort) {
-      this.sort = sort;
-    } // fetch(page) {
-    //   axios
-    //     .get("/threads/search?query=" + this.q + "&page=" + page)
-    //     .then((res) => {
-    //       this.allThreads = res.data.data;
-    //       let pageUrl = {
-    //         prev_page_url: res.data.prev_page_url,
-    //         next_page_url: res.data.next_page_url,
-    //       };
-    //       eventBus.$emit("pageChange", pageUrl);
-    //     });
-    // },
+    loadMore: function loadMore() {
+      this.page = this.page + 1;
+      this.getAllPost();
+    },
+    getAllPost: function getAllPost() {
+      var _this = this;
 
+      this.loading = true;
+      var query = "?page=".concat(this.page, "&sort_by=").concat(this.sort);
+      var url = "/profiles/".concat(this.profile_user.username, "/threads").concat(query);
+      axios.get(url).then(function (res) {
+        console.log(res.data); // this.posts = res.data.threads;
+
+        var threads = [];
+        var old_threads = _this.$store.getters.profilePosts;
+        threads = [].concat(_toConsumableArray(old_threads), _toConsumableArray(res.data.threads));
+
+        _this.$store.dispatch("profilePosts", threads);
+
+        _this.loading = false;
+      });
+    }
   }
 });
 
@@ -941,11 +972,14 @@ __webpack_require__.r(__webpack_exports__);
     this.getProfileComments();
   },
   methods: {
+    setTabPage: function setTabPage(tab) {
+      history.pushState(null, null, "?tab=" + tab);
+    },
     getProfileComments: function getProfileComments() {
       var _this = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/comments")).then(function (res) {
-        _this.replies_count = res.data.replies_count;
+        _this.replies_count = res.data.replies_count; // this.$store.dispatch("profilePosts", res.data.threads);
       });
     },
     getAllPost: function getAllPost() {
@@ -954,6 +988,12 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/profiles/".concat(this.profile_user.username, "/threads")).then(function (res) {
         // this.posts = res.data.threads;
         _this2.$store.dispatch("profilePosts", res.data.threads);
+
+        _this2.$store.dispatch("profilePostsPerPage", res.data.per_page);
+
+        _this2.$store.dispatch("profilePostsCurrentPage", res.data.current_page);
+
+        _this2.$store.dispatch("profileTotalRecords", res.data.total_records);
       });
     },
     getAllLikePost: function getAllLikePost() {
@@ -1114,7 +1154,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.post-header[data-v-9fc4dac2] {\r\n  display: flex;\r\n  padding: 15px 0;\n}\n.post-counts[data-v-9fc4dac2] {\r\n  color: black;\r\n  font-weight: bold;\r\n  margin-right: 20px;\n}\n.sortBy[data-v-9fc4dac2] {\r\n  background-color: transparent;\r\n  border: none;\r\n  outline: none;\r\n  width: auto;\r\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-9fc4dac2]:focus {\r\n  outline: none;\r\n  border: none;\n}\r\n", ""]);
+exports.push([module.i, "\n.post-header[data-v-9fc4dac2] {\r\n  display: flex;\r\n  padding: 15px 0;\n}\n.post-counts[data-v-9fc4dac2] {\r\n  color: black;\r\n  font-weight: bold;\r\n  margin-right: 20px;\n}\n.sortBy[data-v-9fc4dac2] {\r\n  background-color: transparent;\r\n  border: none;\r\n  outline: none;\r\n  width: auto;\r\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-9fc4dac2]:focus {\r\n  outline: none;\r\n  border: none;\n}\n.load-more-btn[data-v-9fc4dac2]{\r\n  text-align: center;\n}\r\n", ""]);
 
 // exports
 
@@ -1493,10 +1533,45 @@ var render = function() {
     _c(
       "div",
       { staticClass: "post-body" },
-      _vm._l(_vm.sortPosts, function(thread, index) {
-        return _c("single-thread", { key: index, attrs: { thread: thread } })
-      }),
-      1
+      [
+        _vm._l(_vm.posts, function(thread, index) {
+          return _c("single-thread", { key: index, attrs: { thread: thread } })
+        }),
+        _vm._v(" "),
+        _vm.page < _vm.totalPage
+          ? _c("div", { staticClass: "load-more-btn" }, [
+              _vm.loading
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button", disabled: "" }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "spinner-border spinner-border-sm",
+                        attrs: { role: "status", "aria-hidden": "true" }
+                      }),
+                      _vm._v("\n      Loading...\n      ")
+                    ]
+                  )
+                : _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-sm",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.loadMore($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Load More")]
+                  )
+            ])
+          : _vm._e()
+      ],
+      2
     )
   ])
 }
@@ -2341,7 +2416,14 @@ var render = function() {
                     _vm.isShowPosts
                       ? _c(
                           "a",
-                          { attrs: { "data-toggle": "tab", href: "#posts" } },
+                          {
+                            attrs: { "data-toggle": "tab", href: "#posts" },
+                            on: {
+                              click: function($event) {
+                                return _vm.setTabPage("post")
+                              }
+                            }
+                          },
                           [_vm._v("Posts")]
                         )
                       : _vm._e()
@@ -2352,7 +2434,12 @@ var render = function() {
                       ? _c(
                           "a",
                           {
-                            attrs: { "data-toggle": "tab", href: "#favorites" }
+                            attrs: { "data-toggle": "tab", href: "#favorites" },
+                            on: {
+                              click: function($event) {
+                                return _vm.setTabPage("favorites")
+                              }
+                            }
                           },
                           [_vm._v("Favorites")]
                         )
@@ -2363,7 +2450,14 @@ var render = function() {
                     _vm.is_owner
                       ? _c(
                           "a",
-                          { attrs: { "data-toggle": "tab", href: "#likes" } },
+                          {
+                            attrs: { "data-toggle": "tab", href: "#likes" },
+                            on: {
+                              click: function($event) {
+                                return _vm.setTabPage("likes")
+                              }
+                            }
+                          },
                           [_vm._v("Likes")]
                         )
                       : _vm._e()
@@ -2377,6 +2471,11 @@ var render = function() {
                             attrs: {
                               "data-toggle": "tab",
                               href: "#subscriptions"
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.setTabPage("subscriptions")
+                              }
                             }
                           },
                           [_vm._v("Subscriptions")]

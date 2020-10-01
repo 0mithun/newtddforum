@@ -77425,6 +77425,9 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     followers: [],
     followings: [],
     profilePosts: [],
+    profilePostsPerPage: 10,
+    profilePostsCurrentPage: 1,
+    profileTotalRecords: 0,
     profileFavoritePosts: [],
     profileLikePosts: []
   },
@@ -77534,6 +77537,15 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     profilePosts: function profilePosts(state, payload) {
       state.profilePosts = payload;
     },
+    profilePostsPerPage: function profilePostsPerPage(state, payload) {
+      state.profilePostsPerPage = payload;
+    },
+    profilePostsCurrentPage: function profilePostsCurrentPage(state, payload) {
+      state.profilePostsCurrentPage = payload;
+    },
+    profileTotalRecords: function profileTotalRecords(state, payload) {
+      state.profileTotalRecords = payload;
+    },
     profileFavoritePosts: function profileFavoritePosts(state, payload) {
       state.profileFavoritePosts = payload;
     },
@@ -77618,6 +77630,15 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     profilePosts: function profilePosts(context, payload) {
       context.commit('profilePosts', payload);
     },
+    profilePostsPerPage: function profilePostsPerPage(context, payload) {
+      context.commit('profilePostsPerPage', payload);
+    },
+    profilePostsCurrentPage: function profilePostsCurrentPage(context, payload) {
+      context.commit('profilePostsCurrentPage', payload);
+    },
+    profileTotalRecords: function profileTotalRecords(context, payload) {
+      context.commit('profileTotalRecords', payload);
+    },
     //Profile Favorite Posts
     profileFavoritePosts: function profileFavoritePosts(context, payload) {
       context.commit('profileFavoritePosts', payload);
@@ -77652,12 +77673,28 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     followings: function followings(state) {
       return state.followings;
     },
+
+    /**Profile Posts */
     profilePosts: function profilePosts(state) {
       return state.profilePosts;
     },
-    profilePostCount: function profilePostCount(state) {
-      return state.profilePosts.length;
+    profilePostsPerPage: function profilePostsPerPage(state) {
+      return state.profilePostsPerPage;
     },
+    profilePostsCurrentPage: function profilePostsCurrentPage(state) {
+      return state.profilePostsCurrentPage;
+    },
+    profileTotalRecords: function profileTotalRecords(state) {
+      return state.profileTotalRecords;
+    },
+    profilePostCount: function profilePostCount(state) {
+      // return state.profilePosts.length
+      return state.profileTotalRecords;
+    },
+
+    /**End profile Post */
+
+    /**profile favorite */
     profileFavoritePosts: function profileFavoritePosts(state) {
       return state.profileFavoritePosts;
     },

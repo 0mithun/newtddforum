@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ConfirmNewEmail;
 use App\Reply;
 use App\Thread;
+use App\Traits\ThreadPrivacy;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Mail;
 use Spatie\Geocoder\Geocoder;
 
 class ProfilesController extends Controller {
+    use ThreadPrivacy;
+    public $perPage = 10;
     /**
      * Show the user's profile.
      *
@@ -328,35 +331,56 @@ class ProfilesController extends Controller {
 
     public function myThreadsShow() {
         $user = request( 'user' );
+        
         $auth_user = auth()->user();
         $getUserInfo = User::with( 'userprivacy' )->where( 'username', $user )->first();
 
-        if ( $auth_user->username == $user ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )
-            // ->get();
-            ;
-        } else if ( $auth_user->id == 1 ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )
-            // ->get();
-            ;
-        } else if ( $auth_user->userprivacy->restricted_18 == 1 ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )
-                ->where( 'anonymous', '=', 0 )
-            // ->get();
-            ;
-        } else if ( $auth_user->userprivacy->restricted_13 == 1 ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )->where( 'age_restriction', '!=', 18 )
-                ->where( 'anonymous', '=', 0 )
-            // ->get();
-            ;
-        } else {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )->where( 'age_restriction', 0 )
-                ->where( 'anonymous', '=', 0 )
-            // ->get();
-            ;
+        $threads = Thread::where('user_id', $getUserInfo->id);
+
+        if($user != $auth_user->username || $auth_user->id != 1 ){
+            $threads->where( 'anonymous', '=', 0 );
         }
 
-        return response()->json( ['threads' => $threads->get()] );
+        $this->sortBy($threads);
+        $totalRecords = $threads->count();
+
+        
+        $threads = $this->generateCurrentPageResults($threads, $this->perPage);        
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+        $threads = $this->convertToObject($threads);
+
+
+        
+
+        // if ( $auth_user->username == $user ) {
+        //     $threads = Thread::where( 'user_id', $getUserInfo->id )
+        //     // ->get();
+        //     ;
+        // } else if ( $auth_user->id == 1 ) {
+        //     $threads = Thread::where( 'user_id', $getUserInfo->id )
+        //     // ->get();
+        //     ;
+        // } else if ( $auth_user->userprivacy->restricted_18 == 1 ) {
+        //     $threads = Thread::where( 'user_id', $getUserInfo->id )
+        //         ->where( 'anonymous', '=', 0 )
+        //     // ->get();
+        //     ;
+        // } else if ( $auth_user->userprivacy->restricted_13 == 1 ) {
+        //     $threads = Thread::where( 'user_id', $getUserInfo->id )->where( 'age_restriction', '!=', 18 )
+        //         ->where( 'anonymous', '=', 0 )
+        //     // ->get();
+        //     ;
+        // } else {
+        //     $threads = Thread::where( 'user_id', $getUserInfo->id )->where( 'age_restriction', 0 )
+        //         ->where( 'anonymous', '=', 0 )
+        //     // ->get();
+        //     ;
+        // }
+
+        return response()->json( [
+            'threads' => $threads,'per_page'  => $this->perPage,
+            'total_records' => $totalRecords,
+        ] );
     }
 
     /**
@@ -423,5 +447,19 @@ class ProfilesController extends Controller {
         $geocoder->setCountry( config( 'geocoder.country', 'US' ) );
 
         return $geocoder->getCoordinatesForAddress( $address );
+    }
+
+    public function sortBy($threads){
+        if(request('sort_by') && request('sort_by') !=''){
+            $sort = request('sort_by');
+            $valid_sort = ['visits','favorite_count'];
+            if($sort == 'topRated'){
+                $threads->orderByRaw('like_count - dislike_count DESC');
+            }else if(in_array($sort, $valid_sort)){
+                $threads->orderBy($sort, 'desc');
+            }
+        }else{
+            $threads->orderByRaw('like_count - dislike_count DESC');
+        }
     }
 }

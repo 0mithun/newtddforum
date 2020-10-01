@@ -12,6 +12,10 @@ export default {
         followers: [],
         followings: [],
         profilePosts: [],
+        profilePostsPerPage: 10,
+        profilePostsCurrentPage:1,
+        profileTotalRecords:0,
+
         profileFavoritePosts: [],
         profileLikePosts: [],
     },
@@ -133,6 +137,15 @@ export default {
         profilePosts(state, payload) {
             state.profilePosts = payload
         },
+        profilePostsPerPage(state, payload) {
+            state.profilePostsPerPage = payload
+        },
+        profilePostsCurrentPage(state, payload) {
+            state.profilePostsCurrentPage = payload
+        },
+        profileTotalRecords(state, payload) {
+            state.profileTotalRecords = payload
+        },
 
         profileFavoritePosts(state, payload) {
             state.profileFavoritePosts = payload
@@ -227,6 +240,15 @@ export default {
         profilePosts(context, payload) {
             context.commit('profilePosts', payload)
         },
+        profilePostsPerPage(context, payload) {
+            context.commit('profilePostsPerPage', payload)
+        },
+        profilePostsCurrentPage(context, payload) {
+            context.commit('profilePostsCurrentPage', payload)
+        },
+        profileTotalRecords(context, payload) {
+            context.commit('profileTotalRecords', payload)
+        },
 
         //Profile Favorite Posts
         profileFavoritePosts(context, payload) {
@@ -265,13 +287,28 @@ export default {
             return state.followings
         },
 
+        /**Profile Posts */
         profilePosts(state) {
             return state.profilePosts
         },
-        profilePostCount(state) {
-            return state.profilePosts.length
+        profilePostsPerPage(state) {
+            return state.profilePostsPerPage
+        },
+        profilePostsCurrentPage(state) {
+            return state.profilePostsCurrentPage
+        },
+        profileTotalRecords(state) {
+            return state.profileTotalRecords
         },
 
+        profilePostCount(state) {
+            // return state.profilePosts.length
+            return state.profileTotalRecords
+        },
+
+        /**End profile Post */
+
+    /**profile favorite */
         profileFavoritePosts(state) {
             return state.profileFavoritePosts
         },

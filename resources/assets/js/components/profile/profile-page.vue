@@ -86,16 +86,16 @@
                 <a data-toggle="tab" href="#following">Following</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#posts" v-if="isShowPosts">Posts</a>
+                <a data-toggle="tab" href="#posts" v-if="isShowPosts" @click="setTabPage('post')">Posts</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#favorites" v-if="isShowFavorites">Favorites</a>
+                <a data-toggle="tab" href="#favorites" v-if="isShowFavorites" @click="setTabPage('favorites')">Favorites</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#likes" v-if="is_owner">Likes</a>
+                <a data-toggle="tab" href="#likes" v-if="is_owner" @click="setTabPage('likes')">Likes</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#subscriptions" v-if="is_owner">Subscriptions</a>
+                <a data-toggle="tab" href="#subscriptions" v-if="is_owner" @click="setTabPage('subscriptions')">Subscriptions</a>
               </li>
             </ul>
             <div class="tab-content">
@@ -344,6 +344,9 @@ export default {
     this.getProfileComments()
   },
   methods: {
+    setTabPage(tab){
+      history.pushState(null, null, "?tab=" + tab);
+    },
     getProfileComments(){
       axios.get(`/profiles/${this.profile_user.username}/comments`)
         .then((res) => {
@@ -357,6 +360,9 @@ export default {
         .then((res) => {
           // this.posts = res.data.threads;
           this.$store.dispatch("profilePosts", res.data.threads);
+          this.$store.dispatch("profilePostsPerPage", res.data.per_page);
+          this.$store.dispatch("profilePostsCurrentPage", res.data.current_page);
+          this.$store.dispatch("profileTotalRecords", res.data.total_records);
         });
     },
     getAllLikePost() {
