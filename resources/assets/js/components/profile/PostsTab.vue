@@ -37,6 +37,7 @@ export default {
   },
   watch:{
     sort(sortBy){
+      this.$store.dispatch("profilePosts", []);
       this.getAllPost();
     }
   },
@@ -67,7 +68,6 @@ export default {
       axios
         .get(url)
         .then((res) => {
-          console.log(res.data)
           // this.posts = res.data.threads;
           let threads = []
           let old_threads = this.$store.getters.profilePosts;

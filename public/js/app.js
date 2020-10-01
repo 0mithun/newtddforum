@@ -77425,11 +77425,11 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     followers: [],
     followings: [],
     profilePosts: [],
-    profilePostsPerPage: 10,
-    profilePostsCurrentPage: 1,
     profileTotalRecords: 0,
     profileFavoritePosts: [],
-    profileLikePosts: []
+    profileFavoriteTotalRecords: 0,
+    profileLikePosts: [],
+    profileLikeTotalRecords: 0
   },
   mutations: {
     friendList: function friendList(state, payload) {
@@ -77537,20 +77537,20 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     profilePosts: function profilePosts(state, payload) {
       state.profilePosts = payload;
     },
-    profilePostsPerPage: function profilePostsPerPage(state, payload) {
-      state.profilePostsPerPage = payload;
-    },
-    profilePostsCurrentPage: function profilePostsCurrentPage(state, payload) {
-      state.profilePostsCurrentPage = payload;
-    },
     profileTotalRecords: function profileTotalRecords(state, payload) {
       state.profileTotalRecords = payload;
     },
     profileFavoritePosts: function profileFavoritePosts(state, payload) {
       state.profileFavoritePosts = payload;
     },
+    profileFavoriteTotalRecords: function profileFavoriteTotalRecords(state, payload) {
+      state.profileFavoriteTotalRecords = payload;
+    },
     profileLikePosts: function profileLikePosts(state, payload) {
       state.profileLikePosts = payload;
+    },
+    profileLikeTotalRecords: function profileLikeTotalRecords(state, payload) {
+      state.profileLikeTotalRecords = payload;
     }
   },
   actions: {
@@ -77630,12 +77630,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     profilePosts: function profilePosts(context, payload) {
       context.commit('profilePosts', payload);
     },
-    profilePostsPerPage: function profilePostsPerPage(context, payload) {
-      context.commit('profilePostsPerPage', payload);
-    },
-    profilePostsCurrentPage: function profilePostsCurrentPage(context, payload) {
-      context.commit('profilePostsCurrentPage', payload);
-    },
     profileTotalRecords: function profileTotalRecords(context, payload) {
       context.commit('profileTotalRecords', payload);
     },
@@ -77644,8 +77638,16 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       context.commit('profileFavoritePosts', payload);
     },
     //Profile Favorite Posts
+    profileFavoriteTotalRecords: function profileFavoriteTotalRecords(context, payload) {
+      context.commit('profileFavoriteTotalRecords', payload);
+    },
+    //Profile Favorite Posts
     profileLikePosts: function profileLikePosts(context, payload) {
       context.commit('profileLikePosts', payload);
+    },
+    //Profile Favorite Posts
+    profileLikeTotalRecords: function profileLikeTotalRecords(context, payload) {
+      context.commit('profileLikeTotalRecords', payload);
     }
   },
   getters: {
@@ -77678,12 +77680,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     profilePosts: function profilePosts(state) {
       return state.profilePosts;
     },
-    profilePostsPerPage: function profilePostsPerPage(state) {
-      return state.profilePostsPerPage;
-    },
-    profilePostsCurrentPage: function profilePostsCurrentPage(state) {
-      return state.profilePostsCurrentPage;
-    },
     profileTotalRecords: function profileTotalRecords(state) {
       return state.profileTotalRecords;
     },
@@ -77698,14 +77694,20 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     profileFavoritePosts: function profileFavoritePosts(state) {
       return state.profileFavoritePosts;
     },
+    profileFavoriteTotalRecords: function profileFavoriteTotalRecords(state) {
+      return state.profileFavoriteTotalRecords;
+    },
     profileFavoriteCount: function profileFavoriteCount(state) {
-      return state.profileFavoritePosts.length;
+      return state.profileFavoriteTotalRecords;
     },
     profileLikePosts: function profileLikePosts(state) {
       return state.profileLikePosts;
     },
+    profileLikeTotalRecords: function profileLikeTotalRecords(state) {
+      return state.profileLikeTotalRecords;
+    },
     profileLikeCount: function profileLikeCount(state) {
-      return state.profileLikePosts.length;
+      return state.profileLikeTotalRecords;
     }
   }
 });

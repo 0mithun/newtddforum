@@ -12,12 +12,13 @@ export default {
         followers: [],
         followings: [],
         profilePosts: [],
-        profilePostsPerPage: 10,
-        profilePostsCurrentPage:1,
+
         profileTotalRecords:0,
 
         profileFavoritePosts: [],
+        profileFavoriteTotalRecords: 0,
         profileLikePosts: [],
+        profileLikeTotalRecords:0
     },
     mutations: {
         friendList(state, payload) {
@@ -137,12 +138,7 @@ export default {
         profilePosts(state, payload) {
             state.profilePosts = payload
         },
-        profilePostsPerPage(state, payload) {
-            state.profilePostsPerPage = payload
-        },
-        profilePostsCurrentPage(state, payload) {
-            state.profilePostsCurrentPage = payload
-        },
+
         profileTotalRecords(state, payload) {
             state.profileTotalRecords = payload
         },
@@ -151,9 +147,16 @@ export default {
             state.profileFavoritePosts = payload
         },
 
+        profileFavoriteTotalRecords(state, payload) {
+            state.profileFavoriteTotalRecords = payload
+        },
+
         profileLikePosts(state, payload) {
             state.profileLikePosts = payload
-        }
+        },
+        profileLikeTotalRecords(state, payload) {
+            state.profileLikeTotalRecords = payload
+        },
 
 
 
@@ -240,12 +243,7 @@ export default {
         profilePosts(context, payload) {
             context.commit('profilePosts', payload)
         },
-        profilePostsPerPage(context, payload) {
-            context.commit('profilePostsPerPage', payload)
-        },
-        profilePostsCurrentPage(context, payload) {
-            context.commit('profilePostsCurrentPage', payload)
-        },
+
         profileTotalRecords(context, payload) {
             context.commit('profileTotalRecords', payload)
         },
@@ -254,10 +252,18 @@ export default {
         profileFavoritePosts(context, payload) {
             context.commit('profileFavoritePosts', payload)
         },
+        //Profile Favorite Posts
+        profileFavoriteTotalRecords(context, payload) {
+            context.commit('profileFavoriteTotalRecords', payload)
+        },
 
         //Profile Favorite Posts
         profileLikePosts(context, payload) {
             context.commit('profileLikePosts', payload)
+        },
+        //Profile Favorite Posts
+        profileLikeTotalRecords(context, payload) {
+            context.commit('profileLikeTotalRecords', payload)
         }
 
     },
@@ -291,12 +297,6 @@ export default {
         profilePosts(state) {
             return state.profilePosts
         },
-        profilePostsPerPage(state) {
-            return state.profilePostsPerPage
-        },
-        profilePostsCurrentPage(state) {
-            return state.profilePostsCurrentPage
-        },
         profileTotalRecords(state) {
             return state.profileTotalRecords
         },
@@ -312,17 +312,23 @@ export default {
         profileFavoritePosts(state) {
             return state.profileFavoritePosts
         },
+        profileFavoriteTotalRecords(state) {
+            return state.profileFavoriteTotalRecords
+        },
 
         profileFavoriteCount(state) {
-            return state.profileFavoritePosts.length
+            return state.profileFavoriteTotalRecords
         },
 
 
         profileLikePosts(state) {
             return state.profileLikePosts
         },
+        profileLikeTotalRecords(state) {
+            return state.profileLikeTotalRecords
+        },
         profileLikeCount(state) {
-            return state.profileLikePosts.length
+            return state.profileLikeTotalRecords
         },
 
     }

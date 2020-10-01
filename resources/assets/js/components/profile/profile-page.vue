@@ -86,16 +86,16 @@
                 <a data-toggle="tab" href="#following">Following</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#posts" v-if="isShowPosts" @click="setTabPage('post')">Posts</a>
+                <a data-toggle="tab" href="#posts" v-if="isShowPosts" >Posts</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#favorites" v-if="isShowFavorites" @click="setTabPage('favorites')">Favorites</a>
+                <a data-toggle="tab" href="#favorites" v-if="isShowFavorites" >Favorites</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#likes" v-if="is_owner" @click="setTabPage('likes')">Likes</a>
+                <a data-toggle="tab" href="#likes" v-if="is_owner">Likes</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#subscriptions" v-if="is_owner" @click="setTabPage('subscriptions')">Subscriptions</a>
+                <a data-toggle="tab" href="#subscriptions" v-if="is_owner">Subscriptions</a>
               </li>
             </ul>
             <div class="tab-content">
@@ -200,7 +200,7 @@ import About from "./ProfileAbout";
 import Friends from "./ProfileFriends";
 import PostTab from "./PostsTab";
 import LikeTab from "./LikeTab";
-import FavoriteTab from "./LikeTab";
+import FavoriteTab from "./FavoriteTab";
 import SubscribeTab from "./SubscribeTab";
 export default {
   props: {
@@ -344,9 +344,7 @@ export default {
     this.getProfileComments()
   },
   methods: {
-    setTabPage(tab){
-      history.pushState(null, null, "?tab=" + tab);
-    },
+  
     getProfileComments(){
       axios.get(`/profiles/${this.profile_user.username}/comments`)
         .then((res) => {
@@ -360,8 +358,6 @@ export default {
         .then((res) => {
           // this.posts = res.data.threads;
           this.$store.dispatch("profilePosts", res.data.threads);
-          this.$store.dispatch("profilePostsPerPage", res.data.per_page);
-          this.$store.dispatch("profilePostsCurrentPage", res.data.current_page);
           this.$store.dispatch("profileTotalRecords", res.data.total_records);
         });
     },
@@ -369,6 +365,8 @@ export default {
       axios.get(`/profiles/${this.profile_user.username}/likes`).then((res) => {
         // this.posts = res.data.threads;
         this.$store.dispatch("profileLikePosts", res.data.threads);
+        this.$store.dispatch("profileLikeTotalRecords", res.data.total_records);
+     
       });
     },
     getAllFavoritePost() {
@@ -377,6 +375,9 @@ export default {
         .then((res) => {
           // this.posts = res.data.threads;
           this.$store.dispatch("profileFavoritePosts", res.data.threads);
+          
+          this.$store.dispatch("profileFavoriteTotalRecords", res.data.total_records);
+          
         });
     },
     toggleFollow() {

@@ -11,7 +11,16 @@
       </div>
     </div>
     <div class="post-body">
-      <single-thread v-for="(thread, index) in sortPosts" :thread="thread" :key="index"></single-thread>
+      <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
+
+       <div class="load-more-btn" v-if="page< totalPage">
+        <button class="btn btn-primary" type="button" disabled v-if="loading">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+        </button>
+          <button class="btn btn-primary btn-sm" @click.prevent="loadMore" v-else >Load More</button>
+
+      </div>
     </div>
   </div>
 </template>
@@ -19,10 +28,18 @@
 <script>
 export default {
   props: ["profile_user"],
-  data() {
+   data() {
     return {
       sort: "topRated",
+       page:1,
+      loading: false
     };
+  },
+  watch:{
+    sort(sortBy){
+      this.$store.dispatch("profileLikePosts", []);
+      this.getAllPost();
+    }
   },
   computed: {
     postCounts() {
@@ -31,14 +48,33 @@ export default {
     posts() {
       return this.$store.getters.profileLikePosts;
     },
-    sortPosts() {
-      let threads = _.orderBy(this.posts, [this.sort], "desc");
-      return threads;
+    totalPage() {
+      return Math.ceil(this.postCounts / 10);
+    },
+    signedIn() {
+      return window.App.user ? true : false;
     },
   },
   methods: {
-    sortBy(sort) {
-      this.sort = sort;
+    loadMore(){
+      this.page = this.page + 1
+      this.getAllPost();
+    },
+    getAllPost() {
+      this.loading = true;
+      let query = `?page=${this.page}&sort_by=${this.sort}`;
+      let url = `/profiles/${this.profile_user.username}/likes${query}`;
+      axios
+        .get(url)
+        .then((res) => {
+          console.log(res.data)
+          let threads = []
+          let old_threads = this.$store.getters.profileLikePosts;
+
+          threads = [...old_threads, ...res.data.threads];
+          this.$store.dispatch("profileLikePosts", threads);
+          this.loading = false;
+        });
     },
   },
 };
@@ -64,5 +100,9 @@ export default {
 .sortBy:focus {
   outline: none;
   border: none;
+}
+
+.load-more-btn{
+  text-align: center;
 }
 </style>
