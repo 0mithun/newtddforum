@@ -22,11 +22,21 @@
                 </a>
 
             </li>
+            <li class="list-group-item" style="height:30px;width: 175px">
+                 <a href="/chat">
+                    Go to Messenger
+                </a>
+            </li>
 
         </ul>
         <ul class="dropdown-menu dropdown-menu-left" v-else>
             <li class="list-group-item" style="height:30px;width: 175px">
                 <span class="text-center">No Message</span>
+            </li>
+            <li class="list-group-item" style="height:30px;width: 175px">
+                 <a href="/chat">
+                    Go to Messenger
+                </a>
             </li>
         </ul>
     </li>

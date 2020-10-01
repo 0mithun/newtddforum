@@ -29,10 +29,11 @@ export default {
     };
   },
   created() {
-    window.events.$on("isDesliked", (id) => {
-      if (this.thread.id == id) {
-        this.isLiked = false;
-      }
+   eventBus.$on("threadLikeAdd-"+this.thread.id, (id) => {
+      this.isLiked = true;
+    });
+     eventBus.$on("threadLikeDelete-"+this.thread.id, (id) => {
+      this.isLiked = false;
     });
   },
 
@@ -59,13 +60,15 @@ export default {
         this.redirectToLogin();
       }
       axios.post("/thread/" + this.thread.id + "/likes").then((res) => {
+          eventBus.$emit("threadDislikeDelete-" + this.thread.id, this.thread.id);
         if (this.isLiked) {
           this.isLiked = false;
+          eventBus.$emit("threadLikeDelete-" + this.thread.id, this.thread.id);
         } else {
           this.isLiked = true;
-          window.events.$emit("isLiked", this.thread.id);
+        eventBus.$emit("threadLikeAdd-" + this.thread.id, this.thread.id);
         }
-        eventBus.$emit("threadVoted-" + this.thread.id, this.thread.id);
+         flash("You are successfully up vote this thread", "success");
       });
     },
     redirectToLogin() {

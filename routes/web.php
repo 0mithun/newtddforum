@@ -14,6 +14,8 @@ Auth::routes();
 
 Route::get('redirect-to', 'Auth\LoginController@redirectToPage');
 
+Route::redirect('/home', '/', 301);
+
 /*
  *
 Sociali Login

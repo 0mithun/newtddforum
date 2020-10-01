@@ -7,24 +7,22 @@
                                 <input type="text" placeholder="search" />
                                 <i class="fa fa-search"></i>
                             </div> -->
-                            <ul class="list">
+
+                             <ul class="list" v-if="friendLists.length<1">
+                                <li class="clearfix">
+                                   
+                                  <span style="color:white"> No Friends</span>
+                                </li>
+                                
+                            </ul>
+                            <ul class="list" v-else>
                                 <li class="clearfix" v-for="(friend, index) in friendLists" :key="index" @click.prevent="selectUser(friend.id)" :class="friend.id == selectFriend ? 'active-friend': '' " >
                                     <img :src="friend.profileAvatarPath" alt="avatar" style="width:50px; border-radius:50%;height:50px" />
                                     <div class="about">
                                         <div class="name" style="color:black">{{ friend.name }}</div>
                                         
                                         <user-online :user="friend" type="status"></user-online>
-                                        
-                                        <!-- <div class="status">
-                                            <div v-if="onlineUser(friend.id)">
-                                                <i class="fa fa-circle online" ></i> online
-                                            </div>
-                                            <div v-else>
-                                                <i class="fa fa-circle "></i> ofline
-                                            </div>
 
-                                            
-                                        </div> -->
                                     </div>
                                     <div>
                                         <span class="glyphicon glyphicon-comment messageStatus" style="color:red;display:none;" :id="'messageStatus'+friend.id "></span>
@@ -637,7 +635,7 @@
             font-size: 20px;
         }
         .chat-page{
-            margin-top: 55px;
+            margin-top: 70px;
         }
 
 
