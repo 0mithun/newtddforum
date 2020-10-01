@@ -11,8 +11,9 @@
             <div class="profile-count">
               <post-counts :post_count="profilePostCount"></post-counts>
               <like-counts :like_counts="profileLikeCount"></like-counts>
-              <comment-counts :comment_count="comments"></comment-counts>
-              <favorite-counts :favorite_count="profileFavoriteCount"></favorite-counts>
+              <replies-counts :replies_count="replies_count"></replies-counts>
+              <!-- <favorite-counts :thread="profileFavoritePosts"></favorite-counts> -->
+              <profile-favorite-counts :thread="profileFavoritePosts"></profile-favorite-counts>
             </div>
             <div class="profile-buttons">
               <template v-if="!is_owner">
@@ -235,7 +236,7 @@ export default {
 
       favorites: [],
       likes: [],
-      comments: [],
+      replies_count:0,
       isFollow: false,
     };
   },
@@ -248,6 +249,10 @@ export default {
     },
     profileFavoriteCount() {
       return this.$store.getters.profileFavoriteCount;
+    },
+    profileFavoritePosts(){
+      return this.$store.getters.profileFavoritePosts;
+      // return [];
     },
     followings() {
       return this.$store.getters.followings;
@@ -325,7 +330,7 @@ export default {
       this.getAllPost();
     }
     if (this.isShowFavorites) {
-      // this.getAllFavoritePost();
+      this.getAllFavoritePost();
     }
     if (this.is_owner) {
       this.getAllLikePost();
@@ -335,8 +340,17 @@ export default {
     if (!this.is_owner) {
       this.checkIsFollow();
     }
+
+    this.getProfileComments()
   },
   methods: {
+    getProfileComments(){
+      axios.get(`/profiles/${this.profile_user.username}/comments`)
+        .then((res) => {
+          this.replies_count = res.data.replies_count
+          // this.$store.dispatch("profilePosts", res.data.threads);
+        });
+    },
     getAllPost() {
       axios
         .get(`/profiles/${this.profile_user.username}/threads`)

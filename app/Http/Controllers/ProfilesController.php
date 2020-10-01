@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ConfirmNewEmail;
+use App\Reply;
 use App\Thread;
 use App\User;
 use DB;
@@ -272,6 +273,21 @@ class ProfilesController extends Controller {
 
         return response()->json( ['threads' => $threads] );
     }
+
+    /**
+     * Get all comments
+     */
+
+    public function myCommentsShow() {
+        $user = request( 'user' );
+        $getUserInfo = User::where( 'username', $user )->first();
+
+
+        $count = Reply::where('user_id', $getUserInfo->id)->count();
+
+        return response()->json( ['replies_count' => $count] );
+    }
+
 
     /**
      * Get all Favoreite Threads

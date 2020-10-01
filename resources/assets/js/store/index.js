@@ -13,7 +13,7 @@ export default {
         followings: [],
         profilePosts: [],
         profileFavoritePosts: [],
-        profileLikePosts: []
+        profileLikePosts: [],
     },
     mutations: {
         friendList(state, payload) {
@@ -273,10 +273,8 @@ export default {
         },
 
         profileFavoritePosts(state) {
-            return state.profilePosts.data
+            return state.profileFavoritePosts
         },
-
-
 
         profileFavoriteCount(state) {
             return state.profileFavoritePosts.length

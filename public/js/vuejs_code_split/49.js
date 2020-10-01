@@ -1,14 +1,1655 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[49],{
 
-/***/ "./node_modules/vue-select/dist/vue-select.js":
+/***/ "./node_modules/at.js/dist/js/jquery.atwho.js":
 /*!****************************************************!*\
-  !*** ./node_modules/vue-select/dist/vue-select.js ***!
+  !*** ./node_modules/at.js/dist/js/jquery.atwho.js ***!
   \****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-!function(t,e){ true?module.exports=e():undefined}("undefined"!=typeof self?self:this,function(){return function(t){var e={};function n(o){if(e[o])return e[o].exports;var i=e[o]={i:o,l:!1,exports:{}};return t[o].call(i.exports,i,i.exports,n),i.l=!0,i.exports}return n.m=t,n.c=e,n.d=function(t,e,o){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:o})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var o=Object.create(null);if(n.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)n.d(o,i,function(e){return t[e]}.bind(null,i));return o},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="/",n(n.s=8)}([function(t,e){function n(t){return(n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function o(e){return"function"==typeof Symbol&&"symbol"===n(Symbol.iterator)?t.exports=o=function(t){return n(t)}:t.exports=o=function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":n(t)},o(e)}t.exports=o},function(t,e,n){},function(t,e,n){var o=n(4),i=n(5),r=n(6);t.exports=function(t){return o(t)||i(t)||r()}},function(t,e){t.exports=function(t,e,n){return e in t?Object.defineProperty(t,e,{value:n,enumerable:!0,configurable:!0,writable:!0}):t[e]=n,t}},function(t,e){t.exports=function(t){if(Array.isArray(t)){for(var e=0,n=new Array(t.length);e<t.length;e++)n[e]=t[e];return n}}},function(t,e){t.exports=function(t){if(Symbol.iterator in Object(t)||"[object Arguments]"===Object.prototype.toString.call(t))return Array.from(t)}},function(t,e){t.exports=function(){throw new TypeError("Invalid attempt to spread non-iterable instance")}},function(t,e,n){"use strict";var o=n(1);n.n(o).a},function(t,e,n){"use strict";n.r(e);var o=n(2),i=n.n(o),r=n(0),s=n.n(r),a=n(3),l=n.n(a),u={watch:{typeAheadPointer:function(){this.maybeAdjustScroll()}},methods:{maybeAdjustScroll:function(){var t=this.pixelsToPointerTop(),e=this.pixelsToPointerBottom();return t<=this.viewport().top?this.scrollTo(t):e>=this.viewport().bottom?this.scrollTo(this.viewport().top+this.pointerHeight()):void 0},pixelsToPointerTop:function(){var t=0;if(this.$refs.dropdownMenu)for(var e=0;e<this.typeAheadPointer;e++)t+=this.$refs.dropdownMenu.children[e].offsetHeight;return t},pixelsToPointerBottom:function(){return this.pixelsToPointerTop()+this.pointerHeight()},pointerHeight:function(){var t=!!this.$refs.dropdownMenu&&this.$refs.dropdownMenu.children[this.typeAheadPointer];return t?t.offsetHeight:0},viewport:function(){return{top:this.$refs.dropdownMenu?this.$refs.dropdownMenu.scrollTop:0,bottom:this.$refs.dropdownMenu?this.$refs.dropdownMenu.offsetHeight+this.$refs.dropdownMenu.scrollTop:0}},scrollTo:function(t){return this.$refs.dropdownMenu?this.$refs.dropdownMenu.scrollTop=t:null}}},c={data:function(){return{typeAheadPointer:-1}},watch:{filteredOptions:function(){for(var t=0;t<this.filteredOptions.length;t++)if(this.selectable(this.filteredOptions[t])){this.typeAheadPointer=t;break}}},methods:{typeAheadUp:function(){for(var t=this.typeAheadPointer-1;t>=0;t--)if(this.selectable(this.filteredOptions[t])){this.typeAheadPointer=t,this.maybeAdjustScroll&&this.maybeAdjustScroll();break}},typeAheadDown:function(){for(var t=this.typeAheadPointer+1;t<this.filteredOptions.length;t++)if(this.selectable(this.filteredOptions[t])){this.typeAheadPointer=t,this.maybeAdjustScroll&&this.maybeAdjustScroll();break}},typeAheadSelect:function(){this.filteredOptions[this.typeAheadPointer]?this.select(this.filteredOptions[this.typeAheadPointer]):this.taggable&&this.search.length&&this.select(this.search),this.clearSearchOnSelect&&(this.search="")}}},p={props:{loading:{type:Boolean,default:!1}},data:function(){return{mutableLoading:!1}},watch:{search:function(){this.$emit("search",this.search,this.toggleLoading)},loading:function(t){this.mutableLoading=t}},methods:{toggleLoading:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:null;return this.mutableLoading=null==t?!this.mutableLoading:t}}};function h(t,e,n,o,i,r,s,a){var l,u="function"==typeof t?t.options:t;if(e&&(u.render=e,u.staticRenderFns=n,u._compiled=!0),o&&(u.functional=!0),r&&(u._scopeId="data-v-"+r),s?(l=function(t){(t=t||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(t=__VUE_SSR_CONTEXT__),i&&i.call(this,t),t&&t._registeredComponents&&t._registeredComponents.add(s)},u._ssrRegister=l):i&&(l=a?function(){i.call(this,this.$root.$options.shadowRoot)}:i),l)if(u.functional){u._injectStyles=l;var c=u.render;u.render=function(t,e){return l.call(e),c(t,e)}}else{var p=u.beforeCreate;u.beforeCreate=p?[].concat(p,l):[l]}return{exports:t,options:u}}var d={Deselect:h({},function(){var t=this.$createElement,e=this._self._c||t;return e("svg",{attrs:{xmlns:"http://www.w3.org/2000/svg",width:"10",height:"10"}},[e("path",{attrs:{d:"M6.895455 5l2.842897-2.842898c.348864-.348863.348864-.914488 0-1.263636L9.106534.261648c-.348864-.348864-.914489-.348864-1.263636 0L5 3.104545 2.157102.261648c-.348863-.348864-.914488-.348864-1.263636 0L.261648.893466c-.348864.348864-.348864.914489 0 1.263636L3.104545 5 .261648 7.842898c-.348864.348863-.348864.914488 0 1.263636l.631818.631818c.348864.348864.914773.348864 1.263636 0L5 6.895455l2.842898 2.842897c.348863.348864.914772.348864 1.263636 0l.631818-.631818c.348864-.348864.348864-.914489 0-1.263636L6.895455 5z"}})])},[],!1,null,null,null).exports,OpenIndicator:h({},function(){var t=this.$createElement,e=this._self._c||t;return e("svg",{attrs:{xmlns:"http://www.w3.org/2000/svg",width:"14",height:"10"}},[e("path",{attrs:{d:"M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"}})])},[],!1,null,null,null).exports};function f(t,e){var n=Object.keys(t);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(t);e&&(o=o.filter(function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable})),n.push.apply(n,o)}return n}function y(t){for(var e=1;e<arguments.length;e++){var n=null!=arguments[e]?arguments[e]:{};e%2?f(n,!0).forEach(function(e){l()(t,e,n[e])}):Object.getOwnPropertyDescriptors?Object.defineProperties(t,Object.getOwnPropertyDescriptors(n)):f(n).forEach(function(e){Object.defineProperty(t,e,Object.getOwnPropertyDescriptor(n,e))})}return t}var b={components:y({},d),mixins:[u,c,p],props:{value:{},components:{type:Object,default:function(){return{}}},options:{type:Array,default:function(){return[]}},disabled:{type:Boolean,default:!1},clearable:{type:Boolean,default:!0},searchable:{type:Boolean,default:!0},multiple:{type:Boolean,default:!1},placeholder:{type:String,default:""},transition:{type:String,default:"vs__fade"},clearSearchOnSelect:{type:Boolean,default:!0},closeOnSelect:{type:Boolean,default:!0},label:{type:String,default:"label"},autocomplete:{type:String,default:"off"},reduce:{type:Function,default:function(t){return t}},selectable:{type:Function,default:function(t){return!0}},getOptionLabel:{type:Function,default:function(t){return"object"===s()(t)?t.hasOwnProperty(this.label)?t[this.label]:console.warn('[vue-select warn]: Label key "option.'.concat(this.label,'" does not')+" exist in options object ".concat(JSON.stringify(t),".\n")+"https://vue-select.org/api/props.html#getoptionlabel"):t}},getOptionKey:{type:Function,default:function(t){if("object"===s()(t)&&t.id)return t.id;try{return JSON.stringify(t)}catch(t){return console.warn("[vue-select warn]: Could not stringify option to generate unique key. Please provide'getOptionKey' prop to return a unique key for each option.\nhttps://vue-select.org/api/props.html#getoptionkey")}}},onTab:{type:Function,default:function(){this.selectOnTab&&!this.isComposing&&this.typeAheadSelect()}},taggable:{type:Boolean,default:!1},tabindex:{type:Number,default:null},pushTags:{type:Boolean,default:!1},filterable:{type:Boolean,default:!0},filterBy:{type:Function,default:function(t,e,n){return(e||"").toLowerCase().indexOf(n.toLowerCase())>-1}},filter:{type:Function,default:function(t,e){var n=this;return t.filter(function(t){var o=n.getOptionLabel(t);return"number"==typeof o&&(o=o.toString()),n.filterBy(t,o,e)})}},createOption:{type:Function,default:function(t){return"object"===s()(this.optionList[0])?l()({},this.label,t):t}},resetOnOptionsChange:{default:!1,validator:function(t){return["function","boolean"].includes(s()(t))}},noDrop:{type:Boolean,default:!1},inputId:{type:String},dir:{type:String,default:"auto"},selectOnTab:{type:Boolean,default:!1},selectOnKeyCodes:{type:Array,default:function(){return[13]}},searchInputQuerySelector:{type:String,default:"[type=search]"},mapKeydown:{type:Function,default:function(t,e){return t}}},data:function(){return{search:"",open:!1,isComposing:!1,pushedTags:[],_value:[]}},watch:{options:function(t,e){var n=this;!this.taggable&&("function"==typeof n.resetOnOptionsChange?n.resetOnOptionsChange(t,e,n.selectedValue):n.resetOnOptionsChange)&&this.clearSelection(),this.value&&this.isTrackingValues&&this.setInternalValueFromOptions(this.value)},value:function(t){this.isTrackingValues&&this.setInternalValueFromOptions(t)},multiple:function(){this.clearSelection()}},created:function(){this.mutableLoading=this.loading,void 0!==this.value&&this.isTrackingValues&&this.setInternalValueFromOptions(this.value),this.$on("option:created",this.maybePushTag)},methods:{setInternalValueFromOptions:function(t){var e=this;Array.isArray(t)?this.$data._value=t.map(function(t){return e.findOptionFromReducedValue(t)}):this.$data._value=this.findOptionFromReducedValue(t)},select:function(t){this.isOptionSelected(t)||(this.taggable&&!this.optionExists(t)&&(t=this.createOption(t),this.$emit("option:created",t)),this.multiple&&(t=this.selectedValue.concat(t)),this.updateValue(t)),this.onAfterSelect(t)},deselect:function(t){var e=this;this.updateValue(this.selectedValue.filter(function(n){return!e.optionComparator(n,t)}))},clearSelection:function(){this.updateValue(this.multiple?[]:null)},onAfterSelect:function(t){this.closeOnSelect&&(this.open=!this.open,this.searchEl.blur()),this.clearSearchOnSelect&&(this.search="")},updateValue:function(t){var e=this;this.isTrackingValues&&(this.$data._value=t),null!==t&&(t=Array.isArray(t)?t.map(function(t){return e.reduce(t)}):this.reduce(t)),this.$emit("input",t)},toggleDropdown:function(t){var e=t.target;[].concat(i()(this.$refs.deselectButtons||[]),i()([this.$refs.clearButton]||false)).some(function(t){return t.contains(e)||t===e})||(this.open?this.searchEl.blur():this.disabled||(this.open=!0,this.searchEl.focus()))},isOptionSelected:function(t){var e=this;return this.selectedValue.some(function(n){return e.optionComparator(n,t)})},optionComparator:function(t,e){if("object"!==s()(t)&&"object"!==s()(e)){if(t===e)return!0}else{if(t===this.reduce(e))return!0;if(this.getOptionLabel(t)===this.getOptionLabel(e)||this.getOptionLabel(t)===e)return!0;if(this.reduce(t)===this.reduce(e))return!0}return!1},findOptionFromReducedValue:function(t){var e=this;return this.options.find(function(n){return JSON.stringify(e.reduce(n))===JSON.stringify(t)})||t},closeSearchOptions:function(){this.open=!1,this.$emit("search:blur")},maybeDeleteValue:function(){if(!this.searchEl.value.length&&this.selectedValue&&this.clearable){var t=null;this.multiple&&(t=i()(this.selectedValue.slice(0,this.selectedValue.length-1))),this.updateValue(t)}},optionExists:function(t){var e=this;return this.optionList.some(function(n){return"object"===s()(n)&&e.getOptionLabel(n)===t||n===t})},normalizeOptionForSlot:function(t){return"object"===s()(t)?t:l()({},this.label,t)},maybePushTag:function(t){this.pushTags&&this.pushedTags.push(t)},onEscape:function(){this.search.length?this.search="":this.searchEl.blur()},onSearchBlur:function(){if(!this.mousedown||this.searching)return this.clearSearchOnBlur&&(this.search=""),void this.closeSearchOptions();this.mousedown=!1,0!==this.search.length||0!==this.options.length||this.closeSearchOptions()},onSearchFocus:function(){this.open=!0,this.$emit("search:focus")},onMousedown:function(){this.mousedown=!0},onMouseUp:function(){this.mousedown=!1},onSearchKeyDown:function(t){var e=this,n=function(t){return t.preventDefault(),!e.isComposing&&e.typeAheadSelect()},o={8:function(t){return e.maybeDeleteValue()},9:function(t){return e.onTab()},27:function(t){return e.onEscape()},38:function(t){return t.preventDefault(),e.typeAheadUp()},40:function(t){return t.preventDefault(),e.typeAheadDown()}};this.selectOnKeyCodes.forEach(function(t){return o[t]=n});var i=this.mapKeydown(o,this);if("function"==typeof i[t.keyCode])return i[t.keyCode](t)}},computed:{isTrackingValues:function(){return void 0===this.value||this.$options.propsData.hasOwnProperty("reduce")},selectedValue:function(){var t=this.value;return this.isTrackingValues&&(t=this.$data._value),t?[].concat(t):[]},optionList:function(){return this.options.concat(this.pushedTags)},searchEl:function(){return this.$scopedSlots.search?this.$refs.selectedOptions.querySelector(this.searchInputQuerySelector):this.$refs.search},scope:function(){var t=this;return{search:{attributes:{disabled:this.disabled,placeholder:this.searchPlaceholder,tabindex:this.tabindex,readonly:!this.searchable,id:this.inputId,"aria-expanded":this.dropdownOpen,"aria-label":"Search for option",ref:"search",role:"combobox",type:"search",autocomplete:"off",value:this.search},events:{compositionstart:function(){return t.isComposing=!0},compositionend:function(){return t.isComposing=!1},keydown:this.onSearchKeyDown,blur:this.onSearchBlur,focus:this.onSearchFocus,input:function(e){return t.search=e.target.value}}},spinner:{loading:this.mutableLoading},openIndicator:{attributes:{ref:"openIndicator",role:"presentation",class:"vs__open-indicator"}}}},childComponents:function(){return y({},d,{},this.components)},stateClasses:function(){return{"vs--open":this.dropdownOpen,"vs--single":!this.multiple,"vs--searching":this.searching&&!this.noDrop,"vs--searchable":this.searchable&&!this.noDrop,"vs--unsearchable":!this.searchable,"vs--loading":this.mutableLoading,"vs--disabled":this.disabled}},clearSearchOnBlur:function(){return this.clearSearchOnSelect&&!this.multiple},searching:function(){return!!this.search},dropdownOpen:function(){return!this.noDrop&&(this.open&&!this.mutableLoading)},searchPlaceholder:function(){if(this.isValueEmpty&&this.placeholder)return this.placeholder},filteredOptions:function(){var t=[].concat(this.optionList);if(!this.filterable&&!this.taggable)return t;var e=this.search.length?this.filter(t,this.search,this):t;return this.taggable&&this.search.length&&!this.optionExists(this.search)&&e.unshift(this.search),e},isValueEmpty:function(){return 0===this.selectedValue.length},showClearButton:function(){return!this.multiple&&this.clearable&&!this.open&&!this.isValueEmpty}}},g=(n(7),h(b,function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("div",{staticClass:"v-select",class:t.stateClasses,attrs:{dir:t.dir}},[n("div",{ref:"toggle",staticClass:"vs__dropdown-toggle",on:{mousedown:function(e){return e.preventDefault(),t.toggleDropdown(e)}}},[n("div",{ref:"selectedOptions",staticClass:"vs__selected-options"},[t._l(t.selectedValue,function(e){return t._t("selected-option-container",[n("span",{key:t.getOptionKey(e),staticClass:"vs__selected"},[t._t("selected-option",[t._v("\n            "+t._s(t.getOptionLabel(e))+"\n          ")],null,t.normalizeOptionForSlot(e)),t._v(" "),t.multiple?n("button",{ref:"deselectButtons",refInFor:!0,staticClass:"vs__deselect",attrs:{disabled:t.disabled,type:"button","aria-label":"Deselect option"},on:{click:function(n){return t.deselect(e)}}},[n(t.childComponents.Deselect,{tag:"component"})],1):t._e()],2)],{option:t.normalizeOptionForSlot(e),deselect:t.deselect,multiple:t.multiple,disabled:t.disabled})}),t._v(" "),t._t("search",[n("input",t._g(t._b({staticClass:"vs__search"},"input",t.scope.search.attributes,!1),t.scope.search.events))],null,t.scope.search)],2),t._v(" "),n("div",{ref:"actions",staticClass:"vs__actions"},[n("button",{directives:[{name:"show",rawName:"v-show",value:t.showClearButton,expression:"showClearButton"}],ref:"clearButton",staticClass:"vs__clear",attrs:{disabled:t.disabled,type:"button",title:"Clear selection"},on:{click:t.clearSelection}},[n(t.childComponents.Deselect,{tag:"component"})],1),t._v(" "),t._t("open-indicator",[t.noDrop?t._e():n(t.childComponents.OpenIndicator,t._b({tag:"component"},"component",t.scope.openIndicator.attributes,!1))],null,t.scope.openIndicator),t._v(" "),t._t("spinner",[n("div",{directives:[{name:"show",rawName:"v-show",value:t.mutableLoading,expression:"mutableLoading"}],staticClass:"vs__spinner"},[t._v("Loading...")])],null,t.scope.spinner)],2)]),t._v(" "),n("transition",{attrs:{name:t.transition}},[t.dropdownOpen?n("ul",{ref:"dropdownMenu",staticClass:"vs__dropdown-menu",attrs:{role:"listbox"},on:{mousedown:function(e){return e.preventDefault(),t.onMousedown(e)},mouseup:t.onMouseUp}},[t._l(t.filteredOptions,function(e,o){return n("li",{key:t.getOptionKey(e),staticClass:"vs__dropdown-option",class:{"vs__dropdown-option--selected":t.isOptionSelected(e),"vs__dropdown-option--highlight":o===t.typeAheadPointer,"vs__dropdown-option--disabled":!t.selectable(e)},attrs:{role:"option"},on:{mouseover:function(n){t.selectable(e)&&(t.typeAheadPointer=o)},mousedown:function(n){n.preventDefault(),n.stopPropagation(),t.selectable(e)&&t.select(e)}}},[t._t("option",[t._v("\n          "+t._s(t.getOptionLabel(e))+"\n        ")],null,t.normalizeOptionForSlot(e))],2)}),t._v(" "),t.filteredOptions.length?t._e():n("li",{staticClass:"vs__no-options",on:{mousedown:function(t){t.stopPropagation()}}},[t._t("no-options",[t._v("Sorry, no matching options.")])],2)],2):t._e()])],1)},[],!1,null,null,null).exports),m={ajax:p,pointer:c,pointerScroll:u};n.d(e,"VueSelect",function(){return g}),n.d(e,"mixins",function(){return m});e.default=g}])});
-//# sourceMappingURL=vue-select.js.map
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+ * at.js - 1.5.3
+ * Copyright (c) 2017 chord.luo <chord.luo@gmail.com>;
+ * Homepage: http://ichord.github.com/At.js
+ * License: MIT
+ */
+(function (root, factory) {
+  if (true) {
+    // AMD. Register as an anonymous module unless amdModuleId is set
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")], __WEBPACK_AMD_DEFINE_RESULT__ = (function (a0) {
+      return (factory(a0));
+    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+}(this, function ($) {
+var DEFAULT_CALLBACKS, KEY_CODE;
+
+KEY_CODE = {
+  ESC: 27,
+  TAB: 9,
+  ENTER: 13,
+  CTRL: 17,
+  A: 65,
+  P: 80,
+  N: 78,
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40,
+  BACKSPACE: 8,
+  SPACE: 32
+};
+
+DEFAULT_CALLBACKS = {
+  beforeSave: function(data) {
+    return Controller.arrayToDefaultHash(data);
+  },
+  matcher: function(flag, subtext, should_startWithSpace, acceptSpaceBar) {
+    var _a, _y, match, regexp, space;
+    flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    if (should_startWithSpace) {
+      flag = '(?:^|\\s)' + flag;
+    }
+    _a = decodeURI("%C3%80");
+    _y = decodeURI("%C3%BF");
+    space = acceptSpaceBar ? "\ " : "";
+    regexp = new RegExp(flag + "([A-Za-z" + _a + "-" + _y + "0-9_" + space + "\'\.\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
+    match = regexp.exec(subtext);
+    if (match) {
+      return match[2] || match[1];
+    } else {
+      return null;
+    }
+  },
+  filter: function(query, data, searchKey) {
+    var _results, i, item, len;
+    _results = [];
+    for (i = 0, len = data.length; i < len; i++) {
+      item = data[i];
+      if (~new String(item[searchKey]).toLowerCase().indexOf(query.toLowerCase())) {
+        _results.push(item);
+      }
+    }
+    return _results;
+  },
+  remoteFilter: null,
+  sorter: function(query, items, searchKey) {
+    var _results, i, item, len;
+    if (!query) {
+      return items;
+    }
+    _results = [];
+    for (i = 0, len = items.length; i < len; i++) {
+      item = items[i];
+      item.atwho_order = new String(item[searchKey]).toLowerCase().indexOf(query.toLowerCase());
+      if (item.atwho_order > -1) {
+        _results.push(item);
+      }
+    }
+    return _results.sort(function(a, b) {
+      return a.atwho_order - b.atwho_order;
+    });
+  },
+  tplEval: function(tpl, map) {
+    var error, error1, template;
+    template = tpl;
+    try {
+      if (typeof tpl !== 'string') {
+        template = tpl(map);
+      }
+      return template.replace(/\$\{([^\}]*)\}/g, function(tag, key, pos) {
+        return map[key];
+      });
+    } catch (error1) {
+      error = error1;
+      return "";
+    }
+  },
+  highlighter: function(li, query) {
+    var regexp;
+    if (!query) {
+      return li;
+    }
+    regexp = new RegExp(">\\s*([^\<]*?)(" + query.replace("+", "\\+") + ")([^\<]*)\\s*<", 'ig');
+    return li.replace(regexp, function(str, $1, $2, $3) {
+      return '> ' + $1 + '<strong>' + $2 + '</strong>' + $3 + ' <';
+    });
+  },
+  beforeInsert: function(value, $li, e) {
+    return value;
+  },
+  beforeReposition: function(offset) {
+    return offset;
+  },
+  afterMatchFailed: function(at, el) {}
+};
+
+var App;
+
+App = (function() {
+  function App(inputor) {
+    this.currentFlag = null;
+    this.controllers = {};
+    this.aliasMaps = {};
+    this.$inputor = $(inputor);
+    this.setupRootElement();
+    this.listen();
+  }
+
+  App.prototype.createContainer = function(doc) {
+    var ref;
+    if ((ref = this.$el) != null) {
+      ref.remove();
+    }
+    return $(doc.body).append(this.$el = $("<div class='atwho-container'></div>"));
+  };
+
+  App.prototype.setupRootElement = function(iframe, asRoot) {
+    var error, error1;
+    if (asRoot == null) {
+      asRoot = false;
+    }
+    if (iframe) {
+      this.window = iframe.contentWindow;
+      this.document = iframe.contentDocument || this.window.document;
+      this.iframe = iframe;
+    } else {
+      this.document = this.$inputor[0].ownerDocument;
+      this.window = this.document.defaultView || this.document.parentWindow;
+      try {
+        this.iframe = this.window.frameElement;
+      } catch (error1) {
+        error = error1;
+        this.iframe = null;
+        if ($.fn.atwho.debug) {
+          throw new Error("iframe auto-discovery is failed.\nPlease use `setIframe` to set the target iframe manually.\n" + error);
+        }
+      }
+    }
+    return this.createContainer((this.iframeAsRoot = asRoot) ? this.document : document);
+  };
+
+  App.prototype.controller = function(at) {
+    var c, current, currentFlag, ref;
+    if (this.aliasMaps[at]) {
+      current = this.controllers[this.aliasMaps[at]];
+    } else {
+      ref = this.controllers;
+      for (currentFlag in ref) {
+        c = ref[currentFlag];
+        if (currentFlag === at) {
+          current = c;
+          break;
+        }
+      }
+    }
+    if (current) {
+      return current;
+    } else {
+      return this.controllers[this.currentFlag];
+    }
+  };
+
+  App.prototype.setContextFor = function(at) {
+    this.currentFlag = at;
+    return this;
+  };
+
+  App.prototype.reg = function(flag, setting) {
+    var base, controller;
+    controller = (base = this.controllers)[flag] || (base[flag] = this.$inputor.is('[contentEditable]') ? new EditableController(this, flag) : new TextareaController(this, flag));
+    if (setting.alias) {
+      this.aliasMaps[setting.alias] = flag;
+    }
+    controller.init(setting);
+    return this;
+  };
+
+  App.prototype.listen = function() {
+    return this.$inputor.on('compositionstart', (function(_this) {
+      return function(e) {
+        var ref;
+        if ((ref = _this.controller()) != null) {
+          ref.view.hide();
+        }
+        _this.isComposing = true;
+        return null;
+      };
+    })(this)).on('compositionend', (function(_this) {
+      return function(e) {
+        _this.isComposing = false;
+        setTimeout(function(e) {
+          return _this.dispatch(e);
+        });
+        return null;
+      };
+    })(this)).on('keyup.atwhoInner', (function(_this) {
+      return function(e) {
+        return _this.onKeyup(e);
+      };
+    })(this)).on('keydown.atwhoInner', (function(_this) {
+      return function(e) {
+        return _this.onKeydown(e);
+      };
+    })(this)).on('blur.atwhoInner', (function(_this) {
+      return function(e) {
+        var c;
+        if (c = _this.controller()) {
+          c.expectedQueryCBId = null;
+          return c.view.hide(e, c.getOpt("displayTimeout"));
+        }
+      };
+    })(this)).on('click.atwhoInner', (function(_this) {
+      return function(e) {
+        return _this.dispatch(e);
+      };
+    })(this)).on('scroll.atwhoInner', (function(_this) {
+      return function() {
+        var lastScrollTop;
+        lastScrollTop = _this.$inputor.scrollTop();
+        return function(e) {
+          var currentScrollTop, ref;
+          currentScrollTop = e.target.scrollTop;
+          if (lastScrollTop !== currentScrollTop) {
+            if ((ref = _this.controller()) != null) {
+              ref.view.hide(e);
+            }
+          }
+          lastScrollTop = currentScrollTop;
+          return true;
+        };
+      };
+    })(this)());
+  };
+
+  App.prototype.shutdown = function() {
+    var _, c, ref;
+    ref = this.controllers;
+    for (_ in ref) {
+      c = ref[_];
+      c.destroy();
+      delete this.controllers[_];
+    }
+    this.$inputor.off('.atwhoInner');
+    return this.$el.remove();
+  };
+
+  App.prototype.dispatch = function(e) {
+    var _, c, ref, results;
+    ref = this.controllers;
+    results = [];
+    for (_ in ref) {
+      c = ref[_];
+      results.push(c.lookUp(e));
+    }
+    return results;
+  };
+
+  App.prototype.onKeyup = function(e) {
+    var ref;
+    switch (e.keyCode) {
+      case KEY_CODE.ESC:
+        e.preventDefault();
+        if ((ref = this.controller()) != null) {
+          ref.view.hide();
+        }
+        break;
+      case KEY_CODE.DOWN:
+      case KEY_CODE.UP:
+      case KEY_CODE.CTRL:
+      case KEY_CODE.ENTER:
+        $.noop();
+        break;
+      case KEY_CODE.P:
+      case KEY_CODE.N:
+        if (!e.ctrlKey) {
+          this.dispatch(e);
+        }
+        break;
+      default:
+        this.dispatch(e);
+    }
+  };
+
+  App.prototype.onKeydown = function(e) {
+    var ref, view;
+    view = (ref = this.controller()) != null ? ref.view : void 0;
+    if (!(view && view.visible())) {
+      return;
+    }
+    switch (e.keyCode) {
+      case KEY_CODE.ESC:
+        e.preventDefault();
+        view.hide(e);
+        break;
+      case KEY_CODE.UP:
+        e.preventDefault();
+        view.prev();
+        break;
+      case KEY_CODE.DOWN:
+        e.preventDefault();
+        view.next();
+        break;
+      case KEY_CODE.P:
+        if (!e.ctrlKey) {
+          return;
+        }
+        e.preventDefault();
+        view.prev();
+        break;
+      case KEY_CODE.N:
+        if (!e.ctrlKey) {
+          return;
+        }
+        e.preventDefault();
+        view.next();
+        break;
+      case KEY_CODE.TAB:
+      case KEY_CODE.ENTER:
+      case KEY_CODE.SPACE:
+        if (!view.visible()) {
+          return;
+        }
+        if (!this.controller().getOpt('spaceSelectsMatch') && e.keyCode === KEY_CODE.SPACE) {
+          return;
+        }
+        if (!this.controller().getOpt('tabSelectsMatch') && e.keyCode === KEY_CODE.TAB) {
+          return;
+        }
+        if (view.highlighted()) {
+          e.preventDefault();
+          view.choose(e);
+        } else {
+          view.hide(e);
+        }
+        break;
+      default:
+        $.noop();
+    }
+  };
+
+  return App;
+
+})();
+
+var Controller,
+  slice = [].slice;
+
+Controller = (function() {
+  Controller.prototype.uid = function() {
+    return (Math.random().toString(16) + "000000000").substr(2, 8) + (new Date().getTime());
+  };
+
+  function Controller(app, at1) {
+    this.app = app;
+    this.at = at1;
+    this.$inputor = this.app.$inputor;
+    this.id = this.$inputor[0].id || this.uid();
+    this.expectedQueryCBId = null;
+    this.setting = null;
+    this.query = null;
+    this.pos = 0;
+    this.range = null;
+    if ((this.$el = $("#atwho-ground-" + this.id, this.app.$el)).length === 0) {
+      this.app.$el.append(this.$el = $("<div id='atwho-ground-" + this.id + "'></div>"));
+    }
+    this.model = new Model(this);
+    this.view = new View(this);
+  }
+
+  Controller.prototype.init = function(setting) {
+    this.setting = $.extend({}, this.setting || $.fn.atwho["default"], setting);
+    this.view.init();
+    return this.model.reload(this.setting.data);
+  };
+
+  Controller.prototype.destroy = function() {
+    this.trigger('beforeDestroy');
+    this.model.destroy();
+    this.view.destroy();
+    return this.$el.remove();
+  };
+
+  Controller.prototype.callDefault = function() {
+    var args, error, error1, funcName;
+    funcName = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+    try {
+      return DEFAULT_CALLBACKS[funcName].apply(this, args);
+    } catch (error1) {
+      error = error1;
+      return $.error(error + " Or maybe At.js doesn't have function " + funcName);
+    }
+  };
+
+  Controller.prototype.trigger = function(name, data) {
+    var alias, eventName;
+    if (data == null) {
+      data = [];
+    }
+    data.push(this);
+    alias = this.getOpt('alias');
+    eventName = alias ? name + "-" + alias + ".atwho" : name + ".atwho";
+    return this.$inputor.trigger(eventName, data);
+  };
+
+  Controller.prototype.callbacks = function(funcName) {
+    return this.getOpt("callbacks")[funcName] || DEFAULT_CALLBACKS[funcName];
+  };
+
+  Controller.prototype.getOpt = function(at, default_value) {
+    var e, error1;
+    try {
+      return this.setting[at];
+    } catch (error1) {
+      e = error1;
+      return null;
+    }
+  };
+
+  Controller.prototype.insertContentFor = function($li) {
+    var data, tpl;
+    tpl = this.getOpt('insertTpl');
+    data = $.extend({}, $li.data('item-data'), {
+      'atwho-at': this.at
+    });
+    return this.callbacks("tplEval").call(this, tpl, data, "onInsert");
+  };
+
+  Controller.prototype.renderView = function(data) {
+    var searchKey;
+    searchKey = this.getOpt("searchKey");
+    data = this.callbacks("sorter").call(this, this.query.text, data.slice(0, 1001), searchKey);
+    return this.view.render(data.slice(0, this.getOpt('limit')));
+  };
+
+  Controller.arrayToDefaultHash = function(data) {
+    var i, item, len, results;
+    if (!$.isArray(data)) {
+      return data;
+    }
+    results = [];
+    for (i = 0, len = data.length; i < len; i++) {
+      item = data[i];
+      if ($.isPlainObject(item)) {
+        results.push(item);
+      } else {
+        results.push({
+          name: item
+        });
+      }
+    }
+    return results;
+  };
+
+  Controller.prototype.lookUp = function(e) {
+    var query, wait;
+    if (e && e.type === 'click' && !this.getOpt('lookUpOnClick')) {
+      return;
+    }
+    if (this.getOpt('suspendOnComposing') && this.app.isComposing) {
+      return;
+    }
+    query = this.catchQuery(e);
+    if (!query) {
+      this.expectedQueryCBId = null;
+      return query;
+    }
+    this.app.setContextFor(this.at);
+    if (wait = this.getOpt('delay')) {
+      this._delayLookUp(query, wait);
+    } else {
+      this._lookUp(query);
+    }
+    return query;
+  };
+
+  Controller.prototype._delayLookUp = function(query, wait) {
+    var now, remaining;
+    now = Date.now ? Date.now() : new Date().getTime();
+    this.previousCallTime || (this.previousCallTime = now);
+    remaining = wait - (now - this.previousCallTime);
+    if ((0 < remaining && remaining < wait)) {
+      this.previousCallTime = now;
+      this._stopDelayedCall();
+      return this.delayedCallTimeout = setTimeout((function(_this) {
+        return function() {
+          _this.previousCallTime = 0;
+          _this.delayedCallTimeout = null;
+          return _this._lookUp(query);
+        };
+      })(this), wait);
+    } else {
+      this._stopDelayedCall();
+      if (this.previousCallTime !== now) {
+        this.previousCallTime = 0;
+      }
+      return this._lookUp(query);
+    }
+  };
+
+  Controller.prototype._stopDelayedCall = function() {
+    if (this.delayedCallTimeout) {
+      clearTimeout(this.delayedCallTimeout);
+      return this.delayedCallTimeout = null;
+    }
+  };
+
+  Controller.prototype._generateQueryCBId = function() {
+    return {};
+  };
+
+  Controller.prototype._lookUp = function(query) {
+    var _callback;
+    _callback = function(queryCBId, data) {
+      if (queryCBId !== this.expectedQueryCBId) {
+        return;
+      }
+      if (data && data.length > 0) {
+        return this.renderView(this.constructor.arrayToDefaultHash(data));
+      } else {
+        return this.view.hide();
+      }
+    };
+    this.expectedQueryCBId = this._generateQueryCBId();
+    return this.model.query(query.text, $.proxy(_callback, this, this.expectedQueryCBId));
+  };
+
+  return Controller;
+
+})();
+
+var TextareaController,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+TextareaController = (function(superClass) {
+  extend(TextareaController, superClass);
+
+  function TextareaController() {
+    return TextareaController.__super__.constructor.apply(this, arguments);
+  }
+
+  TextareaController.prototype.catchQuery = function() {
+    var caretPos, content, end, isString, query, start, subtext;
+    content = this.$inputor.val();
+    caretPos = this.$inputor.caret('pos', {
+      iframe: this.app.iframe
+    });
+    subtext = content.slice(0, caretPos);
+    query = this.callbacks("matcher").call(this, this.at, subtext, this.getOpt('startWithSpace'), this.getOpt("acceptSpaceBar"));
+    isString = typeof query === 'string';
+    if (isString && query.length < this.getOpt('minLen', 0)) {
+      return;
+    }
+    if (isString && query.length <= this.getOpt('maxLen', 20)) {
+      start = caretPos - query.length;
+      end = start + query.length;
+      this.pos = start;
+      query = {
+        'text': query,
+        'headPos': start,
+        'endPos': end
+      };
+      this.trigger("matched", [this.at, query.text]);
+    } else {
+      query = null;
+      this.view.hide();
+    }
+    return this.query = query;
+  };
+
+  TextareaController.prototype.rect = function() {
+    var c, iframeOffset, scaleBottom;
+    if (!(c = this.$inputor.caret('offset', this.pos - 1, {
+      iframe: this.app.iframe
+    }))) {
+      return;
+    }
+    if (this.app.iframe && !this.app.iframeAsRoot) {
+      iframeOffset = $(this.app.iframe).offset();
+      c.left += iframeOffset.left;
+      c.top += iframeOffset.top;
+    }
+    scaleBottom = this.app.document.selection ? 0 : 2;
+    return {
+      left: c.left,
+      top: c.top,
+      bottom: c.top + c.height + scaleBottom
+    };
+  };
+
+  TextareaController.prototype.insert = function(content, $li) {
+    var $inputor, source, startStr, suffix, text;
+    $inputor = this.$inputor;
+    source = $inputor.val();
+    startStr = source.slice(0, Math.max(this.query.headPos - this.at.length, 0));
+    suffix = (suffix = this.getOpt('suffix')) === "" ? suffix : suffix || " ";
+    content += suffix;
+    text = "" + startStr + content + (source.slice(this.query['endPos'] || 0));
+    $inputor.val(text);
+    $inputor.caret('pos', startStr.length + content.length, {
+      iframe: this.app.iframe
+    });
+    if (!$inputor.is(':focus')) {
+      $inputor.focus();
+    }
+    return $inputor.change();
+  };
+
+  return TextareaController;
+
+})(Controller);
+
+var EditableController,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+EditableController = (function(superClass) {
+  extend(EditableController, superClass);
+
+  function EditableController() {
+    return EditableController.__super__.constructor.apply(this, arguments);
+  }
+
+  EditableController.prototype._getRange = function() {
+    var sel;
+    sel = this.app.window.getSelection();
+    if (sel.rangeCount > 0) {
+      return sel.getRangeAt(0);
+    }
+  };
+
+  EditableController.prototype._setRange = function(position, node, range) {
+    if (range == null) {
+      range = this._getRange();
+    }
+    if (!(range && node)) {
+      return;
+    }
+    node = $(node)[0];
+    if (position === 'after') {
+      range.setEndAfter(node);
+      range.setStartAfter(node);
+    } else {
+      range.setEndBefore(node);
+      range.setStartBefore(node);
+    }
+    range.collapse(false);
+    return this._clearRange(range);
+  };
+
+  EditableController.prototype._clearRange = function(range) {
+    var sel;
+    if (range == null) {
+      range = this._getRange();
+    }
+    sel = this.app.window.getSelection();
+    if (this.ctrl_a_pressed == null) {
+      sel.removeAllRanges();
+      return sel.addRange(range);
+    }
+  };
+
+  EditableController.prototype._movingEvent = function(e) {
+    var ref;
+    return e.type === 'click' || ((ref = e.which) === KEY_CODE.RIGHT || ref === KEY_CODE.LEFT || ref === KEY_CODE.UP || ref === KEY_CODE.DOWN);
+  };
+
+  EditableController.prototype._unwrap = function(node) {
+    var next;
+    node = $(node).unwrap().get(0);
+    if ((next = node.nextSibling) && next.nodeValue) {
+      node.nodeValue += next.nodeValue;
+      $(next).remove();
+    }
+    return node;
+  };
+
+  EditableController.prototype.catchQuery = function(e) {
+    var $inserted, $query, _range, index, inserted, isString, lastNode, matched, offset, query, query_content, range;
+    if (!(range = this._getRange())) {
+      return;
+    }
+    if (!range.collapsed) {
+      return;
+    }
+    if (e.which === KEY_CODE.ENTER) {
+      ($query = $(range.startContainer).closest('.atwho-query')).contents().unwrap();
+      if ($query.is(':empty')) {
+        $query.remove();
+      }
+      ($query = $(".atwho-query", this.app.document)).text($query.text()).contents().last().unwrap();
+      this._clearRange();
+      return;
+    }
+    if (/firefox/i.test(navigator.userAgent)) {
+      if ($(range.startContainer).is(this.$inputor)) {
+        this._clearRange();
+        return;
+      }
+      if (e.which === KEY_CODE.BACKSPACE && range.startContainer.nodeType === document.ELEMENT_NODE && (offset = range.startOffset - 1) >= 0) {
+        _range = range.cloneRange();
+        _range.setStart(range.startContainer, offset);
+        if ($(_range.cloneContents()).contents().last().is('.atwho-inserted')) {
+          inserted = $(range.startContainer).contents().get(offset);
+          this._setRange('after', $(inserted).contents().last());
+        }
+      } else if (e.which === KEY_CODE.LEFT && range.startContainer.nodeType === document.TEXT_NODE) {
+        $inserted = $(range.startContainer.previousSibling);
+        if ($inserted.is('.atwho-inserted') && range.startOffset === 0) {
+          this._setRange('after', $inserted.contents().last());
+        }
+      }
+    }
+    $(range.startContainer).closest('.atwho-inserted').addClass('atwho-query').siblings().removeClass('atwho-query');
+    if (($query = $(".atwho-query", this.app.document)).length > 0 && $query.is(':empty') && $query.text().length === 0) {
+      $query.remove();
+    }
+    if (!this._movingEvent(e)) {
+      $query.removeClass('atwho-inserted');
+    }
+    if ($query.length > 0) {
+      switch (e.which) {
+        case KEY_CODE.LEFT:
+          this._setRange('before', $query.get(0), range);
+          $query.removeClass('atwho-query');
+          return;
+        case KEY_CODE.RIGHT:
+          this._setRange('after', $query.get(0).nextSibling, range);
+          $query.removeClass('atwho-query');
+          return;
+      }
+    }
+    if ($query.length > 0 && (query_content = $query.attr('data-atwho-at-query'))) {
+      $query.empty().html(query_content).attr('data-atwho-at-query', null);
+      this._setRange('after', $query.get(0), range);
+    }
+    _range = range.cloneRange();
+    _range.setStart(range.startContainer, 0);
+    matched = this.callbacks("matcher").call(this, this.at, _range.toString(), this.getOpt('startWithSpace'), this.getOpt("acceptSpaceBar"));
+    isString = typeof matched === 'string';
+    if ($query.length === 0 && isString && (index = range.startOffset - this.at.length - matched.length) >= 0) {
+      range.setStart(range.startContainer, index);
+      $query = $('<span/>', this.app.document).attr(this.getOpt("editableAtwhoQueryAttrs")).addClass('atwho-query');
+      range.surroundContents($query.get(0));
+      lastNode = $query.contents().last().get(0);
+      if (lastNode) {
+        if (/firefox/i.test(navigator.userAgent)) {
+          range.setStart(lastNode, lastNode.length);
+          range.setEnd(lastNode, lastNode.length);
+          this._clearRange(range);
+        } else {
+          this._setRange('after', lastNode, range);
+        }
+      }
+    }
+    if (isString && matched.length < this.getOpt('minLen', 0)) {
+      return;
+    }
+    if (isString && matched.length <= this.getOpt('maxLen', 20)) {
+      query = {
+        text: matched,
+        el: $query
+      };
+      this.trigger("matched", [this.at, query.text]);
+      return this.query = query;
+    } else {
+      this.view.hide();
+      this.query = {
+        el: $query
+      };
+      if ($query.text().indexOf(this.at) >= 0) {
+        if (this._movingEvent(e) && $query.hasClass('atwho-inserted')) {
+          $query.removeClass('atwho-query');
+        } else if (false !== this.callbacks('afterMatchFailed').call(this, this.at, $query)) {
+          this._setRange("after", this._unwrap($query.text($query.text()).contents().first()));
+        }
+      }
+      return null;
+    }
+  };
+
+  EditableController.prototype.rect = function() {
+    var $iframe, iframeOffset, rect;
+    rect = this.query.el.offset();
+    if (!rect) {
+      return;
+    }
+    if (this.app.iframe && !this.app.iframeAsRoot) {
+      iframeOffset = ($iframe = $(this.app.iframe)).offset();
+      rect.left += iframeOffset.left - this.$inputor.scrollLeft();
+      rect.top += iframeOffset.top - this.$inputor.scrollTop();
+    }
+    rect.bottom = rect.top + this.query.el.height();
+    return rect;
+  };
+
+  EditableController.prototype.insert = function(content, $li) {
+    var data, range, suffix, suffixNode;
+    if (!this.$inputor.is(':focus')) {
+      this.$inputor.focus();
+    }
+    suffix = (suffix = this.getOpt('suffix')) === "" ? suffix : suffix || "\u00A0";
+    data = $li.data('item-data');
+    this.query.el.removeClass('atwho-query').addClass('atwho-inserted').html(content).attr('data-atwho-at-query', "" + data['atwho-at'] + this.query.text).attr('contenteditable', "false");
+    if (range = this._getRange()) {
+      if (this.query.el.length) {
+        range.setEndAfter(this.query.el[0]);
+      }
+      range.collapse(false);
+      range.insertNode(suffixNode = this.app.document.createTextNode("" + suffix));
+      this._setRange('after', suffixNode, range);
+    }
+    if (!this.$inputor.is(':focus')) {
+      this.$inputor.focus();
+    }
+    return this.$inputor.change();
+  };
+
+  return EditableController;
+
+})(Controller);
+
+var Model;
+
+Model = (function() {
+  function Model(context) {
+    this.context = context;
+    this.at = this.context.at;
+    this.storage = this.context.$inputor;
+  }
+
+  Model.prototype.destroy = function() {
+    return this.storage.data(this.at, null);
+  };
+
+  Model.prototype.saved = function() {
+    return this.fetch() > 0;
+  };
+
+  Model.prototype.query = function(query, callback) {
+    var _remoteFilter, data, searchKey;
+    data = this.fetch();
+    searchKey = this.context.getOpt("searchKey");
+    data = this.context.callbacks('filter').call(this.context, query, data, searchKey) || [];
+    _remoteFilter = this.context.callbacks('remoteFilter');
+    if (data.length > 0 || (!_remoteFilter && data.length === 0)) {
+      return callback(data);
+    } else {
+      return _remoteFilter.call(this.context, query, callback);
+    }
+  };
+
+  Model.prototype.fetch = function() {
+    return this.storage.data(this.at) || [];
+  };
+
+  Model.prototype.save = function(data) {
+    return this.storage.data(this.at, this.context.callbacks("beforeSave").call(this.context, data || []));
+  };
+
+  Model.prototype.load = function(data) {
+    if (!(this.saved() || !data)) {
+      return this._load(data);
+    }
+  };
+
+  Model.prototype.reload = function(data) {
+    return this._load(data);
+  };
+
+  Model.prototype._load = function(data) {
+    if (typeof data === "string") {
+      return $.ajax(data, {
+        dataType: "json"
+      }).done((function(_this) {
+        return function(data) {
+          return _this.save(data);
+        };
+      })(this));
+    } else {
+      return this.save(data);
+    }
+  };
+
+  return Model;
+
+})();
+
+var View;
+
+View = (function() {
+  function View(context) {
+    this.context = context;
+    this.$el = $("<div class='atwho-view'><ul class='atwho-view-ul'></ul></div>");
+    this.$elUl = this.$el.children();
+    this.timeoutID = null;
+    this.context.$el.append(this.$el);
+    this.bindEvent();
+  }
+
+  View.prototype.init = function() {
+    var header_tpl, id;
+    id = this.context.getOpt("alias") || this.context.at.charCodeAt(0);
+    header_tpl = this.context.getOpt("headerTpl");
+    if (header_tpl && this.$el.children().length === 1) {
+      this.$el.prepend(header_tpl);
+    }
+    return this.$el.attr({
+      'id': "at-view-" + id
+    });
+  };
+
+  View.prototype.destroy = function() {
+    return this.$el.remove();
+  };
+
+  View.prototype.bindEvent = function() {
+    var $menu, lastCoordX, lastCoordY;
+    $menu = this.$el.find('ul');
+    lastCoordX = 0;
+    lastCoordY = 0;
+    return $menu.on('mousemove.atwho-view', 'li', (function(_this) {
+      return function(e) {
+        var $cur;
+        if (lastCoordX === e.clientX && lastCoordY === e.clientY) {
+          return;
+        }
+        lastCoordX = e.clientX;
+        lastCoordY = e.clientY;
+        $cur = $(e.currentTarget);
+        if ($cur.hasClass('cur')) {
+          return;
+        }
+        $menu.find('.cur').removeClass('cur');
+        return $cur.addClass('cur');
+      };
+    })(this)).on('click.atwho-view', 'li', (function(_this) {
+      return function(e) {
+        $menu.find('.cur').removeClass('cur');
+        $(e.currentTarget).addClass('cur');
+        _this.choose(e);
+        return e.preventDefault();
+      };
+    })(this));
+  };
+
+  View.prototype.visible = function() {
+    return $.expr.filters.visible(this.$el[0]);
+  };
+
+  View.prototype.highlighted = function() {
+    return this.$el.find(".cur").length > 0;
+  };
+
+  View.prototype.choose = function(e) {
+    var $li, content;
+    if (($li = this.$el.find(".cur")).length) {
+      content = this.context.insertContentFor($li);
+      this.context._stopDelayedCall();
+      this.context.insert(this.context.callbacks("beforeInsert").call(this.context, content, $li, e), $li);
+      this.context.trigger("inserted", [$li, e]);
+      this.hide(e);
+    }
+    if (this.context.getOpt("hideWithoutSuffix")) {
+      return this.stopShowing = true;
+    }
+  };
+
+  View.prototype.reposition = function(rect) {
+    var _window, offset, overflowOffset, ref;
+    _window = this.context.app.iframeAsRoot ? this.context.app.window : window;
+    if (rect.bottom + this.$el.height() - $(_window).scrollTop() > $(_window).height()) {
+      rect.bottom = rect.top - this.$el.height();
+    }
+    if (rect.left > (overflowOffset = $(_window).width() - this.$el.width() - 5)) {
+      rect.left = overflowOffset;
+    }
+    offset = {
+      left: rect.left,
+      top: rect.bottom
+    };
+    if ((ref = this.context.callbacks("beforeReposition")) != null) {
+      ref.call(this.context, offset);
+    }
+    this.$el.offset(offset);
+    return this.context.trigger("reposition", [offset]);
+  };
+
+  View.prototype.next = function() {
+    var cur, next, nextEl, offset;
+    cur = this.$el.find('.cur').removeClass('cur');
+    next = cur.next();
+    if (!next.length) {
+      next = this.$el.find('li:first');
+    }
+    next.addClass('cur');
+    nextEl = next[0];
+    offset = nextEl.offsetTop + nextEl.offsetHeight + (nextEl.nextSibling ? nextEl.nextSibling.offsetHeight : 0);
+    return this.scrollTop(Math.max(0, offset - this.$el.height()));
+  };
+
+  View.prototype.prev = function() {
+    var cur, offset, prev, prevEl;
+    cur = this.$el.find('.cur').removeClass('cur');
+    prev = cur.prev();
+    if (!prev.length) {
+      prev = this.$el.find('li:last');
+    }
+    prev.addClass('cur');
+    prevEl = prev[0];
+    offset = prevEl.offsetTop + prevEl.offsetHeight + (prevEl.nextSibling ? prevEl.nextSibling.offsetHeight : 0);
+    return this.scrollTop(Math.max(0, offset - this.$el.height()));
+  };
+
+  View.prototype.scrollTop = function(scrollTop) {
+    var scrollDuration;
+    scrollDuration = this.context.getOpt('scrollDuration');
+    if (scrollDuration) {
+      return this.$elUl.animate({
+        scrollTop: scrollTop
+      }, scrollDuration);
+    } else {
+      return this.$elUl.scrollTop(scrollTop);
+    }
+  };
+
+  View.prototype.show = function() {
+    var rect;
+    if (this.stopShowing) {
+      this.stopShowing = false;
+      return;
+    }
+    if (!this.visible()) {
+      this.$el.show();
+      this.$el.scrollTop(0);
+      this.context.trigger('shown');
+    }
+    if (rect = this.context.rect()) {
+      return this.reposition(rect);
+    }
+  };
+
+  View.prototype.hide = function(e, time) {
+    var callback;
+    if (!this.visible()) {
+      return;
+    }
+    if (isNaN(time)) {
+      this.$el.hide();
+      return this.context.trigger('hidden', [e]);
+    } else {
+      callback = (function(_this) {
+        return function() {
+          return _this.hide();
+        };
+      })(this);
+      clearTimeout(this.timeoutID);
+      return this.timeoutID = setTimeout(callback, time);
+    }
+  };
+
+  View.prototype.render = function(list) {
+    var $li, $ul, i, item, len, li, tpl;
+    if (!($.isArray(list) && list.length > 0)) {
+      this.hide();
+      return;
+    }
+    this.$el.find('ul').empty();
+    $ul = this.$el.find('ul');
+    tpl = this.context.getOpt('displayTpl');
+    for (i = 0, len = list.length; i < len; i++) {
+      item = list[i];
+      item = $.extend({}, item, {
+        'atwho-at': this.context.at
+      });
+      li = this.context.callbacks("tplEval").call(this.context, tpl, item, "onDisplay");
+      $li = $(this.context.callbacks("highlighter").call(this.context, li, this.context.query.text));
+      $li.data("item-data", item);
+      $ul.append($li);
+    }
+    this.show();
+    if (this.context.getOpt('highlightFirst')) {
+      return $ul.find("li:first").addClass("cur");
+    }
+  };
+
+  return View;
+
+})();
+
+var Api;
+
+Api = {
+  load: function(at, data) {
+    var c;
+    if (c = this.controller(at)) {
+      return c.model.load(data);
+    }
+  },
+  isSelecting: function() {
+    var ref;
+    return !!((ref = this.controller()) != null ? ref.view.visible() : void 0);
+  },
+  hide: function() {
+    var ref;
+    return (ref = this.controller()) != null ? ref.view.hide() : void 0;
+  },
+  reposition: function() {
+    var c;
+    if (c = this.controller()) {
+      return c.view.reposition(c.rect());
+    }
+  },
+  setIframe: function(iframe, asRoot) {
+    this.setupRootElement(iframe, asRoot);
+    return null;
+  },
+  run: function() {
+    return this.dispatch();
+  },
+  destroy: function() {
+    this.shutdown();
+    return this.$inputor.data('atwho', null);
+  }
+};
+
+$.fn.atwho = function(method) {
+  var _args, result;
+  _args = arguments;
+  result = null;
+  this.filter('textarea, input, [contenteditable=""], [contenteditable=true]').each(function() {
+    var $this, app;
+    if (!(app = ($this = $(this)).data("atwho"))) {
+      $this.data('atwho', (app = new App(this)));
+    }
+    if (typeof method === 'object' || !method) {
+      return app.reg(method.at, method);
+    } else if (Api[method] && app) {
+      return result = Api[method].apply(app, Array.prototype.slice.call(_args, 1));
+    } else {
+      return $.error("Method " + method + " does not exist on jQuery.atwho");
+    }
+  });
+  if (result != null) {
+    return result;
+  } else {
+    return this;
+  }
+};
+
+$.fn.atwho["default"] = {
+  at: void 0,
+  alias: void 0,
+  data: null,
+  displayTpl: "<li>${name}</li>",
+  insertTpl: "${atwho-at}${name}",
+  headerTpl: null,
+  callbacks: DEFAULT_CALLBACKS,
+  searchKey: "name",
+  suffix: void 0,
+  hideWithoutSuffix: false,
+  startWithSpace: true,
+  acceptSpaceBar: false,
+  highlightFirst: true,
+  limit: 5,
+  maxLen: 20,
+  minLen: 0,
+  displayTimeout: 300,
+  delay: null,
+  spaceSelectsMatch: false,
+  tabSelectsMatch: true,
+  editableAtwhoQueryAttrs: {},
+  scrollDuration: 150,
+  suspendOnComposing: true,
+  lookUpOnClick: true
+};
+
+$.fn.atwho.debug = false;
+
+}));
+
+
+/***/ }),
+
+/***/ "./node_modules/jquery.caret/dist/jquery.caret.js":
+/*!********************************************************!*\
+  !*** ./node_modules/jquery.caret/dist/jquery.caret.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
+  if (true) {
+    // AMD. Register as an anonymous module.
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")], __WEBPACK_AMD_DEFINE_RESULT__ = (function ($) {
+      return (root.returnExportsGlobal = factory($));
+    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+}(this, function ($) {
+
+/*
+  Implement Github like autocomplete mentions
+  http://ichord.github.com/At.js
+
+  Copyright (c) 2013 chord.luo@gmail.com
+  Licensed under the MIT license.
+*/
+
+/*
+本插件操作 textarea 或者 input 内的插入符
+只实现了获得插入符在文本框中的位置，我设置
+插入符的位置.
+*/
+
+"use strict";
+var EditableCaret, InputCaret, Mirror, Utils, discoveryIframeOf, methods, oDocument, oFrame, oWindow, pluginName, setContextBy;
+
+pluginName = 'caret';
+
+EditableCaret = (function() {
+  function EditableCaret($inputor) {
+    this.$inputor = $inputor;
+    this.domInputor = this.$inputor[0];
+  }
+
+  EditableCaret.prototype.setPos = function(pos) {
+    var fn, found, offset, sel;
+    if (sel = oWindow.getSelection()) {
+      offset = 0;
+      found = false;
+      (fn = function(pos, parent) {
+        var node, range, _i, _len, _ref, _results;
+        _ref = parent.childNodes;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          node = _ref[_i];
+          if (found) {
+            break;
+          }
+          if (node.nodeType === 3) {
+            if (offset + node.length >= pos) {
+              found = true;
+              range = oDocument.createRange();
+              range.setStart(node, pos - offset);
+              sel.removeAllRanges();
+              sel.addRange(range);
+              break;
+            } else {
+              _results.push(offset += node.length);
+            }
+          } else {
+            _results.push(fn(pos, node));
+          }
+        }
+        return _results;
+      })(pos, this.domInputor);
+    }
+    return this.domInputor;
+  };
+
+  EditableCaret.prototype.getIEPosition = function() {
+    return this.getPosition();
+  };
+
+  EditableCaret.prototype.getPosition = function() {
+    var inputor_offset, offset;
+    offset = this.getOffset();
+    inputor_offset = this.$inputor.offset();
+    offset.left -= inputor_offset.left;
+    offset.top -= inputor_offset.top;
+    return offset;
+  };
+
+  EditableCaret.prototype.getOldIEPos = function() {
+    var preCaretTextRange, textRange;
+    textRange = oDocument.selection.createRange();
+    preCaretTextRange = oDocument.body.createTextRange();
+    preCaretTextRange.moveToElementText(this.domInputor);
+    preCaretTextRange.setEndPoint("EndToEnd", textRange);
+    return preCaretTextRange.text.length;
+  };
+
+  EditableCaret.prototype.getPos = function() {
+    var clonedRange, pos, range;
+    if (range = this.range()) {
+      clonedRange = range.cloneRange();
+      clonedRange.selectNodeContents(this.domInputor);
+      clonedRange.setEnd(range.endContainer, range.endOffset);
+      pos = clonedRange.toString().length;
+      clonedRange.detach();
+      return pos;
+    } else if (oDocument.selection) {
+      return this.getOldIEPos();
+    }
+  };
+
+  EditableCaret.prototype.getOldIEOffset = function() {
+    var range, rect;
+    range = oDocument.selection.createRange().duplicate();
+    range.moveStart("character", -1);
+    rect = range.getBoundingClientRect();
+    return {
+      height: rect.bottom - rect.top,
+      left: rect.left,
+      top: rect.top
+    };
+  };
+
+  EditableCaret.prototype.getOffset = function(pos) {
+    var clonedRange, offset, range, rect, shadowCaret;
+    if (oWindow.getSelection && (range = this.range())) {
+      if (range.endOffset - 1 > 0 && range.endContainer !== this.domInputor) {
+        clonedRange = range.cloneRange();
+        clonedRange.setStart(range.endContainer, range.endOffset - 1);
+        clonedRange.setEnd(range.endContainer, range.endOffset);
+        rect = clonedRange.getBoundingClientRect();
+        offset = {
+          height: rect.height,
+          left: rect.left + rect.width,
+          top: rect.top
+        };
+        clonedRange.detach();
+      }
+      if (!offset || (offset != null ? offset.height : void 0) === 0) {
+        clonedRange = range.cloneRange();
+        shadowCaret = $(oDocument.createTextNode("|"));
+        clonedRange.insertNode(shadowCaret[0]);
+        clonedRange.selectNode(shadowCaret[0]);
+        rect = clonedRange.getBoundingClientRect();
+        offset = {
+          height: rect.height,
+          left: rect.left,
+          top: rect.top
+        };
+        shadowCaret.remove();
+        clonedRange.detach();
+      }
+    } else if (oDocument.selection) {
+      offset = this.getOldIEOffset();
+    }
+    if (offset) {
+      offset.top += $(oWindow).scrollTop();
+      offset.left += $(oWindow).scrollLeft();
+    }
+    return offset;
+  };
+
+  EditableCaret.prototype.range = function() {
+    var sel;
+    if (!oWindow.getSelection) {
+      return;
+    }
+    sel = oWindow.getSelection();
+    if (sel.rangeCount > 0) {
+      return sel.getRangeAt(0);
+    } else {
+      return null;
+    }
+  };
+
+  return EditableCaret;
+
+})();
+
+InputCaret = (function() {
+  function InputCaret($inputor) {
+    this.$inputor = $inputor;
+    this.domInputor = this.$inputor[0];
+  }
+
+  InputCaret.prototype.getIEPos = function() {
+    var endRange, inputor, len, normalizedValue, pos, range, textInputRange;
+    inputor = this.domInputor;
+    range = oDocument.selection.createRange();
+    pos = 0;
+    if (range && range.parentElement() === inputor) {
+      normalizedValue = inputor.value.replace(/\r\n/g, "\n");
+      len = normalizedValue.length;
+      textInputRange = inputor.createTextRange();
+      textInputRange.moveToBookmark(range.getBookmark());
+      endRange = inputor.createTextRange();
+      endRange.collapse(false);
+      if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+        pos = len;
+      } else {
+        pos = -textInputRange.moveStart("character", -len);
+      }
+    }
+    return pos;
+  };
+
+  InputCaret.prototype.getPos = function() {
+    if (oDocument.selection) {
+      return this.getIEPos();
+    } else {
+      return this.domInputor.selectionStart;
+    }
+  };
+
+  InputCaret.prototype.setPos = function(pos) {
+    var inputor, range;
+    inputor = this.domInputor;
+    if (oDocument.selection) {
+      range = inputor.createTextRange();
+      range.move("character", pos);
+      range.select();
+    } else if (inputor.setSelectionRange) {
+      inputor.setSelectionRange(pos, pos);
+    }
+    return inputor;
+  };
+
+  InputCaret.prototype.getIEOffset = function(pos) {
+    var h, textRange, x, y;
+    textRange = this.domInputor.createTextRange();
+    pos || (pos = this.getPos());
+    textRange.move('character', pos);
+    x = textRange.boundingLeft;
+    y = textRange.boundingTop;
+    h = textRange.boundingHeight;
+    return {
+      left: x,
+      top: y,
+      height: h
+    };
+  };
+
+  InputCaret.prototype.getOffset = function(pos) {
+    var $inputor, offset, position;
+    $inputor = this.$inputor;
+    if (oDocument.selection) {
+      offset = this.getIEOffset(pos);
+      offset.top += $(oWindow).scrollTop() + $inputor.scrollTop();
+      offset.left += $(oWindow).scrollLeft() + $inputor.scrollLeft();
+      return offset;
+    } else {
+      offset = $inputor.offset();
+      position = this.getPosition(pos);
+      return offset = {
+        left: offset.left + position.left - $inputor.scrollLeft(),
+        top: offset.top + position.top - $inputor.scrollTop(),
+        height: position.height
+      };
+    }
+  };
+
+  InputCaret.prototype.getPosition = function(pos) {
+    var $inputor, at_rect, end_range, format, html, mirror, start_range;
+    $inputor = this.$inputor;
+    format = function(value) {
+      value = value.replace(/<|>|`|"|&/g, '?').replace(/\r\n|\r|\n/g, "<br/>");
+      if (/firefox/i.test(navigator.userAgent)) {
+        value = value.replace(/\s/g, '&nbsp;');
+      }
+      return value;
+    };
+    if (pos === void 0) {
+      pos = this.getPos();
+    }
+    start_range = $inputor.val().slice(0, pos);
+    end_range = $inputor.val().slice(pos);
+    html = "<span style='position: relative; display: inline;'>" + format(start_range) + "</span>";
+    html += "<span id='caret' style='position: relative; display: inline;'>|</span>";
+    html += "<span style='position: relative; display: inline;'>" + format(end_range) + "</span>";
+    mirror = new Mirror($inputor);
+    return at_rect = mirror.create(html).rect();
+  };
+
+  InputCaret.prototype.getIEPosition = function(pos) {
+    var h, inputorOffset, offset, x, y;
+    offset = this.getIEOffset(pos);
+    inputorOffset = this.$inputor.offset();
+    x = offset.left - inputorOffset.left;
+    y = offset.top - inputorOffset.top;
+    h = offset.height;
+    return {
+      left: x,
+      top: y,
+      height: h
+    };
+  };
+
+  return InputCaret;
+
+})();
+
+Mirror = (function() {
+  Mirror.prototype.css_attr = ["borderBottomWidth", "borderLeftWidth", "borderRightWidth", "borderTopStyle", "borderRightStyle", "borderBottomStyle", "borderLeftStyle", "borderTopWidth", "boxSizing", "fontFamily", "fontSize", "fontWeight", "height", "letterSpacing", "lineHeight", "marginBottom", "marginLeft", "marginRight", "marginTop", "outlineWidth", "overflow", "overflowX", "overflowY", "paddingBottom", "paddingLeft", "paddingRight", "paddingTop", "textAlign", "textOverflow", "textTransform", "whiteSpace", "wordBreak", "wordWrap"];
+
+  function Mirror($inputor) {
+    this.$inputor = $inputor;
+  }
+
+  Mirror.prototype.mirrorCss = function() {
+    var css,
+      _this = this;
+    css = {
+      position: 'absolute',
+      left: -9999,
+      top: 0,
+      zIndex: -20000
+    };
+    if (this.$inputor.prop('tagName') === 'TEXTAREA') {
+      this.css_attr.push('width');
+    }
+    $.each(this.css_attr, function(i, p) {
+      return css[p] = _this.$inputor.css(p);
+    });
+    return css;
+  };
+
+  Mirror.prototype.create = function(html) {
+    this.$mirror = $('<div></div>');
+    this.$mirror.css(this.mirrorCss());
+    this.$mirror.html(html);
+    this.$inputor.after(this.$mirror);
+    return this;
+  };
+
+  Mirror.prototype.rect = function() {
+    var $flag, pos, rect;
+    $flag = this.$mirror.find("#caret");
+    pos = $flag.position();
+    rect = {
+      left: pos.left,
+      top: pos.top,
+      height: $flag.height()
+    };
+    this.$mirror.remove();
+    return rect;
+  };
+
+  return Mirror;
+
+})();
+
+Utils = {
+  contentEditable: function($inputor) {
+    return !!($inputor[0].contentEditable && $inputor[0].contentEditable === 'true');
+  }
+};
+
+methods = {
+  pos: function(pos) {
+    if (pos || pos === 0) {
+      return this.setPos(pos);
+    } else {
+      return this.getPos();
+    }
+  },
+  position: function(pos) {
+    if (oDocument.selection) {
+      return this.getIEPosition(pos);
+    } else {
+      return this.getPosition(pos);
+    }
+  },
+  offset: function(pos) {
+    var offset;
+    offset = this.getOffset(pos);
+    return offset;
+  }
+};
+
+oDocument = null;
+
+oWindow = null;
+
+oFrame = null;
+
+setContextBy = function(settings) {
+  var iframe;
+  if (iframe = settings != null ? settings.iframe : void 0) {
+    oFrame = iframe;
+    oWindow = iframe.contentWindow;
+    return oDocument = iframe.contentDocument || oWindow.document;
+  } else {
+    oFrame = void 0;
+    oWindow = window;
+    return oDocument = document;
+  }
+};
+
+discoveryIframeOf = function($dom) {
+  var error;
+  oDocument = $dom[0].ownerDocument;
+  oWindow = oDocument.defaultView || oDocument.parentWindow;
+  try {
+    return oFrame = oWindow.frameElement;
+  } catch (_error) {
+    error = _error;
+  }
+};
+
+$.fn.caret = function(method, value, settings) {
+  var caret;
+  if (methods[method]) {
+    if ($.isPlainObject(value)) {
+      setContextBy(value);
+      value = void 0;
+    } else {
+      setContextBy(settings);
+    }
+    caret = Utils.contentEditable(this) ? new EditableCaret(this) : new InputCaret(this);
+    return methods[method].apply(caret, [value]);
+  } else {
+    return $.error("Method " + method + " does not exist on jQuery.caret");
+  }
+};
+
+$.fn.caret.EditableCaret = EditableCaret;
+
+$.fn.caret.InputCaret = InputCaret;
+
+$.fn.caret.Utils = Utils;
+
+$.fn.caret.apis = methods;
+
+
+}));
+
 
 /***/ })
 

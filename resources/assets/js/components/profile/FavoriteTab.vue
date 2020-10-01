@@ -24,6 +24,7 @@ export default {
       sort: "topRated",
     };
   },
+
   computed: {
     postCounts() {
       return this.$store.getters.profileFavoriteCount;

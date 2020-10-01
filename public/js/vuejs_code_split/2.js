@@ -805,6 +805,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -844,7 +845,7 @@ __webpack_require__.r(__webpack_exports__);
       newMessage: "",
       favorites: [],
       likes: [],
-      comments: [],
+      replies_count: 0,
       isFollow: false
     };
   },
@@ -857,6 +858,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     profileFavoriteCount: function profileFavoriteCount() {
       return this.$store.getters.profileFavoriteCount;
+    },
+    profileFavoritePosts: function profileFavoritePosts() {
+      return this.$store.getters.profileFavoritePosts; // return [];
     },
     followings: function followings() {
       return this.$store.getters.followings;
@@ -922,7 +926,8 @@ __webpack_require__.r(__webpack_exports__);
       this.getAllPost();
     }
 
-    if (this.isShowFavorites) {// this.getAllFavoritePost();
+    if (this.isShowFavorites) {
+      this.getAllFavoritePost();
     }
 
     if (this.is_owner) {
@@ -932,49 +937,58 @@ __webpack_require__.r(__webpack_exports__);
     if (!this.is_owner) {
       this.checkIsFollow();
     }
+
+    this.getProfileComments();
   },
   methods: {
-    getAllPost: function getAllPost() {
+    getProfileComments: function getProfileComments() {
       var _this = this;
+
+      axios.get("/profiles/".concat(this.profile_user.username, "/comments")).then(function (res) {
+        _this.replies_count = res.data.replies_count;
+      });
+    },
+    getAllPost: function getAllPost() {
+      var _this2 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/threads")).then(function (res) {
         // this.posts = res.data.threads;
-        _this.$store.dispatch("profilePosts", res.data.threads);
+        _this2.$store.dispatch("profilePosts", res.data.threads);
       });
     },
     getAllLikePost: function getAllLikePost() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/likes")).then(function (res) {
         // this.posts = res.data.threads;
-        _this2.$store.dispatch("profileLikePosts", res.data.threads);
+        _this3.$store.dispatch("profileLikePosts", res.data.threads);
       });
     },
     getAllFavoritePost: function getAllFavoritePost() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get("/profiles/".concat(this.profile_user.username, "/favorites")).then(function (res) {
         // this.posts = res.data.threads;
-        _this3.$store.dispatch("profileFavoritePosts", res.data.threads);
+        _this4.$store.dispatch("profileFavoritePosts", res.data.threads);
       });
     },
     toggleFollow: function toggleFollow() {
-      var _this4 = this;
+      var _this5 = this;
 
       var url = "/user/".concat(this.profile_user.username, "/follow");
       axios.post(url).then(function (res) {
-        if (_this4.isFollow) {
-          _this4.$store.dispatch("removeFollowers", window.App.user.id);
+        if (_this5.isFollow) {
+          _this5.$store.dispatch("removeFollowers", window.App.user.id);
         } else {
-          _this4.$store.dispatch("addFollowers", window.App.user);
+          _this5.$store.dispatch("addFollowers", window.App.user);
         }
 
-        _this4.isFollow = !_this4.isFollow;
+        _this5.isFollow = !_this5.isFollow;
         flash(res.data.message);
       });
     },
     unfollow: function unfollow(friend) {
-      var _this5 = this;
+      var _this6 = this;
 
       var url = "";
 
@@ -985,7 +999,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post(url).then(function (res) {
-        _this5.$store.dispatch("removeFollowings", friend);
+        _this6.$store.dispatch("removeFollowings", friend);
 
         flash(res.data.message);
       });
@@ -998,10 +1012,10 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     checkIsFollow: function checkIsFollow() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get("/user/".concat(this.profile_user.username, "/is-follow")).then(function (res) {
-        _this6.isFollow = res.data;
+        _this7.isFollow = res.data;
       });
     },
     checkPrivacy: function checkPrivacy() {
@@ -1014,15 +1028,15 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     sendMessage: function sendMessage() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.post("/chat-send-message", {
         message: this.newMessage,
         friend: this.profile_user.id,
         friend_message: this.is_friend
       }).then(function (res) {
-        _this7.newMessage = "";
-        _this7.showModal = false;
+        _this8.newMessage = "";
+        _this8.showModal = false;
         $("#messageModal").modal("hide");
       });
     }
@@ -2159,12 +2173,12 @@ var render = function() {
                   attrs: { like_counts: _vm.profileLikeCount }
                 }),
                 _vm._v(" "),
-                _c("comment-counts", {
-                  attrs: { comment_count: _vm.comments }
+                _c("replies-counts", {
+                  attrs: { replies_count: _vm.replies_count }
                 }),
                 _vm._v(" "),
-                _c("favorite-counts", {
-                  attrs: { favorite_count: _vm.profileFavoriteCount }
+                _c("profile-favorite-counts", {
+                  attrs: { thread: _vm.profileFavoritePosts }
                 })
               ],
               1
