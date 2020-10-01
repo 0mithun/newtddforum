@@ -12,8 +12,13 @@ export default {
         followers: [],
         followings: [],
         profilePosts: [],
+
+        profileTotalRecords:0,
+
         profileFavoritePosts: [],
-        profileLikePosts: []
+        profileFavoriteTotalRecords: 0,
+        profileLikePosts: [],
+        profileLikeTotalRecords:0
     },
     mutations: {
         friendList(state, payload) {
@@ -134,13 +139,24 @@ export default {
             state.profilePosts = payload
         },
 
+        profileTotalRecords(state, payload) {
+            state.profileTotalRecords = payload
+        },
+
         profileFavoritePosts(state, payload) {
             state.profileFavoritePosts = payload
         },
 
+        profileFavoriteTotalRecords(state, payload) {
+            state.profileFavoriteTotalRecords = payload
+        },
+
         profileLikePosts(state, payload) {
             state.profileLikePosts = payload
-        }
+        },
+        profileLikeTotalRecords(state, payload) {
+            state.profileLikeTotalRecords = payload
+        },
 
 
 
@@ -228,14 +244,26 @@ export default {
             context.commit('profilePosts', payload)
         },
 
+        profileTotalRecords(context, payload) {
+            context.commit('profileTotalRecords', payload)
+        },
+
         //Profile Favorite Posts
         profileFavoritePosts(context, payload) {
             context.commit('profileFavoritePosts', payload)
+        },
+        //Profile Favorite Posts
+        profileFavoriteTotalRecords(context, payload) {
+            context.commit('profileFavoriteTotalRecords', payload)
         },
 
         //Profile Favorite Posts
         profileLikePosts(context, payload) {
             context.commit('profileLikePosts', payload)
+        },
+        //Profile Favorite Posts
+        profileLikeTotalRecords(context, payload) {
+            context.commit('profileLikeTotalRecords', payload)
         }
 
     },
@@ -265,29 +293,42 @@ export default {
             return state.followings
         },
 
+        /**Profile Posts */
         profilePosts(state) {
             return state.profilePosts
         },
+        profileTotalRecords(state) {
+            return state.profileTotalRecords
+        },
+
         profilePostCount(state) {
-            return state.profilePosts.length
+            // return state.profilePosts.length
+            return state.profileTotalRecords
         },
 
+        /**End profile Post */
+
+    /**profile favorite */
         profileFavoritePosts(state) {
-            return state.profilePosts.data
+            return state.profileFavoritePosts
         },
-
-
+        profileFavoriteTotalRecords(state) {
+            return state.profileFavoriteTotalRecords
+        },
 
         profileFavoriteCount(state) {
-            return state.profileFavoritePosts.length
+            return state.profileFavoriteTotalRecords
         },
 
 
         profileLikePosts(state) {
             return state.profileLikePosts
         },
+        profileLikeTotalRecords(state) {
+            return state.profileLikeTotalRecords
+        },
         profileLikeCount(state) {
-            return state.profileLikePosts.length
+            return state.profileLikeTotalRecords
         },
 
     }

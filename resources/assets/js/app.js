@@ -122,6 +122,12 @@ Vue.component("point-counts", () =>
 Vue.component("following-counts", () =>
   import("./components/Counts/FollowingCounts.vue")
 );
+Vue.component("replies-counts", () =>
+  import("./components/Counts/RepliesCount.vue")
+);
+Vue.component("profile-favorite-counts", () =>
+  import("./components/Counts/ProfileFavoriteCount.vue")
+);
 
 Vue.component("thread-replies", () => import("./components/Replies"));
 Vue.component("up-votes", () => import("./components/UpVotes.vue"));

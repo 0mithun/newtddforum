@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ConfirmNewEmail;
+use App\Reply;
 use App\Thread;
+use App\Traits\ThreadPrivacy;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
@@ -12,6 +14,8 @@ use Illuminate\Support\Facades\Mail;
 use Spatie\Geocoder\Geocoder;
 
 class ProfilesController extends Controller {
+    use ThreadPrivacy;
+    public $perPage = 10;
     /**
      * Show the user's profile.
      *
@@ -267,11 +271,36 @@ class ProfilesController extends Controller {
             ->get()
             ->pluck( 'thread_id' )
             ->all();
+        
+        $threads = Thread::whereIn( 'id', $subscriptionsId );
 
-        $threads = Thread::whereIn( 'id', $subscriptionsId )->get();
+        $this->sortBy($threads);
+        $totalRecords = $threads->count();
 
-        return response()->json( ['threads' => $threads] );
+        
+        $threads = $this->generateCurrentPageResults($threads, $this->perPage);        
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+        $threads = $this->convertToObject($threads);
+
+        return response()->json( [
+            'threads' => $threads,
+            'total_records' => $totalRecords,
+        ] );
     }
+
+    /**
+     * Get all comments
+     */
+
+    public function myCommentsShow() {
+        $user = request( 'user' );
+        $getUserInfo = User::where( 'username', $user )->first();
+
+        $count = Reply::where('user_id', $getUserInfo->id)->count();
+
+        return response()->json( ['replies_count' => $count] );
+    }
+
 
     /**
      * Get all Favoreite Threads
@@ -280,6 +309,7 @@ class ProfilesController extends Controller {
     public function myFavoritesShow() {
         $user = request( 'user' );
         $getUserInfo = User::where( 'username', $user )->first();
+        $auth_user = auth()->user();
         $favoritesId = DB::table( 'favorites' )
             ->where( 'user_id', $getUserInfo->id )
             ->where( 'favorited_type', 'App\Thread' )
@@ -287,21 +317,24 @@ class ProfilesController extends Controller {
             ->pluck( 'favorited_id' )
             ->all();
 
-        $auth_user = auth()->user();
+        $threads = Thread::whereIn('id', $favoritesId);
 
-        if ( $auth_user->username == $user ) {
-            $favorites = Thread::whereIn( 'id', $favoritesId )->get();
-        } else if ( $auth_user->id == 1 ) {
-            $favorites = Thread::whereIn( 'id', $favoritesId )->get();
-        } else if ( $auth_user->userprivacy->restricted_18 == 1 ) {
-            $favorites = Thread::whereIn( 'id', $favoritesId )->get();
-        } else if ( $auth_user->userprivacy->restricted_13 == 1 ) {
-            $favorites = Thread::whereIn( 'id', $favoritesId )->where( 'age_restriction', '!=', 18 )->get();
-        } else {
-            $favorites = Thread::whereIn( 'id', $favoritesId )->where( 'age_restriction', 0 )->get();
+        if($user != $auth_user->username || $auth_user->id != 1 ){
+            $threads->where( 'anonymous', '=', 0 );
         }
+        $this->filterThreads($threads);  
+        $this->sortBy($threads);
+        $totalRecords = $threads->count();
 
-        return response()->json( ['threads' => $favorites] );
+        
+        $threads = $this->generateCurrentPageResults($threads, $this->perPage);        
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+        $threads = $this->convertToObject($threads);
+
+        return response()->json( [
+            'threads' => $threads,
+            'total_records' => $totalRecords,
+        ] );
     }
 
     /***
@@ -312,35 +345,29 @@ class ProfilesController extends Controller {
 
     public function myThreadsShow() {
         $user = request( 'user' );
+        
         $auth_user = auth()->user();
         $getUserInfo = User::with( 'userprivacy' )->where( 'username', $user )->first();
 
-        if ( $auth_user->username == $user ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )
-            // ->get();
-            ;
-        } else if ( $auth_user->id == 1 ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )
-            // ->get();
-            ;
-        } else if ( $auth_user->userprivacy->restricted_18 == 1 ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )
-                ->where( 'anonymous', '=', 0 )
-            // ->get();
-            ;
-        } else if ( $auth_user->userprivacy->restricted_13 == 1 ) {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )->where( 'age_restriction', '!=', 18 )
-                ->where( 'anonymous', '=', 0 )
-            // ->get();
-            ;
-        } else {
-            $threads = Thread::where( 'user_id', $getUserInfo->id )->where( 'age_restriction', 0 )
-                ->where( 'anonymous', '=', 0 )
-            // ->get();
-            ;
+        $threads = Thread::where('user_id', $getUserInfo->id);
+
+        if($user != $auth_user->username || $auth_user->id != 1 ){
+            $threads->where( 'anonymous', '=', 0 );
         }
 
-        return response()->json( ['threads' => $threads->get()] );
+        $this->filterThreads($threads);                    
+        $this->sortBy($threads);
+        $totalRecords = $threads->count();
+
+        
+        $threads = $this->generateCurrentPageResults($threads, $this->perPage);        
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+        $threads = $this->convertToObject($threads);
+
+        return response()->json( [
+            'threads' => $threads,'per_page'  => $this->perPage,
+            'total_records' => $totalRecords,
+        ] );
     }
 
     /**
@@ -356,9 +383,20 @@ class ProfilesController extends Controller {
             ->get()
             ->pluck( 'likeable_id' )
             ->all();
-        $threads = Thread::whereIn( 'id', $likesId )->get();
+                    
+        $threads = Thread::whereIn( 'id', $likesId );
+        $this->sortBy($threads);
+        $totalRecords = $threads->count();
 
-        return response()->json( ['threads' => $threads] );
+        
+        $threads = $this->generateCurrentPageResults($threads, $this->perPage);        
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+        $threads = $this->convertToObject($threads);
+
+        return response()->json( [
+            'threads' => $threads,
+            'total_records' => $totalRecords,
+        ] );
     }
 
     /**
@@ -407,5 +445,19 @@ class ProfilesController extends Controller {
         $geocoder->setCountry( config( 'geocoder.country', 'US' ) );
 
         return $geocoder->getCoordinatesForAddress( $address );
+    }
+
+    public function sortBy($threads){
+        if(request('sort_by') && request('sort_by') !=''){
+            $sort = request('sort_by');
+            $valid_sort = ['visits','favorite_count'];
+            if($sort == 'topRated'){
+                $threads->orderByRaw('like_count - dislike_count DESC');
+            }else if(in_array($sort, $valid_sort)){
+                $threads->orderBy($sort, 'desc');
+            }
+        }else{
+            $threads->orderByRaw('like_count - dislike_count DESC');
+        }
     }
 }

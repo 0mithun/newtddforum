@@ -9,6 +9,9 @@ use App\Thread;
 use App\User;
 use Illuminate\Support\Facades\App;
 
+
+use DB;
+
 class RepliesController extends Controller {
     /**
      * Create a new RepliesController instance.

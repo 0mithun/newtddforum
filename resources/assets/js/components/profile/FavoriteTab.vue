@@ -11,7 +11,15 @@
       </div>
     </div>
     <div class="post-body">
-      <single-thread v-for="(thread, index) in sortPosts" :thread="thread" :key="index"></single-thread>
+      <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
+       <div class="load-more-btn" v-if="page< totalPage">
+        <button class="btn btn-primary" type="button" disabled v-if="loading">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+        </button>
+          <button class="btn btn-primary btn-sm" @click.prevent="loadMore" v-else >Load More</button>
+
+      </div>
     </div>
   </div>
 </template>
@@ -22,8 +30,17 @@ export default {
   data() {
     return {
       sort: "topRated",
+       page:1,
+      loading: false
     };
   },
+    watch:{
+    sort(sortBy){
+      this.$store.dispatch("profileFavoritePosts", []);
+      this.getAllPost();
+    }
+  },
+
   computed: {
     postCounts() {
       return this.$store.getters.profileFavoriteCount;
@@ -31,14 +48,33 @@ export default {
     posts() {
       return this.$store.getters.profileFavoritePosts;
     },
-    sortPosts() {
-      let threads = _.orderBy(this.posts, [this.sort], "desc");
-      return threads;
+    totalPage() {
+      return Math.ceil(this.postCounts / 10);
     },
+    signedIn() {
+      return window.App.user ? true : false;
+    },
+
   },
   methods: {
-    sortBy(sort) {
-      this.sort = sort;
+    loadMore(){
+      this.page = this.page + 1
+      this.getAllPost();
+    },
+    getAllPost() {
+      this.loading = true;
+      let query = `?page=${this.page}&sort_by=${this.sort}`;
+      let url = `/profiles/${this.profile_user.username}/favorites${query}`;
+      axios
+        .get(url)
+        .then((res) => {
+          let threads = []
+          let old_threads = this.$store.getters.profileFavoritePosts;
+
+          threads = [...old_threads, ...res.data.threads];
+          this.$store.dispatch("profileFavoritePosts", threads);
+          this.loading = false;
+        });
     },
   },
 };
@@ -64,5 +100,9 @@ export default {
 .sortBy:focus {
   outline: none;
   border: none;
+}
+
+.load-more-btn{
+  text-align: center;
 }
 </style>

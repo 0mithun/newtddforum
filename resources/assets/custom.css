@@ -450,20 +450,13 @@ li.list-group-item {
   color: black;
   border: 2px solid black;
 }
-.active-icon:hover {
-  color: #92959e;
-  border: 2px solid #92959e;
-}
 
 .inactive-icon {
   color: #92959e;
   border: 2px solid #92959e;
 }
 
-.inactive-icon:hover {
-  color: black;
-  border: 2px solid black;
-}
+
 
 .focus-comment-btn:hover {
   color: black;

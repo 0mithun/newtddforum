@@ -79,6 +79,8 @@
                     :thread="thread"
                     :key="index"
                   ></single-thread>
+
+                  
                   <nav aria-label="..." v-if="totalPage > 1">
                     <ul class="pagination">
                       <li v-if="currentPage != 1">                        

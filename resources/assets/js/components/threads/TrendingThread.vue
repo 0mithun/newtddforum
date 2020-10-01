@@ -43,8 +43,6 @@ export default {
     getTrending() {
       axios.get("/trending").then((res) => {
         this.threads = res.data;
-
-        console.log(res.data)
       });
     },
   },

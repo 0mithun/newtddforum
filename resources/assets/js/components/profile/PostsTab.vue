@@ -11,8 +11,16 @@
       </div>
     </div>
     <div class="post-body">
-      <single-thread v-for="(thread, index) in sortPosts" :thread="thread" :key="index"></single-thread>
-      <!-- <SearchPagination :dataSet="threads" @changedSearch="fetch" :query="q"></SearchPagination> -->
+      <single-thread v-for="(thread, index) in posts" :thread="thread" :key="index"></single-thread>
+      
+      <div class="load-more-btn" v-if="page< totalPage">
+        <button class="btn btn-primary" type="button" disabled v-if="loading">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+        </button>
+          <button class="btn btn-primary btn-sm" @click.prevent="loadMore" v-else >Load More</button>
+
+      </div>
     </div>
   </div>
 </template>
@@ -23,7 +31,15 @@ export default {
   data() {
     return {
       sort: "topRated",
+      page:1,
+      loading: false
     };
+  },
+  watch:{
+    sort(sortBy){
+      this.$store.dispatch("profilePosts", []);
+      this.getAllPost();
+    }
   },
   computed: {
     postCounts() {
@@ -32,28 +48,36 @@ export default {
     posts() {
       return this.$store.getters.profilePosts;
     },
-    sortPosts() {
-      let threads = _.orderBy(this.posts, [this.sort], "desc");
-      return threads;
+  
+    totalPage() {
+      return Math.ceil(this.postCounts / 10);
+    },
+    signedIn() {
+      return window.App.user ? true : false;
     },
   },
   methods: {
-    sortBy(sort) {
-      this.sort = sort;
+    loadMore(){
+      this.page = this.page + 1
+      this.getAllPost();
+    },
+    getAllPost() {
+      this.loading = true;
+      let query = `?page=${this.page}&sort_by=${this.sort}`;
+      let url = `/profiles/${this.profile_user.username}/threads${query}`;
+      axios
+        .get(url)
+        .then((res) => {
+          // this.posts = res.data.threads;
+          let threads = []
+          let old_threads = this.$store.getters.profilePosts;
+
+          threads = [...old_threads, ...res.data.threads];
+          this.$store.dispatch("profilePosts", threads);
+          this.loading = false;
+        });
     },
 
-    // fetch(page) {
-    //   axios
-    //     .get("/threads/search?query=" + this.q + "&page=" + page)
-    //     .then((res) => {
-    //       this.allThreads = res.data.data;
-    //       let pageUrl = {
-    //         prev_page_url: res.data.prev_page_url,
-    //         next_page_url: res.data.next_page_url,
-    //       };
-    //       eventBus.$emit("pageChange", pageUrl);
-    //     });
-    // },
   },
 };
 </script>
@@ -78,5 +102,9 @@ export default {
 .sortBy:focus {
   outline: none;
   border: none;
+}
+
+.load-more-btn{
+  text-align: center;
 }
 </style>

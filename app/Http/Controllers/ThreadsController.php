@@ -21,10 +21,14 @@ use App\Notifications\ThreadPostTwitter;
 use App\Notifications\ThreadPostFacebook;
 use App\Http\Requests\CreateThreadRequest;
 use App\Http\Requests\UpdateThreadRequest;
+use App\Traits\ThreadPrivacy;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ThreadsController extends Controller
 {
+    use ThreadPrivacy;
+
+    public $perPage = 10;
     /**
      * Create a new ThreadsController instance.
      */
@@ -45,64 +49,25 @@ class ThreadsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
-    {
-        $perPage = 10;
+    {   
         $threads = $this->getThreads($channel, $filters);
-        // if (auth()->check()) {
-        //     $user = auth()->user();
-        //     $privacy = $user->userprivacy;
-        //     if ($privacy->restricted_18 == 1) {
-        //         $threads = collect($threads->get());
-        //     } else if ($user->id == 1) {
-        //         $threads = collect($threads->get());
-        //     } else if ($privacy->restricted_13 == 1) {
-        //         $collect = collect($threads->get());
-        //         $threads = $collect->filter(function ($thread) use ($user) {
-        //             if ($thread->user_id == $user->id) {
-        //                 return true;
-        //             } else if ($thread->age_restriction != 18) {
-        //                 return true;
-        //             }
-        //         });
-        //     } else {
-        //         $collect = collect($threads->get());
-        //         $threads = $collect->filter(function ($thread) use ($user) {
-        //             if ($thread->user_id == $user->id) {
-        //                 return true;
-        //             } else if ($thread->age_restriction == 0) {
-        //                 return true;
-        //             }
-        //         });
-        //     }
-        // } else {
-        //     $collect = collect($threads->get());
-        //     $threads = $collect->where('age_restriction', 0);
-        // }
-
-        // $threads = $this->paginate($threads->get(), 10);
-
-
-
         $totalRecords = $threads->count();
-
+        
+        $threads = $this->generateCurrentPageResults($threads, $this->perPage);        
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+        
+       $threads = $this->convertToObject($threads);
+        
         if (request()->wantsJson()) {
             return $threads;
         }
         $admin = Admin::first();
 
-        $threads = $this->generateCurrentPageResults($threads, $perPage);
-
-        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
-     
-        $threads = collect($threads)->map(function ($voucher) {
-            return (object) $voucher;
-        });
-
         return view('threads.index', [
             'threads'   =>  $threads,
             'trending'  => $trending->get(),
             'pageTitle' => $admin->app_title,
-            'per_page'  => $perPage,
+            'per_page'  => $this->perPage,
             'current_page'  => (request('page') && request('page') != '') ? request('page') : 1,
             'total_records' => $totalRecords,
 
@@ -110,16 +75,7 @@ class ThreadsController extends Controller
         ]);
     }
 
-    public function generateCurrentPageResults($threads, $perPage)
-    {
-        $currentPage = 1;
-        if (request('page') && request('page') != '') {
-            $currentPage = request('page');
-        }
-        $skip = ($currentPage - 1) * $perPage;
-        return $threads->skip($skip)->take($perPage)->get();
-    }
-
+  
 
     /**
      * Display the specified resource.
@@ -348,26 +304,6 @@ class ThreadsController extends Controller
         return $threads;
     }
 
-    public function filterThreads($threads)
-    {
-        if (auth()->check()) {
-            $user = auth()->user();
-            $privacy = $user->userprivacy;
-            if ($privacy->restricted_18 == 1) {
-                // $threadsId = $threads->pluck('id')->all();
-            } else if ($user->id == 1) {
-                // $threadsId =  $threads->pluck('id')->all();
-            } else if ($privacy->restricted_13 == 1) {
-                $threadsId =  $threads->where('age_restriction', '!=', 18)->orWhere('user_id', $user->id);
-            } else {
-                $threadsId =  $threads->where('age_restriction', 0)->orWhere('user_id', $user->id);
-            }
-        } else {
-            $threadsId =  $threads->where('age_restriction', 0);
-        }
-
-        // return $threadsId;
-    }
 
     /**
      * Paginate Filter Threads
@@ -402,18 +338,12 @@ class ThreadsController extends Controller
             }
         }
 
-        // dd($tag);
-        // $pageTitle = 'Tag: ' . $tag->name;
-        // $tag->load('threads');
-
-        // dd($tag);
 
         $threads = Thread::where('tag_names','LIKE', "%{$tag->name}%");
 
         $this->filterThreads($threads);
-        $perPage = 10;
         $totalRecords = $threads->count();
-        $threads = $this->generateCurrentPageResults($threads, $perPage);
+        $threads = $this->generateCurrentPageResults($threads, $this->perPage);
 
      
         $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
@@ -427,24 +357,6 @@ class ThreadsController extends Controller
     }
     
    
-    /**
-     * Convert latin to UTF-8
-     */
-    public static function convert_from_latin1_to_utf8_recursively($dat)
-   {
-      if (is_string($dat)) {
-         return utf8_encode($dat);
-      } elseif (is_array($dat)) {
-         $ret = [];
-         foreach ($dat as $i => $d) $ret[ $i ] = self::convert_from_latin1_to_utf8_recursively($d);
-         return $ret;
-      } elseif (is_object($dat)) {
-         foreach ($dat as $i => $d) $dat->$i = self::convert_from_latin1_to_utf8_recursively($d);
-         return $dat;
-      } else {
-         return $dat;
-      }
-   }
     
     /**
      * Get lat, lng with thread location

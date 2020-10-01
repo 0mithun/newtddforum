@@ -162,6 +162,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profiles/{user}/favorites', 'ProfilesController@myFavoritesShow')->name('profile.favorites');
     Route::get('/profiles/{user}/threads', 'ProfilesController@myThreadsShow')->name('profile.threads');
     Route::get('/profiles/{user}/likes', 'ProfilesController@myLikesShow')->name('profile.likes');
+    Route::get('/profiles/{user}/comments', 'ProfilesController@myCommentsShow')->name('profile.likes');
 
     /*Authentication check added*/
 

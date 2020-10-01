@@ -11,8 +11,9 @@
             <div class="profile-count">
               <post-counts :post_count="profilePostCount"></post-counts>
               <like-counts :like_counts="profileLikeCount"></like-counts>
-              <comment-counts :comment_count="comments"></comment-counts>
-              <favorite-counts :favorite_count="profileFavoriteCount"></favorite-counts>
+              <replies-counts :replies_count="replies_count"></replies-counts>
+              <!-- <favorite-counts :thread="profileFavoritePosts"></favorite-counts> -->
+              <profile-favorite-counts :thread="profileFavoritePosts"></profile-favorite-counts>
             </div>
             <div class="profile-buttons">
               <template v-if="!is_owner">
@@ -85,10 +86,10 @@
                 <a data-toggle="tab" href="#following">Following</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#posts" v-if="isShowPosts">Posts</a>
+                <a data-toggle="tab" href="#posts" v-if="isShowPosts" >Posts</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#favorites" v-if="isShowFavorites">Favorites</a>
+                <a data-toggle="tab" href="#favorites" v-if="isShowFavorites" >Favorites</a>
               </li>
               <li>
                 <a data-toggle="tab" href="#likes" v-if="is_owner">Likes</a>
@@ -199,7 +200,7 @@ import About from "./ProfileAbout";
 import Friends from "./ProfileFriends";
 import PostTab from "./PostsTab";
 import LikeTab from "./LikeTab";
-import FavoriteTab from "./LikeTab";
+import FavoriteTab from "./FavoriteTab";
 import SubscribeTab from "./SubscribeTab";
 export default {
   props: {
@@ -235,7 +236,7 @@ export default {
 
       favorites: [],
       likes: [],
-      comments: [],
+      replies_count:0,
       isFollow: false,
     };
   },
@@ -248,6 +249,10 @@ export default {
     },
     profileFavoriteCount() {
       return this.$store.getters.profileFavoriteCount;
+    },
+    profileFavoritePosts(){
+      return this.$store.getters.profileFavoritePosts;
+      // return [];
     },
     followings() {
       return this.$store.getters.followings;
@@ -325,7 +330,7 @@ export default {
       this.getAllPost();
     }
     if (this.isShowFavorites) {
-      // this.getAllFavoritePost();
+      this.getAllFavoritePost();
     }
     if (this.is_owner) {
       this.getAllLikePost();
@@ -335,20 +340,33 @@ export default {
     if (!this.is_owner) {
       this.checkIsFollow();
     }
+
+    this.getProfileComments()
   },
   methods: {
+  
+    getProfileComments(){
+      axios.get(`/profiles/${this.profile_user.username}/comments`)
+        .then((res) => {
+          this.replies_count = res.data.replies_count
+          // this.$store.dispatch("profilePosts", res.data.threads);
+        });
+    },
     getAllPost() {
       axios
         .get(`/profiles/${this.profile_user.username}/threads`)
         .then((res) => {
           // this.posts = res.data.threads;
           this.$store.dispatch("profilePosts", res.data.threads);
+          this.$store.dispatch("profileTotalRecords", res.data.total_records);
         });
     },
     getAllLikePost() {
       axios.get(`/profiles/${this.profile_user.username}/likes`).then((res) => {
         // this.posts = res.data.threads;
         this.$store.dispatch("profileLikePosts", res.data.threads);
+        this.$store.dispatch("profileLikeTotalRecords", res.data.total_records);
+     
       });
     },
     getAllFavoritePost() {
@@ -357,6 +375,9 @@ export default {
         .then((res) => {
           // this.posts = res.data.threads;
           this.$store.dispatch("profileFavoritePosts", res.data.threads);
+          
+          this.$store.dispatch("profileFavoriteTotalRecords", res.data.total_records);
+          
         });
     },
     toggleFollow() {
