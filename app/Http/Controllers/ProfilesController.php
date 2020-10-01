@@ -271,10 +271,21 @@ class ProfilesController extends Controller {
             ->get()
             ->pluck( 'thread_id' )
             ->all();
+        
+        $threads = Thread::whereIn( 'id', $subscriptionsId );
 
-        $threads = Thread::whereIn( 'id', $subscriptionsId )->get();
+        $this->sortBy($threads);
+        $totalRecords = $threads->count();
 
-        return response()->json( ['threads' => $threads] );
+        
+        $threads = $this->generateCurrentPageResults($threads, $this->perPage);        
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+        $threads = $this->convertToObject($threads);
+
+        return response()->json( [
+            'threads' => $threads,
+            'total_records' => $totalRecords,
+        ] );
     }
 
     /**
@@ -284,7 +295,6 @@ class ProfilesController extends Controller {
     public function myCommentsShow() {
         $user = request( 'user' );
         $getUserInfo = User::where( 'username', $user )->first();
-
 
         $count = Reply::where('user_id', $getUserInfo->id)->count();
 
@@ -373,13 +383,8 @@ class ProfilesController extends Controller {
             ->get()
             ->pluck( 'likeable_id' )
             ->all();
-            // $threads = Thread::whereIn( 'id', $likesId )->get();
-            
-            // return response()->json( ['threads' => $threads] );
-            
-            
-            // $this->filterThreads($threads);                    
-            $threads = Thread::whereIn( 'id', $likesId );
+                    
+        $threads = Thread::whereIn( 'id', $likesId );
         $this->sortBy($threads);
         $totalRecords = $threads->count();
 

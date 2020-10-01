@@ -67,7 +67,6 @@ export default {
       axios
         .get(url)
         .then((res) => {
-          console.log(res.data)
           let threads = []
           let old_threads = this.$store.getters.profileLikePosts;
 

@@ -25,6 +25,8 @@ $factory->define( App\User::class, function ( Faker\Generator $faker ) {
         'username'       => strtolower( $first_name . $last_name . uniqid() ),
         'lat'            => $faker->latitude( 19.5, 64.5 ),
         'lng'            => $faker->longitude( -161.75583, -68.01197 ),
+        'city'           => 'New York',
+        'country'        => 'USA',
         'password'       => $password ?: $password = bcrypt( 'secret' ),
         'remember_token' => str_random( 10 ),
         'confirmed'      => true,

@@ -183,7 +183,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var query = "?page=".concat(this.page, "&sort_by=").concat(this.sort);
       var url = "/profiles/".concat(this.profile_user.username, "/likes").concat(query);
       axios.get(url).then(function (res) {
-        console.log(res.data);
         var threads = [];
         var old_threads = _this.$store.getters.profileLikePosts;
         threads = [].concat(_toConsumableArray(old_threads), _toConsumableArray(res.data.threads));
@@ -710,6 +709,22 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -733,8 +748,16 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       sort: "topRated",
+      page: 1,
+      loading: false,
       subscribePosts: []
     };
+  },
+  watch: {
+    sort: function sort(sortBy) {
+      this.subscribePosts = [];
+      this.getAllPost();
+    }
   },
   computed: {
     postCounts: function postCounts() {
@@ -743,24 +766,33 @@ __webpack_require__.r(__webpack_exports__);
     posts: function posts() {
       return this.subscribePosts;
     },
-    sortPosts: function sortPosts() {
-      var threads = _.orderBy(this.posts, [this.sort], "desc");
-
-      return threads;
+    totalPage: function totalPage() {
+      return Math.ceil(this.postCounts / 10);
+    },
+    signedIn: function signedIn() {
+      return window.App.user ? true : false;
     }
   },
   created: function created() {
-    this.getAllSubscriptionPost();
+    this.getAllPost();
   },
   methods: {
-    sortBy: function sortBy(sort) {
-      this.sort = sort;
+    loadMore: function loadMore() {
+      this.page = this.page + 1;
+      this.getAllPost();
     },
-    getAllSubscriptionPost: function getAllSubscriptionPost() {
+    getAllPost: function getAllPost() {
       var _this = this;
 
-      axios.get("/profiles/".concat(this.profile_user.username, "/subscriptions")).then(function (res) {
-        _this.subscribePosts = res.data.threads;
+      this.loading = true;
+      var query = "?page=".concat(this.page, "&sort_by=").concat(this.sort);
+      var url = "/profiles/".concat(this.profile_user.username, "/subscriptions").concat(query);
+      axios.get(url).then(function (res) {
+        var threads = [];
+        var old_threads = _this.subscribePosts;
+        threads = [].concat(_toConsumableArray(old_threads), _toConsumableArray(res.data.threads));
+        _this.subscribePosts = threads;
+        _this.loading = false;
       });
     }
   }
@@ -2539,10 +2571,45 @@ var render = function() {
     _c(
       "div",
       { staticClass: "post-body" },
-      _vm._l(_vm.sortPosts, function(thread, index) {
-        return _c("single-thread", { key: index, attrs: { thread: thread } })
-      }),
-      1
+      [
+        _vm._l(_vm.posts, function(thread, index) {
+          return _c("single-thread", { key: index, attrs: { thread: thread } })
+        }),
+        _vm._v(" "),
+        _vm.page < _vm.totalPage
+          ? _c("div", { staticClass: "load-more-btn" }, [
+              _vm.loading
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button", disabled: "" }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "spinner-border spinner-border-sm",
+                        attrs: { role: "status", "aria-hidden": "true" }
+                      }),
+                      _vm._v("\n      Loading...\n      ")
+                    ]
+                  )
+                : _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-sm",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.loadMore($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Load More")]
+                  )
+            ])
+          : _vm._e()
+      ],
+      2
     )
   ])
 }

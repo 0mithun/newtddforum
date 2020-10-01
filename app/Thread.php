@@ -12,7 +12,7 @@ use ScoutElastic\Searchable;
 class Thread extends Model
 {
     //use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
-    use RecordsActivity, Notifiable, Favoritable, Likeable, Searchable;
+    use  Notifiable, Favoritable, Likeable, Searchable;
 
     protected $indexConfigurator = ThreadsIndexConfigurator::class;
 
@@ -61,7 +61,7 @@ class Thread extends Model
      * @var array
      */
     // protected $appends = ['isSubscribedTo','isReported','isFavorited','excerpt','threadImagePath','path'];
-    protected $appends = ['excerpt', 'threadImagePath', 'imageColor', 'path', 'isLiked', 'isDesliked', 'splitCategory', 'topRated', 'tagNameList'];
+    protected $appends = ['excerpt','isSubscribedTo',  'threadImagePath', 'imageColor', 'path', 'isLiked', 'isDesliked', 'splitCategory', 'topRated', 'tagNameList'];
 
     /**
      * The attributes that should be cast to native types.
@@ -81,6 +81,7 @@ class Thread extends Model
 
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
+            $thread->subscriptions->each->delete();
         });
 
         static::created(function ($thread) {
@@ -213,6 +214,8 @@ class Thread extends Model
     {
         return $this->hasMany(ThreadSubscription::class);
     }
+
+    
 
     /**
      * Determine if the current user is subscribed to the thread.
