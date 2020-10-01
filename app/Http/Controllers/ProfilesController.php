@@ -26,6 +26,10 @@ class ProfilesController extends Controller {
         $authUser = auth()->user();
         $friend = User::where( 'username', $user )
             ->first();
+        
+            if(!$friend){
+                return abort(404);
+            }
 
         if ( $authUser->isBlockedBy( $friend ) || $authUser->hasBlocked( $friend ) ) {
             return redirect( '/' );
@@ -266,6 +270,10 @@ class ProfilesController extends Controller {
         $user = request( 'user' );
         $getUserInfo = User::where( 'username', $user )->first();
 
+        if(!$getUserInfo){
+            return abort(404);
+        }
+
         $subscriptionsId = DB::table( 'thread_subscriptions' )
             ->where( 'user_id', $getUserInfo->id )
             ->get()
@@ -296,6 +304,10 @@ class ProfilesController extends Controller {
         $user = request( 'user' );
         $getUserInfo = User::where( 'username', $user )->first();
 
+        if(!$getUserInfo){
+            return abort(404);
+        }
+
         $count = Reply::where('user_id', $getUserInfo->id)->count();
 
         return response()->json( ['replies_count' => $count] );
@@ -309,6 +321,9 @@ class ProfilesController extends Controller {
     public function myFavoritesShow() {
         $user = request( 'user' );
         $getUserInfo = User::where( 'username', $user )->first();
+        if(!$getUserInfo){
+            return abort(404);
+        }
         $auth_user = auth()->user();
         $favoritesId = DB::table( 'favorites' )
             ->where( 'user_id', $getUserInfo->id )
@@ -349,6 +364,10 @@ class ProfilesController extends Controller {
         $auth_user = auth()->user();
         $getUserInfo = User::with( 'userprivacy' )->where( 'username', $user )->first();
 
+        if(!$getUserInfo){
+            return abort(404);
+        }
+
         $threads = Thread::where('user_id', $getUserInfo->id);
 
         if($user != $auth_user->username || $auth_user->id != 1 ){
@@ -376,6 +395,10 @@ class ProfilesController extends Controller {
     public function myLikesShow() {
         $user = request( 'user' );
         $getUserInfo = User::where( 'username', $user )->first();
+
+        if(!$getUserInfo){
+            return abort(404);
+        }
 
         $likesId = DB::table( 'likes' )
             ->where( 'user_id', $getUserInfo->id )
@@ -406,6 +429,9 @@ class ProfilesController extends Controller {
     public function friendList() {
         $user = request( 'user' );
         $userInfo = User::where( 'username', $user )->first();
+        if(!$userInfo){
+            return abort(404);
+        }
 
         $friendLists = $userInfo->getFriends();
 

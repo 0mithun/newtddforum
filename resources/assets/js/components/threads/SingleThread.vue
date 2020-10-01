@@ -2,12 +2,20 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="thread-tags">
-        <a
+        <!-- <a
           :href="'/threads/'+ tag.toLowerCase().trim()"
           class="tag-name"
           v-for="(tag, index) in thread.tagNameList"
           :key="index"
-        >#{{ tag.toLowerCase().trim() }}</a>
+        >#{{ tag.toLowerCase().trim() }}</a> -->
+
+          <a
+          :href="'/threads/'+ thread.channel.name.toLowerCase().trim()"
+          class="tag-name"
+        >#{{ thread.channel.name }}</a>
+
+
+        
       </div>
       <div class="thread_title">
         <a :href="thread.path">
@@ -38,35 +46,6 @@
       </div>
 
       <div v-html="thread.excerpt" class="thread_excerpt"></div>
-      <!-- 
-      <div class="thread_creator">
-        <a href="#" class="creator_name" v-if="thread.anonymous == 1">
-          <img
-            src="/images/default.png"
-            alt="anonymous"
-            width="25"
-            height="25"
-            class="avatar-photo"
-          />
-          <user-online :user="thread.creator"></user-online>anonymous
-        </a>
-        <a
-          :href="'/profiles/' + thread.creator.username"
-          class="creator_name"
-          v-else
-        >
-          <img
-            :src="thread.creator.profileAvatarPath"
-            :alt="thread.creator.name"
-            width="25"
-            height="25"
-            class="avatar-photo"
-          />
-          <user-online :user="thread.creator"></user-online>
-          {{ thread.creator.name }}
-        </a>
-      </div>-->
-
       <div class="tools-row">
         <vote-emoji-list :thread="thread" size="small" position="top"></vote-emoji-list>
         <div class="col-md-3 social-share-btn">

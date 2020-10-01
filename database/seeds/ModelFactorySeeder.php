@@ -13,11 +13,15 @@ class ModelFactorySeeder extends Seeder
     {
         factory(App\Admin::class)->create();
         $user = factory(App\User::class)->create([
-            'name'           => 'Jason Payne',
-            'first_name'     => 'Jason',
-            'last_name'      => 'Payne',
+            'name'           => 'Anecdotage Admins',
+            'first_name'     => 'Anecdotage',
+            'last_name'      => 'Admins',
             'email'          => 'kakooljay@gmail.com',
-            'username'       => 'jasonpayne',
+            'username'       => 'anecdotage',
+            'lat' => 40.71,
+            'lon' => -73.93,
+            'city'           => 'New York',
+            'country'        => 'USA',
             'password'       => bcrypt('secret'),
             'remember_token' => str_random(10),
             'confirmed'      => true,

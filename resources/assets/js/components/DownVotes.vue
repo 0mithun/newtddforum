@@ -29,10 +29,11 @@ export default {
     };
   },
   created() {
-    window.events.$on("isLiked", (id) => {
-      if (this.thread.id == id) {
-        this.isDesliked = false;
-      }
+     eventBus.$on("threadDislikeAdd-"+this.thread.id, (id) => {
+      this.isDesliked = true;
+    });
+     eventBus.$on("threadDislikeDelete-"+this.thread.id, (id) => {
+      this.isDesliked = false;
     });
   },
 
@@ -59,15 +60,17 @@ export default {
         this.redirectToLogin();
       }
       axios.post("/thread/" + this.thread.id + "/dislikes").then((res) => {
+        eventBus.$emit("threadLikeDelete-" + this.thread.id, this.thread.id);
         if (this.isDesliked) {
           this.isDesliked = false;
+           eventBus.$emit("threadDislikeDelete-" + this.thread.id, this.thread.id);
         } else {
           this.isDesliked = true;
-          window.events.$emit("isDesliked", this.thread.id);
+           eventBus.$emit("threadDislikeAdd-" + this.thread.id, this.thread.id);
         }
-
-        eventBus.$emit("threadVoted-" + this.thread.id, this.thread.id);
+         flash("You are successfully down vote this thread", "success");
       });
+
     },
     redirectToLogin() {
       window.location = "/redirect-to?page=" + location.pathname;
