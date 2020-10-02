@@ -82,7 +82,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle profile-avatar" data-toggle="dropdown" role="button" aria-haspopup="true"
                         aria-expanded="false">
-                        <img class="profile-photo " src="{{ asset('images/default.png') }}" alt=""> {{ Auth::user()->name  }}
+                        {{-- <img class="profile-photo " src="{{ asset('images/default.png') }}" alt=""> {{ Auth::user()->name  }} --}}
+                        <img class="profile-photo " src="{{ asset('images/default.png') }}" alt=""> Me
                         <span class="caret"></span></a>
 
                         <ul class="dropdown-menu" role="menu">

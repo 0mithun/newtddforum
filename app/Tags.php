@@ -71,6 +71,7 @@ class Tags extends Model
     public function getProfileAvatarPathAttribute($avatar)
     {
         $avatar = $this->photo == '' ? 'images/avatars/default.png' : $this->photo;
+        //https://www.maxpixel.net/static/photo/1x/Geometric-Rectangles-Background-Shapes-Pattern-4973341.jpg
         // $avatar = 'images/avatars/default.png';
 
         return asset($avatar);

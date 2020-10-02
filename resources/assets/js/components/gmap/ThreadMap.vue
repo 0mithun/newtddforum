@@ -1,5 +1,6 @@
 <template>
-  <GmapMap :center="mapCenter" :zoom="zoom" map-type-id="terrain" style="width: 100%; height: 85vh">
+  <GmapMap @click="clicked" :center="mapCenter" :zoom="zoom" map-type-id="terrain" style="width: 100%; height: 85vh" :options="{   zoomControl: true,
+}">
     <GmapMarker
       :key="index"
       v-for="(m, index) in markers"
@@ -71,6 +72,18 @@ export default {
     };
   },
   methods: {
+    clicked(e){
+      console.log(e.latLng.lat());
+      console.log(e.latLng.lng());
+
+      this.mapCenter.lat = e.latLng.lat();
+      this.mapCenter.lng = e.latLng.lng();
+
+      this.center.lat = e.latLng.lat();
+      this.center.lng = e.latLng.lng();
+
+      this.fetchLocations();
+    },
     fetchLocations() {
       if (this.center.lat == NaN || this.center.lng == NaN) {
         alert("You must provide your location first");
@@ -83,6 +96,9 @@ export default {
           query: this.query,
         })
         .then((res) => {
+          console.log(res.data);
+          // console.log('sama');
+
           let data = res.data;
           if (res.data.status == "failed") {
             alert("You must provide your location first");

@@ -39,7 +39,7 @@ export default {
   created() {
     this.query = location.search;
     this.radius = this.defaultradius;
-    this.fetchNearestLocations();
+    // this.fetchNearestLocations();
   },
   methods: {
     fetchNearestLocations() {
@@ -60,6 +60,7 @@ export default {
           let center = this.center;
           let zoom = 6;
 
+          console.log(res.data);
           eventBus.$emit("markers_fetched", data);
           eventBus.$emit("change_center", center);
           if (this.radius == 0) {
