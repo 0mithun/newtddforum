@@ -15,7 +15,10 @@ trait ThreadPrivacy{
             } else if ($user->id == 1) {
                 // $threadsId =  $threads->pluck('id')->all();
             } else if ($privacy->restricted_13 == 1) {
-                $threads->where('age_restriction', '!=', 18)->orWhere('user_id', $user->id);
+                $threads->where(function($query) use($user){
+                    $query->where('age_restriction', '!=', 18)->orWhere('user_id', $user->id);
+                });
+                
             } else {
                 // $threads->where('age_restriction', 0)->orWhere('user_id', $user->id);
                 $threads->where(function($query)use($user){      
@@ -26,7 +29,6 @@ trait ThreadPrivacy{
              $threads->where('age_restriction', 0);
         }
 
-        // return $threadsId;
     }
 
     public function generateCurrentPageResults($threads, $perPage)
