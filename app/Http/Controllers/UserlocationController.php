@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
+use App\Traits\ThreadPrivacy;
 use DB;
 use Illuminate\Http\Request;
 
 class UserlocationController extends Controller {
+    use ThreadPrivacy;
     public function show() {
         if ( auth()->check() ) {
             $auth_user = auth()->user();
@@ -50,6 +52,7 @@ class UserlocationController extends Controller {
      */
 
     public function getAllThread() {
+        // return 'hello';
         $query = request( 'query' );
         $search = '';
         if ( $query != '' ) {
@@ -64,61 +67,39 @@ class UserlocationController extends Controller {
             $results = Thread::
                 where( 'title', "LIKE", "%$search%" )
                 ->orWhere( 'body', "LIKE", "%$search%" )
-                ->get();
+                // ->get()
+            ;
         } else {
             $center = request( 'center' );
             $lat = $center['lat'];
             $lng = $center['lng'];
 
-            if ( request( 'radius' ) ) {
-                $distance = request( 'radius' ) ?? 500;
+            $distance = request( 'radius' ) ?? 200;
+            $results = $this->search($lat,$lng,$distance);
 
-                $results = $this->search($lat,$lng,$distance);
+            // if ( request( 'radius' ) ) {
+            //     $distance = request( 'radius' ) ?? 500;
+            //     $results = $this->search($lat,$lng,$distance);
                 
-                // $results = DB::select( DB::raw( 'SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance' ) );
-                // $threadsId = DB::select( DB::raw( 'SELECT id, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance' ) );
+            //     // $results = DB::select( DB::raw( 'SELECT *, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance' ) );
+            //     // $threadsId = DB::select( DB::raw( 'SELECT id, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(lat) ) ) ) AS distance FROM threads HAVING distance < ' . $distance . ' ORDER BY distance' ) );
                
 
-            } else {
-                $results = Thread::all();
-            }
+            // } else {
+            //     $results = Thread::latest();
+            // }
         }
+        $this->filterThreads($results);
 
+        $results->whereNotNull('lat')->whereNotNull('lng');
 
-        if ( auth()->check() ) {
-            $auth_user = auth()->user();
-            $privacy = $auth_user->userprivacy;
+        $threads = $results->get();
+        $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
+        
+       $threads = $this->convertToObject($threads);
 
-            $filterResults = $results->filter( function ( $item ) use ( $auth_user, $privacy ) {
-                if ( $item->lat == null || $item->lng == null ) {
-                    return false;
-                }
-                if ( $privacy->restricted_18 == 1 ) {
-                    return true;
-                } else if ( $auth_user->id == 1 ) {
-                    return true;
-                } else if ( $item->user_id == $auth_user->id ) {
-                    return true;
-                } else if ( $item->age_restriction == 0 ) {
-                    return true;
-                } else if ( $item->age_restriction == 13 && $privacy->restricted_13 == 1 ) {
-                    return true;
-                }
-
-                return false;
-
-            } )->values();
-
-        } else {
-            $filterResults = collect( $results )
-                ->filter( function ( $item ) {
-                    if ( $item->lat == null || $item->lng == null ) {
-                        return false;
-                    }
-
-                    return $item->age_restriction == 0;
-                } )->values();
-        }
+       
+        $filterResults = $threads;
 
         $markers = collect( $filterResults )->map( function ( $item, $key ) {
             return [
@@ -146,7 +127,7 @@ class UserlocationController extends Controller {
         // ->lists('id')
         ->pluck('id')
         ;
-        return Thread::whereIn('id', $threadsId)->get();
+        return Thread::whereIn('id', $threadsId);
     }
 
 }
