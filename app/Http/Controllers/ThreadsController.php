@@ -52,6 +52,7 @@ class ThreadsController extends Controller
     {   
         $threads = $this->getThreads($channel, $filters);
         $totalRecords = $threads->count();
+        dump($totalRecords);
         dump($threads->get());
         $threads = $this->generateCurrentPageResults($threads, $this->perPage); 
         dump($threads);      
