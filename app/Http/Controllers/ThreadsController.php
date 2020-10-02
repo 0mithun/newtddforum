@@ -53,9 +53,10 @@ class ThreadsController extends Controller
         $threads = $this->getThreads($channel, $filters);
         $totalRecords = $threads->count();
         
-        $threads = $this->generateCurrentPageResults($threads, $this->perPage);        
+        $threads = $this->generateCurrentPageResults($threads, $this->perPage); 
+        dump($threads);      
         $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
-        
+        dump($threads);
        $threads = $this->convertToObject($threads);
 
        dump($totalRecords);
