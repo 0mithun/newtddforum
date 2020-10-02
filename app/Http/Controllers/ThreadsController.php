@@ -293,7 +293,7 @@ class ThreadsController extends Controller
         // $threads = Thread::latest()->filter( $filters );
 
         $threads = Thread::latest();
-        // $this->filterThreads($threads);
+        $this->filterThreads($threads);
 
         if (request()->path() == '/') {
             $threads->getQuery()->orders = [];
