@@ -57,6 +57,9 @@ class ThreadsController extends Controller
         $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
         
        $threads = $this->convertToObject($threads);
+
+       dump($totalRecords);
+       dump($threads);
         
         if (request()->wantsJson()) {
             return $threads;
