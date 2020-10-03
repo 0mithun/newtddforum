@@ -23,8 +23,8 @@
             </button>
             <h4 class="modal-title" id="gridSystemModalLabel">Thread Source</h4>
           </div>
-          <div class="modal-body">
-            {{ thread.source }}
+          <div class="modal-body" v-html="source">
+            
           </div>
         </div>
       </div>
@@ -34,33 +34,7 @@
 
 <script>
 export default {
-  props: {
-    thread: {
-      type: Object,
-    },
-  },
-
-  data() {
-    return {
-      isLiked: this.thread.isLiked,
-    };
-  },
-  created() {},
-
-  computed: {
-    signedIn() {
-      return window.App.user ? true : false;
-    },
-  },
-
-  methods: {
-    report() {
-      if (!this.signedIn) {
-        return false;
-      }
-      axios.post("/thread/" + this.thread.id + "/likes").then((res) => {});
-    },
-  },
+  props: ['source']
 };
 </script>
 

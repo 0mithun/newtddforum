@@ -257,18 +257,18 @@
                     tags: '',
                     title: this.thread.title,
                     body: this.thread.body,
-                    source: this.thread.source,
-                    location: this.thread.location,
+                    source: this.thread.source == 'null' ? '': this.thread.source ,
+                    location: this.thread.location == 'null' ? '':this.thread.location ,
                     cno: {
                         famous: false,
                         celebrity: false
                     },
-                    main_subject: this.thread.main_subject,
+                    main_subject: this.thread.main_subject =='null' ? '':  this.thread.main_subject ,
                     image_path:null,
                     age_restriction: this.thread.age_restriction,
-                    wiki_info_page_url: this.thread.wiki_info_page_url,
+                    wiki_info_page_url: this.thread.wiki_info_page_url == 'null' ? '': this.thread.wiki_info_page_url,
                     wiki_image_copyright_free: false,
-                    wiki_image_description: this.thread.wiki_image_description,
+                    wiki_image_description: this.thread.wiki_image_description == 'null' ? '' : this.thread.wiki_image_description ,
                     anonymous: this.thread.anonymous
                 },
                 

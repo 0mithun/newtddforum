@@ -18,7 +18,7 @@ class EmojiTableSeeder extends Seeder
             'inspiring',
             'amazing',
             'dumb',
-            'famous',
+            'cool',
         ];
 
         foreach ($emojis as $emoji){
