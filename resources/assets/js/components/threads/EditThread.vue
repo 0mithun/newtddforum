@@ -30,7 +30,7 @@
                             <label for="tags" class="control-label">
                             Tags
                             </label>
-                            <v-select taggable push-tags  v-model="form.tags" :options="alltags"  multiple @input="tagChange"></v-select>
+                            <v-select taggable push-tags  v-model="form.tags" :options="alltags"  multiple></v-select>
                         </div>
                     </div>
                 </div>
@@ -178,7 +178,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">                               
-                                <button class="btn btn-primary" type="submit" :disabled="form.wiki_info_page_url !='' && form.wiki_image_copyright_free != true">Update Thread</button>
+                                <!-- <button class="btn btn-primary" type="submit" :disabled="form.wiki_info_page_url !='' && form.wiki_image_copyright_free != true">Update Thread</button> -->
+                                <button class="btn btn-primary" type="submit">Update Thread</button>
                             </div>
                         </div>
                     </div>
@@ -279,11 +280,10 @@
         },
         methods:{
             formatedTags(){
-                const tags = []
-                for (let tag of this.thread.tags){
-                    tags.push(tag.name)
-                }               
-                this.form.tags = tags;;
+                let tag_names = this.thread.tag_names;
+                if(tag_names != null){
+                    this.form.tags = tag_names.split(",");
+                }
             },
             OpenImgUpload(){
                 $('#image_path').trigger('click')

@@ -30,7 +30,7 @@
                             <label for="tags" class="control-label">
                             Tags
                             </label>
-                            <v-select taggable push-tags  v-model="form.tags" :options="alltags"  multiple @input="tagChange"></v-select>
+                            <v-select taggable push-tags  v-model="form.tags" :options="alltags"  multiple ></v-select>
                         </div>
                     </div>
                 </div>
@@ -273,24 +273,24 @@
             OpenImgUpload(){
                 $('#image_path').trigger('click')
             },
-            tagChange(){
-                let len = this.form.tags.length;
-                if(len>0){
-                    let lastIndex = this.form.tags[len-1];
+            // tagChange(){
+            //     let len = this.form.tags.length;
+            //     if(len>0){
+            //         let lastIndex = this.form.tags[len-1];
                     
-                    let separateItem = lastIndex.split(/[\s,]+/);
-                    if(separateItem.length>0){
-                        this.form.tags.pop()
-                        for(let i = 0; i <separateItem.length; i++){
-                            if(separateItem[i].length>0){
-                                this.form.tags.push(separateItem[i]);
-                            }
+            //         let separateItem = lastIndex.split(/[\s,]+/);
+            //         if(separateItem.length>0){
+            //             this.form.tags.pop()
+            //             for(let i = 0; i <separateItem.length; i++){
+            //                 if(separateItem[i].length>0){
+            //                     this.form.tags.push(separateItem[i]);
+            //                 }
                             
-                        }
-                    }
-                }              
+            //             }
+            //         }
+            //     }              
                 
-            },
+            // },
             onFileSelected(event){
                 if (! event.target.files.length) return;
                 

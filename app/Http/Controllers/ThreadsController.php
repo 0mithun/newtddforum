@@ -110,6 +110,8 @@ class ThreadsController extends Controller
             return \strtolower($tag);
         });
 
+        $tags = $this->convert_from_latin1_to_utf8_recursively($tags->all());
+
         $channel = Channel::select(['id', 'name'])->orderBy('name', 'ASC')->get();
         $pageTitle = 'Add new Thread';
 
@@ -181,10 +183,14 @@ class ThreadsController extends Controller
     public function edit(Thread $thread)
     {
         $tags = Tags::orderBy('name', 'ASC')->get()->pluck('name');
+
         $tags = $tags->map(function ($tag) {
             return \strtolower($tag);
         });
+     
+        $tags = $this->convert_from_latin1_to_utf8_recursively($tags->all());
 
+        
         $channel = Channel::select(['id', 'name'])->orderBy('name', 'ASC')->get();
 
         $pageTitle = 'Edit: ' . $thread->title;
@@ -217,13 +223,13 @@ class ThreadsController extends Controller
             'anonymous'              => request('anonymous', 0),
         ];
 
-        if ($request->location != null) {
-            $location = $this->getGeocodeing($request->location);
-            if ($location['accuracy'] != 'result_not_found') {
-                $data['lat'] = $location['lat'];
-                $data['lng'] = $location['lng'];
-            }
-        }
+        // if ($request->location != null) {
+        //     $location = $this->getGeocodeing($request->location);
+        //     if ($location['accuracy'] != 'result_not_found') {
+        //         $data['lat'] = $location['lat'];
+        //         $data['lng'] = $location['lng'];
+        //     }
+        // }
 
         $channel = '';
         if ($request->has('channel') && $request->channel != null) {
@@ -447,8 +453,10 @@ class ThreadsController extends Controller
     public function attachTags($request, $thread)
     {
         $tags = [];
+        $tag_names = '';
         if ($request->has('tags') && $request->tags != null) {
             $tags = explode(',', $request->tags);
+            $tag_names = $request->tags;
         }
 
         if ($request->has('channel') && $request->channel != null) {
@@ -481,6 +489,10 @@ class ThreadsController extends Controller
         }
 
         $thread->tags()->sync($tag_ids);
+        if($tag_names != ''){
+            $thread->tag_names = $tag_names;
+            $thread->save();
+        }
     }
 
     /**

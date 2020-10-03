@@ -61,7 +61,7 @@ class Thread extends Model
      * @var array
      */
     // protected $appends = ['isSubscribedTo','isReported','isFavorited','excerpt','threadImagePath','path'];
-    protected $appends = ['excerpt','isSubscribedTo',  'threadImagePath', 'imageColor', 'path', 'isLiked', 'isDesliked', 'splitCategory', 'topRated', 'tagNameList'];
+    protected $appends = ['excerpt',  'threadImagePath', 'imageColor', 'path', 'isLiked', 'isDesliked', 'splitCategory', 'topRated', 'tagNameList'];
 
     /**
      * The attributes that should be cast to native types.
@@ -85,7 +85,7 @@ class Thread extends Model
         });
 
         static::created(function ($thread) {
-            $thread->update(['slug' => $thread->title]);
+            $thread->update(['slug' => strip_tags( $thread->title)]);
 
 
             $tags = $thread->tags->pluck('name')->all();
@@ -96,11 +96,15 @@ class Thread extends Model
         });
 
         static::updated(function ($thread) {
-            $tags = $thread->tags->pluck('name')->all();
-            if (count($tags) > 0) {
-                $tagNameList = implode(',', $tags);
-                $thread->update(['tag_names' => $tagNameList]);
-            }
+            // $thread->update(['slug' => strip_tags( $thread->title)]);
+            info('calling');
+
+            // $tags = $thread->tags->pluck('name')->all();
+            // info('tag names:', $tags);
+            // if (count($tags) > 0) {
+            //     $tagNameList = implode(',', $tags);
+            //     $thread->update(['tag_names' => $tagNameList]);
+            // }
         });
     }
 
