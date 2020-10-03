@@ -30,7 +30,14 @@
                             <label for="tags" class="control-label">
                             Tags
                             </label>
-                            <v-select taggable push-tags  v-model="form.tags" :options="alltags"  multiple></v-select>
+                            <v-select taggable push-tags  v-model="form.tags" :options="alltags"  multiple @search="searchTag">
+                                <template v-slot:no-options="{ search, searching }">
+                                    <template v-if="searching">
+                                        No results found for <em>{{ search }}</em>.
+                                    </template>
+                                    <em style="opacity: 0.5;" v-else>Start typing to search for a tags.</em>
+                                </template>
+                            </v-select>
                         </div>
                     </div>
                 </div>
@@ -220,10 +227,6 @@
     import {Typeahead} from 'uiv'
     export default {
         props: {
-            alltags:{
-                type: Array,
-                require: true,
-            },
             allchannels:{
                 type: Array,
                 require: true
@@ -242,6 +245,7 @@
         
         data(){
             return {
+                alltags:[],
                 errors: [],
                 show_more_fields: false,
                 threadThumb: '',
@@ -279,6 +283,16 @@
             this.formatedTags();
         },
         methods:{
+            searchTag(search, loading){
+                loading(true)
+                axios.get(`/threads/get-all-tags?q=${search}`).then(res=>{
+                    let unique = res.data.filter((value,index,arr)=>{
+                        return arr.indexOf(value) == index;
+                    });
+                    this.alltags = unique;
+                    loading(false)
+                })
+            },
             formatedTags(){
                 let tag_names = this.thread.tag_names;
                 if(tag_names != null){
@@ -288,24 +302,7 @@
             OpenImgUpload(){
                 $('#image_path').trigger('click')
             },
-            tagChange(){
-                let len = this.form.tags.length;
-                if(len>0){
-                    let lastIndex = this.form.tags[len-1];
-                    
-                    let separateItem = lastIndex.split(/[\s,]+/);
-                    if(separateItem.length>0){
-                        this.form.tags.pop()
-                        for(let i = 0; i <separateItem.length; i++){
-                            if(separateItem[i].length>0){
-                                this.form.tags.push(separateItem[i]);
-                            }
-                            
-                        }
-                    }
-                }              
-                
-            },
+            
             onFileSelected(event){
                 if (! event.target.files.length) return;
                 

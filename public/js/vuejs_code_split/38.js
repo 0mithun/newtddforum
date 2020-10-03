@@ -227,14 +227,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    alltags: {
-      type: Array,
-      require: true
-    },
     allchannels: {
       type: Array,
       require: true
@@ -251,6 +254,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      alltags: [],
       thread: null,
       errors: [],
       show_more_fields: false,
@@ -283,26 +287,23 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    searchTag: function searchTag(search, loading) {
+      var _this = this;
+
+      loading(true);
+      axios.get("/threads/get-all-tags?q=".concat(search)).then(function (res) {
+        var unique = res.data.filter(function (value, index, arr) {
+          return arr.indexOf(value) == index;
+        });
+        _this.alltags = unique;
+        loading(false);
+      });
+    },
     OpenImgUpload: function OpenImgUpload() {
       $('#image_path').trigger('click');
     },
-    // tagChange(){
-    //     let len = this.form.tags.length;
-    //     if(len>0){
-    //         let lastIndex = this.form.tags[len-1];
-    //         let separateItem = lastIndex.split(/[\s,]+/);
-    //         if(separateItem.length>0){
-    //             this.form.tags.pop()
-    //             for(let i = 0; i <separateItem.length; i++){
-    //                 if(separateItem[i].length>0){
-    //                     this.form.tags.push(separateItem[i]);
-    //                 }
-    //             }
-    //         }
-    //     }              
-    // },
     onFileSelected: function onFileSelected(event) {
-      var _this = this;
+      var _this2 = this;
 
       if (!event.target.files.length) return;
       this.image_path_error = false;
@@ -323,7 +324,7 @@ __webpack_require__.r(__webpack_exports__);
 
       reader.onload = function (e) {
         var src = e.target.result;
-        _this.threadThumb = src;
+        _this2.threadThumb = src;
       };
     },
     appendData: function appendData() {
@@ -353,20 +354,20 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addNewThread: function addNewThread() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.errors = [];
       this.appendData();
       axios.post('/threads', this.formData).then(function (res) {
-        _this2.thread = res.data.thread;
+        _this3.thread = res.data.thread;
         $('#shareThreadModal').modal('show');
         flash('Thread Created Successfully');
       })["catch"](function (err) {
-        _this2.errors = err.response.data.errors;
+        _this3.errors = err.response.data.errors;
       });
     },
     shareThread: function shareThread() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('/thread/share', {
         thread: this.thread.id,
@@ -374,7 +375,7 @@ __webpack_require__.r(__webpack_exports__);
         share_on_twitter: this.share_on_twitter
       }).then(function (res) {
         $('#shareThreadModal').modal('hide');
-        window.location = _this3.thread.path;
+        window.location = _this4.thread.path;
       })["catch"](function (err) {});
     },
     closeShareModal: function closeShareModal() {
@@ -576,6 +577,29 @@ var render = function() {
                       options: _vm.alltags,
                       multiple: ""
                     },
+                    on: { search: _vm.searchTag },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "no-options",
+                        fn: function(ref) {
+                          var search = ref.search
+                          var searching = ref.searching
+                          return [
+                            searching
+                              ? [
+                                  _vm._v(
+                                    "\n                                    No results found for "
+                                  ),
+                                  _c("em", [_vm._v(_vm._s(search))]),
+                                  _vm._v(".\n                                ")
+                                ]
+                              : _c("em", { staticStyle: { opacity: "0.5" } }, [
+                                  _vm._v("Start typing to search for a tags.")
+                                ])
+                          ]
+                        }
+                      }
+                    ]),
                     model: {
                       value: _vm.form.tags,
                       callback: function($$v) {
