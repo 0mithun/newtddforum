@@ -359,7 +359,7 @@ export default {
     },
   },
   created() {
-    this.allThreads = this.threads;
+    this.allThreads = Object.values(this.threads);
     this.getAllEmojis();
     this.getAllTags();
     this.setCurrentPage();
@@ -388,7 +388,8 @@ export default {
       if (this.filterOpen) {
         return this.allThreads.length;
       }
-      return this.threads.length;
+      // return this.threads.length;
+      return this.allThreads.length;
     },
     mapUrl() {
       return `/map/show?query=${this.q}`;
@@ -426,7 +427,7 @@ export default {
       this.paginatedItems = [];
       this.page = 1;
 
-      let data = this.threads;
+      let data = Object.values(this.threads);
 
       if (this.filter_rated.length > 0) {
         data = this.filterByRated(this.filter_rated, data);

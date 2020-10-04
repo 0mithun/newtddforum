@@ -440,7 +440,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.allThreads = this.threads;
+    this.allThreads = Object.values(this.threads);
     this.getAllEmojis();
     this.getAllTags();
     this.setCurrentPage();
@@ -463,9 +463,10 @@ __webpack_require__.r(__webpack_exports__);
     postsCount: function postsCount() {
       if (this.filterOpen) {
         return this.allThreads.length;
-      }
+      } // return this.threads.length;
 
-      return this.threads.length;
+
+      return this.allThreads.length;
     },
     mapUrl: function mapUrl() {
       return "/map/show?query=".concat(this.q);
@@ -497,7 +498,7 @@ __webpack_require__.r(__webpack_exports__);
     filterThreads: function filterThreads() {
       this.paginatedItems = [];
       this.page = 1;
-      var data = this.threads;
+      var data = Object.values(this.threads);
 
       if (this.filter_rated.length > 0) {
         data = this.filterByRated(this.filter_rated, data);

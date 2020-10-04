@@ -48,5 +48,13 @@ class ThreadSearchRule extends SearchRule
                 // ]
             ]
         ];
+
+        return [
+            'must' => [
+                'query_string' => [
+                    'query' => $this->builder->query
+                ]
+            ]
+         ];
     }
 }
