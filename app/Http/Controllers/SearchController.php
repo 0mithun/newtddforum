@@ -7,6 +7,7 @@ use App\Traits\ThreadPrivacy;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rules\Unique;
 
 class SearchController extends Controller
 {
@@ -19,12 +20,23 @@ class SearchController extends Controller
         }
         $threads = $this->filterSearch($query);
 
+        $tags = [];
+        foreach($threads as $thread){
+            $split_tags = explode(',',  $thread->tag_names);
+            $tags = array_merge($tags, $split_tags);
+        }
+        $new_array = array_unique($tags);
+        $tags = $this->convert_from_latin1_to_utf8_recursively($new_array);
+// dd($tags);
+
+        // $tags = array_unique($tags);
         $pageTitle = 'Search Threads';
 
         return view('threads.search', [
             'threads'   =>  $threads,
             'query'     => $query,
             'pageTitle' => $pageTitle,
+            'tags'      => $tags
         ]);
 
         // if (request()->expectsJson()) {

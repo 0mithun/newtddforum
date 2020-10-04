@@ -315,7 +315,7 @@ import SearchPagination from "./SearchPagination";
 import moment, { max } from "moment";
 
 export default {
-  props: ["threads", "query"],
+  props: ["threads", "query", 'all_tags'],
   components: {
     SearchPagination,
   },
@@ -334,7 +334,7 @@ export default {
       filter_tags: [],
       filter_length: [],
       emojis: "",
-      tags: [],
+      tags: Object.values(this.all_tags),
 
       page: 1,
       perPage: 10,
@@ -361,7 +361,7 @@ export default {
   created() {
     this.allThreads = Object.values(this.threads);
     this.getAllEmojis();
-    this.getAllTags();
+    // this.getAllTags();
     this.setCurrentPage();
     this.paginate(this.perPage, this.page);
   },
@@ -522,11 +522,11 @@ export default {
 
     filterByTags(filter, data) {
       let newThreads = _.filter(data, (thread) => {
-        return thread.tags.length > 0;
+        return thread.tagNameList.length > 0;
       });
       let filterThreads = _.filter(newThreads, (thread) => {
-        for (let i = 0; i < thread.tags.length; i++) {
-          if (_.includes(filter, thread.tags[i].name.toLowerCase())) {
+        for (let i = 0; i < thread.tagNameList.length; i++) {
+          if (_.includes(filter, thread.tagNameList[i].toLowerCase())) {
             return true;
           }
         }

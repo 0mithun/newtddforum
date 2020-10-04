@@ -398,7 +398,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["threads", "query"],
+  props: ["threads", "query", 'all_tags'],
   components: {
     SearchPagination: _SearchPagination__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -416,7 +416,7 @@ __webpack_require__.r(__webpack_exports__);
       filter_tags: [],
       filter_length: [],
       emojis: "",
-      tags: [],
+      tags: Object.values(this.all_tags),
       page: 1,
       perPage: 10,
       paginatedItems: this.allThreads
@@ -441,8 +441,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.allThreads = Object.values(this.threads);
-    this.getAllEmojis();
-    this.getAllTags();
+    this.getAllEmojis(); // this.getAllTags();
+
     this.setCurrentPage();
     this.paginate(this.perPage, this.page);
   },
@@ -597,12 +597,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     filterByTags: function filterByTags(filter, data) {
       var newThreads = _.filter(data, function (thread) {
-        return thread.tags.length > 0;
+        return thread.tagNameList.length > 0;
       });
 
       var filterThreads = _.filter(newThreads, function (thread) {
-        for (var i = 0; i < thread.tags.length; i++) {
-          if (_.includes(filter, thread.tags[i].name.toLowerCase())) {
+        for (var i = 0; i < thread.tagNameList.length; i++) {
+          if (_.includes(filter, thread.tagNameList[i].toLowerCase())) {
             return true;
           }
         }
