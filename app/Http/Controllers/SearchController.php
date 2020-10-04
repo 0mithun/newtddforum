@@ -92,7 +92,11 @@ class SearchController extends Controller
         $tags_array = [];
         $other_array = [];
         foreach($filterThreads as $thread){
-            $regex = "/({$query})/i";
+            // $regex = "/({$query})/i";
+            $regex = "/\s?({$query})/i";
+            
+           
+
              if(preg_match($regex, $thread->title, $matches))
              {
                 $title_array[] = $thread;
@@ -112,6 +116,9 @@ class SearchController extends Controller
         }   
 
         $newThreads = array_merge($title_array, $body_array, $tags_array);
+        
+
+
         $threads = $this->convert_from_latin1_to_utf8_recursively($newThreads);
         $threads = $this->convertToObject($threads);
         return $threads;

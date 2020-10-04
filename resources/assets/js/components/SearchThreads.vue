@@ -524,11 +524,20 @@ export default {
       let newThreads = _.filter(data, (thread) => {
         return thread.tagNameList.length > 0;
       });
+     
       let filterThreads = _.filter(newThreads, (thread) => {
-        for (let i = 0; i < thread.tagNameList.length; i++) {
-          if (_.includes(filter, thread.tagNameList[i].toLowerCase())) {
-            return true;
-          }
+         let found = false;
+        for (let i = 0; i < thread.tagNameList.length; i++) {          
+          if (_.includes(filter, thread.tagNameList[i].trim().toLowerCase())) {
+            found = true;
+            break;
+          }          
+        }
+        if(found){
+          return true;
+        }else{
+          console.log(thread.id)
+          console.log(thread.tagNameList)
         }
       });
       return filterThreads;

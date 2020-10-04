@@ -601,10 +601,20 @@ __webpack_require__.r(__webpack_exports__);
       });
 
       var filterThreads = _.filter(newThreads, function (thread) {
+        var found = false;
+
         for (var i = 0; i < thread.tagNameList.length; i++) {
-          if (_.includes(filter, thread.tagNameList[i].toLowerCase())) {
-            return true;
+          if (_.includes(filter, thread.tagNameList[i].trim().toLowerCase())) {
+            found = true;
+            break;
           }
+        }
+
+        if (found) {
+          return true;
+        } else {
+          console.log(thread.id);
+          console.log(thread.tagNameList);
         }
       });
 
