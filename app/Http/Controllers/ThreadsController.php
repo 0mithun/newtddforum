@@ -329,9 +329,12 @@ class ThreadsController extends Controller
         }
 
 
-        $threads = Thread::where('tag_names','LIKE', "%{$tag->name}%");
-
+        // $threads = Thread::where('tag_names','LIKE', "%{$tag->name}%");
+        $threads = $tag->threads();
+     
+        
         $this->filterThreads($threads);
+        
         $totalRecords = $threads->count();
         $threads = $this->generateCurrentPageResults($threads, $this->perPage);
 

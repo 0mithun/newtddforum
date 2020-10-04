@@ -15,10 +15,17 @@ class SearchController extends Controller
     public function search()
     {
         $query = request('query');
+        // $total = Thread::search($query)->paginate()->total();
+        // $threads = Thread::search($query)->paginate($total)->load('emojis');
+        // return response()->json($threads);
+        // dd($threads->all());
+
+
         if ($query == '') {
             return redirect()->back();
         }
         $threads = $this->filterSearch($query);
+        // return response()->json($threads);
 
         $tags = [];
         foreach($threads as $thread){
@@ -29,7 +36,6 @@ class SearchController extends Controller
         $tags = $this->convert_from_latin1_to_utf8_recursively($new_array);
 
         $pageTitle = 'Search Threads';
-
         return view('threads.search', [
             'threads'   =>  $threads,
             'query'     => $query,
@@ -50,9 +56,9 @@ class SearchController extends Controller
 
     public function filterSearch($query)
     {
-
         // $threads = Thread::search($query)->paginate(3,'page',5);
-        $threads = Thread::search($query)->paginate()->load('emojis');
+        $total = Thread::search($query)->paginate()->total();
+        $threads = Thread::search($query)->paginate($total)->load('emojis');
         $allThreads = $threads->all();
         $collect = collect($allThreads);       
         
@@ -84,21 +90,28 @@ class SearchController extends Controller
         $title_array = [];
         $body_array = [];
         $tags_array = [];
-
+        $other_array = [];
         foreach($filterThreads as $thread){
-            if(stripos($thread->title, $query)){
+            $regex = "/({$query})/i";
+             if(preg_match($regex, $thread->title, $matches))
+             {
                 $title_array[] = $thread;
-            } else if(stripos($thread->body, $query)){
+             }             
+             else if(preg_match($regex, $thread->body, $matches))
+             {
                 $body_array[] = $thread;
-            }
-            else if(stripos($thread->tag_names, $query)){
+             }
+             
+             else if(preg_match($regex, $thread->tag_names, $matches))
+             {
                 $tags_array[] = $thread;
-            }
-        }
+             }else {
+                 $other_array[] = $thread;
+             }
+ 
+        }   
 
         $newThreads = array_merge($title_array, $body_array, $tags_array);
-
-        // $threads = $this->convert_from_latin1_to_utf8_recursively($filterThreads->toArray());
         $threads = $this->convert_from_latin1_to_utf8_recursively($newThreads);
         $threads = $this->convertToObject($threads);
         return $threads;
