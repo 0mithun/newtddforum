@@ -27,9 +27,7 @@ class SearchController extends Controller
         }
         $new_array = array_unique($tags);
         $tags = $this->convert_from_latin1_to_utf8_recursively($new_array);
-// dd($tags);
 
-        // $tags = array_unique($tags);
         $pageTitle = 'Search Threads';
 
         return view('threads.search', [
@@ -83,58 +81,27 @@ class SearchController extends Controller
             });
         }
 
-        $threads = $this->convert_from_latin1_to_utf8_recursively($filterThreads->toArray());
+        $title_array = [];
+        $body_array = [];
+        $tags_array = [];
+
+        foreach($filterThreads as $thread){
+            if(stripos($thread->title, $query)){
+                $title_array[] = $thread;
+            } else if(stripos($thread->body, $query)){
+                $body_array[] = $thread;
+            }
+            else if(stripos($thread->tag_names, $query)){
+                $tags_array[] = $thread;
+            }
+        }
+
+        $newThreads = array_merge($title_array, $body_array, $tags_array);
+
+        // $threads = $this->convert_from_latin1_to_utf8_recursively($filterThreads->toArray());
+        $threads = $this->convert_from_latin1_to_utf8_recursively($newThreads);
         $threads = $this->convertToObject($threads);
-return $threads;
-        dd($threads);
- 
-
-        // if (auth()->check()) {
-        //     $user = auth()->user();
-        //     $privacy = $user->userprivacy;
-        //     if ($privacy->restricted_18 == 1) {
-        //         // $threads = Thread::search($query)
-        //         //     ->paginate(10)
-        //         //     ->load('emojis');
-        //         // $collect = collect($threads);
-        //     } else if ($privacy->restricted_13 == 1) {
-        //         $threads = Thread::search($query)
-        //             ->paginate()
-        //             ->load('emojis');
-
-        //         $collect = collect($threads);
-        //         $threads = $collect->where('age_restriction', '!=', 18);
-        //     } else {
-        //         $threads = Thread::search($query)
-        //             ->paginate()
-        //             ->load('emojis');
-        //         $collect = collect($threads);
-        //         $threads = $collect->where('age_restriction', 0);
-        //     }
-        // } else {
-        //     $threads = Thread::search($query)
-        //         ->paginate()
-        //         ->load('emojis');
-
-        //     $collect = collect($threads);
-        //     $threads = $collect->where('age_restriction', 0);
-        // }
-
-
-
-        // $threads = $this->paginate($threads, 10);
-
         return $threads;
     }
 
-    // public function paginate($items, $perPage = 2, $page = null)
-    // {
-    //     $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-    //     $items = $items instanceof Collection ? $items : Collection::make($items);
-
-    //     return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, [
-    //         'path'     => Paginator::resolveCurrentPath(),
-    //         'pageName' => 'page',
-    //     ]);
-    // }
 }

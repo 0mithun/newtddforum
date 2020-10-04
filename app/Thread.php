@@ -35,7 +35,10 @@ class Thread extends Model
                 'type'     => 'string',
                 'analyzer' => 'english',
             ],
-
+            'tags'  => [
+                'type'     => 'string',
+                'analyzer' => 'english',
+            ],
         ],
     ];
 
@@ -322,6 +325,7 @@ class Thread extends Model
         $searchable = [
             'title' => $this->title,
             'body'  => $this->body,
+            'tags'  => $this->tag_names
         ];
 
         return $searchable;

@@ -20,34 +20,34 @@ class ThreadSearchRule extends SearchRule
     public function buildQueryPayload()
     {
         $query = $this->builder->query;
-        return [
-            'should' => [
-                [
-                    'match' => [
-                        'title' => [
-                            'query' => $query,
-                            'boost' => 2
-                        ]
-                    ]
-                ],
-                [
-                    'match' => [
-                        'body' => [
-                            'query' => $query,
-                            'boost' => 1
-                        ]
-                    ]
-                ],
-                // [
-                //     'match' => [
-                //         'tags' => [
-                //             'query' => $query,
-                //             'boost' => 1
-                //         ]
-                //     ]
-                // ]
-            ]
-        ];
+        // return [
+        //     'should' => [
+        //         [
+        //             'match' => [
+        //                 'title' => [
+        //                     'query' => $query,
+        //                     'boost' => 3
+        //                 ]
+        //             ]
+        //         ],
+        //         [
+        //             'match' => [
+        //                 'body' => [
+        //                     'query' => $query,
+        //                     'boost' => 2
+        //                 ]
+        //             ]
+        //         ],
+        //         [
+        //             'match' => [
+        //                 'tags' => [
+        //                     'query' => $query,
+        //                     'boost' => 1
+        //                 ]
+        //             ]
+        //         ]
+        //     ]
+        // ];
 
         return [
             'must' => [
