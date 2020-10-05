@@ -97,17 +97,15 @@ class SearchController extends Controller
         foreach($filterThreads as $thread){
             // $regex = "/({$query})/i";
             $regex = "/\s?({$query})/i";
-            
            
-
-            //  if(preg_match($regex, $thread->title, $matches))
-            //  {
-            //     $title_array[] = $thread;
-            //  }             
-            //  else if(preg_match($regex, $thread->body, $matches))
-            //  {
-            //     $body_array[] = $thread;
-            //  }
+             if(preg_match($regex, $thread->title, $matches))
+             {
+                $title_array[] = $thread;
+             }             
+             else if(preg_match($regex, $thread->body, $matches))
+             {
+                $body_array[] = $thread;
+             }
              
              if(preg_match($regex, $thread->tag_names, $matches))
              {
@@ -122,8 +120,6 @@ class SearchController extends Controller
 
         $newThreads = array_merge($title_array, $body_array, $tags_array);
         
-
-
         $threads = $this->convert_from_latin1_to_utf8_recursively($newThreads);
         $threads = $this->convertToObject($threads);
         return $threads;
