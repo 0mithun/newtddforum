@@ -46,7 +46,7 @@ Route::get('/threads/get-all-tags','ThreadsController@getAllTags');
 
 Route::post('/thread/share', 'ThreadsController@share');
 
-Route::get("/threads/{tagname}", 'ThreadsController@loadByTag')->name('tags.threads.list');
+Route::get("/tags/{tagname}", 'ThreadsController@loadByTag')->name('tags.threads.list');
 
 Route::get('/threads?by={username}', 'ThreadsController@index')->name('threadsbyuser');
 
