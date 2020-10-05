@@ -100,7 +100,7 @@ class Thread extends Model
 
         static::updated(function ($thread) {
             // $thread->update(['slug' => strip_tags( $thread->title)]);
-            info('calling');
+            // info('calling');
 
             // $tags = $thread->tags->pluck('name')->all();
             // info('tag names:', $tags);
@@ -118,10 +118,10 @@ class Thread extends Model
      */
     public function path()
     {
-        // $lower = strtolower($this->channel->slug);
+        $lower = strtolower($this->channel->slug);
 
-        // return "/anecdotes/{$lower}/{$this->slug}";
-        return 'sliug';
+        return "/anecdotes/{$lower}/{$this->slug}";
+      
     }
 
     public function getPathAttribute()
