@@ -105,15 +105,10 @@ class ThreadsController extends Controller
      */
     public function create()
     {
-        $tags = Tags::orderBy('name', 'ASC')->get()->pluck('name');
-        $tags = $tags->map(function ($tag) {
-            return \strtolower($tag);
-        });
-
         $channel = Channel::select(['id', 'name'])->orderBy('name', 'ASC')->get();
         $pageTitle = 'Add new Thread';
 
-        return view('threads.create', compact('tags', 'channel', 'pageTitle'));
+        return view('threads.create', compact('channel', 'pageTitle'));
     }
 
     /**
@@ -180,16 +175,12 @@ class ThreadsController extends Controller
 
     public function edit(Thread $thread)
     {
-        $tags = Tags::orderBy('name', 'ASC')->get()->pluck('name');
-        $tags = $tags->map(function ($tag) {
-            return \strtolower($tag);
-        });
-
+      
         $channel = Channel::select(['id', 'name'])->orderBy('name', 'ASC')->get();
 
         $pageTitle = 'Edit: ' . $thread->title;
 
-        return view('threads.edit', compact('tags', 'channel', 'thread', 'pageTitle'));
+        return view('threads.edit', compact('channel', 'thread', 'pageTitle'));
     }
 
     /**
@@ -217,13 +208,13 @@ class ThreadsController extends Controller
             'anonymous'              => request('anonymous', 0),
         ];
 
-        if ($request->location != null) {
-            $location = $this->getGeocodeing($request->location);
-            if ($location['accuracy'] != 'result_not_found') {
-                $data['lat'] = $location['lat'];
-                $data['lng'] = $location['lng'];
-            }
-        }
+        // if ($request->location != null) {
+        //     $location = $this->getGeocodeing($request->location);
+        //     if ($location['accuracy'] != 'result_not_found') {
+        //         $data['lat'] = $location['lat'];
+        //         $data['lng'] = $location['lng'];
+        //     }
+        // }
 
         $channel = '';
         if ($request->has('channel') && $request->channel != null) {
@@ -338,9 +329,12 @@ class ThreadsController extends Controller
         }
 
 
-        $threads = Thread::where('tag_names','LIKE', "%{$tag->name}%");
+        // $threads = Thread::where('tag_names','LIKE', "%{$tag->name}%");
+        $threads = $tag->threads();
 
+        
         $this->filterThreads($threads);
+        
         $totalRecords = $threads->count();
         $threads = $this->generateCurrentPageResults($threads, $this->perPage);
 
@@ -447,8 +441,10 @@ class ThreadsController extends Controller
     public function attachTags($request, $thread)
     {
         $tags = [];
+        $tag_names = '';
         if ($request->has('tags') && $request->tags != null) {
             $tags = explode(',', $request->tags);
+            $tag_names = $request->tags;
         }
 
         if ($request->has('channel') && $request->channel != null) {
@@ -481,6 +477,10 @@ class ThreadsController extends Controller
         }
 
         $thread->tags()->sync($tag_ids);
+        if($tag_names != ''){
+            $thread->tag_names = $tag_names;
+            $thread->save();
+        }
     }
 
     /**
@@ -550,5 +550,23 @@ class ThreadsController extends Controller
     public function getSingleThread(Thread $thread)
     {
         return response()->json($thread);
+    }
+
+    public function getAllTags(){
+        if(request()->has('q')){
+            $query = request()->q;
+            // $tags = Tags::where('name','LIKE',"%$query%")->distinct()->orderBy('name', 'ASC')->limit(5)->get()->pluck('name');
+            $tags = Tags::where('name','LIKE',"%$query%")->orderBy('name', 'ASC')->limit(5)->get()->pluck('name');
+        }else{
+            $tags = Tags::orderBy('name', 'ASC')->limit(5)->get()->pluck('name');
+        }
+
+        $tags = $tags->map(function ($tag) {
+            return \trim(strtolower($tag));
+        });
+     
+        $tags = $this->convert_from_latin1_to_utf8_recursively($tags->all());
+
+        return $tags;
     }
 }

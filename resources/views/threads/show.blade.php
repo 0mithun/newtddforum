@@ -171,7 +171,7 @@
                                 <up-votes :thread="{{ $thread }}" size="small"></up-votes>
                                 <down-votes :thread="{{ $thread }}" size="small"></down-votes>
                                 <report-thread :thread="{{ $thread }}" size="small"></report-thread>                             
-                                <show-source :thread="{{ $thread }}" size="small"></show-source>                            
+                                <show-source source="{{ $thread->source }}" size="small"></show-source>                            
                             </div>
                         </div>
                         <div class="row">
@@ -238,7 +238,7 @@
                                 <up-votes :thread="{{ $thread }}" size="small"></up-votes>
                                 <down-votes :thread="{{ $thread }}" size="small"></down-votes>
                                 <report-thread :thread="{{ $thread }}" size="small"></report-thread>                             
-                                <show-source :thread="{{ $thread }}" size="small"></show-source>                            
+                                <show-source source="{{ $thread->source }}" size="small"></show-source>                            
                             </div>
                         </div>
                     </div>

@@ -41,6 +41,8 @@ Route::get('/trending', 'ThreadsController@getTrending');
 Route::resource('threads', 'ThreadsController')->except(['show', 'update']);
 Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show');
 Route::post('threads/{thread}', 'ThreadsController@update');
+Route::get('/threads/get-all-tags','ThreadsController@getAllTags');
+
 
 Route::post('/thread/share', 'ThreadsController@share');
 

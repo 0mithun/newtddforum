@@ -331,13 +331,17 @@
 
       <nav aria-label="..." v-if="totalPage > 1">
         <ul class="pagination">
+<<<<<<< HEAD
           <li v-if="currentPage != 1" @click="onPageChange(currentPage - 1)">
+=======
+          <li v-if="currentPage != 1" @click="onPageChange(1)">
+>>>>>>> social
             <span>
               <span aria-hidden="true">&laquo;</span>
             </span>
           </li>
           <li
-            v-for="page in totalPage"
+            v-for="page in pageRange"
             :key="page"
             @click="onPageChange(page)"
             :class="{ active: currentPage == page }"
@@ -348,10 +352,7 @@
             </span>
           </li>
 
-          <li
-            v-if="currentPage != totalPage"
-            @click="onPageChange(currentPage + 1)"
-          >
+          <li v-if="currentPage != totalPage" @click="onPageChange(totalPage)">
             <span>
               <span aria-hidden="true">&raquo;</span>
               <!-- <span aria-hidden="true">&rarr;</span> -->
@@ -371,7 +372,7 @@ import SearchPagination from "./SearchPagination";
 import moment, { max } from "moment";
 
 export default {
-  props: ["threads", "query"],
+  props: ["threads", "query", 'all_tags'],
   components: {
     SearchPagination,
   },
@@ -390,11 +391,14 @@ export default {
       filter_tags: [],
       filter_length: [],
       emojis: "",
-      tags: [],
+      tags: Object.values(this.all_tags),
 
+      paginatedItems: this.allThreads,
       page: 1,
       perPage: 10,
-      paginatedItems: this.allThreads,
+      limitLinks: 10,
+      formPage: 1,
+      toPage: 1,
     };
   },
   watch: {
@@ -415,10 +419,11 @@ export default {
     },
   },
   created() {
-    this.allThreads = this.threads;
+    this.allThreads = Object.values(this.threads);
     this.getAllEmojis();
-    this.getAllTags();
+    // this.getAllTags();
     this.setCurrentPage();
+    this.paginateLimit();
     this.paginate(this.perPage, this.page);
   },
   computed: {
@@ -444,8 +449,14 @@ export default {
       if (this.filterOpen) {
         return this.allThreads.length;
       }
-      return this.threads.length;
+      // return this.threads.length;
+      return this.allThreads.length;
     },
+
+    pageRange() {
+      return _.range(this.formPage, this.toPage);
+    },
+
     mapUrl() {
       return `/map/show?query=${this.q}`;
     },
@@ -475,14 +486,39 @@ export default {
       this.page = page;
 
       history.pushState(null, null, "?query=" + this.q + "&page=" + page);
+      this.paginateLimit();
       this.paginate(this.perPage, page);
+    },
+
+     paginateLimit() {
+      let half_total_links = Math.floor(this.limitLinks / 2);
+      let from = this.page - half_total_links;
+      let to = Number.parseInt(this.page) + half_total_links;
+      if (this.page < half_total_links) {
+        to += half_total_links - this.page;
+      }
+      if (this.totalPage - this.page < half_total_links) {
+        from -= half_total_links - (this.totalPage - this.page) - 1;
+      }
+
+      if (from < half_total_links) {
+        from = 1;
+      }
+      
+      if(to>this.totalPage){
+        to = this.totalPage;
+      }
+
+
+      this.formPage = from;
+      this.toPage = to+1;
     },
 
     filterThreads() {
       this.paginatedItems = [];
       this.page = 1;
 
-      let data = this.threads;
+      let data = Object.values(this.threads);
 
       if (this.filter_rated.length > 0) {
         data = this.filterByRated(this.filter_rated, data);
@@ -577,13 +613,22 @@ export default {
 
     filterByTags(filter, data) {
       let newThreads = _.filter(data, (thread) => {
-        return thread.tags.length > 0;
+        return thread.tagNameList.length > 0;
       });
+     
       let filterThreads = _.filter(newThreads, (thread) => {
-        for (let i = 0; i < thread.tags.length; i++) {
-          if (_.includes(filter, thread.tags[i].name.toLowerCase())) {
-            return true;
-          }
+         let found = false;
+        for (let i = 0; i < thread.tagNameList.length; i++) {          
+          if (_.includes(filter, thread.tagNameList[i].trim().toLowerCase())) {
+            found = true;
+            break;
+          }          
+        }
+        if(found){
+          return true;
+        }else{
+          console.log(thread.id)
+          console.log(thread.tagNameList)
         }
       });
       return filterThreads;
