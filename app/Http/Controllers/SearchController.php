@@ -3,30 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
+use Illuminate\Http\Request;
 use App\Traits\ThreadPrivacy;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Validation\Rules\Unique;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SearchController extends Controller
 {
     use ThreadPrivacy;
-    public function search()
+    public function search(Request $request)
     {
+        unset($request['page']);
         $query = request('query');
+
         // $total = Thread::search($query)->paginate()->total();
         // $threads = Thread::search($query)->paginate($total)->load('emojis');
         // return response()->json($threads);
         // dd($threads->all());
-
-
+        
+        
         if ($query == '') {
             return redirect()->back();
         }
         $threads = $this->filterSearch($query);
-        // return response()->json($threads);
-
         $tags = [];
         foreach($threads as $thread){
             $split_tags = explode(',',  $thread->tag_names);
@@ -56,6 +57,8 @@ class SearchController extends Controller
 
     public function filterSearch($query)
     {
+       
+
         // $threads = Thread::search($query)->paginate(3,'page',5);
         $total = Thread::search($query)->paginate()->total();
         $threads = Thread::search($query)->paginate($total)->load('emojis');
@@ -97,16 +100,16 @@ class SearchController extends Controller
             
            
 
-             if(preg_match($regex, $thread->title, $matches))
-             {
-                $title_array[] = $thread;
-             }             
-             else if(preg_match($regex, $thread->body, $matches))
-             {
-                $body_array[] = $thread;
-             }
+            //  if(preg_match($regex, $thread->title, $matches))
+            //  {
+            //     $title_array[] = $thread;
+            //  }             
+            //  else if(preg_match($regex, $thread->body, $matches))
+            //  {
+            //     $body_array[] = $thread;
+            //  }
              
-             else if(preg_match($regex, $thread->tag_names, $matches))
+             if(preg_match($regex, $thread->tag_names, $matches))
              {
                 $tags_array[] = $thread;
              }else {
@@ -114,6 +117,8 @@ class SearchController extends Controller
              }
  
         }   
+    
+        return $tags_array;
 
         $newThreads = array_merge($title_array, $body_array, $tags_array);
         

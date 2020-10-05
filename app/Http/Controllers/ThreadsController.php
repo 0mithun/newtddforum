@@ -331,7 +331,7 @@ class ThreadsController extends Controller
 
         // $threads = Thread::where('tag_names','LIKE', "%{$tag->name}%");
         $threads = $tag->threads();
-     
+
         
         $this->filterThreads($threads);
         

@@ -118,9 +118,10 @@ class Thread extends Model
      */
     public function path()
     {
-        $lower = strtolower($this->channel->slug);
+        // $lower = strtolower($this->channel->slug);
 
-        return "/anecdotes/{$lower}/{$this->slug}";
+        // return "/anecdotes/{$lower}/{$this->slug}";
+        return 'sliug';
     }
 
     public function getPathAttribute()
