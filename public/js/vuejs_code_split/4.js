@@ -417,9 +417,12 @@ __webpack_require__.r(__webpack_exports__);
       filter_length: [],
       emojis: "",
       tags: Object.values(this.all_tags),
+      paginatedItems: this.allThreads,
       page: 1,
       perPage: 10,
-      paginatedItems: this.allThreads
+      limitLinks: 10,
+      formPage: 1,
+      toPage: 1
     };
   },
   watch: {
@@ -444,6 +447,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getAllEmojis(); // this.getAllTags();
 
     this.setCurrentPage();
+    this.paginateLimit();
     this.paginate(this.perPage, this.page);
   },
   computed: {
@@ -467,6 +471,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
       return this.allThreads.length;
+    },
+    pageRange: function pageRange() {
+      return _.range(this.formPage, this.toPage);
     },
     mapUrl: function mapUrl() {
       return "/map/show?query=".concat(this.q);
@@ -493,7 +500,32 @@ __webpack_require__.r(__webpack_exports__);
     onPageChange: function onPageChange(page) {
       this.page = page;
       history.pushState(null, null, "?query=" + this.q + "&page=" + page);
+      this.paginateLimit();
       this.paginate(this.perPage, page);
+    },
+    paginateLimit: function paginateLimit() {
+      var half_total_links = Math.floor(this.limitLinks / 2);
+      var from = this.page - half_total_links;
+      var to = Number.parseInt(this.page) + half_total_links;
+
+      if (this.page < half_total_links) {
+        to += half_total_links - this.page;
+      }
+
+      if (this.totalPage - this.page < half_total_links) {
+        from -= half_total_links - (this.totalPage - this.page) - 1;
+      }
+
+      if (from < half_total_links) {
+        from = 1;
+      }
+
+      if (to > this.totalPage) {
+        to = this.totalPage;
+      }
+
+      this.formPage = from;
+      this.toPage = to + 1;
     },
     filterThreads: function filterThreads() {
       this.paginatedItems = [];
@@ -1567,9 +1599,21 @@ var render = function() {
                 "ul",
                 { staticClass: "pagination" },
                 [
-                  _vm.currentPage != 1 ? _c("li", [_vm._m(7)]) : _vm._e(),
+                  _vm.currentPage != 1
+                    ? _c(
+                        "li",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.onPageChange(1)
+                            }
+                          }
+                        },
+                        [_vm._m(7)]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _vm._l(_vm.totalPage, function(page) {
+                  _vm._l(_vm.pageRange, function(page) {
                     return _c(
                       "li",
                       {
@@ -1595,7 +1639,17 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _vm.currentPage != _vm.totalPage
-                    ? _c("li", [_vm._m(8)])
+                    ? _c(
+                        "li",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.onPageChange(_vm.totalPage)
+                            }
+                          }
+                        },
+                        [_vm._m(8)]
+                      )
                     : _vm._e()
                 ],
                 2

@@ -279,13 +279,13 @@
 
       <nav aria-label="..." v-if="totalPage > 1">
         <ul class="pagination">
-          <li v-if="currentPage != 1">
+          <li v-if="currentPage != 1" @click="onPageChange(1)">
             <span>
               <span aria-hidden="true">&laquo;</span>
             </span>
           </li>
           <li
-            v-for="page in totalPage"
+            v-for="page in pageRange"
             :key="page"
             @click="onPageChange(page)"
             :class="{ active: currentPage == page }"
@@ -296,7 +296,7 @@
             </span>
           </li>
 
-          <li v-if="currentPage != totalPage">
+          <li v-if="currentPage != totalPage" @click="onPageChange(totalPage)">
             <span>
               <span aria-hidden="true">&raquo;</span>
             </span>
@@ -336,9 +336,12 @@ export default {
       emojis: "",
       tags: Object.values(this.all_tags),
 
+      paginatedItems: this.allThreads,
       page: 1,
       perPage: 10,
-      paginatedItems: this.allThreads,
+      limitLinks: 10,
+      formPage: 1,
+      toPage: 1,
     };
   },
   watch: {
@@ -363,6 +366,7 @@ export default {
     this.getAllEmojis();
     // this.getAllTags();
     this.setCurrentPage();
+    this.paginateLimit();
     this.paginate(this.perPage, this.page);
   },
   computed: {
@@ -391,6 +395,11 @@ export default {
       // return this.threads.length;
       return this.allThreads.length;
     },
+
+    pageRange() {
+      return _.range(this.formPage, this.toPage);
+    },
+
     mapUrl() {
       return `/map/show?query=${this.q}`;
     },
@@ -420,7 +429,32 @@ export default {
       this.page = page;
 
       history.pushState(null, null, "?query=" + this.q + "&page=" + page);
+      this.paginateLimit();
       this.paginate(this.perPage, page);
+    },
+
+     paginateLimit() {
+      let half_total_links = Math.floor(this.limitLinks / 2);
+      let from = this.page - half_total_links;
+      let to = Number.parseInt(this.page) + half_total_links;
+      if (this.page < half_total_links) {
+        to += half_total_links - this.page;
+      }
+      if (this.totalPage - this.page < half_total_links) {
+        from -= half_total_links - (this.totalPage - this.page) - 1;
+      }
+
+      if (from < half_total_links) {
+        from = 1;
+      }
+      
+      if(to>this.totalPage){
+        to = this.totalPage;
+      }
+
+
+      this.formPage = from;
+      this.toPage = to+1;
     },
 
     filterThreads() {
