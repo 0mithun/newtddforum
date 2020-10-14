@@ -222,19 +222,6 @@ class WikiImageProcess implements ShouldQueue
         fclose($fp);
     }
 
-    // public function saveInfo( $image_page_url, $full_image_link, $description, $fullPath ) {
-    //     $thread = Thread::where( 'id', $this->thread->id )->first();
-
-    //     $thread->wiki_info_page_url = $this->wikiUrl;
-    //     $thread->wiki_image_page_url = $image_page_url;
-    //     $thread->wiki_image_url = $full_image_link;
-    //     $thread->wiki_image_path = $fullPath;
-    //     // $thread->wiki_info_page_url = $wikiUrl;
-    //     $thread->description = $description;
-    //     $thread->image_saved = true;
-
-    //     $thread->save();
-    // }
 
     public function deleteImage($url)
     {

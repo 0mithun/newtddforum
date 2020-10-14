@@ -7,7 +7,7 @@
              <span style="color:red;font-weight:bold;font-size:16px;" >{{ unreadNotifications.length }}</span>
         </a>
 
-        <ul class="dropdown-menu" v-if="unreadNotifications.length">
+        <ul class="dropdown-menu user-notification" v-if="unreadNotifications.length">
             <li v-for="(notification, index) in unreadNotifications" :key="index">
                 <a :href="notification.data.link"
                    v-text="notification.data.message"
@@ -18,7 +18,7 @@
 
 
         </ul>
-        <ul class="dropdown-menu" v-else>
+        <ul class="dropdown-menu user-notification" v-else>
             <li>
                 <a href="#">No Notification</a>
             </li>
@@ -79,3 +79,29 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+   
+
+      .navbar-nav > li > .dropdown-menu.user-notification {
+            overflow-y: scroll;
+            width: 250px;
+        }
+         .dropdown-menu.user-notification > li {
+            border-bottom: 1px solid #ddd;
+            margin-top: 5px;
+        }
+        .dropdown-menu.user-notification > li > a {
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.6;
+            color: #333333;
+            white-space: normal;
+            overflow: hidden;
+            height: auto;
+            text-align: justify;
+            /* width: 100%; */
+        }
+</style>

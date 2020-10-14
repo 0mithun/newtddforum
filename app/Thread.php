@@ -375,10 +375,6 @@ class Thread extends Model
 
         if ($this->image_path != '') {
             return asset($this->image_path);
-        } else if ($this->amazon_image_path != '') {
-            return asset($this->amazon_image_path);
-        } else if ($this->other_image_path != '') {
-            return asset($this->other_image_path);
         } else if ($this->wiki_image_path != '') {
             return $this->wiki_image_path;
         } else {
@@ -416,11 +412,7 @@ class Thread extends Model
 
         if ($this->image_path_pixel_color != '') {
             return $this->image_path_pixel_color;
-        } else if ($this->amazon_image_path_pixel_color != '') {
-            return ($this->amazon_image_path_pixel_color);
-        } else if ($this->other_image_path_pixel_color != '') {
-            return ($this->other_image_path_pixel_color);
-        } else if ($this->wiki_image_path_pixel_color != '') {
+        }  else if ($this->wiki_image_path_pixel_color != '') {
             return $this->wiki_image_path_pixel_color;
         } else {
             return '255,255,255,1';

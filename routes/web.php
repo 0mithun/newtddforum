@@ -32,7 +32,7 @@ Route::get('login/instagram/callback', 'Auth\LoginController@handleInstagramProv
 Route::get('/map/show', 'UserlocationController@show')->name('map.show');
 Route::post('/map/all-threads', 'UserlocationController@getAllThread');
 
-Route::get('threads/search', 'SearchController@search');
+Route::get('anecdotes/search', 'SearchController@search');
 
 Route::get('/', 'ThreadsController@index');
 

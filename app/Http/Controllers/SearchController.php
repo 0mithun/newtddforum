@@ -17,7 +17,6 @@ class SearchController extends Controller
     {
         unset($request['page']);
         $query = request('query');
-
         // $total = Thread::search($query)->paginate()->total();
         // $threads = Thread::search($query)->paginate($total)->load('emojis');
         // return response()->json($threads);
@@ -63,7 +62,9 @@ class SearchController extends Controller
         $total = Thread::search($query)->paginate()->total();
         $threads = Thread::search($query)->paginate($total)->load('emojis');
         $allThreads = $threads->all();
+
         $collect = collect($allThreads);       
+        
         
         if(auth()->check()){
             $user = auth()->user();
@@ -94,32 +95,34 @@ class SearchController extends Controller
         $body_array = [];
         $tags_array = [];
         $other_array = [];
+
         foreach($filterThreads as $thread){
             // $regex = "/({$query})/i";
             $regex = "/\s?({$query})/i";
-           
-             if(preg_match($regex, $thread->title, $matches))
-             {
+            
+            if(preg_match($regex, $thread->title, $matches))
+            {
                 $title_array[] = $thread;
-             }             
-             else if(preg_match($regex, $thread->body, $matches))
-             {
+            }             
+            else if(preg_match($regex, $thread->body, $matches))
+            {
                 $body_array[] = $thread;
-             }
-             
-             if(preg_match($regex, $thread->tag_names, $matches))
-             {
+            }
+            
+            if(preg_match($regex, $thread->tag_names, $matches))
+            {
                 $tags_array[] = $thread;
-             }else {
-                 $other_array[] = $thread;
-             }
- 
+            }else {
+                $other_array[] = $thread;
+            }
+            
         }   
-    
-        return $tags_array;
-
+        
+        // return $tags_array;
+        
         $newThreads = array_merge($title_array, $body_array, $tags_array);
         
+       
         $threads = $this->convert_from_latin1_to_utf8_recursively($newThreads);
         $threads = $this->convertToObject($threads);
         return $threads;

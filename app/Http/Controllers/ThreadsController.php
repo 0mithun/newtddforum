@@ -21,6 +21,7 @@ use App\Notifications\ThreadPostTwitter;
 use App\Notifications\ThreadPostFacebook;
 use App\Http\Requests\CreateThreadRequest;
 use App\Http\Requests\UpdateThreadRequest;
+use App\Jobs\DownloadThreadImageJob;
 use App\Traits\ThreadPrivacy;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -157,7 +158,8 @@ class ThreadsController extends Controller
         $this->attachTags($request, $thread);
 
         if (request('wiki_info_page_url') != '') {
-            WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
+            // WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
+            dispatch(new DownloadThreadImageJob(request('wiki_info_page_url'), $thread));
         }
 
         if ($request->expectsJson()) {
@@ -230,7 +232,8 @@ class ThreadsController extends Controller
         $this->attachTags($request, $thread);
 
         if (request('wiki_info_page_url') != '') {
-            WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
+            // WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
+            dispatch(new DownloadThreadImageJob(request('wiki_info_page_url'), $thread));
         }
 
         if ($request->expectsJson()) {
@@ -368,51 +371,6 @@ class ThreadsController extends Controller
         return $geocoder->getCoordinatesForAddress($address);
     }
 
-    /**
-     * Get Related Threads
-     */
-
-     //currently not used
-    public function getRelatedThread($thread)
-    {
-        //Related Threads
-        $threadTags = $thread->tags->pluck('id')->all();
-        $relatedThreads = [];
-        $relatedThreads = Thread::whereHas('tags', function ($q) use ($threadTags) {
-            $q->whereIn('id', $threadTags); // or email <> ''
-        })
-            ->whereNotIn('id', [$thread->id])
-            ->get();
-        $relatedThreads = collect($relatedThreads);
-
-        if (auth()->check()) {
-            $auth_user = auth()->user();
-            $relatedThreads = $relatedThreads->filter(function ($value, $key) use ($auth_user) {
-                if ($value->age_restriction == 0) {
-                    return true;
-                } else if ($value->user_id == $auth_user->id) {
-                    return true;
-                } else if ($auth_user->id == 1) {
-                    return true;
-                } else if ($auth_user->userprivacy->restricted_18 == 1) {
-                    return true;
-                } else if ($value->age_restriction == 13 && $auth_user->userprivacy->restricted_13 == 1) {
-                    return true;
-                }
-            });
-        } else {
-            $relatedThreads = $relatedThreads->filter(function ($value, $key) {
-                if ($value->age_restriction == 0) {
-                    return true;
-                }
-            });
-        }
-        if ($relatedThreads->count() > 4) {
-            $relatedThreads = $relatedThreads->random(5);
-        }
-
-        return $relatedThreads;
-    }
 
     /**
      * Uplod Thread Images

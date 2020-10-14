@@ -6,7 +6,7 @@
              <img class="navbar-icon pen" src="/images/mail.png" alt="">
               <span style="color:red;font-weight:bold;font-size:14px" >{{ unreadNotifications.length }}</span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-left list-group"  v-if="messageNotifications.length">
+        <ul class="dropdown-menu message-notification  dropdown-menu-left list-group"  v-if="messageNotifications.length">
             <li class="list-group-item" v-for="(notification, index) in messageNotifications" :key="index">
                 <a href="/chat" @click="markAsRead(notification)">
                     <div class="col-md-1 profile">                       
@@ -22,18 +22,18 @@
                 </a>
 
             </li>
-            <li class="list-group-item" style="height:30px;width: 175px">
+            <li class="list-group-item"">
                  <a href="/chat">
                     Go to Messenger
                 </a>
             </li>
 
         </ul>
-        <ul class="dropdown-menu dropdown-menu-left" v-else>
-            <li class="list-group-item" style="height:30px;width: 175px">
+        <ul class="dropdown-menu message-notification dropdown-menu-left" v-else>
+            <li class="list-group-item">
                 <span class="text-center">No Message</span>
             </li>
-            <li class="list-group-item" style="height:30px;width: 175px">
+            <li class="list-group-item"">
                  <a href="/chat">
                     Go to Messenger
                 </a>
@@ -114,8 +114,8 @@
 
 <style  scoped>
     li.list-group-item {
-        width: 500px;
-        height: 55px;
+        /* width: 500px;
+        height: 55px; */
         vertical-align: center;
     }
     li.list-group-item:last-child{
@@ -146,6 +146,31 @@
         padding: 0px;
     }
     li.list-group-item{
-        padding:5px ;
+        /* padding:5px ; */
+        /* border:none; */
+         border-bottom: 1px solid #ddd;
     }
+   
+    
+        .navbar-nav > li > .dropdown-menu.message-notification {
+            overflow-y: scroll;
+            width: 300px;
+        }
+         .dropdown-menu.message-notification > li {
+           
+            /* margin-top: 5px; */
+        }
+        .dropdown-menu.message-notification > li > a {
+            display: block;
+            /* padding: 3px 20px; */
+            clear: both;
+            font-weight: normal;
+            line-height: 1.6;
+            color: #333333;
+            white-space: normal;
+            overflow: hidden;
+            height: auto;
+            text-align: justify;
+            /* width: 100%; */
+        }
 </style>
