@@ -1,5 +1,5 @@
 <template>
-  <form class="navbar-form search-form" method="GET" action="/threads/search">
+  <form class="navbar-form search-form" method="GET" action="/anecdotes/search">
     <input
       type="text"
       class="form-control search-box"

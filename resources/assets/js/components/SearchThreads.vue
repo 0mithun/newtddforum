@@ -323,12 +323,6 @@
         :key="index"
       ></single-thread>
 
-      <!-- <SearchPagination
-        :dataSet="threads"
-        @changedSearch="fetch"
-        :query="q"
-      ></SearchPagination>-->
-
       <nav aria-label="..." v-if="totalPage > 1">
         <ul class="pagination">
 <<<<<<< HEAD
@@ -368,15 +362,10 @@
 </template>
 
 <script>
-import SearchPagination from "./SearchPagination";
 import moment, { max } from "moment";
 
 export default {
   props: ["threads", "query", 'all_tags'],
-  components: {
-    SearchPagination,
-  },
-
   data() {
     return {
       allThreads: [],
@@ -425,6 +414,9 @@ export default {
     this.setCurrentPage();
     this.paginateLimit();
     this.paginate(this.perPage, this.page);
+    
+    this.sortBy();
+    
   },
   computed: {
     currentPage() {
@@ -626,9 +618,6 @@ export default {
         }
         if(found){
           return true;
-        }else{
-          console.log(thread.id)
-          console.log(thread.tagNameList)
         }
       });
       return filterThreads;
@@ -646,13 +635,14 @@ export default {
     },
     searchThread() {
       // /threads/search
-      let url = "/threads/search?query=" + this.q;
+      let url = "/anecdotes/search?query=" + this.q;
       window.location.href = url;
     },
     sortBy() {
       let threads = _.orderBy(this.allThreads, [this.sort_by], "desc");
-      this.paginatedItems = threads;
+      // this.paginatedItems = threads;
       // this.threads = threads;
+      this.allThreads = threads;
     },
     ago(created_at) {
       return moment(created_at, "YYYY-MM-DD HH:mm:ss").fromNow() + "...";
@@ -663,7 +653,7 @@ export default {
       }
       this.search = true;
       axios
-        .get("/threads/search?query=" + this.q + "&sort_by=" + this.sort_by)
+        .get("/anecdotes/search?query=" + this.q + "&sort_by=" + this.sort_by)
         .then((res) => {
           this.allThreads = res.data;
           this.threads = res.data;

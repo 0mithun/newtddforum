@@ -134,7 +134,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\nli.list-group-item[data-v-1b52d6d2] {\n    width: 500px;\n    height: 55px;\n    vertical-align: center;\n}\nli.list-group-item[data-v-1b52d6d2]:last-child{\n    border-bottom: none;\n}\nli.list-group-item[data-v-1b52d6d2]:first-child{\n    border-top: none;\n}\nli.list-group-item a[data-v-1b52d6d2]:hover{\n    background: none;\n}\nli.list-group-item[data-v-1b52d6d2]:hover{\n    background:#dddfe2;\n}\n.profile-image[data-v-1b52d6d2]{\n    width:40px;\n    height:40px;\n    border-radius: 50%;\n}\n.profile[data-v-1b52d6d2]{\n        padding: 0;\n}\n.message[data-v-1b52d6d2]{\n}\n.dropdown-menu > li > a[data-v-1b52d6d2] {\n    padding: 0px;\n}\nli.list-group-item[data-v-1b52d6d2]{\n    padding:5px ;\n}\n", ""]);
+exports.push([module.i, "\nli.list-group-item[data-v-1b52d6d2] {\n    /* width: 500px;\n    height: 55px; */\n    vertical-align: center;\n}\nli.list-group-item[data-v-1b52d6d2]:last-child{\n    border-bottom: none;\n}\nli.list-group-item[data-v-1b52d6d2]:first-child{\n    border-top: none;\n}\nli.list-group-item a[data-v-1b52d6d2]:hover{\n    background: none;\n}\nli.list-group-item[data-v-1b52d6d2]:hover{\n    background:#dddfe2;\n}\n.profile-image[data-v-1b52d6d2]{\n    width:40px;\n    height:40px;\n    border-radius: 50%;\n}\n.profile[data-v-1b52d6d2]{\n        padding: 0;\n}\n.message[data-v-1b52d6d2]{\n}\n.dropdown-menu > li > a[data-v-1b52d6d2] {\n    padding: 0px;\n}\nli.list-group-item[data-v-1b52d6d2]{\n    /* padding:5px ; */\n    /* border:none; */\n     border-bottom: 1px solid #ddd;\n}\n.navbar-nav > li > .dropdown-menu.message-notification[data-v-1b52d6d2] {\n        overflow-y: scroll;\n        width: 300px;\n}\n.dropdown-menu.message-notification > li[data-v-1b52d6d2] {\n       \n        /* margin-top: 5px; */\n}\n.dropdown-menu.message-notification > li > a[data-v-1b52d6d2] {\n        display: block;\n        /* padding: 3px 20px; */\n        clear: both;\n        font-weight: normal;\n        line-height: 1.6;\n        color: #333333;\n        white-space: normal;\n        overflow: hidden;\n        height: auto;\n        text-align: justify;\n        /* width: 100%; */\n}\n", ""]);
 
 // exports
 
@@ -216,7 +216,10 @@ var render = function() {
     _vm.messageNotifications.length
       ? _c(
           "ul",
-          { staticClass: "dropdown-menu dropdown-menu-left list-group" },
+          {
+            staticClass:
+              "dropdown-menu message-notification  dropdown-menu-left list-group"
+          },
           [
             _vm._l(_vm.messageNotifications, function(notification, index) {
               return _c("li", { key: index, staticClass: "list-group-item" }, [
@@ -278,11 +281,13 @@ var render = function() {
           ],
           2
         )
-      : _c("ul", { staticClass: "dropdown-menu dropdown-menu-left" }, [
-          _vm._m(1),
-          _vm._v(" "),
-          _vm._m(2)
-        ])
+      : _c(
+          "ul",
+          {
+            staticClass: "dropdown-menu message-notification dropdown-menu-left"
+          },
+          [_vm._m(1), _vm._v(" "), _vm._m(2)]
+        )
   ])
 }
 var staticRenderFns = [
@@ -290,48 +295,29 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "list-group-item",
-        staticStyle: { height: "30px", width: "175px" }
-      },
-      [
-        _c("a", { attrs: { href: "/chat" } }, [
-          _vm._v("\n                Go to Messenger\n            ")
-        ])
-      ]
-    )
+    return _c("li", { staticClass: "list-group-item" }, [
+      _c("a", { attrs: { href: "/chat" } }, [
+        _vm._v("\n                Go to Messenger\n            ")
+      ])
+    ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "list-group-item",
-        staticStyle: { height: "30px", width: "175px" }
-      },
-      [_c("span", { staticClass: "text-center" }, [_vm._v("No Message")])]
-    )
+    return _c("li", { staticClass: "list-group-item" }, [
+      _c("span", { staticClass: "text-center" }, [_vm._v("No Message")])
+    ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "list-group-item",
-        staticStyle: { height: "30px", width: "175px" }
-      },
-      [
-        _c("a", { attrs: { href: "/chat" } }, [
-          _vm._v("\n                Go to Messenger\n            ")
-        ])
-      ]
-    )
+    return _c("li", { staticClass: "list-group-item" }, [
+      _c("a", { attrs: { href: "/chat" } }, [
+        _vm._v("\n                Go to Messenger\n            ")
+      ])
+    ])
   }
 ]
 render._withStripped = true
