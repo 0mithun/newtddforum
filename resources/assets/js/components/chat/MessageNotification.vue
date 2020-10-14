@@ -7,22 +7,33 @@
               <span style="color:red;font-weight:bold;font-size:14px" >{{ unreadNotifications.length }}</span>
         </a>
         <ul class="dropdown-menu message-notification  dropdown-menu-left list-group"  v-if="messageNotifications.length">
-            <li class="list-group-item" v-for="(notification, index) in messageNotifications" :key="index">
-                <a href="/chat" @click="markAsRead(notification)">
-                    <div class="col-md-1 profile">                       
+            <li class="list-group-item less-padding" v-for="(notification, index) in messageNotifications" :key="index">
+                <a class="chat" href="/chat" @click="markAsRead(notification)">
+                    <div class=" profile">                       
                         <img :src="notification.data.friend.profileAvatarPath" alt="" class="profile-image">
+                         
                     </div>
-                    <div class="col-md-11 message">
+                    <div class=" message">
+                        <div class="profilename">
+                            <b class="pull-left" v-text="notification.data.friend.name"></b>  
+                        </div>
+
+                        <div class="message-content">
+                            <div class="message-body">
+
+                            <span class="" v-text="notification.data.message.message"></span>
+                            </div>
+                            <div class="message-time">
+
+                            <span style="margin-left:3px" class="text-muted" v-text="formateMessageTime(notification.data.message.created_at)"></span>
+                            </div>
+                        </div>
                         
-                        <b class="pull-left" v-text="notification.data.friend.name"></b>
-                        <span class="pull-right" v-text="formateMessageTime(notification.data.message.created_at)"></span>                     
-                        <br>
-                        <span class="text-muted" v-text="notification.data.message.message"></span>
                     </div>
                 </a>
 
             </li>
-            <li class="list-group-item"">
+            <li class="list-group-item">
                  <a href="/chat">
                     Go to Messenger
                 </a>
@@ -33,7 +44,7 @@
             <li class="list-group-item">
                 <span class="text-center">No Message</span>
             </li>
-            <li class="list-group-item"">
+            <li class="list-group-item">
                  <a href="/chat">
                     Go to Messenger
                 </a>
@@ -104,9 +115,9 @@
                 sound.play();
             },
             formateMessageTime(timestamp){
-               return moment(timestamp).format('MM-D-YYYY, h:mm:ss A');
-            //    return moment(timestamp).fromNow();
-               //return moment(timestamp).calendar();
+            //    return moment(timestamp).format('MM-D-YYYY, h:mm:ss A');
+               return moment(timestamp).startOf('hour').fromNow();
+            //    return moment(timestamp).calendar();
             },
         }
     }
@@ -173,4 +184,44 @@
             text-align: justify;
             /* width: 100%; */
         }
+        .less-padding{
+            padding: 5px;
+        }
+
+        .dropdown-menu.message-notification > li > a.chat{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .profile{
+            width:15%;
+        }
+        .message{
+            width:85%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-content: space-around;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .profilename{
+            align-self: flex-end;
+        }
+        .message-content{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding-left: 5px;
+        }
+
+        .message-body{
+            
+        }
+
+        .message-time{
+
+        }
+
 </style>
