@@ -19,7 +19,7 @@ class ModelFactorySeeder extends Seeder
             'email'          => 'kakooljay@gmail.com',
             'username'       => 'anecdotage',
             'lat' => 40.71,
-            'lon' => -73.93,
+            'lng' => -73.93,
             'city'           => 'New York',
             'country'        => 'USA',
             'password'       => bcrypt('secret'),
