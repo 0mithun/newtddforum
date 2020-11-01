@@ -325,11 +325,7 @@
 
       <nav aria-label="..." v-if="totalPage > 1">
         <ul class="pagination">
-<<<<<<< HEAD
-          <li v-if="currentPage != 1" @click="onPageChange(currentPage - 1)">
-=======
           <li v-if="currentPage != 1" @click="onPageChange(1)">
->>>>>>> social
             <span>
               <span aria-hidden="true">&laquo;</span>
             </span>

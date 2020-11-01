@@ -1,6 +1,13 @@
 <template>
   <div>
     <div class="panel" v-for="(thread, index) in threads" :key="index">
+      
+      <div class="panel-body">
+        <div class="trending_thread_title">
+          <a :href="thread.path">
+            <strong v-html="thread.title"></strong>
+          </a>
+        </div>
       <div class="card-header thread_thumb" :style="threadThumbStyle(thread)">
         <a :href="thread.path">
           <img
@@ -11,12 +18,7 @@
           />
         </a>
       </div>
-      <div class="panel-body">
-        <div class="trending_thread_title">
-          <a :href="thread.path">
-            <strong v-html="thread.title"></strong>
-          </a>
-        </div>
+
         <div class="trending_footer">
           <comment-counts color="#ff4301" :thread="thread"></comment-counts>
           <point-counts :thread="thread"></point-counts>
@@ -55,10 +57,20 @@ export default {
   max-width: 100%;
   text-align: center;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 .thread_thumb_image {
   max-width: 100%;
   height:120px;
+}
+
+.panel-body{
+  padding: 0px;
+}
+.trending_thread_title{
+  padding:10px 10px;
+}
+.trending_footer{
+  padding: 5px 10px;
 }
 </style>
