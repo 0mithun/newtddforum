@@ -24,7 +24,7 @@
             <h4 class="modal-title" id="gridSystemModalLabel">Thread Source</h4>
           </div>
           <div class="modal-body" v-html="source">
-            
+             
           </div>
         </div>
       </div>

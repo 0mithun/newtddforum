@@ -2,13 +2,15 @@
 
 namespace App\Jobs;
 
+use App\User;
 use App\Thread;
 use Goutte\Client;
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use App\Notifications\InvalidImageUrlNotification;
 
 class DownloadThreadImageJob implements ShouldQueue
 {
@@ -44,23 +46,25 @@ class DownloadThreadImageJob implements ShouldQueue
 
         $pixel_color = $this->getImageColorAttribute($this->image_url);
 
-        if( $this->file_download_curl($image_path, $this->image_url)){
+        $this->file_download_curl('public/'.$image_path, $this->image_url);
 
-            if($this->thread->image_path != ''){
-                $this->deleteImage($this->thread->image_path);
-            }
-
-            $data = [
-                'image_path'    =>  $image_path ,
-                'image_path_pixel_color'    => $pixel_color
-            ];
-
-            $this->saveInfo($data);
+        if($this->thread->image_path != ''){
+            $this->deleteImage($this->thread->image_path);
         }
+
+        $data = [
+            'image_path'    =>  $image_path ,
+            'image_path_pixel_color'    => $pixel_color
+        ];
+
+        $this->saveInfo($data);
+        
        
 
        }else{
            //send notification to user
+            $user = User::where('id', $this->thread->user_id)->first();
+            $user->notify(new InvalidImageUrlNotification($this->thread));
        }
     }
 

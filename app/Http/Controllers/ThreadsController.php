@@ -514,7 +514,7 @@ class ThreadsController extends Controller
         if(request()->has('q')){
             $query = request()->q;
             // $tags = Tags::where('name','LIKE',"%$query%")->distinct()->orderBy('name', 'ASC')->limit(5)->get()->pluck('name');
-            $tags = Tags::where('name','LIKE',"%$query%")->orderBy('name', 'ASC')->limit(5)->get()->pluck('name');
+            $tags = Tags::where('name','LIKE',"$query%")->orderBy('name', 'ASC')->limit(5)->get()->pluck('name');
         }else{
             $tags = Tags::orderBy('name', 'ASC')->limit(5)->get()->pluck('name');
         }

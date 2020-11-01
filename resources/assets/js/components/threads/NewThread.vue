@@ -11,7 +11,7 @@
                         <div class="form-group" :class="{'has-error': errors.title }">
                             <label for="title" class="control-label" >Title (required)</label>
                             <input type="text" id="title" class="form-control" v-model="form.title">
-                            <span class="help-block" v-if="errors.title">{{ errors.title[0] }}</span>
+                            <span class="help-block error" v-if="errors.title">{{ errors.title[0] }}</span>
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                                 }"
                             />
                             
-                            <span class="help-block" v-if="errors.body">{{ errors.body[0] }}</span>
+                            <span class="help-block error" v-if="errors.body">{{ errors.body[0] }}</span>
 
                         </div>
                     </div>
@@ -76,11 +76,11 @@
                             </div>
                             <input style="display:none" type="file" name="image_path" accept="image/*" class="form-control" id="image_path" @change="onFileSelected">
 
-                            <span class="help-block " v-if="image_path_error">
+                            <span class="help-block  error" v-if="image_path_error">
                                 <strong class="" v-text="image_path_error_message"></strong>
                             </span>
 
-                            <span class="help-block" v-if="errors.body">{{ errors.body[0] }}</span>
+                            <span class="help-block error" v-if="errors.body">{{ errors.body[0] }}</span>
 
                         </div>
                     </div>
@@ -102,9 +102,10 @@
                             </div>
                             <div class="form-group" v-if="form.wiki_info_page_url !=''">
                                 <label for="">
-                                    <input type="checkbox" v-model="form.wiki_image_copyright_free" required> 
+                                    <input type="checkbox" v-model="form.wiki_image_copyright_free" > 
                                     This image is copyright-free (or the description includes license information)
                                 </label>
+                                <span class="help-block error" v-if="form.wiki_info_page_url && !form.wiki_image_copyright_free">Please confirm your right to post this image.</span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -344,6 +345,10 @@
                 
             },
             addNewThread(){
+                 if(this.form.wiki_info_page_url && !this.form.wiki_image_copyright_free){
+                    alert('Please confirm your right to post this image.')
+                    return;
+                }
                 this.errors = []
                 this.appendData();
                 axios.post('/threads', this.formData).then(res=>{
@@ -387,5 +392,12 @@
         }
     .tox-tinymce{
         min-height:500px!important;
+    }
+
+    .error{
+        color:red;
+    }
+    .help-block.error{
+        color:red;
     }
 </style>

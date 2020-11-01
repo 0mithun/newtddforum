@@ -1307,7 +1307,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.post-header[data-v-2656ebe8] {\r\n  display: flex;\r\n  padding: 15px 0;\n}\n.post-counts[data-v-2656ebe8] {\r\n  color: black;\r\n  font-weight: bold;\r\n  margin-right: 20px;\n}\n.sortBy[data-v-2656ebe8] {\r\n  background-color: transparent;\r\n  border: none;\r\n  outline: none;\r\n  width: auto;\r\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-2656ebe8]:focus {\r\n  outline: none;\r\n  border: none;\n}\n.load-more-btn[data-v-2656ebe8]{\r\n  text-align: center;\n}\r\n", ""]);
+exports.push([module.i, "\n.post-header[data-v-2656ebe8] {\n  display: flex;\n  padding: 15px 0;\n}\n.post-counts[data-v-2656ebe8] {\n  color: black;\n  font-weight: bold;\n  margin-right: 20px;\n}\n.sortBy[data-v-2656ebe8] {\n  background-color: transparent;\n  border: none;\n  outline: none;\n  width: auto;\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-2656ebe8]:focus {\n  outline: none;\n  border: none;\n}\n.load-more-btn[data-v-2656ebe8]{\n  text-align: center;\n}\n", ""]);
 
 // exports
 
@@ -1326,7 +1326,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.post-header[data-v-4461ed9e] {\r\n  display: flex;\r\n  padding: 15px 0;\n}\n.post-counts[data-v-4461ed9e] {\r\n  color: black;\r\n  font-weight: bold;\r\n  margin-right: 20px;\n}\n.sortBy[data-v-4461ed9e] {\r\n  background-color: transparent;\r\n  border: none;\r\n  outline: none;\r\n  width: auto;\r\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-4461ed9e]:focus {\r\n  outline: none;\r\n  border: none;\n}\n.load-more-btn[data-v-4461ed9e]{\r\n  text-align: center;\n}\r\n", ""]);
+exports.push([module.i, "\n.post-header[data-v-4461ed9e] {\n  display: flex;\n  padding: 15px 0;\n}\n.post-counts[data-v-4461ed9e] {\n  color: black;\n  font-weight: bold;\n  margin-right: 20px;\n}\n.sortBy[data-v-4461ed9e] {\n  background-color: transparent;\n  border: none;\n  outline: none;\n  width: auto;\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-4461ed9e]:focus {\n  outline: none;\n  border: none;\n}\n.load-more-btn[data-v-4461ed9e]{\n  text-align: center;\n}\n", ""]);
 
 // exports
 
@@ -1345,7 +1345,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.post-header[data-v-9fc4dac2] {\r\n  display: flex;\r\n  padding: 15px 0;\n}\n.post-counts[data-v-9fc4dac2] {\r\n  color: black;\r\n  font-weight: bold;\r\n  margin-right: 20px;\n}\n.sortBy[data-v-9fc4dac2] {\r\n  background-color: transparent;\r\n  border: none;\r\n  outline: none;\r\n  width: auto;\r\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-9fc4dac2]:focus {\r\n  outline: none;\r\n  border: none;\n}\n.load-more-btn[data-v-9fc4dac2]{\r\n  text-align: center;\n}\r\n", ""]);
+exports.push([module.i, "\n.post-header[data-v-9fc4dac2] {\n  display: flex;\n  padding: 15px 0;\n}\n.post-counts[data-v-9fc4dac2] {\n  color: black;\n  font-weight: bold;\n  margin-right: 20px;\n}\n.sortBy[data-v-9fc4dac2] {\n  background-color: transparent;\n  border: none;\n  outline: none;\n  width: auto;\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-9fc4dac2]:focus {\n  outline: none;\n  border: none;\n}\n.load-more-btn[data-v-9fc4dac2]{\n  text-align: center;\n}\n", ""]);
 
 // exports
 
@@ -1364,7 +1364,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.post-header[data-v-000f7a70] {\r\n  display: flex;\r\n  padding: 15px 0;\n}\n.post-counts[data-v-000f7a70] {\r\n  color: black;\r\n  font-weight: bold;\r\n  margin-right: 20px;\n}\n.sortBy[data-v-000f7a70] {\r\n  background-color: transparent;\r\n  border: none;\r\n  outline: none;\r\n  width: auto;\r\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-000f7a70]:focus {\r\n  outline: none;\r\n  border: none;\n}\r\n", ""]);
+exports.push([module.i, "\n.post-header[data-v-000f7a70] {\n  display: flex;\n  padding: 15px 0;\n}\n.post-counts[data-v-000f7a70] {\n  color: black;\n  font-weight: bold;\n  margin-right: 20px;\n}\n.sortBy[data-v-000f7a70] {\n  background-color: transparent;\n  border: none;\n  outline: none;\n  width: auto;\n  color: rgb(255, 67, 1);\n}\n.sortBy[data-v-000f7a70]:focus {\n  outline: none;\n  border: none;\n}\n", ""]);
 
 // exports
 
@@ -1383,7 +1383,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.profile-header[data-v-39ca48f0] {\r\n  margin: 30px auto;\r\n  display: flex;\r\n  align-items: center;\n}\n.profile-name[data-v-39ca48f0] {\r\n  padding: 0;\r\n  margin: 0;\r\n  color: black;\n}\n.profile-buttons[data-v-39ca48f0] {\r\n  padding: 10px 0px;\n}\n.profile-img[data-v-39ca48f0] {\r\n  width: 120px;\r\n  height: 120px;\r\n  padding: 3px;\r\n  border: 2px solid rgb(255, 67, 1);\r\n  border-radius: 50%;\n}\n.profile-avatar[data-v-39ca48f0] {\r\n  margin-right: 30px;\n}\n.profile-count[data-v-39ca48f0] {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\n}\n.follow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: rgb(255, 67, 1);\r\n  color: white;\n}\n.unfollow-btn[data-v-39ca48f0] {\r\n  width: 100px;\r\n  background-color: red;\r\n  color: white;\n}\n.nav-tabs > li > a[data-v-39ca48f0] {\r\n  color: black;\r\n  border: none;\r\n  margin-right: 0;\n}\n.nav-tabs > li > a[data-v-39ca48f0],\r\n.nav-tabs > li > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li > a[data-v-39ca48f0]:focus {\r\n  border: none;\n}\n.nav-tabs > li.active > a[data-v-39ca48f0],\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:hover,\r\n.nav-tabs > li.active > a[data-v-39ca48f0]:focus {\r\n  color: #555555;\r\n  background-color: #f5f8fa;\r\n  border-bottom: 3px solid rgb(255, 67, 1);\r\n  cursor: default;\n}\n.profile-nav-tabs[data-v-39ca48f0] {\r\n  display: flex;\r\n  justify-content: space-between;\n}\n.profile-nav-tabs[data-v-39ca48f0]::before,\r\n.profile-nav-tabs[data-v-39ca48f0]::after {\r\n  content: none;\n}\n.single-tags-name[data-v-39ca48f0] {\r\n  color: black;\n}\n.single-tags-name span[data-v-39ca48f0] {\r\n  color: rgb(255, 67, 1);\n}\n.friends-avatar[data-v-39ca48f0] {\r\n  width: 80px;\r\n  height: 80px;\r\n  padding: 10px;\r\n  border-radius: 15px;\n}\n.friends-name[data-v-39ca48f0] {\r\n  font-size: 14px;\r\n  color: black;\r\n  font-weight: bold;\r\n  padding: 0;\n}\n.unfriend-btn[data-v-39ca48f0] {\r\n  margin-left: auto;\n}\n.sidebar[data-v-39ca48f0] {\r\n  margin: 30px auto;\n}\n.counts-item[data-v-39ca48f0] {\r\n  margin: 0 5px;\n}\r\n", ""]);
+exports.push([module.i, "\n.profile-header[data-v-39ca48f0] {\n  margin: 30px auto;\n  display: flex;\n  align-items: center;\n}\n.profile-name[data-v-39ca48f0] {\n  padding: 0;\n  margin: 0;\n  color: black;\n}\n.profile-buttons[data-v-39ca48f0] {\n  padding: 10px 0px;\n}\n.profile-img[data-v-39ca48f0] {\n  width: 120px;\n  height: 120px;\n  padding: 3px;\n  border: 2px solid rgb(255, 67, 1);\n  border-radius: 50%;\n}\n.profile-avatar[data-v-39ca48f0] {\n  margin-right: 30px;\n}\n.profile-count[data-v-39ca48f0] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.follow-btn[data-v-39ca48f0] {\n  width: 100px;\n  background-color: rgb(255, 67, 1);\n  color: white;\n}\n.unfollow-btn[data-v-39ca48f0] {\n  width: 100px;\n  background-color: red;\n  color: white;\n}\n.nav-tabs > li > a[data-v-39ca48f0] {\n  color: black;\n  border: none;\n  margin-right: 0;\n}\n.nav-tabs > li > a[data-v-39ca48f0],\n.nav-tabs > li > a[data-v-39ca48f0]:hover,\n.nav-tabs > li > a[data-v-39ca48f0]:focus {\n  border: none;\n}\n.nav-tabs > li.active > a[data-v-39ca48f0],\n.nav-tabs > li.active > a[data-v-39ca48f0]:hover,\n.nav-tabs > li.active > a[data-v-39ca48f0]:focus {\n  color: #555555;\n  background-color: #f5f8fa;\n  border-bottom: 3px solid rgb(255, 67, 1);\n  cursor: default;\n}\n.profile-nav-tabs[data-v-39ca48f0] {\n  display: flex;\n  justify-content: space-between;\n}\n.profile-nav-tabs[data-v-39ca48f0]::before,\n.profile-nav-tabs[data-v-39ca48f0]::after {\n  content: none;\n}\n.single-tags-name[data-v-39ca48f0] {\n  color: black;\n}\n.single-tags-name span[data-v-39ca48f0] {\n  color: rgb(255, 67, 1);\n}\n.friends-avatar[data-v-39ca48f0] {\n  width: 80px;\n  height: 80px;\n  padding: 10px;\n  border-radius: 15px;\n}\n.friends-name[data-v-39ca48f0] {\n  font-size: 14px;\n  color: black;\n  font-weight: bold;\n  padding: 0;\n}\n.unfriend-btn[data-v-39ca48f0] {\n  margin-left: auto;\n}\n.sidebar[data-v-39ca48f0] {\n  margin: 30px auto;\n}\n.counts-item[data-v-39ca48f0] {\n  margin: 0 5px;\n}\n", ""]);
 
 // exports
 

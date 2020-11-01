@@ -101,7 +101,7 @@
             white-space: normal;
             overflow: hidden;
             height: auto;
-            text-align: justify;
+            text-align: left;
             /* width: 100%; */
         }
 </style>

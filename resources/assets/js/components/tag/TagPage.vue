@@ -58,7 +58,9 @@
             </div>
             <div class="row description" v-if="showDescription">
               <div class="col-md-12">
-                {{ tag.description }}
+                <div v-html="tag.description">
+                                   
+                </div>
                 
               </div>
             </div>
