@@ -79,6 +79,15 @@
             min-height:500px!important;
             overflow: scroll;
         }
+
+        .story-text{
+            font-size:17px;
+        }
+        .image-description{
+            text-align:center;
+            font-size:12px;
+            padding:0px 10px;
+        }
     </style>
     
 @endsection
@@ -121,7 +130,7 @@
                                 <emoji-counts :thread="{{ $thread }}"></emoji-counts>
             
                                 <div  class="thread-map-icon">
-                                    @if($thread->location != NULL)
+                                    @if($thread->location != NULL && $thread->location !='null')
                                         <img src="{{ asset('images/png/map-icon-red.png') }}" alt="">
                                         <span class="full-location">{{ $thread->location }}</span>
 
@@ -177,10 +186,11 @@
                         <div class="row">
                             <div class="col-md-12 no-padding">
                                 <div class="story">
-                                    <div class="thread_thumb" style="background: rgba({{ $thread->imageColor }})">
+                                    <div class="thread_thumb" style="margin-bottom:0px; background: rgba({{ $thread->imageColor }})">
                                         <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image thread_thumb_image">
                                         {{-- Under images: need show img description + license info + amazon [shop] --}}
                                     </div>
+                                    <p class="image-description" style="text-align:center">{!! $thread->wiki_image_description !!}</p>
                                 </div>
                             </div>
                         </div>

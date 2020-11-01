@@ -100,6 +100,7 @@ export default {
 }
 .thread_thumb_image {
   max-width: 100%;
+  height:240px;
 }
 .panel {
   position: relative;
@@ -121,5 +122,9 @@ export default {
 
 .tools-row{
   padding-bottom: 15px;
+}
+
+.thread_excerpt{
+  font-size: 17px;
 }
 </style>

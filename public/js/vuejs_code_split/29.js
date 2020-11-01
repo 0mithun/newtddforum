@@ -105,7 +105,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".navbar-nav > li > .dropdown-menu.user-notification[data-v-c0045994] {\n  overflow-y: scroll;\n  width: 250px;\n}\n.dropdown-menu.user-notification > li[data-v-c0045994] {\n  border-bottom: 1px solid #ddd;\n  margin-top: 5px;\n}\n.dropdown-menu.user-notification > li > a[data-v-c0045994] {\n  display: block;\n  padding: 3px 20px;\n  clear: both;\n  font-weight: normal;\n  line-height: 1.6;\n  color: #333333;\n  white-space: normal;\n  overflow: hidden;\n  height: auto;\n  text-align: justify;\n  /* width: 100%; */\n}", ""]);
+exports.push([module.i, ".navbar-nav > li > .dropdown-menu.user-notification[data-v-c0045994] {\n  overflow-y: scroll;\n  width: 250px;\n}\n.dropdown-menu.user-notification > li[data-v-c0045994] {\n  border-bottom: 1px solid #ddd;\n  margin-top: 5px;\n}\n.dropdown-menu.user-notification > li > a[data-v-c0045994] {\n  display: block;\n  padding: 3px 20px;\n  clear: both;\n  font-weight: normal;\n  line-height: 1.6;\n  color: #333333;\n  white-space: normal;\n  overflow: hidden;\n  height: auto;\n  text-align: left;\n  /* width: 100%; */\n}", ""]);
 
 // exports
 

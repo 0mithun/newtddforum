@@ -95,6 +95,7 @@ class ThreadsController extends Controller
         // $relatedThreads = $this->getRelatedThread( $thread );
         $pageTitle = $thread->title;
 
+        
 
         return view('threads.show', compact('thread', 'pageTitle'));
     }

@@ -74,7 +74,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.thread_thumb[data-v-113089a8] {\n  display: block;\n  max-width: 100%;\n  text-align: center;\n  overflow: hidden;\n  margin-bottom: 20px;\n}\n.thread_thumb_image[data-v-113089a8] {\n  max-width: 100%;\n}\n", ""]);
+exports.push([module.i, "\n.thread_thumb[data-v-113089a8] {\n  display: block;\n  max-width: 100%;\n  text-align: center;\n  overflow: hidden;\n  margin-bottom: 20px;\n}\n.thread_thumb_image[data-v-113089a8] {\n  max-width: 100%;\n  height:120px;\n}\n", ""]);
 
 // exports
 

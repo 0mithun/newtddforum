@@ -73,6 +73,7 @@ export default {
   max-width: 100%;
   height: auto;
   display: inline-block;
+  height: 60px;
 }
 .thread-counts {
   width: 45%;

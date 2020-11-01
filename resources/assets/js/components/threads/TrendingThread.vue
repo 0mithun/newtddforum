@@ -59,5 +59,6 @@ export default {
 }
 .thread_thumb_image {
   max-width: 100%;
+  height:120px;
 }
 </style>

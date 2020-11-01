@@ -236,7 +236,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.info-content[data-v-71185c30] {\n  cursor: pointer;\n  max-width: 10vw;\n}\n.info-content-body[data-v-71185c30] {\n  display: flex;\n  justify-content: space-between;\n}\n.info-content-thread-thumb[data-v-71185c30] {\n  margin-right: 5%;\n  width: 50%;\n}\n.thread-thumb[data-v-71185c30] {\n  max-width: 100%;\n  height: auto;\n  display: inline-block;\n}\n.thread-counts[data-v-71185c30] {\n  width: 45%;\n  width: 45%;\n  display: flex;\n  justify-content: space-evenly;\n  flex-direction: column;\n}\n.thread-title[data-v-71185c30] {\n  color: black;\n}\n", ""]);
+exports.push([module.i, "\n.info-content[data-v-71185c30] {\n  cursor: pointer;\n  max-width: 10vw;\n}\n.info-content-body[data-v-71185c30] {\n  display: flex;\n  justify-content: space-between;\n}\n.info-content-thread-thumb[data-v-71185c30] {\n  margin-right: 5%;\n  width: 50%;\n}\n.thread-thumb[data-v-71185c30] {\n  max-width: 100%;\n  height: auto;\n  display: inline-block;\n  height: 60px;\n}\n.thread-counts[data-v-71185c30] {\n  width: 45%;\n  width: 45%;\n  display: flex;\n  justify-content: space-evenly;\n  flex-direction: column;\n}\n.thread-title[data-v-71185c30] {\n  color: black;\n}\n", ""]);
 
 // exports
 

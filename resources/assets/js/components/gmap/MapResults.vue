@@ -92,7 +92,7 @@ export default {
 }
 .thread-thumb {
   max-width: 100%;
-  height: auto;
+  height: 60px;
   display: inline-block;
 }
 .thread-counts {
