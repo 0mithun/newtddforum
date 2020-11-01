@@ -111,7 +111,7 @@ class SearchController extends Controller
                 $body_array[] = $thread;
             }
             
-            if(preg_match($regex, $thread->tag_names, $matches))
+            else if(preg_match($regex, $thread->tag_names, $matches))
             {
                 $tags_array[] = $thread;
             }else {
