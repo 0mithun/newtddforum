@@ -639,6 +639,7 @@ export default {
       // this.paginatedItems = threads;
       // this.threads = threads;
       this.allThreads = threads;
+      this.paginatedItems = threads;
     },
     ago(created_at) {
       return moment(created_at, "YYYY-MM-DD HH:mm:ss").fromNow() + "...";
