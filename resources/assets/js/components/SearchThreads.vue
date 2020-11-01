@@ -318,9 +318,9 @@
         </div>
       </div>
       <single-thread
-        v-for="(thread, index) in paginatedItems"
+        v-for="(thread, index) in showPaginatedItems"
         :thread="thread"
-        :key="index"
+        :key="thread.id"
       ></single-thread>
 
       <nav aria-label="..." v-if="totalPage > 1">
@@ -415,6 +415,9 @@ export default {
     
   },
   computed: {
+    showPaginatedItems(){
+      return this.paginatedItems;
+    },
     currentPage() {
       return this.page;
     },
@@ -462,6 +465,7 @@ export default {
       }
     },
     paginate(per_page, page_number) {
+   
       let itemsToParse = this.allThreads;
       let start = (page_number - 1) * per_page;
       let end = page_number * per_page;
@@ -635,12 +639,14 @@ export default {
       window.location.href = url;
     },
     sortBy() {
+      // this.allThreads = [];
       let threads = _.orderBy(this.allThreads, [this.sort_by], "desc");
       // this.paginatedItems = threads;
       // this.threads = threads;
       this.allThreads = threads;
-      this.paginate(this.perPage, this.page);
-      // this.paginatedItems = threads;
+       this.paginate(this.perPage, this.page);
+      
+      
     },
     ago(created_at) {
       return moment(created_at, "YYYY-MM-DD HH:mm:ss").fromNow() + "...";

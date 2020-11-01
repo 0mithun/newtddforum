@@ -63,6 +63,8 @@ class SearchController extends Controller
         $threads = Thread::search($query)->paginate($total)->load('emojis');
         $allThreads = $threads->all();
 
+        
+
         $collect = collect($allThreads);       
         
         
