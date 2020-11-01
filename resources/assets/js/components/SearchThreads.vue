@@ -405,13 +405,13 @@ export default {
   },
   created() {
     this.allThreads = Object.values(this.threads);
+    this.sortBy();
     this.getAllEmojis();
     // this.getAllTags();
     this.setCurrentPage();
     this.paginateLimit();
     this.paginate(this.perPage, this.page);
     
-    this.sortBy();
     
   },
   computed: {
