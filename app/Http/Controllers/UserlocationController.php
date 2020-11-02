@@ -16,15 +16,15 @@ class UserlocationController extends Controller {
             $lat = $auth_user->lat;
             $lng = $auth_user->lng;
             $userLocations = [
-                'lat' => $auth_user->lat,
-                'lng' => $auth_user->lng,
+                'lat' => (float) $auth_user->lat,
+                'lng' => (float)  $auth_user->lng,
             ];
         } else {
             $arr_ip = geoip()->getLocation( $_SERVER['REMOTE_ADDR'] );
 
             $userLocations = [
-                'lat' => $arr_ip['lat'],
-                'lng' => $arr_ip['lon'],
+                'lat' =>(float)  $arr_ip['lat'],
+                'lng' => (float) $arr_ip['lon'],
             ];
         }
 
@@ -38,8 +38,8 @@ class UserlocationController extends Controller {
         $lat = $auth_user->lat;
         $lng = $auth_user->lng;
         $userLocations = [
-            'lat' => $auth_user->lat,
-            'lng' => $auth_user->lng,
+            'lat' =>(float)  $auth_user->lat,
+            'lng' => (float) $auth_user->lng,
         ];
 
         $pageTitle = 'Closet maps';
@@ -60,6 +60,7 @@ class UserlocationController extends Controller {
             $splitQueryString = explode( '=', $query );
             if ( count( $splitQueryString ) > 1 ) {
                 $search = array_pop( $splitQueryString );
+                $search = urldecode($search);
             }
         }
 
@@ -67,6 +68,7 @@ class UserlocationController extends Controller {
             $results = Thread::
                 where( 'title', "LIKE", "%$search%" )
                 ->orWhere( 'body', "LIKE", "%$search%" )
+                ->orWhere('tag_names','LIKE',"%$search%")
                 // ->get()
             ;
         } else {
@@ -74,7 +76,7 @@ class UserlocationController extends Controller {
             $lat = $center['lat'];
             $lng = $center['lng'];
 
-            $distance = request( 'radius' ) ?? 200;
+            $distance = request( 'radius' ) ?? 1000;
             $results = $this->search($lat,$lng,$distance);
 
             // if ( request( 'radius' ) ) {
@@ -103,7 +105,7 @@ class UserlocationController extends Controller {
 
         $markers = collect( $filterResults )->map( function ( $item, $key ) {
             return [
-                'position'  => ['lat' => $item->lat, 'lng' => $item->lng],
+                'position'  => ['lat' => (float) $item->lat, 'lng' => (float)  $item->lng],
                 'name'      => $item->title,
                 'thread_id' => $item->id,
             ];
@@ -124,6 +126,7 @@ class UserlocationController extends Controller {
         ->selectRaw('id, ( 3959 * acos( cos( radians('.$lat.') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('.$lng.') ) + sin( radians('.$lat.') ) * sin(radians(lat)) ) ) AS distance')
         ->having('distance','<',$distance)
         ->orderBy('distance')
+        ->limit(150)
         // ->lists('id')
         ->pluck('id')
         ;

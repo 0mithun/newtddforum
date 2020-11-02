@@ -8,7 +8,7 @@
             <strong v-html="thread.title"></strong>
           </a>
         </div>
-      <div class="card-header thread_thumb" :style="threadThumbStyle(thread)">
+      <div class="card-header thread_thumb" :style="threadThumbStyle(thread)"  @click="openThreadUrl(thread.path)">
         <a :href="thread.path">
           <img
             :src="thread.threadImagePath"
@@ -40,13 +40,17 @@ export default {
   },
   methods: {
     threadThumbStyle(thread) {
-      return `background: rgba(${thread.imageColor})`;
+      return `background: rgba(${thread.imageColor});cursor:pointer;`;
     },
     getTrending() {
       axios.get("/trending").then((res) => {
         this.threads = res.data;
       });
     },
+     openThreadUrl(path){
+       window.location = path;
+
+     }
   },
 };
 </script>

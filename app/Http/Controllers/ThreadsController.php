@@ -150,7 +150,7 @@ class ThreadsController extends Controller
             $channel = json_decode($request->channel);
             $data['channel_id'] = $channel->id;
         } else {
-            $data['channel_id'] = 1;
+            $data['channel_id'] = 2;
         }
 
         $thread = Thread::create($data);
@@ -224,7 +224,7 @@ class ThreadsController extends Controller
             $channel = json_decode($request->channel);
             $data['channel_id'] = $channel->id;
         } else {
-            $data['channel_id'] = 1;
+            $data['channel_id'] = 2;
         }
 
         $thread->update($data);
@@ -267,7 +267,7 @@ class ThreadsController extends Controller
             return response([], 204);
         }
 
-        return redirect('/threads');
+        // return redirect('/');
     }
 
     /**

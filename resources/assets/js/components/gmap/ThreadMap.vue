@@ -1,6 +1,13 @@
 <template>
-  <GmapMap @click="clicked" :center="mapCenter" :zoom="zoom" map-type-id="terrain" style="width: 100%; height: 85vh" :options="{   zoomControl: true,
-}">
+<div>
+  <div class="loading" v-if="loading">
+    <div class="image">
+    <img src="/images/loading.gif" alt="">
+      <h4 style="color:white;font-weignt:bold;">Loading....</h4>
+    </div>
+  </div>
+  <div>
+     <GmapMap @center_changed="centerChanged" @click="clicked" :center="mapCenter" :zoom="zoom" map-type-id="terrain" style="width: 100%; height: 85vh" :options="{   zoomControl: true,}">
     <GmapMarker
       :key="index"
       v-for="(m, index) in markers"
@@ -24,7 +31,7 @@
             
     </gmap-cluster>-->
 
-    <GmapMarker :position="center" :clickable="true" :draggable="false" />
+    <GmapMarker :position="center" :clickable="true" :draggable="false" @click="toggleInfoWindow(m,index)" />
 
     <gmap-info-window
       :options="infoOptions"
@@ -35,6 +42,9 @@
       <info-content :thread="infoContent" v-if="this.infoContent !=null"></info-content>
     </gmap-info-window>
   </GmapMap>
+  </div>
+</div>
+ 
 </template>
 
 <script>
@@ -47,15 +57,18 @@ export default {
   },
   data() {
     return {
+      loading:false,
       query: "",
       center: { lat: parseFloat(this.userlat), lng: parseFloat(this.userlng) },
       mapCenter: {
         lat: parseFloat(this.userlat),
         lng: parseFloat(this.userlng),
       },
+    
+      fetchRunningCenter:null,
       markers: [],
       results: [],
-      zoom: 2,
+      zoom: 5,
       infoContent: null,
       infoWindowPos: {
         lat: 0,
@@ -72,42 +85,76 @@ export default {
     };
   },
   methods: {
+    centerChanged(event){
+      const center = {
+        lat:event.lat(),
+        lng: event.lng()
+      }
+
+        this.fetchRunningCenter = center;
+        this.fetchLocations();
+    },
     clicked(e){
-      console.log(e.latLng.lat());
-      console.log(e.latLng.lng());
 
       this.mapCenter.lat = e.latLng.lat();
       this.mapCenter.lng = e.latLng.lng();
 
-      this.center.lat = e.latLng.lat();
-      this.center.lng = e.latLng.lng();
-
+      // this.center.lat = e.latLng.lat();
+      // this.center.lng = e.latLng.lng();
+      this.loading = true;
       this.fetchLocations();
     },
     fetchLocations() {
-      if (this.center.lat == NaN || this.center.lng == NaN) {
-        alert("You must provide your location first");
+      
+      if(this.query ==''){
+        if (this.center.lat == NaN || this.center.lng == NaN) {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position=>{
+                 const lat  = position.coords.latitude;
+                 const long = position.coords.longitude; 
+                 this.center.lat = lat;
+                 this.center.lng = long;            
+            });
+          }else{
+            alert("You must provide your location first");
+            return;
+          }
+        }
       }
-      let url = "/map/all-threads";
 
+      let url = "/map/all-threads";
       axios
         .post(url, {
-          center: this.center,
+          center: this.fetchRunningCenter != null ? this.fetchRunningCenter : this.center,
           query: this.query,
         })
         .then((res) => {
           console.log(res.data);
-          // console.log('sama');
+          
 
           let data = res.data;
           if (res.data.status == "failed") {
             alert("You must provide your location first");
           } else {
             eventBus.$emit("markers_fetched", data);
+            if(this.fetchRunningCenter != null){
+              this.mapCenter = this.fetchRunningCenter;
+              
+            }
           }
         });
     },
     toggleInfoWindow(marker, idx) {
+      const center = {
+        lat:  this.results[idx].lat,
+        lng: this.results[idx].lng
+      }
+      // this.center = center;
+      this.mapCenter = center;
+      if(this.zoom < 10){
+        this.zoom = this.zoom + 1
+      }
+
       this.infoWindowPos = marker.position;
 
       this.infoContent = this.results[idx];
@@ -121,6 +168,8 @@ export default {
         this.infoWinOpen = true;
         this.currentMidx = idx;
       }
+
+      this.fetchLocations();
     },
   },
   created() {
@@ -136,6 +185,7 @@ export default {
           Math.random() * Math.floor(this.markers.length)
         );
         this.mapCenter = data.markers[center].position;
+        this.loading = false;
       }
     });
     eventBus.$on("markers_result_clicked", (index) => {
@@ -150,9 +200,36 @@ export default {
     eventBus.$on("change_center", (center) => {
       this.mapCenter = center;
     });
+
+    eventBus.$on("query_removed", () => {
+      this.query = '';
+      const uri = window.location.toString();
+      if (uri.indexOf("?") > 0) {
+          const clean_uri = uri.substring(0, uri.indexOf("?"));
+          window.history.replaceState({}, document.title, clean_uri);
+      }
+    });
+  
+      
   },
 };
 </script>
 
 <style>
+.loading{
+    position: absolute;
+    left: 0;
+    /* right: 0; */
+    z-index: 99999;
+    top: 0;
+    background: rgba(0,0,0,0.4);
+    height: 100%;
+    width: 100%;
+}
+.loading .image{
+  position: absolute;
+    left: 48%;
+    /* right: 0; */
+    top: 48%;
+}
 </style>

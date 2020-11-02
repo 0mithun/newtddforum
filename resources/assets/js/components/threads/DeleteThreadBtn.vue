@@ -32,12 +32,11 @@
                 return false
             },
             deleteThread(){
-                console.log(this.thread.slug)
-                axios.delete('/threads/'+this.thread.slug).then(res=>{
-                    console.log(res.data)
+                axios.delete('/threads/'+this.thread.slug).then(res=>{    
+                     flash("Thread Delete Successfully.");               
                     window.location = '/'
                 }).catch(err=>{
-
+                    console.log(err)
                 })
             },
         }

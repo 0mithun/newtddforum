@@ -43,9 +43,24 @@ export default {
   },
   methods: {
     fetchNearestLocations() {
-      if (this.center.lat == NaN || this.center.lng == NaN) {
-        alert("You must provide your location first");
+
+      if(this.query ==''){
+        if (this.center.lat == NaN || this.center.lng == NaN) {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position=>{
+                 const lat  = position.coords.latitude;
+                 const long = position.coords.longitude; 
+                 this.center.lat = lat;
+                 this.center.lng = long;            
+            });
+          }else{
+            alert("You must provide your location first");
+            return;
+          }
+        }
       }
+
+
       let url = "/map/all-threads";
 
       axios
@@ -60,7 +75,6 @@ export default {
           let center = this.center;
           let zoom = 6;
 
-          console.log(res.data);
           eventBus.$emit("markers_fetched", data);
           eventBus.$emit("change_center", center);
           if (this.radius == 0) {
@@ -78,10 +92,12 @@ export default {
         });
     },
     setRelatedThread(place) {
+      this.query = '';
+      eventBus.$emit("query_removed");
       this.radius = 500;
       let center = {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng(),
+        lat: Number.parseFloat( place.geometry.location.lat()),
+        lng: Number.parseFloat( place.geometry.location.lng()),
       };
       this.center = center;
       this.fetchNearestLocations();

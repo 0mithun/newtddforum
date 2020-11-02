@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <div class="card-header thread_thumb" :style="threadThumbStyle">
+      <div class="card-header thread_thumb" :style="threadThumbStyle" @click="openThreadUrl(thread.path)">
         <a :href="thread.path">
           <img
             :src="thread.threadImagePath"
@@ -73,9 +73,14 @@ export default {
   props: ["thread"],
   computed: {
     threadThumbStyle() {
-      return `background: rgba(${this.thread.imageColor})`;
+      return `background: rgba(${this.thread.imageColor});cursor:pointer;`;
     },
   },
+  methods:{
+    openThreadUrl(path){
+      window.location =path ;
+    }
+  }
 };
 </script>
 
