@@ -21,10 +21,10 @@
             >
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title" id="gridSystemModalLabel">Thread Source</h4>
+            <h4 class="modal-title" id="gridSystemModalLabel">Article source</h4>
           </div>
-          <div class="modal-body" v-html="source">
-             
+          <div class="modal-body">
+             <span v-html="source"></span>
           </div>
         </div>
       </div>
@@ -34,7 +34,10 @@
 
 <script>
 export default {
-  props: ['source']
+  props: ['source'],
+  created(){
+    console.log(unescape(this.source))
+  }
 };
 </script>
 
@@ -49,5 +52,12 @@ export default {
   padding: 0;
   height: auto;
   width: auto;
+}
+.modal-header{
+  padding:5px 10px;
+}
+
+.modal-body{
+  padding:5px 10px;
 }
 </style>

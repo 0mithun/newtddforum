@@ -84,9 +84,15 @@
             font-size:17px;
         }
         .image-description{
-            text-align:center;
+            text-align:left;
             font-size:12px;
             padding:0px 10px;
+        }
+        .channel-name{
+            margin-right:10px;
+        }
+        .thread-show-tags{
+            margin-top:15px;
         }
     </style>
     
@@ -102,7 +108,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-10">
-                                <span class="channel-name"></span>
+                                <span class="channel-name" >  <a href="{{ route('tags.threads.list', strtolower($thread->channel->name)) }}" class="tag-name">{{ $thread->channel->name }}</a></span>
                                 <span class="created_time">{{ $thread->created_at->diffForHumans() }}</span>
                             </div>
                             <div class="col-md-2 thread-edit-delete-btn"> 

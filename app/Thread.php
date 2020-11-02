@@ -301,6 +301,19 @@ class Thread extends Model
     }
 
     /**
+     * Access the source attribute.
+     *
+     * @param  string $source
+     * @return string
+     */
+    public function getSourceAttribute($source)
+    {
+        // return \Purify::clean($body);
+
+        return html_entity_decode($source);
+    }
+
+    /**
      *
      * Set the word_count attribute
      * @param string $value

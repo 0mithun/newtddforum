@@ -38,7 +38,8 @@ Route::get('/', 'ThreadsController@index');
 
 Route::get('/trending', 'ThreadsController@getTrending');
 
-Route::resource('threads', 'ThreadsController')->except(['show', 'update']);
+Route::resource('threads', 'ThreadsController')->except(['show', 'update','index']);
+Route::get('anecdotes', 'ThreadsController@index')->name('threads.index');
 Route::get('anecdotes/{channel}/{thread}', 'ThreadsController@show');
 Route::post('threads/{thread}', 'ThreadsController@update');
 Route::get('/threads/get-all-tags','ThreadsController@getAllTags');
@@ -110,7 +111,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/chat-others','ChatController@getOtherMessageUsers');
     // Route::get('/other-users-message','ChatController@getOtherUsersMessage');
 
-    Route::get('/closet/threads', 'UserlocationController@showCloset')->name('closet.thread');
+    Route::get('/closet', 'UserlocationController@showCloset')->name('closet.thread');
 
     Route::post('/anecdotes/{channel}/{thread}/replies', 'RepliesController@store');
     Route::patch('/replies/{reply}', 'RepliesController@update');

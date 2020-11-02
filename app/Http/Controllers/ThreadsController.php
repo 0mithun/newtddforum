@@ -51,6 +51,7 @@ class ThreadsController extends Controller
      */
     public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {   
+       
         $threads = $this->getThreads($channel, $filters);
         $totalRecords = $threads->count();
         $threads = $this->generateCurrentPageResults($threads, $this->perPage); 
@@ -62,6 +63,8 @@ class ThreadsController extends Controller
             return $threads;
         }
         $admin = Admin::first();
+
+        
 
         return view('threads.index', [
             'threads'   =>  $threads,

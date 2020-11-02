@@ -11,11 +11,11 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Top <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/threads?rated=1">Trending</a></li>
-                        <li><a href="/threads?viewed=1">Most Viewed</a></li>
-                        <li><a href="/threads?recents=1">Most Recent</a></li>
+                        <li><a href="/anecdotes?rated=1">Trending</a></li>
+                        <li><a href="/anecdotes?viewed=1">Most Viewed</a></li>
+                        <li><a href="/anecdotes?recents=1">Most Recent</a></li>
                         <li><a href="{{ route('closet.thread') }}">Closest</a></li>
-                        <li><a href="/threads?video=1">Video</a></li>
+                        <li><a href="/anecdotes?video=1">Video</a></li>
                       
 
 
@@ -26,7 +26,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false">Categories <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        {{-- <li><a href="/threads?rated=1">Top</a></li> --}}
+                        {{-- <li><a href="/anecdotes?rated=1">Top</a></li> --}}
                         @foreach ($channels as $channel)
                             <li><a href="{{ route('tags.threads.list', strtolower($channel->name)) }}">{{ $channel->name }}</a></li>
                         @endforeach
@@ -42,7 +42,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         @foreach($emojis as $emoji)
-                            <li class="navigation-emoji-icon"><a href="/threads?emoji={{ $emoji->name }}" class="navigation-emoji " style="background-image: url(/images/emojis/{{ $emoji->name }}.png)">{{ $emoji->name }}</a></li>
+                            <li class="navigation-emoji-icon"><a href="/anecdotes?emoji={{ $emoji->name }}" class="navigation-emoji " style="background-image: url(/images/emojis/{{ $emoji->name }}.png)">{{ $emoji->name }}</a></li>
                         @endforeach 
                     </ul>
                 </li>
