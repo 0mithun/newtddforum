@@ -2,17 +2,18 @@
 
 namespace App;
 
-use App\Events\ThreadReceivedNewReply;
+use App\Filters\IsPublished;
+use ScoutElastic\Searchable;
 use App\Filters\ThreadFilters;
-use Illuminate\Database\Eloquent\Builder;
+use App\Events\ThreadReceivedNewReply;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use ScoutElastic\Searchable;
+use Illuminate\Database\Eloquent\Builder;
 
 class Thread extends Model
 {
     //use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
-    use  Notifiable, Favoritable, Likeable, Searchable;
+    use  Notifiable, Favoritable, Likeable;
 
     protected $indexConfigurator = ThreadsIndexConfigurator::class;
 
@@ -109,6 +110,9 @@ class Thread extends Model
             //     $thread->update(['tag_names' => $tagNameList]);
             // }
         });
+      
+        static::addGlobalScope(new IsPublished);
+            
     }
 
     /**

@@ -110,6 +110,9 @@ class ReportController extends Controller {
             $user->notify( new ThreadWasReported( $thread, $reason ) );
         }
 
+        $thread->is_published = 0;
+        $thread->save();
+
         return \response()->json( ['status' => 'success', 'message' => 'Thread Reported Successfully'] );
     }
 

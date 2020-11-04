@@ -212,6 +212,7 @@ class ThreadsController extends Controller
             'cno'                    => $request->cno == null ? '' : $request->cno,
             'age_restriction'        => $request->age_restriction ? $request->age_restriction : 0,
             'anonymous'              => request('anonymous', 0),
+            'is_published'          => $thread->is_published == 1 ? 1 : ($authUser->id ==1 ? 1 : 0)
         ];
 
         // if ($request->location != null) {
@@ -229,6 +230,8 @@ class ThreadsController extends Controller
         } else {
             $data['channel_id'] = 2;
         }
+
+       
 
         $thread->update($data);
 
