@@ -1,7 +1,7 @@
 <template>
   <div class="counts-item" :style="commentStyle">
     <i class="fa fa-comment"></i>
-    <strong>{{ commentCounts | formatCount }}</strong> comments
+    <strong>{{ commentCounts | formatCount }}</strong>  {{ commentCounts | strPlural('comment') }}
   </div>
 </template>
 

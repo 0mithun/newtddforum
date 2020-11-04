@@ -1,7 +1,7 @@
 <template>
   <div class="counts-item">
     <i class="fa fa-star"></i>
-    <strong>{{ favoriteCounts | formatCount }}</strong> favorite
+    <strong>{{ favoriteCounts | formatCount   }}</strong> {{ favoriteCounts | strPlural('favorite')}}
   </div>
 </template>
 

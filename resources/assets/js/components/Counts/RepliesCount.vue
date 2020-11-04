@@ -1,7 +1,7 @@
 <template>
   <div class="counts-item" :style="commentStyle">
     <i class="fa fa-comment"></i>
-    <strong>{{ replies_count | formatCount }}</strong> comments
+    <strong>{{ replies_count | formatCount }}</strong>  {{ replies_count | strPlural('comment') }}
   </div>
 </template>
 

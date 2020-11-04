@@ -1,7 +1,7 @@
 <template>
   <div class="counts-item">
     <i class="fa fa-arrow-up"></i>
-    <strong>{{ like_counts | formatCount}}</strong> likes
+    <strong>{{ like_counts | formatCount}}</strong>  {{ like_counts | strPlural('like') }}
   </div>
 </template>
 

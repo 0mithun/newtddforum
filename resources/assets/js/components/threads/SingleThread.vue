@@ -131,5 +131,6 @@ export default {
 
 .thread_excerpt{
   font-size: 17px;
+   color:rgba(0,0,0,.8);
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="counts-item">
     <i class="fa fa-eye"></i>
-    <strong>{{ viewCounts | formatCount }}</strong> views
+    <strong>{{ viewCounts | formatCount }}</strong> {{ viewCounts | strPlural('view') }}
   </div>
 </template>
 

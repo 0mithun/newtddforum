@@ -94,6 +94,10 @@
         .thread-show-tags{
             margin-top:15px;
         }
+
+        .story{
+            color:rgba(0,0,0,.8);
+        }
     </style>
     
 @endsection

@@ -1,7 +1,7 @@
 <template>
   <div class="counts-item">
     <i class="fa fa-arrow-up"></i>
-    <strong>{{ pointCounts | formatCount }}</strong> points
+    <strong>{{ pointCounts | formatCount }}</strong>  {{ pointCounts | strPlural('point') }}
   </div>
 </template>
 
