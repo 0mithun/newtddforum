@@ -22,7 +22,7 @@
                         <div class="form-group " >
                             <label for="input">Category</label>
                             <input id="input" class="form-control" type="text" placeholder="Enter channel name">
-                            <typeahead v-model="form.channel" target="#input" :data="allchannels" item-key="name" force-select/>
+                            <typeahead v-model="form.channel" target="#input" :data="allchannels" item-key="name" />
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -80,7 +80,7 @@
                                 <strong class="" v-text="image_path_error_message"></strong>
                             </span>
 
-                            <span class="help-block error" v-if="errors.body">{{ errors.body[0] }}</span>
+                            <span class="help-block error" v-if="errors.image_path">{{ errors.image_path[0] }}</span>
 
                         </div>
                     </div>

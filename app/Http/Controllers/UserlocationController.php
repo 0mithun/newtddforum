@@ -69,6 +69,10 @@ class UserlocationController extends Controller {
                 where( 'title', "LIKE", "%$search%" )
                 ->orWhere( 'body', "LIKE", "%$search%" )
                 ->orWhere('tag_names','LIKE',"%$search%")
+                ->where(function($query){
+                    $query->where('lat','!=','')->where('lng','!=','');
+                    
+                })
                 // ->get()
             ;
         } else {

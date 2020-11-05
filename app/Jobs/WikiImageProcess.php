@@ -149,17 +149,53 @@ class WikiImageProcess implements ShouldQueue
 
                 if (in_array($license->first()->text(), $acceptedLicenses)) {
                     $licenseText = $license->first()->text();
+                   
+                    $saLicenseType = [
+                        'CC BY-SA 1.0',
+                        'CC BY-SA 1.5',
+                        'CC BY-SA 2.5',
+                        'CC BY-SA 3.0',
+                        'CC BY-SA 4.0',
+                    ];
+                    $nonSaLicenseType = [
+                        'CC BY 1.0',
+                        'CC BY 1.5',
+                        'CC BY 2.0 ',
+                        'CC BY 2.5 ',
+                        'CC BY 3.0',
+                        'CC BY 4.0',
+                    ];
+
+
+                    $licenseText = $license->first()->text();
+                    
+                    if( $licenseText == 'Public domain'){
+                        $htmlLicense = '(Public domain)';
+                    }
+                    else if ( in_array( $licenseText, $saLicenseType ) ) {
+                        if( \preg_match('&(\d)\.?\d?&',$licenseText, $matches)){
+
+                            $htmlLicense = '<a href="https://creativecommons.org/licenses/by-sa/'.$matches[0].'">('.$licenseText.')</a>';
+                        }
+                    }else if ( in_array( $licenseText, $nonSaLicenseType ) ) {
+                        if(\preg_match('&(\d)\.?\d?&',$licenseText, $matches)){
+
+                            $htmlLicense = '<a href="https://creativecommons.org/licenses/by/'.$matches[0].'">('.$licenseText.')</a>';
+                        }
+                    } 
                 }
             }
 
             $pixelColor = $this->getImageColorAttribute($full_image_link);
+
+            $fullDescriptionText = sprintf( '%s %s', $descriptionText,  $htmlLicense  );
 
             $data = [
                 'wiki_image_page_url' => $image_page_url,
                 'wiki_image_url' => $full_image_link,
                 'wiki_image_path' => $full_image_link,
                 'wiki_image_path_pixel_color' => $pixelColor ?? '',
-                'wiki_image_description' => $descriptionText . $licenseText,
+                'wiki_image_description' => $fullDescriptionText,
             ];
 
             $this->saveInfo($data);

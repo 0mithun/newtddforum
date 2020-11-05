@@ -60,8 +60,9 @@
           <favorite-thread :thread="thread" size="small"></favorite-thread>
           <up-votes :thread="thread" size="small"></up-votes>
           <down-votes :thread="thread" size="small"></down-votes>
-          <report-thread :thread="thread" size="small"></report-thread>
-          <show-source :thread="thread" size="small"></show-source>
+          <go-to-comment :thread="thread" size="small"></go-to-comment>
+          <!-- <report-thread :thread="thread" size="small"></report-thread>
+          <show-source :thread="thread" size="small"></show-source> -->
         </div>
       </div>
     </div>

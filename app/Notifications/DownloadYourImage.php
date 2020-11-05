@@ -2,18 +2,18 @@
 
 namespace App\Notifications;
 
-use App\Thread;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class InvalidImageUrlNotification extends Notification implements ShouldQueue
+class DownloadYourImage extends Notification implements ShouldQueue
 {
     use Queueable;
 
     public $thread;
+
     /**
      * Create a new notification instance.
      *
@@ -24,7 +24,7 @@ class InvalidImageUrlNotification extends Notification implements ShouldQueue
         $this->thread = $thread;
     }
 
-    /**
+     /**
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
@@ -47,7 +47,7 @@ class InvalidImageUrlNotification extends Notification implements ShouldQueue
     {
         $user = auth()->user();
         return [
-            'message' => "The Image url isn't a valid image url. Please check & add new image",
+            'message' => "Your image is downloading and may take a while to update.",
             'link' => $this->thread->path()
         ];
     }
@@ -55,7 +55,7 @@ class InvalidImageUrlNotification extends Notification implements ShouldQueue
     {
         $user = auth()->user();
         return new BroadcastMessage([
-            'message' => "The Image url isn't a valid image url. Please check & add new image",
+            'message' => "Your image is downloading and may take a while to update.",
             'link' => $this->thread->path()
         ]);
     }

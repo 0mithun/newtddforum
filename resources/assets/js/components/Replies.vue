@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <div class="panel panel-default">
       <new-reply @created="add" v-if="!authorize('isBan')"></new-reply>
       <div class="panel-">

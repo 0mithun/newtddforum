@@ -26,7 +26,7 @@ export default {
         backgroundImage:
           this.userEmoji != ""
             ? "url(/images/emojis/" + this.userEmoji.name + ".png)"
-            : "url(/images/emojis/funny.png)",
+            : "url(/images/emojis/funny-grayscale.png)",
         backgroundSize: this.size == "small" ? "20px" : "32px",
         height: this.size == "small" ? "24px" : "40px",
         width: this.size == "small" ? "24px" : "40px",

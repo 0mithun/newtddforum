@@ -98,6 +98,21 @@
         .story{
             color:rgba(0,0,0,.8);
         }
+        
+        .thread-image{
+            max-width: 100%;
+            height:240px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            }
     </style>
     
 @endsection
@@ -200,7 +215,7 @@
                                         <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image thread_thumb_image">
                                         {{-- Under images: need show img description + license info + amazon [shop] --}}
                                     </div>
-                                    <p class="image-description" style="text-align:center">{!! $thread->wiki_image_description !!}</p>
+                                    <p class="image-description" style="text-align:left">{!! $thread->wiki_image_description !!}</p>
                                 </div>
                             </div>
                         </div>
@@ -342,6 +357,15 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
+
+        $(document).ready(function() {
+            if(window.location.hash){
+                console.log(location.hash)
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }
+        });
 
     </script>
     

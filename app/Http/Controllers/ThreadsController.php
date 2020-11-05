@@ -10,19 +10,20 @@ use App\Channel;
 use App\Trending;
 use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
+use App\Traits\ThreadPrivacy;
 use Spatie\Geocoder\Geocoder;
 use App\Filters\ThreadFilters;
 use App\Jobs\WikiImageProcess;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Collection;
+use App\Jobs\DownloadThreadImageJob;
 use function GuzzleHttp\Promise\all;
 use Illuminate\Pagination\Paginator;
+use App\Notifications\DownloadYourImage;
 use App\Notifications\ThreadPostTwitter;
 use App\Notifications\ThreadPostFacebook;
 use App\Http\Requests\CreateThreadRequest;
 use App\Http\Requests\UpdateThreadRequest;
-use App\Jobs\DownloadThreadImageJob;
-use App\Traits\ThreadPrivacy;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ThreadsController extends Controller
@@ -124,6 +125,7 @@ class ThreadsController extends Controller
      */
     public function store(CreateThreadRequest $request)
     {
+        
         $authUser = auth()->user();
         $data = [
             'user_id'                => $authUser->id,
@@ -151,7 +153,16 @@ class ThreadsController extends Controller
         $channel = '';
         if ($request->has('channel') && $request->channel != null) {
             $channel = json_decode($request->channel);
-            $data['channel_id'] = $channel->id;
+            
+            $type = gettype($channel);
+            if($type == 'string'){
+                $findChannel = Channel::where('name', $channel)->first();
+                if($findChannel){
+                    $data['channel_id'] = $findChannel->id;
+                }
+            }else{
+                $data['channel_id'] = $channel->id;
+            }
         } else {
             $data['channel_id'] = 2;
         }
@@ -164,6 +175,7 @@ class ThreadsController extends Controller
         if (request('wiki_info_page_url') != '') {
             // WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
             dispatch(new DownloadThreadImageJob(request('wiki_info_page_url'), $thread));
+            $auth_user->notify(new DownloadYourImage($thread));
         }
 
         if ($request->expectsJson()) {
@@ -226,7 +238,17 @@ class ThreadsController extends Controller
         $channel = '';
         if ($request->has('channel') && $request->channel != null) {
             $channel = json_decode($request->channel);
-            $data['channel_id'] = $channel->id;
+            // $data['channel_id'] = $channel->id;
+             
+            $type = gettype($channel);
+            if($type == 'string'){
+                $findChannel = Channel::where('name', $channel)->first();
+                if($findChannel){
+                    $data['channel_id'] = $findChannel->id;
+                }
+            }else{
+                $data['channel_id'] = $channel->id;
+            }
         } else {
             $data['channel_id'] = 2;
         }
@@ -241,6 +263,7 @@ class ThreadsController extends Controller
         if (request('wiki_info_page_url') != '') {
             // WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
             dispatch(new DownloadThreadImageJob(request('wiki_info_page_url'), $thread));
+            $auth_user->notify(new DownloadYourImage($thread));
         }
 
         if ($request->expectsJson()) {
@@ -395,8 +418,47 @@ class ThreadsController extends Controller
             $file_name = $thread->id . "." . $extension;
             $file_path = $request->image_path->storeAs('threads', $file_name);
             $thread->image_path = 'uploads/' . $file_path;
+            $thread->image_path_pixel_color = $this->getImageColorAttribute('uploads/' . $file_path);        
+
+
             $thread->save();
         }
+    }
+
+    /**
+     * Get Image color attribute from image
+     *
+     * @param string $image_path
+     * @return void
+     */
+    public function getImageColorAttribute($image_path)
+    {
+        if ($image_path != '') {
+            $splitName = explode('.', $image_path);
+            $extension = strtolower(array_pop($splitName));
+
+            if ($extension == 'jpg') {
+                $im = imagecreatefromjpeg($image_path);
+            }
+            if ($extension == 'jpeg') {
+                $im = imagecreatefromjpeg($image_path);
+            } else if ($extension == 'png') {
+                $im = imagecreatefrompng($image_path);
+            } else if ($extension == 'gif') {
+                $im = imagecreatefromgif($image_path);
+            }
+
+            if (isset($im)) {
+                $rgb = imagecolorat($im, 0, 0);
+                $colors = imagecolorsforindex($im, $rgb);
+                array_pop($colors);
+                array_push($colors, 1);
+                $rgbaString = join(', ', $colors);
+
+                return $rgbaString;
+            }
+        }
+        return '';
     }
 
     /**
@@ -414,9 +476,22 @@ class ThreadsController extends Controller
 
         if ($request->has('channel') && $request->channel != null) {
             $channel = json_decode($request->channel);
-            if (!in_array(\strtolower($channel->name), $tags)) {
-                $tags[] = \strtolower($channel->name);
+             
+            $type = gettype($channel);
+            if($type == 'string'){
+                $findChannel = Channel::where('name', $channel)->first();
+                if($findChannel){
+                    if (!in_array(\strtolower($findChannel->name), $tags)) {
+                        $tags[] = \strtolower($findChannel->name);
+                    }
+                }
+            }else{
+                if (!in_array(\strtolower($channel->name), $tags)) {
+                    $tags[] = \strtolower($channel->name);
+                }
             }
+
+            
         }
 
         $main_subject = $request->main_subject;

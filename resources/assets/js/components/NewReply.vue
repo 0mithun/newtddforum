@@ -1,7 +1,7 @@
 <template>
-  <div class="add-new-reply">
-    <h3 class="comment-heading">What did you think?</h3>
+  <div class="add-new-reply" id="comments" name="comments">
     <div v-if="signedIn">
+    <h3 class="comment-heading">What did you think?</h3>
       <form action @submit.prevent="addReply">
         <div class="input-group">
           <input

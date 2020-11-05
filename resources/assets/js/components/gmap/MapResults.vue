@@ -22,9 +22,10 @@
       @mouseenter="focusMarker(index)"
       :class="isActive(index)"
     >
-      <div class="panel-header">
+      <!-- <div class="panel-header">
         <h5 class="thread-title">{{ thread.title }}</h5>
       </div>
+
       <div class="panel-body thread-info">
         <div class="thread-thumb-side">
           <img :src="thread.threadImagePath" class="thread-thumb" alt />
@@ -33,6 +34,25 @@
           <view-counts :thread="thread"></view-counts>
           <point-counts :thread="thread"></point-counts>
           <emoji-counts :thread="thread"></emoji-counts>
+        </div>
+      </div> -->
+      <div  class="panel">
+        <div  class="panel-body">
+          <div  class="trending_thread_title"><strong>{{ thread.title }}</strong>
+          </div>
+          <div class="card-header thread_thumb" :style="threadThumbStyle(thread)">
+              <img
+                :src="thread.threadImagePath"
+                alt="Jason Ritter: Tan Wizard"
+                class="thread_thumb_image"
+                style="max-width: 100%;height:70px"
+            />
+          </div>
+          <div class="trending_footer">
+             <view-counts :thread="thread"></view-counts>
+              <point-counts :thread="thread"></point-counts>
+              <emoji-counts :thread="thread"></emoji-counts>
+          </div>
         </div>
       </div>
     </div>
@@ -48,8 +68,14 @@ export default {
       activeIndex: null,
     };
   },
+  computed: {
+    
+  },
 
   methods: {
+    threadThumbStyle(thread) {
+      return `background: rgba(${thread.imageColor});cursor:pointer;`;
+    },
     isActive(index) {
       return this.activeIndex == index ? "panel-primary" : "";
     },
@@ -94,6 +120,7 @@ export default {
   max-width: 100%;
   height: 60px;
   display: inline-block;
+  margin-bottom: 0px;
 }
 .thread-counts {
   display: flex;
@@ -111,5 +138,8 @@ export default {
 }
 .panel-body {
   padding: 0px;
+}
+.thread_thumb{
+  margin-bottom: 0px;
 }
 </style>

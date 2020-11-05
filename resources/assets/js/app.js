@@ -132,7 +132,10 @@ Vue.component("profile-favorite-counts", () =>
 Vue.component("thread-replies", () => import("./components/Replies"));
 Vue.component("up-votes", () => import("./components/UpVotes.vue"));
 Vue.component("down-votes", () => import("./components/DownVotes.vue"));
+
 Vue.component("focus-comment", () => import("./components/FocusComment.vue"));
+Vue.component("go-to-comment", () => import("./components/GoToComment.vue"));
+
 Vue.component("vote-emojis", () => import("./components/VoteEmojis.vue"));
 Vue.component("vote-emoji-list", () =>
   import("./components/VoteEmojiList.vue")

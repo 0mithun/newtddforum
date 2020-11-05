@@ -22,7 +22,7 @@
                         <div class="form-group " >
                             <label for="input">Category</label>
                             <input id="input" class="form-control" type="text" placeholder="Enter channel name" v-model="defaultChannel">
-                            <typeahead v-model="form.channel" target="#input" :data="allchannels" item-key="name" force-select/>
+                            <typeahead v-model="form.channel" target="#input" :data="allchannels" item-key="name" />
                         </div>
                     </div>
                     <div class="col-md-8">
