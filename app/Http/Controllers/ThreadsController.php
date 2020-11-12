@@ -263,7 +263,7 @@ class ThreadsController extends Controller
         if (request('wiki_info_page_url') != '') {
             // WikiImageProcess::dispatch(request('wiki_info_page_url'), $thread, false);
             dispatch(new DownloadThreadImageJob(request('wiki_info_page_url'), $thread));
-            $auth_user->notify(new DownloadYourImage($thread));
+            $authUser->notify(new DownloadYourImage($thread));
         }
 
         if ($request->expectsJson()) {

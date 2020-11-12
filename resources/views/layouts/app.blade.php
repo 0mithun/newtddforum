@@ -172,7 +172,9 @@
             background-image: url(/images/social/instagram.png);
         }
 
-
+        .tox {
+            display: none;
+        }
 
     </style>
 </head>
@@ -191,12 +193,10 @@
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
-@php
-    $tinyapikey = config('services.tiny.key');
-    $url = "https://cdn.tiny.cloud/1/".$tinyapikey."/tinymce/5/tinymce.min.js";
-@endphp
-<script src="{{ $url  }}" referrerpolicy="origin"></script>
 
+<script>
+   window.TINY_EDITOR_API_KEY = "{{ config('services.tiny.key') }}";
+</script>
 
 
 @yield('scripts')

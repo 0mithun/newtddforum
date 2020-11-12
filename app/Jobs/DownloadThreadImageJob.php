@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Notifications\ImageDownloadComplete;
 use App\Notifications\InvalidImageUrlNotification;
 
 class DownloadThreadImageJob implements ShouldQueue
@@ -24,7 +25,7 @@ class DownloadThreadImageJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($image_url,Thread $thread)
+    public function __construct($image_url, Thread $thread)
     {
         $this->image_url = $image_url;
         $this->thread = $thread;
@@ -58,6 +59,9 @@ class DownloadThreadImageJob implements ShouldQueue
         ];
 
         $this->saveInfo($data);
+
+        $user = User::where('id', $this->thread->user_id)->first();
+        $user->notify(new ImageDownloadComplete($this->thread));
         
        
 

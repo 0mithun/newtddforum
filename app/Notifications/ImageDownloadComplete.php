@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class DownloadYourImage extends Notification implements ShouldQueue
+class ImageDownloadComplete extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -48,7 +48,7 @@ class DownloadYourImage extends Notification implements ShouldQueue
     {
         $user = auth()->user();
         return [
-            'message' => "Your image is downloading and may take a while to update.",
+            'message' => "Your thread image download complete you can check now.",
             'link' => $this->thread->path()
         ];
     }
@@ -56,7 +56,7 @@ class DownloadYourImage extends Notification implements ShouldQueue
     {
         $user = auth()->user();
         return new BroadcastMessage([
-            'message' => "Your image is downloading and may take a while to update.",
+            'message' => "Your thread image download complete you can check now.",
             'link' => $this->thread->path()
         ]);
     }
