@@ -50,8 +50,8 @@
           </div>
           <div class="trending_footer">
              <view-counts :thread="thread"></view-counts>
-              <point-counts :thread="thread"></point-counts>
               <emoji-counts :thread="thread"></emoji-counts>
+              <point-counts :thread="thread"></point-counts>
           </div>
         </div>
       </div>
@@ -81,7 +81,10 @@ export default {
     },
     focusMarker(index) {
       this.activeIndex = index;
+     
+
       eventBus.$emit("markers_result_clicked", index);
+       eventBus.$emit("zoom_decreased", 6);
     },
     viewThread(thread_id) {
       this.getThreadDetails(thread_id);
@@ -134,12 +137,20 @@ export default {
 .panel {
   margin-bottom: 5px;
   cursor: pointer;
-  padding: 5px;
+  padding: 0px;
 }
 .panel-body {
   padding: 0px;
 }
 .thread_thumb{
   margin-bottom: 0px;
+}
+.trending_thread_title{
+  font-size: 13px;
+  font-weight: bold;
+  color:black
+}
+.trending_footer{
+  font-size: 12px;
 }
 </style>

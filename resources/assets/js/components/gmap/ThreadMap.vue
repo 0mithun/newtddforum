@@ -113,7 +113,10 @@ export default {
                  const lat  = position.coords.latitude;
                  const long = position.coords.longitude; 
                  this.center.lat = lat;
-                 this.center.lng = long;            
+                 this.center.lng = long;      
+                
+                 this.mapCenter.lat = lat;
+                 this.mapCenter.lng = long;   
             });
           }else{
             alert("You must provide your location first");
@@ -129,17 +132,14 @@ export default {
           query: this.query,
         })
         .then((res) => {
-          console.log(res.data);
-          
-
           let data = res.data;
           if (res.data.status == "failed") {
             alert("You must provide your location first");
           } else {
             eventBus.$emit("markers_fetched", data);
             if(this.fetchRunningCenter != null){
-              this.mapCenter = this.fetchRunningCenter;
-              
+              // this.mapCenter = this.fetchRunningCenter;
+              // this.center = this.fetchRunningCenter;
             }
           }
         });
@@ -184,7 +184,7 @@ export default {
         let center = Math.floor(
           Math.random() * Math.floor(this.markers.length)
         );
-        this.mapCenter = data.markers[center].position;
+        // this.mapCenter = data.markers[center].position;
         this.loading = false;
       }
     });

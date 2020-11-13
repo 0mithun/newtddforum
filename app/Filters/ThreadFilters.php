@@ -94,7 +94,11 @@ class ThreadFilters extends Filters
 
         $this->builder->getQuery()->orders = [];
         // $threads = $this->builder->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - (dislike_count + 1 ) DESC');
-        $this->builder->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - dislike_count DESC');
+        // $this->builder->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - dislike_count DESC');
+
+        $this->builder
+        // ->whereColumn('like_count', '>', 'dislike_count')
+        ->orderByRaw('like_count - dislike_count DESC');
 
         // $this->filterThreads();
         return $this->builder;

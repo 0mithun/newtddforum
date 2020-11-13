@@ -316,7 +316,11 @@ class ThreadsController extends Controller
         if (request()->path() == '/') {
             $threads->getQuery()->orders = [];
             // $threads->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - (dislike_count + 1 ) DESC');
-            $threads->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - dislike_count DESC');
+            // $threads->whereColumn('like_count', '>', 'dislike_count')->orderByRaw('like_count - dislike_count DESC');
+
+            $threads
+            // >whereColumn('like_count', '>', 'dislike_count')
+            ->orderByRaw('like_count - dislike_count DESC');
         } else {
             $threads->latest()->filter($filters);
         }

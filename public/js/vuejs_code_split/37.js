@@ -89,6 +89,7 @@ __webpack_require__.r(__webpack_exports__);
     focusMarker: function focusMarker(index) {
       this.activeIndex = index;
       eventBus.$emit("markers_result_clicked", index);
+      eventBus.$emit("zoom_decreased", 6);
     },
     viewThread: function viewThread(thread_id) {
       this.getThreadDetails(thread_id);
@@ -124,7 +125,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.map_thraed_list[data-v-cb8801e6] {\n  height: 100vh;\n  overflow-y: scroll;\n}\n.thread-info[data-v-cb8801e6] {\n  display: flex;\n}\n.thread-thumb-side[data-v-cb8801e6] {\n  width: 50%;\n  margin-right: 5%;\n}\n.thread-thumb[data-v-cb8801e6] {\n  max-width: 100%;\n  height: 60px;\n  display: inline-block;\n  margin-bottom: 0px;\n}\n.thread-counts[data-v-cb8801e6] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-evenly;\n  height: auto;\n}\n.thread-title[data-v-cb8801e6] {\n  color: black;\n}\n.panel[data-v-cb8801e6] {\n  margin-bottom: 5px;\n  cursor: pointer;\n  padding: 5px;\n}\n.panel-body[data-v-cb8801e6] {\n  padding: 0px;\n}\n.thread_thumb[data-v-cb8801e6]{\n  margin-bottom: 0px;\n}\n", ""]);
+exports.push([module.i, "\n.map_thraed_list[data-v-cb8801e6] {\n  height: 100vh;\n  overflow-y: scroll;\n}\n.thread-info[data-v-cb8801e6] {\n  display: flex;\n}\n.thread-thumb-side[data-v-cb8801e6] {\n  width: 50%;\n  margin-right: 5%;\n}\n.thread-thumb[data-v-cb8801e6] {\n  max-width: 100%;\n  height: 60px;\n  display: inline-block;\n  margin-bottom: 0px;\n}\n.thread-counts[data-v-cb8801e6] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-evenly;\n  height: auto;\n}\n.thread-title[data-v-cb8801e6] {\n  color: black;\n}\n.panel[data-v-cb8801e6] {\n  margin-bottom: 5px;\n  cursor: pointer;\n  padding: 0px;\n}\n.panel-body[data-v-cb8801e6] {\n  padding: 0px;\n}\n.thread_thumb[data-v-cb8801e6]{\n  margin-bottom: 0px;\n}\n.trending_thread_title[data-v-cb8801e6]{\n  font-size: 13px;\n  font-weight: bold;\n  color:black\n}\n.trending_footer[data-v-cb8801e6]{\n  font-size: 12px;\n}\n", ""]);
 
 // exports
 
@@ -226,9 +227,9 @@ var render = function() {
                 [
                   _c("view-counts", { attrs: { thread: thread } }),
                   _vm._v(" "),
-                  _c("point-counts", { attrs: { thread: thread } }),
+                  _c("emoji-counts", { attrs: { thread: thread } }),
                   _vm._v(" "),
-                  _c("emoji-counts", { attrs: { thread: thread } })
+                  _c("point-counts", { attrs: { thread: thread } })
                 ],
                 1
               )

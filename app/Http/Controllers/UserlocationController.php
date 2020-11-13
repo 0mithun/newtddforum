@@ -52,7 +52,7 @@ class UserlocationController extends Controller {
      */
 
     public function getAllThread() {
-        // return 'hello';
+      
         $query = request( 'query' );
         $search = '';
         if ( $query != '' ) {
@@ -66,13 +66,18 @@ class UserlocationController extends Controller {
 
         if ( $search != '' ) {
             $results = Thread::
-                where( 'title', "LIKE", "%$search%" )
-                ->orWhere( 'body', "LIKE", "%$search%" )
-                ->orWhere('tag_names','LIKE',"%$search%")
-                ->where(function($query){
-                    $query->where('lat','!=','')->where('lng','!=','');
-                    
+                where(function($query) use($search){
+
+                    $query->where( 'title', "LIKE", "%$search%" );
+                    $query->orWhere( 'body', "LIKE", "%$search%" );
+                    $query->orWhere('tag_names','LIKE',"%$search%");
                 })
+                ->where('lat','!=',null)
+                ->where('lng','!=',null)
+              
+                ;
+               
+            // return $results->toSql();
                 // ->get()
             ;
         } else {

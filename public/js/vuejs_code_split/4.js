@@ -189,6 +189,8 @@ __webpack_require__.r(__webpack_exports__);
               var _long = position.coords.longitude;
               _this.center.lat = lat;
               _this.center.lng = _long;
+              _this.mapCenter.lat = lat;
+              _this.mapCenter.lng = _long;
             });
           } else {
             alert("You must provide your location first");
@@ -202,7 +204,6 @@ __webpack_require__.r(__webpack_exports__);
         center: this.fetchRunningCenter != null ? this.fetchRunningCenter : this.center,
         query: this.query
       }).then(function (res) {
-        console.log(res.data);
         var data = res.data;
 
         if (res.data.status == "failed") {
@@ -210,8 +211,8 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           eventBus.$emit("markers_fetched", data);
 
-          if (_this.fetchRunningCenter != null) {
-            _this.mapCenter = _this.fetchRunningCenter;
+          if (_this.fetchRunningCenter != null) {// this.mapCenter = this.fetchRunningCenter;
+            // this.center = this.fetchRunningCenter;
           }
         }
       });
@@ -252,8 +253,8 @@ __webpack_require__.r(__webpack_exports__);
       _this2.results = data.results;
 
       if (_this2.markers.length > 0) {
-        var center = Math.floor(Math.random() * Math.floor(_this2.markers.length));
-        _this2.mapCenter = data.markers[center].position;
+        var center = Math.floor(Math.random() * Math.floor(_this2.markers.length)); // this.mapCenter = data.markers[center].position;
+
         _this2.loading = false;
       }
     });

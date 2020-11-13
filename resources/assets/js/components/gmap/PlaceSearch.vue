@@ -1,11 +1,14 @@
 <template>
   <div class="row">
     <div class="col-md-12">
+      <div class="form-group">
+
       <gmap-autocomplete
         class="form-control"
         placeholder="Type location for search thread"
         @place_changed="setRelatedThread"
       ></gmap-autocomplete>
+      </div>
     </div>
     <!-- <div class="col-md-3">
                 <select name="" id="" class="form-control" v-model="radius" @change="fetchNearestLocations">
