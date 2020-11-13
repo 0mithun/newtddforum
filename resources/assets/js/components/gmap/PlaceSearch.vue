@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <div class="form-group">
+      <div class="form-group place-search">
 
       <gmap-autocomplete
         class="form-control"
@@ -109,5 +109,8 @@ export default {
 };
 </script>
 
-<style>
+<style scped>
+  .place-search{
+    padding: 0px 10px;
+  }
 </style>
