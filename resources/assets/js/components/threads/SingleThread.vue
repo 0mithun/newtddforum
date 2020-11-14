@@ -10,7 +10,7 @@
         >#{{ tag.toLowerCase().trim() }}</a> -->
 
           <a
-          :href="'/threads/'+ thread.channel.name.toLowerCase().trim()"
+          :href="'/tags/'+ thread.channel.name.toLowerCase().trim()"
           class="tag-name"
         >#{{ thread.channel.name }}</a>
 

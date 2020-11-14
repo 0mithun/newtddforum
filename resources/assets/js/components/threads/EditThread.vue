@@ -30,7 +30,7 @@
                             <label for="tags" class="control-label">
                             Tags
                             </label>
-                            <v-select taggable push-tags  v-model="form.tags" :options="alltags"  multiple @search="searchTag">
+                            <v-select taggable push-tags  v-model="form.tags" :options="alltags"  multiple @search="searchTag" @input="selecetdTag">
                                 <template v-slot:no-options="{ search, searching }">
                                     <template v-if="searching">
                                         No results found for <em>{{ search }}</em>.
@@ -284,12 +284,21 @@
             this.formatedTags();
         },
         methods:{
+            selecetdTag(){
+                let tags = this.form.tags.map(val=>{
+                    return val.toLowerCase();
+                })
+                console.log(tags)
+                console.log(this.form.tags)
+                this.form.tags = tags;
+                // this.form.tags = tags;
+            },
             searchTag(search, loading){
-                loading(true)
                 axios.get(`/threads/get-all-tags?q=${search}`).then(res=>{
                     let unique = res.data.filter((value,index,arr)=>{
                         return arr.indexOf(value) == index;
                     });
+                    
                     this.alltags = unique;
                     loading(false)
                 })

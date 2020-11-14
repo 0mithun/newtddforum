@@ -200,3 +200,4 @@ Vue.filter("strPlural", function(value, text) {
     return text + 's'
   }
 });
+

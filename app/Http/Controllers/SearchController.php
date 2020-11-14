@@ -14,7 +14,8 @@ class SearchController extends Controller
 {
     use ThreadPrivacy;
     public function search(Request $request)
-    {
+    {  
+       
         unset($request['page']);
         $query = request('query');
         // $total = Thread::search($query)->paginate()->total();

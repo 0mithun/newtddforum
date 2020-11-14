@@ -135,7 +135,7 @@ class UserlocationController extends Controller {
         ->selectRaw('id, ( 3959 * acos( cos( radians('.$lat.') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('.$lng.') ) + sin( radians('.$lat.') ) * sin(radians(lat)) ) ) AS distance')
         ->having('distance','<',$distance)
         ->orderBy('distance')
-        ->limit(150)
+        ->limit(100)
         // ->lists('id')
         ->pluck('id')
         ;

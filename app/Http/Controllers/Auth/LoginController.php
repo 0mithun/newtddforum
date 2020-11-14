@@ -58,7 +58,8 @@ class LoginController extends Controller {
  */
     public function showLoginForm() {
         $pageTitle = 'Login';
-
+        $previous =  url()->previous();
+        session()->put( 'url.intended', $previous );
         return view( 'auth.login', compact( 'pageTitle' ) );
     }
 

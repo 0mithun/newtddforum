@@ -35,7 +35,7 @@
           <div class="row">
             <div class="col-md-12 filter-search">
               <div class="count-column">
-                {{ postsCount | formatCount }} Results
+                {{ postsCount | formatCount }}   {{ postsCount | strPlural('Result') }} 
               </div>
               <div class="sort-column">
                 <select

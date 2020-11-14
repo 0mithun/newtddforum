@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="post-header">
-      <div class="post-counts">{{ postCounts | formatCount }} posts</div>
+      <div class="post-counts">{{ postCounts | formatCount }}   {{ postsCount | strPlural('post') }} </div>
       <div class="post-sorting">
         <select v-model="sort" class="sortBy">
           <option value="topRated">Top Rated</option>

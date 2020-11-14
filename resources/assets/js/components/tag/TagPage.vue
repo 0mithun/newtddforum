@@ -7,7 +7,7 @@
             <div class="row profile-header">
               <div class="profile-avatar">
                 <img :src="tag.profileAvatarPath" alt class="profile-img" />
-                <div style="text-align:center">
+                <div style="text-align:center;overflow">
 
                 <!-- <button class="btn btn-xs btn-primary">Show</button> -->
                 <i class="fa fa-question-circle tooltip-icon" @click="showDescription = !showDescription"></i>
@@ -58,7 +58,7 @@
             </div>
             <div class="row description" v-if="showDescription">
               <div class="col-md-12">
-                <div v-html="tag.description">
+                <div v-html="tag.description" style="overflow:hidden;overflow-wrap: anywhere;">
                                    
                 </div>                
               </div>
@@ -66,7 +66,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="post-header">
-                  <div class="post-counts">{{ postCounts }} posts</div>
+                  <div class="post-counts">{{ postCounts }}   {{ postCounts | strPlural('post') }}  </div>
                 </div>
                 
               </div>
@@ -324,7 +324,7 @@ export default {
 }
 .post-counts {
   color: black;
-  padding: 15px 0;
+  padding:  0;
   font-weight: bold;
   padding-bottom: 0px;
 }
@@ -341,7 +341,7 @@ export default {
 }
 
 .tooltip-icon{
-  font-size:20px;
+  font-size:14px;
   cursor:pointer
 }
 
