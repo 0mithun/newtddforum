@@ -5,11 +5,11 @@
       type="button"
       data-toggle="modal"
       data-target="#showReportModal"
-      @click.prevent="signedIn ? true : redirectToLogin()"
+      @click.prevent="signedIn ? showModal = true : redirectToLogin()"
     >
       Report
     </button>
-    <div class="modal fade" tabindex="-1" role="dialog" id="showReportModal">
+    <div class="modal d-block fade in" tabindex="-1" role="dialog" id="showReportModal" style="display:block" v-if="showModal">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -36,11 +36,20 @@
               ></textarea>
             </div>
             <div class="form-group">
-              <select class="form-control" v-model="restrictions">
-                <option selected>Select age restrictions</option>
-                <option value="0">Under 13</option>
+              <select class="form-control" v-model="report_type">
+                <option selected>This item contains</option>
+                <option value="0">PG-13</option>
                 <option value="13">Should be Pg-13</option>
-                <option value="18">Should be rated R</option>
+                <option value="18">R-rated (18+)</option>
+                <option value="copyright_material">Copyright material</option>
+                <option value="untrue_or_libelous">Untrue or libelous</option>
+                <option value="racist_or_hateful">Racist or hateful</option>
+                <option value="pornographic">Pornographic</option>
+                <option value="miscategorized">Miscategorized</option>
+                <option value="not_a_story">Not a story</option>
+                <option value="Incorrect">Incorrect</option>
+                <option value="spam">Spam</option>
+
               </select>
             </div>
             <div class="form-group">
@@ -52,10 +61,33 @@
                 Report
               </button>
             </div>
+
+            <div class="form-group" v-if="isAdmin">
+              <button
+                class="btn btn-primary"
+                @click.prevent="review"
+              >
+                Review
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+     <!-- Modal -->
+      <div class="modal fade in" id="popupMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" v-if="showPopup" style="display:block">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">                        
+                  <div class="modal-body">
+                    <div class="alert alert-success alert-dismissible fade in" role="alert"> 
+                      <button type="button" class="close" aria-label="Close" @click.prevent="closePopup">
+                        <span aria-hidden="true">×</span>
+                      </button> <strong>This item is under review. Thank you for reporting.</strong>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
 </template>
 
@@ -70,7 +102,9 @@ export default {
   data() {
     return {
       reason: "",
-      restrictions: "",
+      report_type: "",
+      showModal: false,
+      showPopup: false
     };
   },
   created() {},
@@ -79,14 +113,25 @@ export default {
     signedIn() {
       return window.App.user ? true : false;
     },
+    isAdmin(){
+      return window.App.user.id == 1;
+    },
     isDiabled() {
-      if (this.reason == "" && this.restrictions == "") {
+      if (this.reason == "" && this.report_type == "") {
         return true;
       }
     },
   },
 
   methods: {
+    closePopup(){
+      this.showModal = false;
+      setTimeout(()=>{
+        window.location = '/';
+      }, 300);
+
+      
+    },
     report() {
       if (!this.signedIn) {
         this.redirectToLogin();
@@ -95,9 +140,29 @@ export default {
         .post("/report/thread", {
           id: this.thread.id,
           reason: this.reason,
-          restrictions: this.restrictions,
+          report_type: this.report_type,
         })
-        .then((res) => {});
+        .then((res) => {
+           this.showModal = false;
+          this.showPopup = true;
+          
+        });
+    },
+    review() {
+      if (!this.signedIn) {
+        this.redirectToLogin();
+      }
+      axios
+        .post("/report/thread/review", {
+          id: this.thread.id,
+          reason: this.reason,
+          report_type: this.report_type,
+        })
+        .then((res) => {
+          this.showModal = false;
+          flash('This item review successfully.')
+          
+        });
     },
     redirectToLogin() {
       window.location = "/redirect-to?page=" + location.pathname;
@@ -120,5 +185,8 @@ export default {
 }
 #reason {
   resize: vertical;
+}
+.alert{
+  margin-bottom: 0px;
 }
 </style>

@@ -140,6 +140,7 @@ Route::middleware(['auth'])->group(function () {
      */
 
     Route::post('/report/thread', 'ReportController@thread');
+    Route::post('/report/thread/review', 'ReportController@threadReview');
     Route::post('/threads/check-thread-report', 'ReportController@checkThreadReport');
 
     // Route::post('/replies/{reply}/report', 'ReportController@reply');

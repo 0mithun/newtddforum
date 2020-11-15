@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Notifications\ReplywasReported;
-use App\Notifications\ThreadRestrictionReported;
-use App\Notifications\ThreadWasReported;
-use App\Notifications\UserWasReported;
+use DB;
+use App\User;
 use App\Reply;
 use App\Thread;
-use App\User;
-use DB;
 use Illuminate\Http\Request;
+use App\Mail\TreadWasReportedEmail;
+use Illuminate\Support\Facades\Mail;
+use App\Notifications\UserWasReported;
+use App\Notifications\ReplywasReported;
+use App\Notifications\ThreadWasReported;
+use App\Notifications\ThreadReportUpdated;
+use App\Notifications\ThreadRestrictionReported;
+use App\Notifications\ThreadReportAdminNotifications;
 
 class ReportController extends Controller {
     public function __construct() {
@@ -73,7 +77,7 @@ class ReportController extends Controller {
 
     public function thread() {
         $id = \request( 'id' );
-        $restrictions = request( 'restrictions' );
+        $report_type = request( 'report_type' );
         $reason = \request( 'reason' );
 
         $authUser = auth()->user();
@@ -85,35 +89,120 @@ class ReportController extends Controller {
             'reported_type' => get_class( $thread ),
         ] );
 
-        if ( $restrictions != '' ) {
-            $thread->age_restriction = $restrictions;
+        if ( $report_type == 13 ||  $report_type == 18 ) {
+            $thread->age_restriction = $report_type;
+            if($report_type == 13){
+                $report_type = 'PG-13';
+            }else if($report_type == 18){
+                $report_type = 'R-rated (18+)' ;
+            }
+
+            $thread->flagged = $report_type;
+            $thread->save();
+                    
+            // $profileLInk = '<a href="/profiles/'.$authUser->username.'">'.$authUser->username .'</a>';
+            // $reason = "User ".$profileLInk." reported to your thread. Your item has been changed to ".$report_type;
+
+            $reason = "Your item <a href=".$thread->path().">here</a> has been flagged as ".$report_type.". It is under review & may be hidden from other people.";
+            $creator = User::find( $thread->creator->id );
+            $creator->notify( new ThreadRestrictionReported( $thread, $reason ) );
+
+            $adminUser = User::find( 1 );
+            $threadLink = '<a href="'.$thread->path().'">This</a>';
+            $reason = $threadLink.' item has been flagged as '.$report_type.' & is under review.';
+            $adminUser->notify( new ThreadReportAdminNotifications( $thread, $reason ) );
+
+            Mail::to('anecdotage-reports@gmail.com')
+            ->send(new TreadWasReportedEmail($thread, $report_type,  $reason ));
+            
+        } else{
+            if($report_type == 'Miscategorized'){
+                $thread->is_published = 1; 
+            }else if($report_type == 'Incorrect'){
+                $thread->is_published = 1; 
+            }else{
+                $thread->is_published = 0;
+            }
+            $report_type =  ucwords(str_replace('_', ' ', $report_type));
+            $thread->flagged = $report_type;
+            $thread->is_published = 0;           
+            $thread->save();
+    
+            $reason = "Your item <a href=".$thread->path().">here</a> has been flagged as ".$report_type.". It is under review & may be hidden from other people.";
+            $creator = User::find( $thread->creator->id );
+            $creator->notify( new ThreadWasReported( $thread, $reason ) );
+
+            $adminUser = User::find( 1 );
+            $threadLink = '<a href="'.$thread->path().'">This</a>';
+            $reason = $threadLink.' item has been flagged as '.$report_type.' & is under review.';
+            $adminUser->notify( new ThreadReportAdminNotifications( $thread, $reason ) );
+
+            Mail::to('anecdotage-reports@gmail.com')
+            ->send(new TreadWasReportedEmail($thread, $report_type, $reason));
+        
+            $reason = "After review, your post changed to ".$report_type;
+            $creator = User::find( $thread->creator->id );
+            $creator->notify( new ThreadReportUpdated( $thread, $reason ) );
+            
+        }
+       
+        return \response()->json( ['status' => 'success', 'message' => 'Thread Reported Successfully'] );
+    }
+
+    public function threadReview(){
+        $id = \request( 'id' );
+        $report_type = request( 'report_type' );
+        $reason = \request( 'reason' );
+
+        $authUser = auth()->user();
+        $thread = Thread::findOrFail( $id );
+
+        DB::table( 'reports' )->insert( [
+            'user_id'       => $authUser->id,
+            'reported_id'   => $id,
+            'reported_type' => get_class( $thread ),
+        ] );
+
+        DB::table( 'reports' )->where('reported_id', $id)->where('reported_type', get_class( $thread ),)->delete();
+
+        if ( $report_type == 13 ||  $report_type == 18 ) {
+            $thread->age_restriction = $report_type;
+
+            if($report_type == 13){
+                $report_type = 'PG-13';
+            }else if($report_type == 18){
+                $report_type = 'R-rated (18+)' ;
+            }
+
+            $thread->flagged = $report_type;
+            $thread->is_published = 1; 
+
+            $thread->save();
+            $reason = "After review, your post changed to ".report_type;
+            $creator = User::find( $thread->creator->id );
+            $creator->notify( new ThreadReportUpdated( $thread, $reason ) );
+           
+        } else{
+            if($report_type == 'Miscategorized'){
+                $thread->is_published = 1; 
+            }else if($report_type == 'Incorrect'){
+                $thread->is_published = 1; 
+            }else{
+                $thread->is_published = 0;
+            }
+            $report_type =  ucwords(str_replace('_', ' ', $report_type));
+
+            $thread->flagged = $report_type;
+            $thread->is_published = 0;           
             $thread->save();
 
-            if ( $authUser->id != 1 ) {
-                $adminUser = User::find( 1 );
-                $reason = 'Check age for this item';
-                $adminUser->notify( new ThreadRestrictionReported( $thread, $reason ) );
-
-                $reason = "User " . $authUser->username . " " . " reported thread with id = " . $thread->id . " has been flagged, we have changed it to PG/R pending review";
-                $creator = User::find( $thread->creator->id );
-                $creator->notify( new ThreadRestrictionReported( $thread, $reason ) );
-
-                $reason = 'This item has been changed to pg/R pending review';
-                $authUser->notify( new ThreadRestrictionReported( $thread, $reason ) );
-            } else {
-                $reason = "After review, your post changed to PG";
-                $creator = User::find( $thread->creator->id );
-                $creator->notify( new ThreadRestrictionReported( $thread, $reason ) );
-            }
-        } else {
-            $user = User::find( 1 );
-            $user->notify( new ThreadWasReported( $thread, $reason ) );
+            $reason = "After review, your post changed to ".report_type;
+            $creator = User::find( $thread->creator->id );
+            $creator->notify( new ThreadReportUpdated( $thread, $reason ) );
+            
         }
-
-        $thread->is_published = 0;
-        $thread->save();
-
-        return \response()->json( ['status' => 'success', 'message' => 'Thread Reported Successfully'] );
+       
+        return \response()->json( ['status' => 'success', 'message' => 'Thread review Successfully'] );
     }
 
     public function checkThreadReport() {

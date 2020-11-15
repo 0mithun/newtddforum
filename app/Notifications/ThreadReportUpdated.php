@@ -3,21 +3,16 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Notifications\Notification;
 
-/**
- * Class ThreadWasReported
- * @package App\Notifications
- */
-class ThreadWasReported extends Notification implements ShouldQueue
+class ThreadReportUpdated extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected  $thread;
-    protected  $reason;
+    protected $thread;
+    protected $reason;
     /**
      * Create a new notification instance.
      *
@@ -41,20 +36,6 @@ class ThreadWasReported extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
-    }
-
-     /**
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable

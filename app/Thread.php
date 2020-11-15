@@ -115,6 +115,7 @@ class Thread extends Model
             
     }
 
+  
     /**
      * Get a string path for the thread.
      *

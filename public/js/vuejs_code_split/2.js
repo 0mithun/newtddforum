@@ -1618,7 +1618,12 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "post-header" }, [
       _c("div", { staticClass: "post-counts" }, [
-        _vm._v(_vm._s(_vm._f("formatCount")(_vm.postCounts)) + " posts")
+        _vm._v(
+          _vm._s(_vm._f("formatCount")(_vm.postCounts)) +
+            "  " +
+            _vm._s(_vm._f("strPlural")(_vm.postsCount, "post")) +
+            " "
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "post-sorting" }, [
@@ -1737,7 +1742,12 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "post-header" }, [
       _c("div", { staticClass: "post-counts" }, [
-        _vm._v(_vm._s(_vm._f("formatCount")(_vm.postCounts)) + " posts")
+        _vm._v(
+          _vm._s(_vm._f("formatCount")(_vm.postCounts)) +
+            "   " +
+            _vm._s(_vm._f("strPlural")(_vm.postsCount, "post")) +
+            " "
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "post-sorting" }, [
@@ -1856,7 +1866,12 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "post-header" }, [
       _c("div", { staticClass: "post-counts" }, [
-        _vm._v(_vm._s(_vm._f("formatCount")(_vm.postCounts)) + " posts")
+        _vm._v(
+          _vm._s(_vm._f("formatCount")(_vm.postCounts)) +
+            "   " +
+            _vm._s(_vm._f("strPlural")(_vm.postsCount, "post")) +
+            " "
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "post-sorting" }, [
@@ -2519,7 +2534,12 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "post-header" }, [
       _c("div", { staticClass: "post-counts" }, [
-        _vm._v(_vm._s(_vm._f("formatCount")(_vm.postCounts)) + " posts")
+        _vm._v(
+          _vm._s(_vm._f("formatCount")(_vm.postCounts)) +
+            "   " +
+            _vm._s(_vm._f("strPlural")(_vm.postsCount, "post")) +
+            " "
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "post-sorting" }, [

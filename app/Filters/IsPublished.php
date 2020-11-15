@@ -18,7 +18,7 @@ class IsPublished implements Scope
     {
         if(\auth()->check()){
             if(\auth()->user()->id !=1){
-                $builder->where('is_published', '=', 1);
+                $builder->where('user_id', auth()->user()->id)->orWhere('is_published', '=', 1);
             }
         }else{
             $builder->where('is_published', '=', 1);
