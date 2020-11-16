@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Thread extends Model
 {
     //use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
-    use  Notifiable, Favoritable, Likeable;
+    use  Notifiable, Favoritable, Likeable, Searchable;
 
     protected $indexConfigurator = ThreadsIndexConfigurator::class;
 
