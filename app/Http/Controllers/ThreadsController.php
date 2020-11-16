@@ -253,7 +253,10 @@ class ThreadsController extends Controller
             $data['channel_id'] = 2;
         }
 
-       
+       if($authUser->id ==1){
+           $data['is_published'] = 1;
+           $data['flagged'] = null;
+       }
 
         $thread->update($data);
 
