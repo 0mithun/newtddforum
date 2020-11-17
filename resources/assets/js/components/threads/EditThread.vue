@@ -261,8 +261,8 @@
                     source: this.thread.source == 'null' ? '': this.thread.source ,
                     location: this.thread.location == 'null' ? '':this.thread.location ,
                     cno: {
-                        famous: false,
-                        celebrity: false
+                        famous: this.thread.cno == 'C'  || this.thread.cno == 'N' ? true : false,
+                        celebrity:  this.thread.cno == 'C'
                     },
                     main_subject: this.thread.main_subject =='null' ? '':  this.thread.main_subject ,
                     image_path:null,

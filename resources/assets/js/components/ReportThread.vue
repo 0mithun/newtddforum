@@ -22,11 +22,41 @@
               <span aria-hidden="true">&times;</span>
             </button>
             <h4 class="modal-title" id="gridSystemModalLabel">
-              Report Thread
+             Item Report
             </h4>
           </div>
           <div class="modal-body">
+            
             <div class="form-group">
+              <label for="This item contains">This item contains</label>
+              <select class="form-control" v-model="report_type">
+                <option value="">Please select a reason</option>
+                <option value="copyright_material">Copyright material</option>
+                <option value="untrue_or_libelous">Untrue or libelous</option>
+                <option value="racist_or_hateful">Racist or hateful</option>
+                <option value="pornographic">Pornographic</option>
+                <option value="18">Adult content (should be R-rated/18+)</option>
+                <option value="13">Mature content (should be PG-13)</option>
+                <!-- <option value="0">PG-13</option> -->
+                <option value="miscategorized">Miscategorized</option>
+                <option value="not_a_story">Not a story</option>
+                <option value="Incorrect">Incorrect</option>
+                <option value="spam">Spam</option>
+
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="This item contains">Email & Other Contact</label>
+              <textarea
+                name="contact"
+                id="contact"
+                rows="2"
+                class="form-control"
+                v-model="contact"
+              ></textarea>
+            </div>
+              <div class="form-group">
+              <label for="This item contains">Additional Notes</label>
               <textarea
                 name="reason"
                 id="reason"
@@ -34,23 +64,6 @@
                 class="form-control"
                 v-model="reason"
               ></textarea>
-            </div>
-            <div class="form-group">
-              <select class="form-control" v-model="report_type">
-                <option selected>This item contains</option>
-                <option value="0">PG-13</option>
-                <option value="13">Should be Pg-13</option>
-                <option value="18">R-rated (18+)</option>
-                <option value="copyright_material">Copyright material</option>
-                <option value="untrue_or_libelous">Untrue or libelous</option>
-                <option value="racist_or_hateful">Racist or hateful</option>
-                <option value="pornographic">Pornographic</option>
-                <option value="miscategorized">Miscategorized</option>
-                <option value="not_a_story">Not a story</option>
-                <option value="Incorrect">Incorrect</option>
-                <option value="spam">Spam</option>
-
-              </select>
             </div>
             <div class="form-group">
               <button
@@ -104,7 +117,8 @@ export default {
       reason: "",
       report_type: "",
       showModal: false,
-      showPopup: false
+      showPopup: false,
+      contact: ''
     };
   },
   created() {},
@@ -156,6 +170,7 @@ export default {
         .post("/report/thread/review", {
           id: this.thread.id,
           reason: this.reason,
+          contact: this.contact,
           report_type: this.report_type,
         })
         .then((res) => {

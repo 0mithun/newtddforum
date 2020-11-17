@@ -1,4 +1,6 @@
 <template>
+<div>
+
   <div class="map_thraed_list">
     <!-- <div class="list-group">
       <a
@@ -21,21 +23,9 @@
       @click="focusMarker(index)"
       @mouseenter="focusMarker(index)"
       :class="isActive(index)"
+      
     >
-      <!-- <div class="panel-header">
-        <h5 class="thread-title">{{ thread.title }}</h5>
-      </div>
-
-      <div class="panel-body thread-info">
-        <div class="thread-thumb-side">
-          <img :src="thread.threadImagePath" class="thread-thumb" alt />
-        </div>
-        <div class="thread-counts">
-          <view-counts :thread="thread"></view-counts>
-          <point-counts :thread="thread"></point-counts>
-          <emoji-counts :thread="thread"></emoji-counts>
-        </div>
-      </div> -->
+      
       <div  class="panel">
         <div  class="panel-body">
           <div  class="trending_thread_title"><strong>{{ thread.title }}</strong>
@@ -56,7 +46,15 @@
         </div>
       </div>
     </div>
+    <div class="panel" v-if="results.length == 0">
+     <div class="panel-body">
+        <div class="alert alert-danger text-center">
+          <strong>  No Results </strong>
+        </div>
+       </div> 
+    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -109,7 +107,7 @@ export default {
 
 <style scoped>
 .map_thraed_list {
-  height: 100vh;
+  height: 85vh;
   overflow-y: scroll;
 }
 .thread-info {
@@ -152,5 +150,8 @@ export default {
 }
 .trending_footer{
   font-size: 12px;
+}
+.alert{
+  margin-bottom: 0px;
 }
 </style>
