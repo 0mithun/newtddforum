@@ -262,7 +262,7 @@
                     location: this.thread.location == 'null' ? '':this.thread.location ,
                     cno: {
                         famous: this.thread.cno == 'C'  || this.thread.cno == 'N' ? true : false,
-                        celebrity:  this.thread.cno == 'C'
+                        celebrity:  this.thread.cno == 'C' ? true : false
                     },
                     main_subject: this.thread.main_subject =='null' ? '':  this.thread.main_subject ,
                     image_path:null,
