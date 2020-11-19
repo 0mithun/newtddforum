@@ -80,7 +80,7 @@ class ReportController extends Controller {
         $report_type = request( 'report_type' );
         $reason = \request( 'reason' );
 
-        $authUser = auth()->user();
+        $authUser = auth()->check() ? auth()->user() : User::where('id',1)->first();
         $thread = Thread::findOrFail( $id );
 
         DB::table( 'reports' )->insert( [
@@ -98,22 +98,9 @@ class ReportController extends Controller {
             }
 
             $thread->flagged = $report_type;
-            $thread->save();
-                    
-            // $profileLInk = '<a href="/profiles/'.$authUser->username.'">'.$authUser->username .'</a>';
-            // $reason = "User ".$profileLInk." reported to your thread. Your item has been changed to ".$report_type;
-
-            $reason = "Your item <a href=".$thread->path().">here</a> has been flagged as ".$report_type.". It is under review & may be hidden from other people.";
-            $creator = User::find( $thread->creator->id );
-            $creator->notify( new ThreadRestrictionReported( $thread, $reason ) );
-
-            $adminUser = User::find( 1 );
-            $threadLink = '<a href="'.$thread->path().'">This</a>';
-            $reason = $threadLink.' item has been flagged as '.$report_type.' & is under review.';
-            $adminUser->notify( new ThreadReportAdminNotifications( $thread, $reason ) );
-
-            Mail::to('anecdotage-reports@gmail.com')
-            ->send(new TreadWasReportedEmail($thread, $report_type,  $reason ));
+            $thread->save();                    
+          
+            $this->sendThraedReportNotification($thread, $report_type);
             
         } else{
             if($report_type == 'Miscategorized'){
@@ -124,30 +111,19 @@ class ReportController extends Controller {
                 $thread->is_published = 0;
             }
             $report_type =  ucwords(str_replace('_', ' ', $report_type));
-            $thread->flagged = $report_type;
-            $thread->is_published = 0;           
+            $thread->flagged = $report_type;       
             $thread->save();
     
-            $reason = "Your item <a href=".$thread->path().">here</a> has been flagged as ".$report_type.". It is under review & may be hidden from other people.";
-            $creator = User::find( $thread->creator->id );
-            $creator->notify( new ThreadWasReported( $thread, $reason ) );
-
-            $adminUser = User::find( 1 );
-            $threadLink = '<a href="'.$thread->path().'">This</a>';
-            $reason = $threadLink.' item has been flagged as '.$report_type.' & is under review.';
-            $adminUser->notify( new ThreadReportAdminNotifications( $thread, $reason ) );
-
-            Mail::to('anecdotage-reports@gmail.com')
-            ->send(new TreadWasReportedEmail($thread, $report_type, $reason));
-        
-            $reason = "After review, your post changed to ".$report_type;
-            $creator = User::find( $thread->creator->id );
-            $creator->notify( new ThreadReportUpdated( $thread, $reason ) );
-            
+            $this->sendThraedReportNotification($thread, $report_type);
         }
        
         return \response()->json( ['status' => 'success', 'message' => 'Thread Reported Successfully'] );
     }
+
+
+    /**
+     * Review Thread by Admin
+     */
 
     public function threadReview(){
         $id = \request( 'id' );
@@ -157,13 +133,14 @@ class ReportController extends Controller {
         $authUser = auth()->user();
         $thread = Thread::findOrFail( $id );
 
+        // DB::table( 'reports' )->where('reported_id', $id)->where('reported_type', get_class( $thread ),)->delete();
+
         DB::table( 'reports' )->insert( [
             'user_id'       => $authUser->id,
             'reported_id'   => $id,
             'reported_type' => get_class( $thread ),
         ] );
 
-        DB::table( 'reports' )->where('reported_id', $id)->where('reported_type', get_class( $thread ),)->delete();
 
         if ( $report_type == 13 ||  $report_type == 18 ) {
             $thread->age_restriction = $report_type;
@@ -192,8 +169,7 @@ class ReportController extends Controller {
             }
             $report_type =  ucwords(str_replace('_', ' ', $report_type));
 
-            $thread->flagged = $report_type;
-            $thread->is_published = 0;           
+            $thread->flagged = $report_type;    
             $thread->save();
 
             $reason = "After review, your post changed to ".report_type;
@@ -247,4 +223,22 @@ class ReportController extends Controller {
 
         return response()->json( ['reported' => false] );
     }
+
+
+
+        public function sendThraedReportNotification($thread, $report_type){
+        
+            $reason = "Your item <a href=".$thread->path().">here</a> has been flagged as ".$report_type.". It is under review & may be hidden from other people.";
+            $creator = User::find( $thread->creator->id );
+            $creator->notify( new ThreadRestrictionReported( $thread, $reason ) );
+        
+            $adminUser = User::find( 1 );
+            $threadLink = '<a href="'.$thread->path().'">This</a>';
+            $reason = $threadLink.' item has been flagged as '.$report_type.' & is under review.';
+            $adminUser->notify( new ThreadReportAdminNotifications( $thread, $reason ) );
+        
+            Mail::to('anecdotage-reports@gmail.com')
+            ->send(new TreadWasReportedEmail($thread, $report_type,  $reason ));
+        }
 }
+
