@@ -276,4 +276,6 @@ Route::middleware(['admin'])->group(function () {
 
     Route::post('batch-tools/thread-replace', 'BatchToolController@replaceSource')->name('batchtools.replace.source');
     Route::post('batch-tools/thread-assign-user', 'BatchToolController@assignUser')->name('batchtools.assign.user');
+
+    Route::post('tag/{tag}/update','TagController@update');
 });

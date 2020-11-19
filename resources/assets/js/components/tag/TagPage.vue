@@ -6,7 +6,7 @@
           <div class="panel-body">
             <div class="row profile-header">
               <div class="profile-avatar">
-                <img :src="tag.profileAvatarPath" alt class="profile-img" />
+                <img :src="tagAvatarPhoto" alt class="profile-img" />
                 <div style="text-align:center;overflow">
 
                 <!-- <button class="btn btn-xs btn-primary">Show</button> -->
@@ -37,6 +37,13 @@
                     v-else
                   >
                     Follow
+                  </button>
+                  <button
+                    class="btn btn-sm  btn-primary"  
+                    @click.prevent="editTag = true" 
+                    v-if="isAdmin"                 
+                  >
+                    Edit Tag
                   </button>
                 </div>
                 <!-- <div class="profile-tags">
@@ -137,6 +144,82 @@
         <trending-thread></trending-thread>
       </div>
       </div>
+
+
+           <!-- Modal -->
+      <div class="modal fade in" id="editTagModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  style="display:block" v-if="editTag">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content"> 
+                <div class="modal-header">
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    @click.prevent="editTag = false"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h5 class="modal-title" id="gridSystemModalLabel">
+                  Edit Tag: <strong>{{ tag.name }}</strong> 
+                  </h5>
+                </div>                       
+                  <div class="modal-body">
+                      <div class="form-group">
+                        <label for="This item contains">Description</label>
+                        <textarea
+                          name="description"
+                          id="description"
+                          rows="2"
+                          class="form-control"
+                          v-model="form.description"
+                        ></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="This item contains">License</label>
+                        <input
+                          type="text"
+                          name="license"
+                          id="license"
+                          rows="2"
+                          class="form-control"
+                          v-model="form.license"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="This item contains">Amazon Link</label>
+                        <input
+                        type="text"
+                          name="amazon"
+                          id="amazon"
+                          rows="2"
+                          class="form-control"
+                          v-model="form.amazon"
+                        />
+                      </div>
+
+                        <div class="form-group " :class="{ 'has-error': form.tagThumbError, 'has-error': form.tagThumbError }">
+                          <label for="image_path" class="control-label">Add an image</label>
+                          <div class="thread-thumb-placeholder" @click="OpenImgUpload">
+                              <img :src="thumb" width="100%" height="100%">
+                          </div>
+                          <input style="display:none" type="file" name="image_path" accept="image/*" class="form-control" id="image_path" @change="onFileSelected">
+
+                          <span class="help-block  error" v-if="form.tagThumbError">
+                              <strong class="" v-text="form.threadThumbErrorMessage"></strong>
+                          </span>
+
+                      </div>
+                      <div class="form-group">
+                        <button class="btn btn-primary" type="button" @click.prevent="editTagInfo">Save</button>
+                      </div>
+                      
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
     </div>
 
 </template>
@@ -164,6 +247,7 @@ export default {
   components: {},
   data() {
     return {
+      tagPhoto: null,
       posts: this.threads,
       followings: [],
       isFollow: false,
@@ -172,10 +256,26 @@ export default {
       limitLinks: 10,
       formPage: 1,
       toPage: 1,
-      showDescription:false
+      showDescription:false,
+      editTag: false,
+      selectFile: null,
+      formData: new FormData,
+      form:{
+        description: '',
+        license:'',
+        amazon:'',
+        tagThumb: this.tag.profileAvatarPath,
+        tagThumbError: '',
+      }
     };
   },
   computed: {
+    tagAvatarPhoto(){
+      return this.tagPhoto ? this.tagPhoto :  this.tag.profileAvatarPath;
+    },
+    thumb(){
+        return this.form.tagThumb == '' ? '/images/default-thread-thumb.jpg' : this.form.tagThumb
+    },
     postCounts() {
       return abbreviate(this.total_records, 1);
     },
@@ -188,6 +288,9 @@ export default {
     signedIn() {
       return window.App.user ? true : false;
     },
+    isAdmin(){
+      return window.App.user.id == 1;
+    },
     pageRange() {
       return _.range(this.formPage, this.toPage);
     },
@@ -199,6 +302,47 @@ export default {
     this.paginateLimit();
   },
   methods: {
+    onFileSelected(event){
+      console.log(event.target.files)
+      if (! event.target.files.length) return;
+      
+      this.form.tagThumbError = false;
+      this.form.threadThumbErrorMessage = '';
+      let file =  event.target.files[0];
+      
+      if (file.size > 1024 *2048) {
+          event.preventDefault();
+          this.tagThumbError = true;
+          this.threadThumbErrorMessage = 'Thread image may not be greater than 2048 kilobytes';
+          return;
+      }
+      this.selectFile = event.target.files[0];
+      this.formData.append('photo', this.selectFile);
+
+
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = e => {
+          let src = e.target.result;
+          this.form.tagThumb = src
+      };
+  },
+  OpenImgUpload(){
+    $('#image_path').trigger('click')
+  },
+  editTagInfo(){
+    this.formData.append('description', this.form.description);
+    this.formData.append('license', this.form.license);
+    this.formData.append('amazon', this.form.amazon);
+
+     axios.post(`/tag/${this.tag.id}/update`, this.formData).then(res=>{
+          this.tagPhoto = this.thumb;
+          this.editTag = false;
+          flash('Tag Update Successfully')
+      }).catch(err=>{
+          console.log(err)
+      })
+  },
     toggleFollow() {
       axios.post(`/tag/${this.tag.id}/follow`).then((res) => {
         // this.isFollow = !this.isFollow;
@@ -349,4 +493,26 @@ export default {
   transition: cubic-bezier(0.075, 0.82, 0.165, .3) ease-in;
   overflow: hidden;
 }
+
+ .thread-thumb-placeholder{
+        width: 100px;
+        height: 100px;
+        background-color: #eeeeee;
+    }
+
+     #tinymce iframe {
+            width: 100%!important;
+            height: 350px!important;
+        }
+    .tox-tinymce{
+        min-height:500px!important;
+    }
+
+    .error{
+        color:red;
+    }
+    .help-block.error{
+        color:red;
+    }
 </style>
+

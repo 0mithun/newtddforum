@@ -213,7 +213,6 @@
                                 <div class="story">
                                     <div class="thread_thumb" style="margin-bottom:0px; background: rgba({{ $thread->imageColor }})">
                                         <img src="{{ $thread->threadImagePath }}" alt="{{ $thread->title }}" class="thread-image thread_thumb_image">
-                                        {{-- Under images: need show img description + license info + amazon [shop] --}}
                                     </div>
                                     <p class="image-description" style="text-align:left">{!! $thread->wiki_image_description !!}</p>
                                 </div>
@@ -352,7 +351,6 @@
 
         $(document).ready(function() {
             if(window.location.hash){
-                console.log(location.hash)
                 var hash = window.location.hash;
                 window.location.hash = "";
                 window.location.hash = hash;
