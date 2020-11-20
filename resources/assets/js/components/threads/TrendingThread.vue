@@ -73,6 +73,7 @@ export default {
 }
 .trending_thread_title{
   padding:10px 10px;
+  overflow-wrap: anywhere;
 }
 .trending_footer{
   padding: 5px 10px;

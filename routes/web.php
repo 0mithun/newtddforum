@@ -97,6 +97,10 @@ Route::get('/all-emojis', 'EmojiController@allEmojis');
 Route::get('/thread/{thread}/is-rated', 'RatingController@isRated')->middleware('auth');
 Route::post('/thread/{thread}/rating', 'RatingController@saveRating')->middleware('auth');
 Route::get('/thread/{thread}/total', 'RatingController@totalRating');
+
+
+//Report 
+    Route::post('/report/thread', 'ReportController@thread');
 //Emojis
 
 Route::middleware(['auth'])->group(function () {
@@ -139,7 +143,7 @@ Route::middleware(['auth'])->group(function () {
      * Report Controller
      */
 
-    Route::post('/report/thread', 'ReportController@thread');
+
     Route::post('/report/thread/review', 'ReportController@threadReview');
     Route::post('/threads/check-thread-report', 'ReportController@checkThreadReport');
 

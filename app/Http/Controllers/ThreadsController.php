@@ -52,7 +52,6 @@ class ThreadsController extends Controller
      */
     public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {   
-       
         $threads = $this->getThreads($channel, $filters);
         $totalRecords = $threads->count();
         $threads = $this->generateCurrentPageResults($threads, $this->perPage); 
@@ -381,6 +380,7 @@ class ThreadsController extends Controller
      
         $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
         // $tag = $this->convert_from_latin1_to_utf8_recursively($tag->toArray());
+       
         return view('threads.threadsbytag', [
             'tag' => $tag,
             'threads'   =>  $threads,

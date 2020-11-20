@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 class TagController extends Controller
 {
     public function update(Request $request, Tags $tag){
-        $data = $request->except(['_token','photo']);
+        $description = $request->description ." ".$request->license." ".$request->amazon;
 
-        $tag->update($data);
+        $tag->update(['description'=> $description]);
 
         if($request->hasFile('photo')){
             $tag_thumb = $tag->photo;

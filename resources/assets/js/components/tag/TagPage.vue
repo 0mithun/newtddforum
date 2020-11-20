@@ -289,7 +289,7 @@ export default {
       return window.App.user ? true : false;
     },
     isAdmin(){
-      return window.App.user.id == 1;
+      return  window.App.user && window.App.user.id == 1;
     },
     pageRange() {
       return _.range(this.formPage, this.toPage);

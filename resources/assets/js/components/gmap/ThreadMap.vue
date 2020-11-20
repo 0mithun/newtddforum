@@ -31,7 +31,7 @@
             
     </gmap-cluster>-->
 
-    <GmapMarker :position="center" :clickable="true" :draggable="false" @click="toggleInfoWindow(m,index)" />
+    <!-- <GmapMarker :position="center" :clickable="true" :draggable="false" @click="toggleInfoWindow(m,index)" /> -->
 
     <gmap-info-window
       :options="infoOptions"

@@ -8,17 +8,33 @@
        <div class="main-menu">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">Top <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/anecdotes?rated=1">Trending</a></li>
-                        <li><a href="/anecdotes?viewed=1">Most Viewed</a></li>
-                        <li><a href="/anecdotes?recents=1">Most Recent</a></li>
-                        <li><a href="{{ route('closet.thread') }}">Closest</a></li>
-                        <li><a href="/anecdotes?video=1">Video</a></li>
-                      
 
+                    @if(request()->query('rated') == 1)
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">Trending <span class="caret"></span></a>
+                    @elseif( request()->query('viewed') == 1)
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">Most Viewed <span class="caret"></span></a>
+                    @elseif( request()->query('recents') == 1)
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">Most Recent <span class="caret"></span></a>
+                    @elseif( request()->query('video') == 1)
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">Video <span class="caret"></span></a>
+                    @elseif( Route::currentRouteName() == 'closet.thread')
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">Closset <span class="caret"></span></a>
+                    @else
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">Top <span class="caret"></span></a>
+                    @endif
 
+                    <ul class="dropdown-menu">                        
+                        <li class="{{ request()->query('rated') == 1 ? 'active' :'' }}"><a href="/anecdotes?rated=1">Trending</a></li>
+                        <li class="{{ request()->query('viewed') == 1 ? 'active' :'' }}"><a href="/anecdotes?viewed=1" >Most Viewed</a></li>
+                        <li class="{{ request()->query('recents') == 1 ? 'active' :'' }}"><a href="/anecdotes?recents=1">Most Recent</a></li>
+                        <li class="{{ Route::currentRouteName() == 'closet.thread' ? 'active' :'' }}"><a href="{{ route('closet.thread') }}">Closest</a></li>
+                        <li class="{{ request()->query('video') == 1 ? 'active' :'' }}"><a href="/anecdotes?video=1">Video</a></li>
                     </ul>
                 </li>
 

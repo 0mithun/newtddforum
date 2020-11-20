@@ -18,7 +18,7 @@ use App\Notifications\ThreadReportAdminNotifications;
 
 class ReportController extends Controller {
     public function __construct() {
-        $this->middleware( 'auth' );
+        // $this->middleware( 'auth' )->except('report');
     }
 
     public function reply( Reply $reply ) {

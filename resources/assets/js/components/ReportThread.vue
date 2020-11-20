@@ -5,7 +5,7 @@
       type="button"
       data-toggle="modal"
       data-target="#showReportModal"
-      @click.prevent="signedIn ? showModal = true : redirectToLogin()"
+      @click.prevent="showModal = true"
     >
       Report
     </button>
@@ -28,7 +28,7 @@
           <div class="modal-body">
             
             <div class="form-group">
-              <label for="This item contains">This item contains</label>
+              <label for="This item contains">Reason</label>
               <select class="form-control" v-model="report_type">
                 <option value="">Please select a reason</option>
                 <option value="copyright_material">Copyright material</option>
@@ -115,7 +115,7 @@ export default {
   data() {
     return {
       reason: "",
-      report_type: "",
+      report_type: "spam",
       showModal: false,
       showPopup: false,
       contact: ''
@@ -128,7 +128,7 @@ export default {
       return window.App.user ? true : false;
     },
     isAdmin(){
-      return window.App.user.id == 1;
+      return  window.App.user && window.App.user.id == 1;
     },
     isDiabled() {
       if (this.reason == "" && this.report_type == "") {
@@ -148,7 +148,7 @@ export default {
     },
     report() {
       if (!this.signedIn) {
-        this.redirectToLogin();
+        // this.redirectToLogin();
       }
       axios
         .post("/report/thread", {
