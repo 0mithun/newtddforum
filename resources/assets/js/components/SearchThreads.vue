@@ -38,7 +38,8 @@
                 {{ postsCount | formatCount }}   {{ postsCount | strPlural('Result') }} 
               </div>
               <div class="sort-column">
-                <select
+
+                <!-- <select
                   name
                   id
                   class="sortBy"
@@ -50,7 +51,37 @@
                   <option value="like_count">Most Liked</option>
                   <option value="favorite_count">Most Favorited</option>
                   <option value="visits">Most Visits</option>
-                </select>
+                </select> -->
+
+                  <!-- Extra small button group -->
+                <div class="btn-group">
+                  <button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <template v-if="sort_by == 'topRated'">
+                       <strong class="dark">Top Rated</strong> 
+                    </template>
+                    <template v-if="sort_by == 'created_at'">
+                       <strong class="dark">Most Recent</strong> 
+                    </template>
+                    <template v-if="sort_by == 'like_count'">
+                       <strong class="dark">Most Liked</strong> 
+                    </template>
+                    <template v-if="sort_by == 'favorite_count'">
+                       <strong class="dark">Most Favorited</strong> 
+                    </template>
+                    <template v-if="sort_by == 'visits'">
+                       <strong class="dark">Most Visits</strong> 
+                    </template>
+                    
+                  <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#" @click.prevent="sortBy('topRated')">Top Rated</a></li>
+                    <li><a href="#" @click.prevent="sortBy('created_at')">Most Recent</a></li>
+                    <li><a href="#" @click.prevent="sortBy('like_count')">Most Liked</a></li>
+                    <li><a href="#" @click.prevent="sortBy('favorite_count')">Most Favorited</a></li>
+                    <li><a href="#" @click.prevent="sortBy('visits')">Most Visits</a></li>
+                  </ul>
+                </div>
               </div>
 
               <div class="btn-group">
@@ -410,7 +441,7 @@ export default {
     this.setCurrentPage();
     this.paginateLimit();
     this.paginate(this.perPage, this.page);
-    this.sortBy();
+    this.sortBy(this.sort_by);
     
     
   },
@@ -638,8 +669,9 @@ export default {
       let url = "/anecdotes/search?query=" + this.q;
       window.location.href = url;
     },
-    sortBy() {
+    sortBy(sort) {
       // this.allThreads = [];
+      this.sort_by = sort;
       let threads = _.orderBy(this.allThreads, [this.sort_by], "desc");
       // this.paginatedItems = threads;
       // this.threads = threads;
@@ -791,5 +823,8 @@ hr {
 
 .count-column {
   font-size: 13px;
+}
+.dark{
+  color:black;
 }
 </style>
