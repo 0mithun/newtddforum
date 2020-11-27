@@ -57,9 +57,9 @@ class ThreadRestrictionReported extends Notification implements ShouldQueue
 
     public function toBroadcast($notifiable)
     {
-        return [
+        return new BroadcastMessage([
             'message' => $this->reason,
             'link' => $this->thread->path()
-        ];
+        ]);
     }
 }

@@ -55,9 +55,23 @@ export default {
         },
       },
     });
+
+   this.scrollToComment();
+
   },
 
   methods: {
+    scrollToComment(){
+       if(window.location.hash){
+          var hash = window.location.hash;
+          window.location.hash = "";
+          window.location.hash = hash;
+       
+          const el = document.querySelector(hash)
+          el && el.scrollIntoView()
+       } 
+
+    },
     addReply() {
       axios
         .post(location.pathname + "/replies", { body: this.body })

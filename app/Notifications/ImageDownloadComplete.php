@@ -46,7 +46,6 @@ class ImageDownloadComplete extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        $user = auth()->user();
         return [
             'message' => "Your thread image download complete you can check now.",
             'link' => $this->thread->path()
@@ -54,7 +53,6 @@ class ImageDownloadComplete extends Notification implements ShouldQueue
     }
     public function toBroadcast($notifiable)
     {
-        $user = auth()->user();
         return new BroadcastMessage([
             'message' => "Your thread image download complete you can check now.",
             'link' => $this->thread->path()

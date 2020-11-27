@@ -45,7 +45,6 @@ class InvalidImageUrlNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        $user = auth()->user();
         return [
             'message' => "The Image url isn't a valid image url. Please check & add new image",
             'link' => $this->thread->path()
@@ -53,7 +52,6 @@ class InvalidImageUrlNotification extends Notification implements ShouldQueue
     }
     public function toBroadcast($notifiable)
     {
-        $user = auth()->user();
         return new BroadcastMessage([
             'message' => "The Image url isn't a valid image url. Please check & add new image",
             'link' => $this->thread->path()

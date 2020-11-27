@@ -223,7 +223,7 @@ class ThreadsController extends Controller
             'cno'                    => $request->cno == null ? '' : $request->cno,
             'age_restriction'        => $request->age_restriction ? $request->age_restriction : 0,
             'anonymous'              => request('anonymous', 0),
-            'is_published'          => $thread->is_published == 1 ? 1 : ($authUser->id ==1 ? 1 : 0)
+            'is_published'           => $thread->is_published == 1 ? 1 : ($authUser->id ==1 ? 1 : 0)
         ];
 
         // if ($request->location != null) {
@@ -255,9 +255,12 @@ class ThreadsController extends Controller
        if($authUser->id ==1){
            $data['is_published'] = 1;
            $data['flagged'] = null;
+           $data['slug'] = str_slug(strip_tags($request->title)); 
        }
 
         $thread->update($data);
+        $thread = $thread->fresh();
+       
 
         $this->uploadThreadImages($request, $thread);
         $this->attachTags($request, $thread);
@@ -272,8 +275,10 @@ class ThreadsController extends Controller
             return response()->json(['status' => 'success', 'thread' => $thread], 200);
         }
 
-        return redirect($thread->path())
-            ->with('flash', 'Your thread has been published!');
+        return response()->json(['thread'=> $thread]);
+
+        // return redirect($thread->path())
+        //     ->with('flash', 'Your thread has been published!');
     }
 
     /**

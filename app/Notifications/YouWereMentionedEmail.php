@@ -51,17 +51,4 @@ class YouWereMentionedEmail extends Notification implements ShouldQueue
             ->action('Visit reply', url($this->reply->path()))
             ->line('Thank you for using our application!');
     }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
 }

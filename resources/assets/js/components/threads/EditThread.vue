@@ -277,6 +277,7 @@
                 share_on_twitter:false,
                 image_path_error:false,
                 image_path_error_message:'',
+                redirect_path: ''
 
             }
         },
@@ -384,8 +385,9 @@
                 this.appendData();
                 let url = '/threads/'+this.thread.slug;                
                 axios.post(url, this.formData).then(res=>{
+                    this.redirect_path = res.data.thread.path;
                     $('#shareThreadModal').modal('show');
-                    flash('Thread Created Successfully')
+                    flash('Thread Update Successfully')
                 }).catch(err=>{
                     this.errors = err.response.data.errors
                 })
@@ -404,7 +406,7 @@
             },
             closeShareModal(){
                 $('#shareThreadModal').modal('hide');
-                window.location = this.thread.path
+                window.location = this.redirect_path;
             },
         }
     }

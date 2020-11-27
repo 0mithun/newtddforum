@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 class Thread extends Model
 {
     //use RecordsActivity,  Notifiable, Favoritable, Likeable, Searchable;
-    use  Notifiable, Favoritable, Likeable, Searchable;
-    // use  Notifiable, Favoritable, Likeable;
+    // use  Notifiable, Favoritable, Likeable, Searchable;
+    use  Notifiable, Favoritable, Likeable;
 
     protected $indexConfigurator = ThreadsIndexConfigurator::class;
 
@@ -90,7 +90,7 @@ class Thread extends Model
         });
 
         static::created(function ($thread) {
-            $thread->update(['slug' => strip_tags( $thread->title)]);
+            $thread->update(['slug' => str_slug(strip_tags( $thread->title))]);
 
 
             $tags = $thread->tags->pluck('name')->all();
@@ -114,6 +114,10 @@ class Thread extends Model
       
         static::addGlobalScope(new IsPublished);
             
+    }
+    
+    public function setTitleAttribute($value){
+        $this->attributes['title']  = title_case($value);
     }
 
   
@@ -289,7 +293,7 @@ class Thread extends Model
     {
         // return \Purify::clean($body);
 
-        return html_entity_decode($title);
+        return title_case(html_entity_decode($title));
     }
 
     /**

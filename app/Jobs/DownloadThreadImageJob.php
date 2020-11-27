@@ -47,7 +47,7 @@ class DownloadThreadImageJob implements ShouldQueue
 
         $pixel_color = $this->getImageColorAttribute($this->image_url);
 
-        $this->file_download_curl('public/'.$image_path, $this->image_url);
+        $this->file_download_curl($image_path, $this->image_url);
 
         if($this->thread->image_path != ''){
             $this->deleteImage($this->thread->image_path);
@@ -149,7 +149,7 @@ class DownloadThreadImageJob implements ShouldQueue
 
     public function file_download_curl(string $fullPath, string $full_image_link)
     {
-        $parts = explode('/', $fullPath);
+        $parts = explode('/', public_path($fullPath));
         array_pop($parts);
         $dir = implode('/', $parts);
 
@@ -157,7 +157,7 @@ class DownloadThreadImageJob implements ShouldQueue
             mkdir($dir, 0777, true);
         }
 
-        $fp = fopen($fullPath, 'wb');
+        $fp = fopen(public_path($fullPath), 'wb');
         $ch = curl_init($full_image_link);
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_HEADER, 0);

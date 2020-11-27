@@ -3,9 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class ThreadReportUpdated extends Notification implements ShouldQueue
 {
@@ -54,9 +55,10 @@ class ThreadReportUpdated extends Notification implements ShouldQueue
 
     public function toBroadcast($notifiable)
     {
-        return [
+
+        return new BroadcastMessage([
             'message' => $this->reason,
             'link' => $this->thread->path()
-        ];
+        ]);
     }
 }

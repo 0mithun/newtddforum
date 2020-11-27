@@ -105,14 +105,20 @@
         }
 
         html {
-            scroll-behavior: smooth;
-            }
+        scroll-behavior: smooth;
+        }
 
-            @media (prefers-reduced-motion: reduce) {
+        @media (prefers-reduced-motion: reduce) {
             html {
                 scroll-behavior: auto;
             }
-            }
+        }
+        
+        .hashlink {
+            height: $header-height;
+            margin-top: -$header-height;
+            visibility: hidden;
+        }
     </style>
     
 @endsection
@@ -349,13 +355,18 @@
             $('[data-toggle="tooltip"]').tooltip()
         })
 
+
         $(document).ready(function() {
             if(window.location.hash){
                 var hash = window.location.hash;
                 window.location.hash = "";
                 window.location.hash = hash;
-            }
+            
+                const el = document.querySelector(hash)
+                el && el.scrollIntoView()
+            } 
         });
+
 
     </script>
     
