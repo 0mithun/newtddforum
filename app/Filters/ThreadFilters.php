@@ -13,7 +13,11 @@ class ThreadFilters extends Filters
      *
      * @var array
      */
-    protected $filters = ['by', 'popular', 'unanswered', 'viewed', 'recents', 'liked', 'rated', 'bestofweek', 'favorites', 'video', 'emoji'];
+    protected $filters = [
+        // 'by', 'popular', 'unanswered',  'liked', 'bestofweek', 'favorites',
+
+        'rated', 'viewed',  'recents',  'video', 'emoji'
+    ];
 
     /**
      * Filter the query by a given username.

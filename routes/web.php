@@ -115,7 +115,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/chat-others','ChatController@getOtherMessageUsers');
     // Route::get('/other-users-message','ChatController@getOtherUsersMessage');
 
-    Route::get('/closet', 'UserlocationController@showCloset')->name('closet.thread');
+    Route::get('/closest', 'UserlocationController@showCloset')->name('closest.thread');
 
     Route::post('/anecdotes/{channel}/{thread}/replies', 'RepliesController@store');
     Route::patch('/replies/{reply}', 'RepliesController@update');

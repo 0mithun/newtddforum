@@ -24,7 +24,11 @@ use App\Notifications\ThreadPostTwitter;
 use App\Notifications\ThreadPostFacebook;
 use App\Http\Requests\CreateThreadRequest;
 use App\Http\Requests\UpdateThreadRequest;
+use App\ThreadView;
+use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
+
+use DB;
 
 class ThreadsController extends Controller
 {
@@ -50,13 +54,13 @@ class ThreadsController extends Controller
      * @param \App\Trending $trending
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
+    public function index(Channel $channel, ThreadFilters $filters)
     {   
         $threads = $this->getThreads($channel, $filters);
         $totalRecords = $threads->count();
         $threads = $this->generateCurrentPageResults($threads, $this->perPage); 
         $threads = $this->convert_from_latin1_to_utf8_recursively($threads->toArray());
-       $threads = $this->convertToObject($threads);
+        $threads = $this->convertToObject($threads);
 
         
         if (request()->wantsJson()) {
@@ -64,11 +68,11 @@ class ThreadsController extends Controller
         }
         $admin = Admin::first();
 
-        
+       
+
 
         return view('threads.index', [
             'threads'   =>  $threads,
-            'trending'  => $trending->get(),
             'pageTitle' => $admin->app_title,
             'per_page'  => $this->perPage,
             'current_page'  => (request('page') && request('page') != '') ? request('page') : 1,
@@ -88,12 +92,15 @@ class ThreadsController extends Controller
      * @param \App\Trending $trending
      * @return \Illuminate\Http\Response
      */
-    public function show($channel, Thread $thread, Trending $trending)
+    // public function show($channel, Thread $thread, Trending $trending)
+    public function show($channel, Thread $thread)
     {
         $this->authorize('show', $thread);
 
-        $trending->push($thread);
         $thread->increment('visits');
+        $thread->views()->create([]); 
+        // DB::table('views')->insert(['thread_id' => $thread->id]);
+
 
         // $relatedThreads = $this->getRelatedThread( $thread );
         $pageTitle = $thread->title;
@@ -328,6 +335,24 @@ class ThreadsController extends Controller
             $threads
             // >whereColumn('like_count', '>', 'dislike_count')
             ->orderByRaw('like_count - dislike_count DESC');
+        } elseif(request()->query('trending') == '1'){
+            $treanding = ThreadView::where('created_at','>=',Carbon::now()->subHours(24))
+            ->select('thread_id', DB::raw('count(*) as total'))
+            ->orderBy('total','desc')
+            ->groupBy('thread_id')
+            ->pluck('thread_id')
+            ->toArray()
+            ;
+            // ->limit(3)
+            // ->get()
+            // ->load('thread')
+            // ->pluck('thread');
+           
+            $threads = Thread::whereIn('id', $treanding);
+
+            
+            return $threads;
+    
         } else {
             $threads->latest()->filter($filters);
         }
@@ -567,7 +592,23 @@ class ThreadsController extends Controller
 
     public function getTrending(Trending $trending)
     {
-        $trendingThreads = $trending->get();
+
+
+        $treanding = ThreadView::where('created_at','>=',Carbon::now()->subHours(24))
+        ->select('thread_id', DB::raw('count(*) as total'))
+        ->orderBy('total','desc')
+        ->groupBy('thread_id')
+        // ->limit(3)
+        ->get()
+        ->load('thread')
+        ->pluck('thread');
+
+
+
+
+
+        // $trendingThreads = $trending->get();
+        $trendingThreads = $treanding;
         if (auth()->check()) {
             $auth_user = auth()->user();
             $threads = collect($trendingThreads)->filter(function ($thread) use ($auth_user) {

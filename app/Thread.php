@@ -501,5 +501,9 @@ class Thread extends Model
         return ($this->like_count - $this->dislike_count);
     }
 
+
+    public function views(){
+        return $this->hasMany(ThreadView::class);
+    }
     
 }

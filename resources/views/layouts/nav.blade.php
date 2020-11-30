@@ -11,7 +11,12 @@
 
                     @if(request()->query('rated') == 1)
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                        aria-expanded="false">Trending <span class="caret"></span></a>
+                        aria-expanded="false">Top Rated <span class="caret"></span></a>
+
+                    @elseif(request()->query('trending') == 1)
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">Trending <span class="caret"></span></a>
+
                     @elseif( request()->query('viewed') == 1)
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                         aria-expanded="false">Most Viewed <span class="caret"></span></a>
@@ -30,10 +35,11 @@
                     @endif
 
                     <ul class="dropdown-menu">                        
-                        <li class="{{ request()->query('rated') == 1 ? 'active' :'' }}"><a href="/anecdotes?rated=1">Trending</a></li>
+                        <li class="{{ request()->query('rated') == 1 ? 'active' :'' }}"><a href="/anecdotes?rated=1">Top Rated</a></li>
+                        <li class="{{ request()->query('trending') == 1 ? 'active' :'' }}"><a href="/anecdotes?trending=1">Trending</a></li>
                         <li class="{{ request()->query('viewed') == 1 ? 'active' :'' }}"><a href="/anecdotes?viewed=1" >Most Viewed</a></li>
                         <li class="{{ request()->query('recents') == 1 ? 'active' :'' }}"><a href="/anecdotes?recents=1">Most Recent</a></li>
-                        <li class="{{ Route::currentRouteName() == 'closet.thread' ? 'active' :'' }}"><a href="{{ route('closet.thread') }}">Closest</a></li>
+                        <li class="{{ Route::currentRouteName() == 'closest.thread' ? 'active' :'' }}"><a href="{{ route('closest.thread') }}">Closest</a></li>
                         <li class="{{ request()->query('video') == 1 ? 'active' :'' }}"><a href="/anecdotes?video=1">Video</a></li>
                     </ul>
                 </li>

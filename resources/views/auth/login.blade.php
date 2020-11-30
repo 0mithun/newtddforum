@@ -12,6 +12,18 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
+                        
+                        @if(session()->has('error'))
+                            <div class="form-group">
+                                <div class="col-md-6 col-md-offset-4">
+                                    <div class="alert alert-danger" style="margin-bottom: 0px">                                        
+                                        <strong>{{ session('error') }}</strong>                                    
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">E-Mail Address/Username</label>
 
