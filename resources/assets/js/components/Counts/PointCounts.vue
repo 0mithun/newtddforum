@@ -26,6 +26,22 @@ export default {
     eventBus.$on("threadVoted-" + this.thread.id, (thread) => {
       this.getThreads();
     });
+
+    eventBus.$on("threadDislikeDelete-" + this.thread.id, (thread) => {
+      this.getThreads();
+    });
+
+    eventBus.$on("threadDislikeAdd-" + this.thread.id, (thread) => {
+      this.getThreads();
+    });
+    eventBus.$on("threadLikeAdd-" + this.thread.id, (thread) => {
+      this.getThreads();
+    });
+    eventBus.$on("threadLikeDelete-" + this.thread.id, (thread) => {
+      this.getThreads();
+    });
+
+
   },
   methods: {
     getThreads() {
