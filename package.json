@@ -32,7 +32,7 @@
     "select2": "^4.0.13",
     "textarea-caret": "^3.1.0",
     "uiv": "^0.34.2",
-    "underscore": "^1.9.2",
+    "underscore": "^1.12.1",
     "vue-chat-scroll": "^1.4.0",
     "vue-fragment": "^1.5.1",
     "vue-select": "^3.4.0",
